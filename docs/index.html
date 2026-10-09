@@ -635,7 +635,9 @@ function parse(t){t=String(t||'').replace(/\n/g,'|');
 function loadLib(){if(window.Tesseract)return Promise.resolve();
  return loading||(loading=new Promise((ok,ko)=>{const s=document.createElement('script');s.src=TJS;s.onload=ok;s.onerror=()=>{loading=null;ko(new Error('lib'))};document.head.appendChild(s)}))}
 async function getWorker(){if(worker)return worker;await loadLib();
- worker=await Tesseract.createWorker('eng');await worker.setParameters({tessedit_pageseg_mode:'6'});return worker}
+ const mk=async o=>{const w=await Tesseract.createWorker('eng',1,o);await w.setParameters({tessedit_pageseg_mode:'6'});return w};
+ try{worker=await mk({})}catch(e1){worker=await mk({langPath:'https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int'})}
+ return worker}
 function prep(src,sx,sy,sw,sh,scale){const c=document.createElement('canvas');c.width=Math.round(sw*scale);c.height=Math.round(sh*scale);
  const g=c.getContext('2d');g.filter='grayscale(1) contrast(1.6)';g.drawImage(src,sx,sy,sw,sh,0,0,c.width,c.height);return c}
 async function ocr(canvas){const w=await getWorker();const r=await w.recognize(canvas);return parse(r.data.text)}
@@ -647,7 +649,7 @@ async function tick(){if(busy||paused||!vid||!vid.videoWidth)return;busy=true;
  try{const g=guide();if(g){const c=prep(vid,g.x+g.w*.58,g.y+g.h*.85,g.w*.42,g.h*.10,Math.max(1,Math.min(3,700/g.w*2)));
   const id=await ocr(c);hist.push(id);hist=hist.slice(-3);
   if(id&&hist.filter(x=>x===id).length>=2){found(id)}else status(id?'Lecture… '+id:'Place le numéro (en bas à droite) dans le cadre')}}
- catch(e){status('Chargement du lecteur… (connexion requise)')}
+ catch(e){status('Lecteur : '+(e&&e.message?e.message:e)+' — réessaie ou saisis le numéro')}
  busy=false}
 function variants(id){return cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'))}
 function found(id){paused=true;hist=[];const vs=variants(id),c=vs[0];
@@ -665,15 +667,15 @@ async function open(){
  +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.85))"><div id="cs-st" style="text-align:center;margin-bottom:8px;font-size:14px">Démarrage de la caméra…</div><div id="cs-res" class="panel" style="display:none;color:var(--tx)"></div></div>';
  document.body.appendChild(ov);vid=ov.querySelector('#cs-v');
  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
-  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, numéro en bas à droite');timer=setInterval(tick,800);getWorker().catch(()=>status('Lecteur indisponible (connexion requise)'))}
- catch(e){status('Caméra inaccessible. Autorise-la, ou utilise « Prendre une photo » / la saisie du numéro.')}}
+  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, numéro en bas à droite');timer=setInterval(tick,800);getWorker().then(()=>status('Aligne la carte dans le cadre, numéro en bas à droite')).catch(e=>status('Lecteur indisponible : '+(e&&e.message?e.message:e)))}
+ catch(e){status('Caméra : '+(e&&e.name||e)+'. Autorise la caméra, ou utilise « Prendre une photo ».')}}
 function close(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ov)ov.remove();ov=vid=null;paused=false;hist=[];render()}
 async function fromFile(f){if(!f)return;toast('Lecture de la photo…');
  try{const bmp=await createImageBitmap(f),W=bmp.width,H=bmp.height;let id=null;
   const tries=[[.58,.85,.42,.10],[.5,.78,.5,.22],[0,0,1,1]];
   for(const [a,b,c,d] of tries){const cv=prep(bmp,W*a,H*b,W*c,H*d,Math.max(1,Math.min(3,1200/(W*c))));id=await ocr(cv);if(id)break}
   if(id){S.sc=id;render();toast('Carte reconnue : '+id)}else toast('Numéro illisible. Cadre la carte entière, bien nette.')}
- catch(e){toast('Lecteur indisponible (connexion requise)')}}
+ catch(e){toast('Lecteur indisponible : '+(e&&e.message||e))}}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-csx],[data-csadd],[data-csno],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();
  if(t.hasAttribute('data-cam'))open();
  else if(t.hasAttribute('data-camfile')){const i=document.getElementById('camfile');if(i)i.click()}

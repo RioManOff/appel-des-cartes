@@ -1,0 +1,3 @@
+Site + APK : tout vient du dossier "docs".
+- Site : GitHub > Settings > Pages > Branch main, dossier /docs.
+- APK : l'appli charge le site. Pour mettre a jour, remplace docs/index.html dans GitHub : plus besoin de reinstaller.

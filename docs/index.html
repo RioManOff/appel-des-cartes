@@ -625,7 +625,7 @@ phLoad();render();
 </script>
 <script>/*camscan*/(function(){
 const TJS='https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js';
-let ov,vid,stream,worker,timer,busy=false,hist=[],paused=false,loading=null;
+let ov,vid,stream,worker,timer,busy=false,hist=[],paused=false,loading=null,scanning=false,tries=0;
 const MAP=s=>s.replace(/[OoQD]/g,'0').replace(/[Il|]/g,'1').replace(/S/g,'5').replace(/B/g,'8');
 function parse(t){t=String(t||'').replace(/\n/g,'|');
  const re=/F\s*[B8]\s*([0-9OIl]{2})\s*[-–—~_.]?\s*([0-9OIlSB]{3})/g;let m;
@@ -645,41 +645,43 @@ function status(t){const e=ov&&ov.querySelector('#cs-st');if(e)e.textContent=t}
 function guide(){const r=ov.querySelector('#cs-g').getBoundingClientRect(),v=vid.getBoundingClientRect(),vw=vid.videoWidth,vh=vid.videoHeight;
  if(!vw)return null;const k=Math.max(v.width/vw,v.height/vh),ox=(v.width-vw*k)/2,oy=(v.height-vh*k)/2;
  return{x:(r.left-v.left-ox)/k,y:(r.top-v.top-oy)/k,w:r.width/k,h:r.height/k}}
-async function tick(){if(busy||paused||!vid||!vid.videoWidth)return;busy=true;
+function setBtn(){const b=ov&&ov.querySelector('#cs-go');if(!b)return;b.style.display=paused?'none':'block';b.textContent=scanning?'⏳ Lecture… (appuie pour arrêter)':'▶️ Démarrer le scan'}
+async function tick(){if(!scanning||busy||paused||!vid||!vid.videoWidth)return;busy=true;tries++;
  try{const g=guide();if(g){const c=prep(vid,g.x+g.w*.58,g.y+g.h*.85,g.w*.42,g.h*.10,Math.max(1,Math.min(3,700/g.w*2)));
   const id=await ocr(c);hist.push(id);hist=hist.slice(-3);
-  if(id&&hist.filter(x=>x===id).length>=2){found(id)}else status(id?'Lecture… '+id:'Place le numéro (en bas à droite) dans le cadre')}}
+  if(id&&hist.filter(x=>x===id).length>=2){found(id)}else if(tries>=10){scanning=false;setBtn();status('Rien de lu. Rapproche la carte, bien nette, puis relance le scan.')}else status(id?'Lecture… '+id:'Lecture en cours… garde la carte bien cadrée')}}
  catch(e){status('Lecteur : '+(e&&e.message?e.message:e)+' — réessaie ou saisis le numéro')}
  busy=false}
 function variants(id){return cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'))}
-function found(id){paused=true;hist=[];const vs=variants(id),c=vs[0];
+function found(id){paused=true;scanning=false;hist=[];const vs=variants(id),c=vs[0];
  const p=ov.querySelector('#cs-res');
  p.innerHTML='<div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:center">'+art(c)+'<div><b>'+c.name+'</b><br><span class="sub">'+id+(c.rar?' · '+c.rar:'')+' · possédée : '+vs.map(v=>v.own).join('/')+'</span></div></div>'
   +'<div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">'+vs.map(v=>'<button class="btn" style="padding:10px" data-csadd="'+v.id+'">+1 '+(v.ver==='Normal'?'Normal':'Alt Art'+(v.id.endsWith('ALT2')?' 2':''))+'</button>').join('')+'<button class="btn alt" style="padding:10px" data-csno>Ignorer</button></div>';
- p.style.display='block';status('Carte reconnue : '+id);if(navigator.vibrate)try{navigator.vibrate(40)}catch(_){}}
-function resume(){const p=ov.querySelector('#cs-res');p.style.display='none';p.innerHTML='';hist=[];paused=false;status('Place le numéro (en bas à droite) dans le cadre')}
+ p.style.display='block';setBtn();status('Carte reconnue : '+id);if(navigator.vibrate)try{navigator.vibrate(40)}catch(_){}}
+function resume(){const p=ov.querySelector('#cs-res');p.style.display='none';p.innerHTML='';hist=[];paused=false;scanning=false;setBtn();status('Aligne la carte, puis appuie sur « Démarrer le scan »')}
 async function open(){
  if(ov)return;ov=document.createElement('div');
  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:#000;color:#fff;display:flex;flex-direction:column;font-family:inherit';
  ov.innerHTML='<video id="cs-v" playsinline muted autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>'
  +'<div id="cs-g" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);height:min(66vh,calc(86vw*1.4));aspect-ratio:5/7;border:3px solid #fff;border-radius:14px;box-shadow:0 0 0 100vmax rgba(0,0,0,.55)"><div style="position:absolute;right:2%;bottom:5%;width:42%;height:10%;border:2px solid #FFC83D;border-radius:6px"></div></div>'
  +'<div style="position:absolute;top:0;left:0;right:0;padding:12px;display:flex;justify-content:space-between;align-items:center"><b>📷 Scanner</b><button data-csx style="background:#222;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:16px">✕ Fermer</button></div>'
- +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.85))"><div id="cs-st" style="text-align:center;margin-bottom:8px;font-size:14px">Démarrage de la caméra…</div><div id="cs-res" class="panel" style="display:none;color:var(--tx)"></div></div>';
+ +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.85))"><div id="cs-st" style="text-align:center;margin-bottom:8px;font-size:14px">Démarrage de la caméra…</div><button id="cs-go" data-csgo class="btn" style="width:100%;padding:16px;font-size:18px;margin-bottom:8px">▶️ Démarrer le scan</button><div id="cs-res" class="panel" style="display:none;color:var(--tx)"></div></div>';
  document.body.appendChild(ov);vid=ov.querySelector('#cs-v');
  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
-  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, numéro en bas à droite');timer=setInterval(tick,800);getWorker().then(()=>status('Aligne la carte dans le cadre, numéro en bas à droite')).catch(e=>status('Lecteur indisponible : '+(e&&e.message?e.message:e)))}
+  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, puis appuie sur « Démarrer le scan »');timer=setInterval(tick,800);getWorker().then(()=>{if(!scanning)status('Aligne la carte dans le cadre, puis appuie sur « Démarrer le scan »')}).catch(e=>status('Lecteur indisponible : '+(e&&e.message?e.message:e)))}
  catch(e){status('Caméra : '+(e&&e.name||e)+'. Autorise la caméra, ou utilise « Prendre une photo ».')}}
-function close(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ov)ov.remove();ov=vid=null;paused=false;hist=[];render()}
+function close(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ov)ov.remove();ov=vid=null;paused=false;scanning=false;hist=[];render()}
 async function fromFile(f){if(!f)return;toast('Lecture de la photo…');
  try{const bmp=await createImageBitmap(f),W=bmp.width,H=bmp.height;let id=null;
   const tries=[[.58,.85,.42,.10],[.5,.78,.5,.22],[0,0,1,1]];
   for(const [a,b,c,d] of tries){const cv=prep(bmp,W*a,H*b,W*c,H*d,Math.max(1,Math.min(3,1200/(W*c))));id=await ocr(cv);if(id)break}
   if(id){S.sc=id;render();toast('Carte reconnue : '+id)}else toast('Numéro illisible. Cadre la carte entière, bien nette.')}
  catch(e){toast('Lecteur indisponible : '+(e&&e.message||e))}}
-document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-csx],[data-csadd],[data-csno],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();
+document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-csx],[data-csgo],[data-csadd],[data-csno],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();
  if(t.hasAttribute('data-cam'))open();
  else if(t.hasAttribute('data-camfile')){const i=document.getElementById('camfile');if(i)i.click()}
  else if(t.hasAttribute('data-csx'))close();
+ else if(t.hasAttribute('data-csgo')){scanning=!scanning;tries=0;hist=[];setBtn();status(scanning?'Lecture en cours… garde la carte bien cadrée':'Scan arrêté')}
  else if(t.hasAttribute('data-csno'))resume();
  else{const id=t.getAttribute('data-csadd'),c=cards.find(x=>x.id===id);if(c){bump('c',1);c.own++;S.last.unshift(id);save();toast(c.name+' ajoutée ✓')}resume()}},true);
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='camfile'){const f=e.target.files[0];e.target.value='';fromFile(f)}},true);

@@ -411,10 +411,10 @@ return header()+`<h2>Scanner</h2>${smBar()}<button class="btn alt" style="margin
 ${last.length?`<h2>Ajoutées à l'instant</h2><button class="btn alt" style="margin-bottom:8px" data-undo>↩️ Annuler la dernière (${last[0].id})</button><div class="grid">`+last.map(cardBtn).join('')+'</div>':''}`}
 function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${smBar()}<button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
+return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bottom:8px" data-cam>📷 Scanner avec l’appareil photo</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Prendre une photo de la carte</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none"><button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
-<p class="sub">Démo : dans l’appli mobile, l’appareil photo lira ce numéro automatiquement.</p>`}
+<p class="sub">Cadre la carte : le numéro en bas à droite (ex. FB01-035) est lu automatiquement. Une connexion internet est nécessaire pour le lecteur. Tu peux toujours saisir le numéro à la main.</p>`}
 function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0);return header()+'<h2>Cartes recherchées</h2>'+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
 function stats(){const sa=sealAll(),sealN=sa.reduce((a,x)=>a+x.s.own,0),sealV=sa.reduce((a,x)=>a+x.s.own*num(x.s.price),0),val=cards.reduce((a,c)=>a+c.own*num(c.price),0)+sealV;
 const bar=(t,x,y)=>`<div class="panel" style="margin-top:10px">${t} : ${x} / ${y} · ${pct(x,y)} %<div class="bar"><i style="width:${pct(x,y)}%"></i></div></div>`;
@@ -623,5 +623,64 @@ async function sphDel(id){if(!SBS||!id)return;try{const t=await sbTok(),r=await 
 if(sbOn()){sphLoad();addEventListener('focus',()=>sphLoad())}
 phLoad();render();
 </script>
-<script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
+<script>/*camscan*/(function(){
+const TJS='https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js';
+let ov,vid,stream,worker,timer,busy=false,hist=[],paused=false,loading=null;
+const MAP=s=>s.replace(/[OoQD]/g,'0').replace(/[Il|]/g,'1').replace(/S/g,'5').replace(/B/g,'8');
+function parse(t){t=String(t||'').replace(/\n/g,'|');
+ const re=/F\s*[B8]\s*([0-9OIl]{2})\s*[-–—~_.]?\s*([0-9OIlSB]{3})/g;let m;
+ while((m=re.exec(t))){const ext='FB'+MAP(m[1]),n=parseInt(MAP(m[2]),10);
+  if(EXTS.some(x=>x[0]===ext)&&cards.some(c=>c.ext===ext&&c.n===n))return ext+'-'+String(n).padStart(3,'0')}
+ return null}
+function loadLib(){if(window.Tesseract)return Promise.resolve();
+ return loading||(loading=new Promise((ok,ko)=>{const s=document.createElement('script');s.src=TJS;s.onload=ok;s.onerror=()=>{loading=null;ko(new Error('lib'))};document.head.appendChild(s)}))}
+async function getWorker(){if(worker)return worker;await loadLib();
+ worker=await Tesseract.createWorker('eng');await worker.setParameters({tessedit_pageseg_mode:'6'});return worker}
+function prep(src,sx,sy,sw,sh,scale){const c=document.createElement('canvas');c.width=Math.round(sw*scale);c.height=Math.round(sh*scale);
+ const g=c.getContext('2d');g.filter='grayscale(1) contrast(1.6)';g.drawImage(src,sx,sy,sw,sh,0,0,c.width,c.height);return c}
+async function ocr(canvas){const w=await getWorker();const r=await w.recognize(canvas);return parse(r.data.text)}
+function status(t){const e=ov&&ov.querySelector('#cs-st');if(e)e.textContent=t}
+function guide(){const r=ov.querySelector('#cs-g').getBoundingClientRect(),v=vid.getBoundingClientRect(),vw=vid.videoWidth,vh=vid.videoHeight;
+ if(!vw)return null;const k=Math.max(v.width/vw,v.height/vh),ox=(v.width-vw*k)/2,oy=(v.height-vh*k)/2;
+ return{x:(r.left-v.left-ox)/k,y:(r.top-v.top-oy)/k,w:r.width/k,h:r.height/k}}
+async function tick(){if(busy||paused||!vid||!vid.videoWidth)return;busy=true;
+ try{const g=guide();if(g){const c=prep(vid,g.x+g.w*.58,g.y+g.h*.85,g.w*.42,g.h*.10,Math.max(1,Math.min(3,700/g.w*2)));
+  const id=await ocr(c);hist.push(id);hist=hist.slice(-3);
+  if(id&&hist.filter(x=>x===id).length>=2){found(id)}else status(id?'Lecture… '+id:'Place le numéro (en bas à droite) dans le cadre')}}
+ catch(e){status('Chargement du lecteur… (connexion requise)')}
+ busy=false}
+function variants(id){return cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'))}
+function found(id){paused=true;hist=[];const vs=variants(id),c=vs[0];
+ const p=ov.querySelector('#cs-res');
+ p.innerHTML='<div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:center">'+art(c)+'<div><b>'+c.name+'</b><br><span class="sub">'+id+(c.rar?' · '+c.rar:'')+' · possédée : '+vs.map(v=>v.own).join('/')+'</span></div></div>'
+  +'<div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">'+vs.map(v=>'<button class="btn" style="padding:10px" data-csadd="'+v.id+'">+1 '+(v.ver==='Normal'?'Normal':'Alt Art'+(v.id.endsWith('ALT2')?' 2':''))+'</button>').join('')+'<button class="btn alt" style="padding:10px" data-csno>Ignorer</button></div>';
+ p.style.display='block';status('Carte reconnue : '+id);if(navigator.vibrate)try{navigator.vibrate(40)}catch(_){}}
+function resume(){const p=ov.querySelector('#cs-res');p.style.display='none';p.innerHTML='';hist=[];paused=false;status('Place le numéro (en bas à droite) dans le cadre')}
+async function open(){
+ if(ov)return;ov=document.createElement('div');
+ ov.style.cssText='position:fixed;inset:0;z-index:99999;background:#000;color:#fff;display:flex;flex-direction:column;font-family:inherit';
+ ov.innerHTML='<video id="cs-v" playsinline muted autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>'
+ +'<div id="cs-g" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);height:min(66vh,calc(86vw*1.4));aspect-ratio:5/7;border:3px solid #fff;border-radius:14px;box-shadow:0 0 0 100vmax rgba(0,0,0,.55)"><div style="position:absolute;right:2%;bottom:5%;width:42%;height:10%;border:2px solid #FFC83D;border-radius:6px"></div></div>'
+ +'<div style="position:absolute;top:0;left:0;right:0;padding:12px;display:flex;justify-content:space-between;align-items:center"><b>📷 Scanner</b><button data-csx style="background:#222;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:16px">✕ Fermer</button></div>'
+ +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.85))"><div id="cs-st" style="text-align:center;margin-bottom:8px;font-size:14px">Démarrage de la caméra…</div><div id="cs-res" class="panel" style="display:none;color:var(--tx)"></div></div>';
+ document.body.appendChild(ov);vid=ov.querySelector('#cs-v');
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, numéro en bas à droite');timer=setInterval(tick,800);getWorker().catch(()=>status('Lecteur indisponible (connexion requise)'))}
+ catch(e){status('Caméra inaccessible. Autorise-la, ou utilise « Prendre une photo » / la saisie du numéro.')}}
+function close(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ov)ov.remove();ov=vid=null;paused=false;hist=[];render()}
+async function fromFile(f){if(!f)return;toast('Lecture de la photo…');
+ try{const bmp=await createImageBitmap(f),W=bmp.width,H=bmp.height;let id=null;
+  const tries=[[.58,.85,.42,.10],[.5,.78,.5,.22],[0,0,1,1]];
+  for(const [a,b,c,d] of tries){const cv=prep(bmp,W*a,H*b,W*c,H*d,Math.max(1,Math.min(3,1200/(W*c))));id=await ocr(cv);if(id)break}
+  if(id){S.sc=id;render();toast('Carte reconnue : '+id)}else toast('Numéro illisible. Cadre la carte entière, bien nette.')}
+ catch(e){toast('Lecteur indisponible (connexion requise)')}}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-csx],[data-csadd],[data-csno],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();
+ if(t.hasAttribute('data-cam'))open();
+ else if(t.hasAttribute('data-camfile')){const i=document.getElementById('camfile');if(i)i.click()}
+ else if(t.hasAttribute('data-csx'))close();
+ else if(t.hasAttribute('data-csno'))resume();
+ else{const id=t.getAttribute('data-csadd'),c=cards.find(x=>x.id===id);if(c){bump('c',1);c.own++;S.last.unshift(id);save();toast(c.name+' ajoutée ✓')}resume()}},true);
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='camfile'){const f=e.target.files[0];e.target.value='';fromFile(f)}},true);
+})();
+</script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
 </html>

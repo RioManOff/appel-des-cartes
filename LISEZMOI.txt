@@ -1,0 +1,8 @@
+Construire l'APK depuis le telephone (GitHub, gratuit)
+1. Cree un compte sur github.com puis un depot (repository) vide, par ex. "appel-des-cartes".
+2. Envoie TOUS les fichiers de ce dossier dans le depot (bouton Add file > Upload files),
+   y compris le dossier .github (si ton telephone ne le garde pas, cree le fichier
+   .github/workflows/apk.yml a la main en copiant son contenu).
+3. Onglet Actions > "Construire l'APK" > Run workflow. Attends 5 a 10 minutes.
+4. Ouvre l'execution terminee > section Artifacts > telecharge "appel-des-cartes-apk" (zip),
+   dezippe, installe app-debug.apk (autorise l'installation d'applications inconnues).

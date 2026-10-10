@@ -697,8 +697,8 @@ html.dbso,html.dbso body{overflow:hidden}
 .ap-wv{position:absolute;left:0;top:-11px;width:200%;height:12px;fill:#FFD66B;animation:apwave 3.8s linear infinite}
 .ap-wv .s{fill:none;stroke:rgba(255,248,214,.9);stroke-width:1.2;vector-effect:non-scaling-stroke}
 @keyframes apwave{to{transform:translateX(-50%)}}
-.ap-bs,.ap-os{position:absolute;inset:0}
-.ap-bs i,.ap-os i{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);background:#C4161C;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ap-bs{position:absolute;inset:0}
+.ap-bs i{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);background:#C4161C;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .ap-bs i{background:rgba(255,255,255,.16)}
 .ap-bs i.on{background:#C4161C}
 @keyframes apstar{0%{transform:translate(-50%,-50%);background:rgba(255,255,255,.16)}55%{transform:translate(-50%,-50%) scale(1.55);background:#FF7467}100%{transform:translate(-50%,-50%);background:#C4161C}}
@@ -761,18 +761,21 @@ html.dbso,html.dbso body{overflow:hidden}
 .ap-l{display:grid;gap:10px;margin-top:12px}
 .ap-sr{position:relative;display:flex;align-items:center;gap:13px;width:100%;padding:13px 12px 13px 13px;border-radius:22px;overflow:hidden;text-align:left;color:var(--tx);border:1px solid rgba(var(--cr),.36);background:linear-gradient(100deg,rgba(var(--cr),.16),rgba(var(--cr),0) 64%),var(--sf)}
 .ap-sr.ok{border-color:rgba(245,180,0,.72);box-shadow:0 0 0 1px rgba(245,180,0,.22),0 10px 26px -14px rgba(245,180,0,.7)}
-.ap-pk{position:absolute;top:0;right:0;bottom:0;width:48%;background-position:50% 12%;background-size:cover;background-repeat:no-repeat;opacity:.2;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 80%);mask-image:linear-gradient(90deg,transparent,#000 80%)}
-:root[data-theme="light"] .ap-pk{opacity:.13}
-.ap-ob{position:relative;flex:none;display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;overflow:hidden;isolation:isolate;background:radial-gradient(circle at 36% 28%,rgba(150,180,220,.3),rgba(28,38,58,.94) 66%,#0c1018);box-shadow:0 0 0 1.5px rgba(var(--cr),.75),0 0 14px rgba(var(--cr),.38)}
-.ap-ob::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 36% 26%,rgba(255,255,255,.5) 0,rgba(255,255,255,0) 20%),radial-gradient(circle at 50% 50%,transparent 54%,rgba(12,3,0,.45) 100%);box-shadow:inset -3px -5px 8px rgba(70,14,0,.45)}
-.ap-ol{position:absolute;inset:0;transform:translateY(calc((100 - var(--fp)) * 1%));background:linear-gradient(180deg,#FFD66B 0,#FFB02E 10%,#F5821A 40%,#D8480A 78%,#8F2704)}
-.ap-ol::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,244,200,.95);box-shadow:0 0 5px rgba(255,220,120,.9)}
-.ap-ob.f .ap-ol{transform:none}
-.ap-ob.f .ap-ol::before{display:none}
-.ap-ob.f{box-shadow:0 0 0 1.5px #F5B400,0 0 18px rgba(245,180,0,.65)}
-.ap-ob b{position:relative;z-index:2;font:400 17px/1 "Bowlby One",Rubik,sans-serif;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.65)}
-.ap-ob b small{margin-left:1px;font-size:10px}
-.ap-os{z-index:1}
+/* le booster de la série : en couleur de bas en haut, au rythme du Master Set (même principe que le sélecteur de séries) */
+.ap-bo{position:relative;flex:none;width:56px;aspect-ratio:183/300;border-radius:6px;overflow:hidden;isolation:isolate;background:radial-gradient(120% 80% at 50% 0%,rgba(var(--cr),.5),rgba(var(--cr),.1) 70%),#0d0606;box-shadow:0 0 0 1px rgba(255,255,255,.16),0 8px 14px -6px rgba(var(--cr),.9)}
+.ap-bk{position:absolute;inset:0;background-position:50% 3%;background-size:cover;background-repeat:no-repeat}
+.ap-bg,.ap-bd{position:absolute;left:0;right:0;top:0;height:calc(100% - var(--p)*1%)}
+.ap-bg{display:none}
+@supports (mix-blend-mode:saturation){.ap-bg{display:block;background:#7a7a7a;mix-blend-mode:saturation}}
+.ap-bd{background:rgba(10,5,5,.5)}
+.ap-bf{position:absolute;left:0;right:0;bottom:calc(var(--p)*1%);height:2px;margin-bottom:-1px;background:var(--c);box-shadow:0 0 8px 1px var(--c)}
+.ap-bo::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.2) 0,rgba(255,255,255,0) 34%,rgba(255,255,255,0) 70%,rgba(255,255,255,.07) 100%)}
+.ap-bn{position:absolute;left:0;right:0;top:34%;text-align:center;font:400 13px/1 "Bowlby One",Rubik,sans-serif;font-style:normal;color:rgba(255,255,255,.85)}
+.ap-bp{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:14px 2px 5px;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.74));color:#fff;font:400 14px/1 "Bowlby One",Rubik,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+.ap-bp small{margin-left:1px;font-size:8.5px}
+.ap-bc{position:absolute;z-index:1;top:3px;right:3px;display:flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--ok);color:#06210f;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.ap-bc svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.ap-bo.f{box-shadow:0 0 0 2px #F5B400,0 0 16px rgba(245,180,0,.6)}
 .ap-sb{position:relative;flex:1;min-width:0}
 .ap-sn{display:flex;align-items:center;gap:8px}
 .ap-sn b{flex:1;min-width:0;font:600 16px/1.2 Rubik,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -2040,6 +2043,7 @@ const apIc={
  radar:'<circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4" stroke-width="1.3"/><path d="m12 12 5.6-5.6"/><circle cx="16.4" cy="15.8" r="1.25" fill="currentColor" stroke="none"/>',
  find:'<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
  share:'<path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/>',
+ check:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
  go:'<path d="m9 5 7 7-7 7"/>'};
 const apSvg=(k,c)=>`<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${apIc[k]}</svg>`,
  apNf=n=>Math.round(n).toLocaleString('fr-FR'),
@@ -2080,9 +2084,8 @@ function apList(){const q=apNorm(S.sq),L=apSer().filter(s=>!q||apNorm(s.e+s.nm).
    msg=s.full?`<span>${s.na?'Master Set complet : série maîtrisée !':'Full Set complet : série maîtrisée !'}</span>`
     :s.done?`<span>Il te manque ${s.mA} Alt Art</span>${s.cA>0?`<b>${apA(s.cA)}</b>`:''}`
     :`<span>Il te manque ${s.mN} carte${apS(s.mN)}</span>${s.cN>0?`<b>${apA(s.cN)}</b>`:''}`;
-  return `<button class="ap-sr${s.full?' ok':''}" data-apx="${s.e}" style="--c:${SERCOL[s.e]||'#E50914'};--cr:${srRGB(s.e)};--fp:${apW(s.ow,s.tot).toFixed(1)}" aria-label="${s.e} ${esc(s.nm)} : full set ${s.o} sur ${s.nn}${s.na?', master set '+s.ow+' sur '+s.tot:''}. Ouvrir la série">`
-   +`<span class="ap-pk srp-${s.e}" aria-hidden="true"></span>`
-   +`<span class="ap-ob${s.full?' f':''}" aria-hidden="true"><span class="ap-ol"></span>${s.full?`<span class="ap-os">${apStars(4)}</span>`:`<b>${mp}<small>%</small></b>`}</span>`
+  return `<button class="ap-sr${s.full?' ok':''}" data-apx="${s.e}" style="--c:${SERCOL[s.e]||'#E50914'};--cr:${srRGB(s.e)};--p:${apW(s.ow,s.tot).toFixed(1)}" aria-label="${s.e} ${esc(s.nm)} : full set ${s.o} sur ${s.nn}${s.na?', master set '+s.ow+' sur '+s.tot:''}. Ouvrir la série">`
+   +`<span class="ap-bo${s.full?' f':''}" aria-hidden="true"><span class="ap-bk srp-${s.e}"></span><span class="ap-bg"></span><span class="ap-bd"></span><span class="ap-bf"></span>${PACKIMG[s.e]?'':`<em class="ap-bn">${s.e}</em>`}<b class="ap-bp">${mp}<small>%</small></b>${s.full?`<i class="ap-bc">${apSvg('check','')}</i>`:''}</span>`
    +`<span class="ap-sb"><span class="ap-sn"><b>${esc(s.nm)}</b><em>${s.e}</em>${apSvg('go','ap-ch')}</span>`
    +`<span class="ap-g"><span class="ap-gt">Full Set</span><span class="ap-kg" style="--w:${apW(s.o,s.nn)}%"><i></i></span><span class="ap-gv${s.done?' ok':''}">${s.o} / ${s.nn}</span></span>`
    +(s.na?`<span class="ap-g m"><span class="ap-gt">Master Set</span><span class="ap-kg" style="--w:${apW(s.ow,s.tot)}%"><i></i></span><span class="ap-gv${s.full?' ok':''}">${s.ow} / ${s.tot}</span></span>`:'')
@@ -2131,7 +2134,7 @@ function stats(){
  +apRd('data-go="dup"','143,160,178','swap','Je propose',pn?'Échange ou vente':'Rien à proposer',apNf(pn),pv>0?apA(pv):'','Je propose : '+pn+' exemplaire'+apS(pn)+'. Ouvrir les doublons')
  +`</section>`
  /* — le radar des séries : chaque série est une boule qui se charge — */
- +`<section><h2 class="ap-t">Radar des séries</h2><p class="ap-lg"><span><i></i>Full Set : toutes les cartes numérotées</span><span><i class="m"></i>Master Set : avec les Alt Art</span></p>${nxt}`
+ +`<section><h2 class="ap-t">Radar des séries</h2><p class="ap-lg"><span><i></i>Full Set : toutes les cartes numérotées</span><span><i class="m"></i>Master Set : avec les Alt Art (remplit le booster)</span></p>${nxt}`
  +`<label class="ap-q">${apSvg('find','')}<input id="sq" type="search" autocomplete="off" enterkeyhint="search" placeholder="Série ou code (ex. FB05)" aria-label="Chercher une série par son nom ou son code" value="${esc(S.sq)}"></label><div class="ap-l" id="apl">${apList()}</div></section>`
  +`<div class="ap-d"><button class="chip" aria-pressed="${!!S.apd}" data-apd>Détails par type et par rareté</button></div>${S.apd?apDetail():''}`
  +`<p class="sub ap-fn">${MKON?'Valeur = quantité × ton prix, sinon la tendance des prix Cardmarket du '+MKDF+'. Les scellés comptent quand tu as saisi leur prix.':'Prix Cardmarket désactivé dans Réglages : seuls les prix que tu as saisis comptent.'}</p>`}

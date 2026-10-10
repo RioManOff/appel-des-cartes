@@ -232,6 +232,101 @@ input:focus,select:focus{outline:none;border-color:var(--ac)!important;box-shado
 @keyframes pkring{0%{box-shadow:0 0 0 0 rgba(var(--hg,255,255,255),.95)}100%{box-shadow:0 0 0 20px rgba(var(--hg,255,255,255),0)}}
 .dwv{animation:dwv .7s ease-out var(--d,0ms) both}
 @keyframes dwv{0%{transform:scale(1);filter:none}35%{transform:scale(1.1);filter:brightness(1.5) drop-shadow(0 0 10px #ffd54a)}100%{transform:scale(1);filter:none}}
+
+/* ===== Carnet de ventes v2 ===== */
+:root{--okt:#04210f}:root[data-theme="light"]{--okt:#fff}
+.vnf{display:grid;gap:10px}.vnf>b{font-size:16px}
+.vnf label{display:block;font-size:12px;color:var(--mu)}
+.vnf .fi{margin-top:4px}
+#vn-sug{display:grid;gap:6px;margin-top:6px;max-height:330px;overflow-y:auto;-webkit-overflow-scrolling:touch}#vn-sug:empty{display:none}
+.vnsg{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 10px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--tx);min-height:56px}
+.vnsg:active{transform:scale(.99);border-color:var(--ok)}
+.vnth{width:34px;flex:none;display:block}.vnth.big{width:50px}.vnth.sm{width:30px}
+.vnth .art{font-size:12px;border-width:1px;border-radius:5px;box-shadow:none}
+.vnin{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.vnin b{overflow:hidden;text-overflow:ellipsis;font-size:14.5px}
+.vnsg .vnin b{white-space:nowrap}
+.vnin small{color:var(--mu);font-size:12px}
+.vnin small b{color:var(--tx);font-size:12px}
+.vnq{color:var(--ok);font-weight:700}
+.vnst{flex:none;font-weight:700;font-size:13px;padding:3px 9px;border-radius:12px;background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok)}
+.vnst.no{background:transparent;color:var(--mu);border:1px solid var(--ln)}
+.vnsel{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--sf))}
+.vnsel:empty{display:none}
+.vnrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.vnqt>span{display:block;font-size:12px;color:var(--mu)}
+.vnqt .stepper{margin:4px 0 0;gap:8px}.vnqt .stepper b{font-size:22px;min-width:26px}
+.vnck{display:flex!important;gap:10px;align-items:center;font-size:13.5px!important;color:var(--tx)!important}
+.vnck input{width:20px;height:20px;accent-color:var(--ok);margin:0}
+.vnpv{border-radius:14px;padding:12px;background:var(--bg);border:1px dashed var(--ln);font-size:14px}
+.vnpv .l{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.vnpv .tt{align-items:baseline;border-top:1px solid var(--ln);margin-top:4px;padding-top:6px}
+.vnpv .big2{font:400 26px/1.1 "Bowlby One",Rubik,sans-serif}
+.vngo,.vnsellbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;min-height:62px;border:0;border-radius:16px;font-size:18px;font-weight:800;letter-spacing:.01em;color:var(--okt);background:var(--ok);background:linear-gradient(180deg,color-mix(in srgb,var(--ok) 78%,#fff),var(--ok));box-shadow:0 2px 0 rgba(0,0,0,.28),0 12px 26px -10px var(--ok);transition:transform .08s,box-shadow .15s,opacity .2s}
+.vngo small{font-weight:600;font-size:13px;opacity:.85}
+.vngo:active,.vnsellbtn:active{transform:translateY(2px) scale(.99);box-shadow:0 0 0 rgba(0,0,0,.3),0 4px 12px -8px var(--ok)}
+.vngo:disabled{background:var(--sf);color:var(--mu);border:1px dashed var(--ln);box-shadow:none;font-size:15px;font-weight:600;opacity:.8}
+.vnsellbtn{min-height:50px;font-size:16px;margin:12px 0 14px;flex-direction:row;gap:8px}
+.vnr{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.vnr .vnin b{white-space:normal;word-break:break-word}
+.vnrr{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none;font-size:14px}
+.vnrr>span{display:flex;gap:6px}.vnrr .chip{margin:0;min-width:40px;min-height:40px;padding:0 10px}
+@keyframes vnflash{0%{background:color-mix(in srgb,var(--ok) 38%,transparent)}100%{background:transparent}}
+.vnnew{animation:vnflash 1.8s ease-out;border-radius:10px}
+.vnprod{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.vnpd{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--tx);text-align:center}
+.vnpd[aria-pressed="true"]{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--sf));box-shadow:0 0 0 2px color-mix(in srgb,var(--ok) 35%,transparent)}
+.vnpd b{font-size:13px}.vnpd small{font-size:11px;color:var(--mu)}.vnpd .vnth{width:46px}
+.vnkpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.vnkpi>div{background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:8px 6px;text-align:center}
+.vnkpi small{display:block;color:var(--mu);font-size:11px}.vnkpi b{font-size:14.5px}
+
+/* ===== Accueil v2 ===== */
+.hmg{font:400 28px/1.1 "Bowlby One",Rubik,sans-serif;margin:8px 0 4px}
+.hmgs{max-width:36ch;font-size:14px}
+.hmfan{position:relative;aspect-ratio:1.9/1;margin:4px auto 0;max-width:380px;--st:clamp(38px,12.5vw,52px);--rot:5deg}
+.hmfan::before{content:"";position:absolute;inset:8% 4% 0;background:radial-gradient(closest-side,color-mix(in srgb,var(--ac) 26%,transparent),transparent);pointer-events:none}
+.hmc{position:absolute;left:50%;bottom:8px;width:clamp(80px,27%,108px);padding:0;border:0;background:none;transform-origin:50% 125%;
+ transform:translateX(-50%) translateX(calc(var(--i)*var(--st))) translateY(calc(var(--i)*var(--i)*5px)) rotate(calc(var(--i)*var(--rot)));transition:transform .22s ease,filter .22s}
+.hmc .art{box-shadow:0 16px 24px -12px rgba(0,0,0,.95),0 2px 5px rgba(0,0,0,.5);border-width:1px}
+.hmc:hover,.hmc:focus-visible{filter:brightness(1.08);z-index:40!important}
+.hmfan .hmc:not(:disabled):active{transform:translateX(-50%) translateX(calc(var(--i)*var(--st))) translateY(calc(var(--i)*var(--i)*5px - 12px)) rotate(calc(var(--i)*var(--rot))) scale(1.04)}
+.hmdl .hmc{animation:hmdeal .6s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(var(--k)*80ms + 120ms)}
+@keyframes hmdeal{from{opacity:0;transform:translateX(-50%) translateY(70px) rotate(0) scale(.85)}}
+.hmph{aspect-ratio:5/7;border:2px dashed var(--ln);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--mu);background:var(--sf)}
+.hmcap{text-align:center;margin:2px auto 0;max-width:34ch}
+.hmchips{justify-content:center;flex-wrap:wrap;overflow:visible;margin:clamp(20px,6vw,30px) 0 0;position:relative;z-index:2}
+.hmtot{margin-top:10px;font-size:14px;color:var(--mu)}.hmtot b{font:400 20px "Bowlby One",Rubik,sans-serif;color:var(--tx)}
+.hmtot span{display:block;font-size:12.5px;margin-top:2px}
+.hmcta{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-top:16px}
+.hmcta button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border-radius:18px;padding:14px;min-height:88px;border:1px solid var(--ln);background:var(--sf);color:var(--tx)}
+.hmcta .hmscan{background:var(--ac);border-color:var(--ac);color:var(--on,#fff);box-shadow:0 12px 26px -14px var(--ac)}
+.hmcta span{font-size:24px;line-height:1;margin-bottom:4px}.hmcta b{font-size:15.5px}.hmcta small{font-size:11.5px;opacity:.8;line-height:1.25}
+.hmcta button:active,.hmt:active,.hml:active{transform:scale(.98)}
+.hmgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.hmt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:74px;padding:8px 2px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:12px}
+.hmt span{font-size:22px;line-height:1}
+.hmh{font:400 17px/1.2 "Bowlby One",Rubik,sans-serif;margin:26px 0 10px}
+.hmser{padding:4px 14px}
+.hmr{display:grid;grid-template-columns:50px 1fr 54px;align-items:center;gap:10px;width:100%;padding:10px 0;border:0;border-bottom:1px solid var(--ln);background:none;color:var(--tx);text-align:left}
+.hmr:last-child{border-bottom:0}
+.hmcode{font:400 13px/1.7 "Bowlby One",Rubik,sans-serif;padding-left:8px;border-left:4px solid var(--c)}
+.hmnm{display:block;font-size:13px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmbar{display:block;height:6px;border-radius:4px;background:var(--ln);margin-top:6px;overflow:hidden}
+.hmbar i{display:block;height:100%;background:var(--c);border-radius:4px}
+.hmpc{text-align:right}.hmpc b{display:block;font:400 15px/1.1 "Bowlby One",Rubik,sans-serif}.hmpc small{font-size:11px;color:var(--mu)}
+.hmm{padding:14px}
+.hmbig{font:400 34px/1 "Bowlby One",Rubik,sans-serif;margin:4px 0 10px}
+.hmkv{display:flex;gap:18px;font-size:12.5px;color:var(--mu);flex-wrap:wrap}.hmkv b{display:block;color:var(--tx);font-size:15px;font-weight:600}
+.hmspark{display:block;width:100%;height:auto;margin:14px 0 4px;color:var(--mu)}
+.hmnext{display:grid;grid-template-columns:92px 1fr;border:1px solid var(--ln);border-radius:16px;background:var(--sf);overflow:hidden}
+.hmcd{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 6px;border-right:2px dashed var(--ln);background:color-mix(in srgb,var(--ac) 12%,transparent)}
+.hmcd b{font:400 36px/1 "Bowlby One",Rubik,sans-serif;color:var(--ac)}.hmcd small{font-size:11.5px;color:var(--mu);margin-top:4px;text-align:center}
+.hmnx{padding:12px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}.hmnx b{font-size:15px;overflow-wrap:anywhere}
+.hmu{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid var(--ln);font-size:14px}.hmu span:first-child{min-width:0;overflow-wrap:anywhere}.hmu .sub{white-space:nowrap}
+.hmsoc{margin-top:28px}
+.hmlinks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.hml{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);text-decoration:none;min-height:62px}
+.hml .hmi{font-size:26px;line-height:1}.hml b{display:block;font-size:14.5px}.hml small{display:block;color:var(--mu);font-size:12px;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -310,7 +405,7 @@ const st=(k,l)=>`<div>${l}</div><div class="stepper"><button data-sk="${t[0]}" d
 return `<div class="sheet" data-close><div role="dialog" aria-label="${t[1]}"><div class="detail">${sealArt(e,t[0],s,54)}<div><h2 style="margin-top:0">${t[1]}</h2>${e} · ${EXTS.find(x=>x[0]===e)[1]}<br><span class="sub">${t[2]}</span></div></div>
 ${st('own','Possédé')}${st('want','Recherché')}
 ${sealBuys(e,t)}<div class="fld"><div class="w"><label>Prix payé / indicatif (€)</label><input data-sp="${t[0]}" inputmode="decimal" placeholder="ex. 90,00" value="${esc(s.price)}"></div></div>
-<a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(EXTS.find(x=>x[0]===e)[1]+' '+t[1].replace(' de display',''))}&language=7">💶 Voir le prix sur Cardmarket</a>
+${s.own>0?`<button class="vnsellbtn" data-vnsells="${e}|${t[0]}">💶 Vendre ce produit</button>`:''}<a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(EXTS.find(x=>x[0]===e)[1]+' '+t[1].replace(' de display',''))}&language=7">💶 Voir le prix sur Cardmarket</a>
 <button class="btn" data-close>Fermer</button></div></div>`}
 const modeBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${S.mode==='cards'}" data-mode="cards">🃏 Cartes</button><button class="chip" aria-pressed="${S.mode==='sealed'}" data-mode="sealed">📦 Scellé (booster, display, case)</button></div>`;
 const binMeta=b=>{const l=b.cards.map(id=>cards.find(c=>c.id===id)).filter(Boolean);return {l,o:l.filter(c=>c.own>0).length}};
@@ -421,12 +516,80 @@ l.forEach((x,i)=>{const col=i%2,row=Math.floor(i/2),tx=pad+col*(CW+20),ty=y+row*
 y+=Math.max(1,Math.ceil(l.length/2))*LH+30});return cv.toDataURL('image/png')}
 async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e2){return false}}}
 const fmtD=d=>{try{return new Date(d).toLocaleDateString('fr-FR')}catch(e){return d}};
-function salesChart(l){if(l.length<2)return '';const a=[...l].sort((x,y)=>x.d<y.d?-1:1);let c=0;const pts=a.map(x=>c+=nb(x.price)-nb(x.buy)),mn=Math.min(0,...pts),mx=Math.max(0,...pts),rg=(mx-mn)||1,W=300,H=110,px=i=>10+i*(W-20)/(pts.length-1),py=v=>H-12-(v-mn)/rg*(H-24);
+function salesChart(l){if(l.length<2)return '';const a=[...l].sort((x,y)=>x.d<y.d?-1:1);let c=0;const pts=a.map(x=>c+=(nb(x.price)-nb(x.buy))*vnQ(x)),mn=Math.min(0,...pts),mx=Math.max(0,...pts),rg=(mx-mn)||1,W=300,H=110,px=i=>10+i*(W-20)/(pts.length-1),py=v=>H-12-(v-mn)/rg*(H-24);
 return `<div class="panel" style="margin-top:10px"><b>📈 Bénéfice cumulé</b><svg viewBox="0 0 ${W} ${H}" style="width:100%;margin-top:6px"><line x1="10" x2="${W-10}" y1="${py(0)}" y2="${py(0)}" stroke="currentColor" opacity=".3" stroke-dasharray="4"/><polyline fill="none" stroke="var(--ac)" stroke-width="2.5" points="${pts.map((v,i)=>px(i)+','+py(v)).join(' ')}"/>${pts.map((v,i)=>`<circle cx="${px(i)}" cy="${py(v)}" r="3" fill="var(--ac)"/>`).join('')}</svg><div class="sub">${fmtD(a[0].d)} → ${fmtD(a[a.length-1].d)} · ${eur(pts[pts.length-1])}</div></div>`}
-function trade(){SL=X.sales.filter(x=>!S.sx||x.ext===S.sx),tot=SL.reduce((a,x)=>a+nb(x.price),0),buy=SL.reduce((a,x)=>a+nb(x.buy),0),ben=tot-buy,li=l=>l.length?l.map(x=>`<div class="tr"><span>${cid(x.c.id)} · ${esc(x.c.name||'')}</span><b>×${x.q}</b></div>`).join(''):'<div class="sub">Rien pour le moment.</div>';
-return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2><div class="row"><button class="chip" aria-pressed="${S.sx===''}" data-sxf="">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.sx===x[0]}" data-sxf="${x[0]}">${x[0]}</button>`).join('')}</div>
-<div class="panel"><input class="fi" id="sv-c" placeholder="Carte (ex. FB01-035 ou nom)"><input class="fi" id="sv-w" placeholder="Acheteur (facultatif)"><input class="fi" id="sv-a" inputmode="decimal" placeholder="Prix d'achat (€)"><input class="fi" id="sv-p" inputmode="decimal" placeholder="Prix de vente (€)"><label class="sub" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="sv-r" checked> Retirer 1 exemplaire de ma collection (si la carte est reconnue)</label><button class="btn" style="margin-top:8px" data-sadd>➕ Enregistrer la vente</button></div>
-${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>${SL.length} vente${SL.length>1?'s':''}</b><div class="tr"><span>Total des ventes</span><b>${eur(tot)}</b></div><div class="tr"><span>Total des achats</span><b>${eur(buy)}</b></div><div class="tr"><span><b>Bénéfice</b></span><b style="color:${ben>=0?'var(--ok)':'#ff5a5a'}">${eur(ben)}</b></div>${SL.map(x=>S.sed===x.id?`<div class="panel" style="margin-top:10px;border-left:6px solid var(--ac)"><b>✏️ Modifier la vente</b><label class="sub" style="display:block;margin-top:6px">Carte</label><input class="fi" id="se-c" value="${esc(x.card)}"><label class="sub" style="display:block;margin-top:6px">Acheteur</label><input class="fi" id="se-w" value="${esc(x.who||'')}"><label class="sub" style="display:block;margin-top:6px">Prix d'achat (€)</label><input class="fi" id="se-a" inputmode="decimal" value="${esc(String(x.buy||''))}"><label class="sub" style="display:block;margin-top:6px">Prix de vente (€)</label><input class="fi" id="se-p" inputmode="decimal" value="${esc(String(x.price||''))}"><label class="sub" style="display:block;margin-top:6px">Date</label><input class="fi" id="se-d" type="date" value="${esc(String(x.d).slice(0,10))}"><button class="btn" style="margin-top:8px" data-ssave="${x.id}">✓ Enregistrer</button><button class="btn alt" style="margin-top:8px" data-scancel>Annuler</button></div>`:`<div class="tr"><span>${fmtD(x.d)} · ${esc(x.card)}${x.who?' → '+esc(x.who):''}</span><span style="text-align:right">${x.buy?'achat '+esc(String(x.buy))+' € · ':''}vente <b>${x.price?esc(String(x.price))+' €':'—'}</b><br><b style="color:${nb(x.price)-nb(x.buy)>=0?'var(--ok)':'#ff5a5a'}">${x.price&&x.buy!==undefined&&x.buy!==''?(nb(x.price)-nb(x.buy)>=0?'+':'')+eur(nb(x.price)-nb(x.buy)):''}</b> <button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button> <button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></div>`).join('')}</div>`}
+let VN={k:'c',e:'',t:'booster',id:'',c:'',a:'',p:'',q:1,w:'',d:'',r:true},VNNEW='';
+const vnQ=x=>Math.max(1,parseInt(x&&x.q)||1),vnNorm=t=>String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const vnReset=()=>{VN={k:VN.k||'c',e:VN.e||'',t:VN.t||'booster',id:'',c:'',a:'',p:'',q:1,w:'',d:'',r:true}};
+const vnRx=/^f?b?\s*0?(\d{1,2})\s*[-_. ]\s*(\d{1,3})\s*(alt|a)?\s*(\d)?$/;
+/* recherche : numéro (fb01-035, 01-35…) ou mots du nom (goku, épée…) */
+function vnFind(raw){const q=vnNorm(raw).trim();if(q.length<2)return [];
+ const m=q.match(vnRx),ext=m?'FB'+m[1].padStart(2,'0'):'',toks=q.split(/\s+/).filter(Boolean),out=[];
+ for(const c of cards){let sc=0;
+  if(m){if(c.ext!==ext)continue;if(c.n===parseInt(m[2],10))sc=10;else if(String(c.n).padStart(3,'0').startsWith(m[2]))sc=3;else continue}
+  else{const nm=vnNorm(c.name||''),hay=nm+' '+c.id.toLowerCase();if(!toks.every(t=>hay.includes(t)))continue;
+   sc=nm.startsWith(q)?6:nm.split(/[\s'’\-:]+/).some(w=>w.startsWith(toks[0]))?4:1}
+  if(c.own>0)sc+=5;if(c.ver==='Normal')sc+=.5;out.push([sc,c])}
+ out.sort((x,y)=>y[0]-x[0]||(x[1].id<y[1].id?-1:1));return out.slice(0,8).map(x=>x[1])}
+function vnExact(raw){const m=vnNorm(raw).trim().match(vnRx);if(!m)return null;
+ const id='FB'+m[1].padStart(2,'0')+'-'+m[2].padStart(3,'0')+(m[3]?'_ALT'+(m[4]&&m[4]!=='1'?m[4]:''):'');return cards.find(c=>c.id===id)||null}
+const vnTag=c=>c.id+(c.rar?' · '+c.rar:'')+(c.ver!=='Normal'?' · Alt Art'+(c.id.endsWith('ALT2')?' 2':''):'');
+const vnSugHTML=l=>l.map(c=>`<button type="button" class="vnsg" data-vnpick="${c.id}"><span class="vnth">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${vnTag(c)}</small></span><span class="vnst ${c.own?'':'no'}">${c.own?'×'+c.own:'0'}</span></button>`).join('');
+function vnSelHTML(){const c=VN.id&&cards.find(x=>x.id===VN.id);if(!c)return '';
+ return `<span class="vnth big">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${vnTag(c)}</small><small>En collection : <b>×${c.own}</b>${c.price?' · prix indicatif '+esc(String(c.price))+' €':''}</small></span><button type="button" class="chip" data-vnclr aria-label="Changer de carte">✕</button>`}
+function vnPv(){return VN.k==='s'?vnPvS():vnPvC()}
+function vnPvS(){const q=VN.q,p=nb(VN.p),e=VN.e||S.ext,t=VN.t,st=sl(e,t),hasP=VN.p.trim()!=='',tv=p*q,bs=X.buys.filter(x=>x.ext===e&&x.type===t),bq=bs.reduce((u,x)=>u+x.q,0),avg=bq?bs.reduce((u,x)=>u+x.q*nb(x.p),0)/bq:0;let h='';
+ if(hasP){h+=`<div class="l"><span>Vente${q>1?' · '+q+' × '+eur(p):''}</span><b>${eur(tv)}</b></div>`;
+  if(avg>0){const m=(p-avg)*q;h+=`<div class="l tt"><span><b>Marge estimée</b> · achat moyen ${eur(avg)}</span><span class="big2" style="color:${m>=0?'var(--ok)':'#ff5a5a'}">${m>=0?'+':''}${eur(m)}</span></div>`}}
+ else h+='<div class="sub">Indique le prix de vente.</div>';
+ const m=[];if(avg>0)m.push('Le prix d’achat est déjà compté dans tes dépenses (achats notés dans Scellé).');else m.push('ℹ️ Aucun achat noté pour ce produit : ajoute-le dans l’onglet Scellé pour qu’il compte dans ton vrai bénéfice.');
+ if(st.own<=0)m.push('⚠️ Tu n’en as pas en stock de scellé.');else{if(q>st.own)m.push('⚠️ Tu n’en as que ×'+st.own+'.');if(VN.r)m.push('Stock : ×'+st.own+' → ×'+Math.max(0,st.own-q))}
+ h+=`<div class="sub" style="margin-top:6px">${m.join(' ')}</div>`;
+ return {h,ok:true,lab:`<span>💶 Enregistrer la vente</span>${hasP?`<small>${eur(tv)}</small>`:''}`}}
+function vnPvC(){const q=VN.q,p=nb(VN.p),a=nb(VN.a),c=VN.id&&cards.find(x=>x.id===VN.id),tv=p*q,ta=a*q,b=tv-ta,hasP=VN.p.trim()!=='',hasA=VN.a.trim()!=='',ok=!!(c||VN.c.trim()||hasP),col=b>=0?'var(--ok)':'#ff5a5a';let h='';
+ if(hasP||hasA){h+=`<div class="l"><span>Vente${q>1?' · '+q+' × '+eur(p):''}</span><b>${eur(tv)}</b></div><div class="l"><span>Achat${q>1?' · '+q+' × '+eur(a):''}</span><b>${hasA?'− '+eur(ta):'—'}</b></div><div class="l tt"><span><b>Bénéfice</b>${ta>0?' · '+(b>=0?'+':'−')+Math.abs(Math.round(b/ta*100))+' %':''}</span><span class="big2" style="color:${col}">${b>=0?'+':''}${eur(b)}</span></div>`}
+ else h='<div class="sub">Indique le prix de vente : ton bénéfice s’affiche ici en direct.</div>';
+ if(c){const m=[];if(c.own<=0)m.push('⚠️ Cette carte n’est pas dans ta collection.');else{if(q>c.own)m.push('⚠️ Tu n’en as que ×'+c.own+'.');if(VN.r)m.push('Stock : ×'+c.own+' → ×'+Math.max(0,c.own-q))}
+  if(m.length)h+=`<div class="sub" style="margin-top:6px">${m.join(' ')}</div>`}
+ const lab=ok?`<span>💶 Enregistrer la vente</span>${hasP?`<small>${eur(tv)}${hasA?' · bénéfice '+(b>=0?'+':'')+eur(b):''}</small>`:''}`:'<span>Choisis une carte ou un prix</span>';
+ return {h,ok,lab}}
+function vnCalc(){const pv=$('#vn-pv'),go=$('#vn-go');if(!pv||!go)return;const r=vnPv();pv.innerHTML=r.h;go.disabled=!r.ok;go.innerHTML=r.lab}
+function vnSelect(id){const c=cards.find(x=>x.id===id);if(!c)return;VN.id=id;VN.c=c.name||c.id;
+ const i=$('#vn-c');if(i)i.value=VN.c;if(!VN.p.trim()&&c.price){VN.p=String(c.price);const pi=$('#vn-p');if(pi)pi.value=VN.p}
+ const sg=$('#vn-sug'),sl=$('#vn-sel');if(sg)sg.innerHTML='';if(sl)sl.innerHTML=vnSelHTML();vnCalc();
+ const pi=$('#vn-p');if(pi&&!pi.value.trim())pi.focus()}
+function vnClear(){VN.id='';VN.c='';const i=$('#vn-c'),sl=$('#vn-sel'),sg=$('#vn-sug');if(i){i.value='';i.focus()}if(sl)sl.innerHTML='';if(sg)sg.innerHTML='';vnCalc()}
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.id||t.id.slice(0,3)!=='vn-')return;
+ const k={'vn-c':'c','vn-a':'a','vn-p':'p','vn-w':'w','vn-d':'d'}[t.id];if(k)VN[k]=t.value;
+ if(t.id==='vn-c'){if(VN.id){VN.id='';const sl=$('#vn-sel');if(sl)sl.innerHTML=''}
+  const l=vnFind(t.value),sg=$('#vn-sug');if(sg)sg.innerHTML=l.length?vnSugHTML(l):(t.value.trim().length>=2?'<div class="sub">Aucune carte trouvée : tu peux enregistrer le texte tel quel.</div>':'')}
+ vnCalc()});
+document.addEventListener('change',e=>{if(!e.target)return;if(e.target.id==='vn-r'){VN.r=e.target.checked;vnCalc()}else if(e.target.id==='vn-e'){VN.e=e.target.value;render()}});
+document.addEventListener('keydown',e=>{const t=e.target;if(e.key!=='Enter'||!t||!t.id||t.id.slice(0,3)!=='vn-')return;
+ if(t.id==='vn-c'){const b=document.querySelector('#vn-sug .vnsg');if(b){e.preventDefault();b.click()}return}
+ if(/^vn-[apwd]$/.test(t.id)){e.preventDefault();const g=$('#vn-go');if(g&&!g.disabled)g.click()}});
+const vnSealPick=()=>{const e=VN.e||S.ext;return `<div><label>Série<select class="fi" id="vn-e">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===e?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</select></label></div><div class="vnprod">${SEALT.map(t=>{const s=sl(e,t[0]);return `<button type="button" class="vnpd" aria-pressed="${VN.t===t[0]}" data-vnt="${t[0]}"><span class="vnth">${sealArt(e,t[0],{own:1,want:0},20)}</span><b>${t[1]}</b><small>${s.own?'×'+s.own+' en stock':'0 en stock'}</small></button>`}).join('')}</div>`};
+function trade(){const SL=X.sales.filter(x=>!S.sx||x.ext===S.sx),tot=SL.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),buy=SL.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),
+ dep=spendAll().filter(x=>S.sx?(x.k==='buy'&&(X.buys.find(b=>b.id===x.id)||{}).ext===S.sx):true),depT=dep.reduce((a,x)=>a+x.a,0),ben=tot-buy,real=ben-depT,pv=vnPv(),ncol=v=>v>=0?'var(--ok)':'#ff5a5a';
+ const row=x=>{const q=vnQ(x),c=x.cid&&cards.find(k=>k.id===x.cid),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu;
+  return `<div class="vnr${x.id===VNNEW?' vnnew':''}">${c?`<span class="vnth sm">${art({...c,own:1})}</span>`:x.kind==='seal'?`<span class="vnth sm">${sealArt(x.se,x.st,{own:1,want:0},12)}</span>`:''}<span class="vnin"><b>${esc(x.card)}${q>1?` <span class="vnq">×${q}</span>`:''}</b><small>${fmtD(x.d)}${x.who?' → '+esc(x.who):''}${x.kind==='seal'?' · 📦 scellé':''}</small><small>${hasB?'achat '+eur(bu)+' · ':''}vente <b>${x.price?eur(pr):'—'}</b></small></span><span class="vnrr">${x.price&&hasB?`<b style="color:${ncol(pf)}">${pf>=0?'+':''}${eur(pf)}</b>`:''}<span><button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button><button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></span></div>`},
+ edit=x=>`<div class="panel vnf" style="margin-top:10px;border-left:6px solid var(--ac)"><b>✏️ Modifier la vente</b><label>Carte<input class="fi" id="se-c" value="${esc(x.card)}"></label><label>Acheteur<input class="fi" id="se-w" value="${esc(x.who||'')}"></label><div class="vnrow"${x.kind==='seal'?' style="grid-template-columns:1fr"':''}>${x.kind==='seal'?'':`<label>Prix d'achat (€ / carte)<input class="fi" id="se-a" inputmode="decimal" value="${esc(String(x.buy||''))}"></label>`}<label>Prix de vente (€ / ${x.kind==='seal'?'unité':'carte'})<input class="fi" id="se-p" inputmode="decimal" value="${esc(String(x.price||''))}"></label></div><div class="vnrow"><label>Quantité<input class="fi" id="se-q" inputmode="numeric" value="${vnQ(x)}"></label><label>Date<input class="fi" id="se-d" type="date" value="${esc(String(x.d).slice(0,10))}"></label></div><button class="btn" data-ssave="${x.id}">✓ Enregistrer</button><button class="btn alt" data-scancel>Annuler</button></div>`;
+ return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2><div class="row"><button class="chip" aria-pressed="${S.sx===''}" data-sxf="">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.sx===x[0]}" data-sxf="${x[0]}">${x[0]}</button>`).join('')}</div>
+<div class="panel vnf" style="margin-top:10px"><b>🆕 Nouvelle vente</b>
+<div class="row" style="margin:0"><button type="button" class="chip" aria-pressed="${VN.k!=='s'}" data-vnk="c">🃏 Carte</button><button type="button" class="chip" aria-pressed="${VN.k==='s'}" data-vnk="s">📦 Scellé</button></div>
+${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="search" placeholder="Cherche une carte : nom ou numéro (Goku, FB01-035)" value="${esc(VN.c)}" style="margin-top:0"><div id="vn-sug"></div></div>
+<div class="vnsel" id="vn-sel">${vnSelHTML()}</div>`}
+<div class="vnrow"${VN.k==='s'?' style="grid-template-columns:1fr"':''}>${VN.k==='s'?'':`<label>Prix d'achat (€ / carte)<input class="fi" id="vn-a" inputmode="decimal" placeholder="0,00" value="${esc(VN.a)}"></label>`}<label>Prix de vente (€ / ${VN.k==='s'?'unité':'carte'})<input class="fi" id="vn-p" inputmode="decimal" placeholder="0,00" value="${esc(VN.p)}"></label></div>
+<div class="vnrow"><div class="vnqt"><span>Quantité</span><div class="stepper"><button type="button" data-vnq="-1" aria-label="Moins">➖</button><b id="vn-qn">${VN.q}</b><button type="button" data-vnq="1" aria-label="Plus">➕</button></div></div><label>Date<input class="fi" id="vn-d" type="date" value="${esc(VN.d||today())}"></label></div>
+<input class="fi" id="vn-w" placeholder="Acheteur (facultatif)" value="${esc(VN.w)}" style="margin-top:0">
+<label class="vnck"><input type="checkbox" id="vn-r" ${VN.r?'checked':''}> ${VN.k==='s'?'Retirer de mon stock de scellé':'Retirer de ma collection'}</label>
+<div class="vnpv" id="vn-pv">${pv.h}</div>
+<button class="vngo" id="vn-go" data-sadd ${pv.ok?'':'disabled'}>${pv.lab}</button></div>
+${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>➕ Ajouter une dépense</b><input class="fi" id="ex-l" placeholder="Pour quoi ? (ex. booster, sleeves, frais d'envoi)"><input class="fi" id="ex-a" inputmode="decimal" placeholder="Montant (€)"><button class="btn" style="margin-top:8px" data-exadd>Enregistrer la dépense</button>${dep.length?`<div style="margin-top:8px">${dep.slice(0,6).map(x=>`<div class="tr"><span>${fmtD(x.d)} · ${esc(x.l)}</span><span><b>${eur(x.a)}</b>${x.k==='exp'?` <button class="chip" data-exdel="${x.id}" aria-label="Supprimer">✕</button>`:''}</span></div>`).join('')}${dep.length>6?`<div class="sub">+ ${dep.length-6} autres (voir Budget)</div>`:''}</div>`:''}</div>
+<div class="panel" style="margin-top:10px"><b>${SL.length} vente${SL.length>1?'s':''}</b>
+<div class="vnkpi" style="margin-top:8px"><div><small>Ventes</small><b>${eur(tot)}</b></div><div><small>Achats cartes</small><b>${eur(buy)}</b></div><div><small>Vrai bénéfice</small><b style="color:${ncol(real)}">${eur(real)}</b></div></div>
+<div class="tr"><span>Bénéfice avant dépenses</span><b style="color:${ncol(ben)}">${eur(ben)}</b></div><div class="tr"><span>Dépenses${S.sx?' ('+S.sx+', scellés)':' (boosters, sleeves…)'}</span><b>− ${eur(depT)}</b></div><div class="tr"><span><b>Vrai bénéfice</b></span><b style="font-size:1.15em;color:${ncol(real)}">${eur(real)}</b></div>
+${SL.map(x=>S.sed===x.id?edit(x):row(x)).join('')}</div>`}
 function zoomSheet(){const c=S.zoom&&cards.find(x=>x.id===S.zoom);if(!c)return '';const row=(a,b)=>b?`<div class="tr"><span>${a}</span><b>${esc(String(b))}</b></div>`:'';
 return `<div class="sheet" data-zx><div role="dialog" aria-label="Zoom" style="text-align:center"><div class="tilt" data-rare="${c.rar==='SCR'||c.rar==='SR'||c.ver!=='Normal'?1:0}" style="width:min(72vw,280px);margin:0 auto">${art(c)}</div><div class="sub" style="margin-top:6px">Touche et fais glisser le doigt sur la carte, ou incline ton téléphone.</div><h2 style="margin:12px 0 4px">${esc(c.name||'Nom à compléter')}</h2><div class="sub">${c.id} · ${EXTS.find(x=>x[0]===c.ext)[1]}</div><div style="text-align:left;margin-top:10px">${row('Type',c.type)}${row('Couleur',c.col)}${row('Rareté',c.rar)}${row('Version',c.ver)}${row('Possédée','×'+c.own)}${c.want?row('Recherchée','×'+c.want):''}${row('Prix indicatif',c.price?c.price+' €':'')}${row('État',c.cond)}${row('Notes',c.note)}</div><button class="btn" style="margin-top:12px" data-zx>Fermer</button></div></div>`}
 function printList(){const lab={missing:'Cartes manquantes',own:'Cartes possédées',upg:'Cartes à remplacer',sell:'Cartes à échanger'}[S.pr];const l=cards.filter(c=>(S.pal||c.ext===S.ext)&&(S.pr==='missing'?c.own===0:S.pr==='own'?c.own>0:S.pr==='upg'?X.upg[c.id]:X.sell[c.id]));return {lab,l}}
@@ -625,21 +788,64 @@ return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:lef
 <button class="btn alt" style="margin:10px 0;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><button class="btn" data-shbuy="1" ${ok(BPRICE)}>${pimg(PACKIMG[S.ext],'',"height:30px;vertical-align:middle;margin-right:8px")}Acheter 1 booster — ${BPRICE} pts</button><button class="btn" style="margin-top:8px" data-shbuy="24" ${ok(DPRICE)}>${pimg(DISPIMG[S.ext],'',"height:30px;vertical-align:middle;margin-right:8px")}Acheter 1 display (24 boosters) — ${DPRICE} pts</button><div class="sub" style="margin-top:6px">Le display coûte moins cher que 24 boosters séparés (${BPRICE*24} pts).</div>`}
 
 const NEWS=[{n:'FB01 – AWAKENED PULSE',d:'2024-02-16',t:'Sortie au Japon'},{n:'FB02 – BLAZING AURA',d:'2024-05-10',t:'Sortie au Japon'},{n:'FB03 – RAGING ROAR',d:'2024-08-09',t:'Sortie au Japon'},{n:'FB04 – ULTRA LIMIT',d:'2024-11-08',t:'Sortie au Japon'},{n:'FB05 – NEW ADVENTURE',d:'2025-02-08',t:'Sortie au Japon'},{n:'FB06 – RIVALS CLASH',d:'2025-04-26',t:'Sortie au Japon'},{n:'FB07 – WISH FOR SHENRON',d:'2025-09-13',t:'Sortie au Japon'},{n:'FB08 – SAIYAN\'S PRIDE',d:'2025-12-13',t:'Sortie au Japon'},{n:'FB09 – DUAL EVOLUTION',d:'2026-03-14',t:'Sortie au Japon'},{n:'FB10 – CROSS FORCE',d:'2026-06-13',t:'Sortie au Japon'},{n:'FB11 – BRIGHTNESS OF HOPE',d:'2026-09-12',t:'Sortie au Japon · version anglaise le 16 octobre 2026'},{n:'FB12 – REACH THE GOD',d:'2026-12-12',t:'Japon · date prévue, peut changer'}];
-function homeV(){const A=[...NEWS,...X.soon.map(x=>({n:x.n,d:x.d,t:x.t}))],up=A.filter(x=>!x.d||dayDiff(x.d)>=0).sort((a,b)=>(a.d||'9999').localeCompare(b.d||'9999')),past=A.filter(x=>x.d&&dayDiff(x.d)<0).sort((a,b)=>b.d.localeCompare(a.d));
-const card=x=>{const n=x.d?dayDiff(x.d):null,lab=n===null?'date à venir':n<0?'✅ Sortie':n===0?"🎉 Aujourd'hui !":n===1?'Demain !':'Dans '+n+' jours',ds=x.d?new Date(x.d+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';return `<div class="panel" style="margin-top:10px;border-left:6px solid ${n!==null&&n<0?'var(--ln)':'var(--ac)'}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><b>${esc(x.n)}</b><span style="white-space:nowrap;color:var(--ac)">${esc(lab)}</span></div><div class="sub">${ds}${x.t?(ds?' · ':'')+esc(x.t):''}</div></div>`};
-const news=(up.length?'<div class="sub" style="margin-top:8px"><b>À venir</b></div>'+up.map(card).join(''):'')+(past.length?'<div class="sub" style="margin-top:14px"><b>Déjà sorties</b></div>'+past.map(card).join(''):'');
-const ser=EXTS.map(e=>{const l=cards.filter(c=>c.ext===e[0]),o=l.filter(c=>c.own>0).length;return `<button class="panel ext" data-hext="${e[0]}" style="margin-top:10px"><b>${e[0]} · ${esc(e[1])}</b><span class="n">${o} / ${l.length}</span><div class="bar"><i style="width:${pct(o,l.length)}%"></i></div></button>`}).join('');
-return header()+remBanner()+homePanel()+`<h2>🗓️ Nouveautés Dragon Ball Card Game</h2>`+news+`<button class="btn alt" style="margin-top:10px" data-go="soon">➕ Ajouter une sortie</button><h2>📚 Mes séries</h2>`+ser+``}
+const hmNum=n=>n.toLocaleString('fr-FR'),hmLd=iso=>{const d=new Date(iso);return isNaN(d)?String(iso).slice(0,10):new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+/* la « main » : 5 cartes mises en éventail */
+function hmHand(){const mode=S.hf||(S.last.length?'last':'best'),sc=c=>cscore(c)+(CARDIMG[c.id]?4:0);let l=[];
+ if(mode==='last'){const seen=new Set();for(const id of S.last){const c=cards.find(x=>x.id===id);if(c&&!seen.has(id)){seen.add(id);l.push(c)}if(l.length>=5)break}}
+ else if(mode==='fav')l=cards.filter(c=>X.fav[c.id]).sort((a,b)=>(b.own>0)-(a.own>0)||sc(b)-sc(a)||(a.id<b.id?-1:1)).slice(0,5);
+ else l=cards.filter(c=>c.own>0).sort((a,b)=>sc(b)-sc(a)||nb(b.price)-nb(a.price)||(a.id<b.id?-1:1)).slice(0,5);
+ return {mode,l}}
+function hmFan(H){const n=H.l.length,dl=LAST.vk!==viewKey()?' hmdl':'';
+ if(!n){const cap={best:'Ajoute tes premières cartes : les plus belles s’affichent ici.',last:'Rien d’ajouté depuis l’ouverture de l’appli.',fav:'Touche ⭐ dans la fiche d’une carte pour la mettre ici.'}[H.mode];
+  return `<div class="hmfan${dl}">${[-1,0,1].map((i,k)=>`<div class="hmc" style="--i:${i};--k:${k};z-index:${10-Math.abs(i)}"><div class="hmph">＋</div></div>`).join('')}</div><p class="sub hmcap">${cap}</p>`}
+ const out=Array(n);let L=Math.floor((n-1)/2),R=L;H.l.forEach((c,k)=>{const s=k===0?L:k%2?++R:--L;out[s]={c,k}});
+ return `<div class="hmfan${dl}">${out.map((o,s)=>`<button class="hmc" data-zoom="${o.c.id}" aria-label="Agrandir ${esc(o.c.name||o.c.id)}" style="--i:${s-(n-1)/2};--k:${o.k};z-index:${20-o.k}">${art(o.c)}</button>`).join('')}</div>`}
+/* argent du mois + 6 derniers mois */
+function hmMoney(){const sp=spendAll();
+ if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton vrai bénéfice (ventes moins achats et dépenses) s’affichera ici.</div><button class="btn" style="margin-top:12px" data-go="trade">💶 Enregistrer une vente</button></div>`;
+ const mk=today().slice(0,7),sM=X.sales.filter(x=>hmLd(x.d).slice(0,7)===mk),vM=sM.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),aM=sM.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),dM=sp.filter(x=>String(x.d).slice(0,7)===mk).reduce((a,x)=>a+x.a,0),rM=vM-aM-dM,t=new Date(),ms=[];
+ for(let k=5;k>=0;k--){const d=new Date(t.getFullYear(),t.getMonth()-k,1),key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),v=X.sales.filter(x=>hmLd(x.d).slice(0,7)===key).reduce((a,x)=>a+(nb(x.price)-nb(x.buy))*vnQ(x),0),e=sp.filter(x=>String(x.d).slice(0,7)===key).reduce((a,x)=>a+x.a,0);ms.push({lab:d.toLocaleDateString('fr-FR',{month:'short'}).replace('.',''),net:v-e})}
+ const mx=Math.max(1,...ms.map(m=>Math.abs(m.net))),W=240,bw=28,gp=(W-6*bw)/5,base=44,bars=ms.map((m,i)=>{const x=i*(bw+gp),h=Math.max(m.net?3:0,Math.abs(m.net)/mx*(m.net>=0?40:14)),y=m.net>=0?base-h:base;
+  return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="4" fill="${m.net>=0?'var(--ok)':'#ff5a5a'}" opacity="${i===5?1:.5}"><title>${m.lab} : ${eur(m.net)}</title></rect><text x="${(x+bw/2).toFixed(1)}" y="68" font-size="10" text-anchor="middle" fill="currentColor">${m.lab}</text>`}).join('');
+ return `<div class="panel hmm"><div class="sub">Vrai bénéfice · ${fmtM(mk)}</div><div class="hmbig" style="color:${rM>=0?'var(--ok)':'#ff5a5a'}">${rM>0?'+':''}${eur(rM)}</div><div class="hmkv"><span><b>${eur(vM)}</b>ventes</span><span><b>${eur(aM)}</b>achats de cartes</span><span><b>${eur(dM)}</b>dépenses</span></div>
+ <svg class="hmspark" viewBox="0 0 ${W} 74" role="img" aria-label="Bénéfice des 6 derniers mois"><line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="currentColor" opacity=".3"/>${bars}</svg>
+ <button class="btn alt" style="margin-top:8px" data-go="trade">💶 Ouvrir le carnet de ventes</button></div>`}
+/* prochaines sorties */
+function hmNews(){const A=[...NEWS,...X.soon.map(x=>({n:x.n,d:x.d,t:x.t}))],up=A.filter(x=>!x.d||dayDiff(x.d)>=0).sort((a,b)=>(a.d||'9999').localeCompare(b.d||'9999')),past=A.filter(x=>x.d&&dayDiff(x.d)<0).sort((a,b)=>b.d.localeCompare(a.d)),
+ ds=x=>x.d?new Date(x.d+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'date à venir',
+ left=x=>{if(!x.d)return 'date à venir';const n=dayDiff(x.d);return n===0?"aujourd'hui":n===1?'demain':n<0?'il y a '+(-n)+' j':'dans '+n+' j'};
+ let h=`<h2 class="hmh">🗓️ Prochaines sorties</h2>`;const nx=up[0];
+ if(nx){const n=nx.d?dayDiff(nx.d):null,big=n===null?'?':n===0?'🎉':n,sm=n===null?'bientôt':n===0?"aujourd'hui":n===1?'jour':'jours';
+  h+=`<div class="hmnext"><div class="hmcd"><b>${big}</b><small>${sm}</small></div><div class="hmnx"><b>${esc(nx.n)}</b><span>${ds(nx)}</span>${nx.t?`<span class="sub">${esc(nx.t)}</span>`:''}</div></div>`;
+  const rest=up.slice(1);if(rest.length)h+=`<div style="margin-top:6px">${rest.map(x=>`<div class="hmu"><span>${esc(x.n)}</span><span class="sub">${left(x)}</span></div>`).join('')}</div>`}
+ else h+=`<p class="sub">Aucune sortie prévue pour le moment.</p>`;
+ if(past.length){h+=`<div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="chip" aria-pressed="${!!S.hpast}" data-hpast>${S.hpast?'Masquer les sorties passées':'Sorties passées ('+past.length+')'}</button><button class="chip" data-go="soon">➕ Ajouter une sortie</button></div>`;
+  if(S.hpast)h+=past.map(x=>`<div class="hmu"><span>${esc(x.n)}</span><span class="sub">${ds(x)}</span></div>`).join('')}
+ else h+=`<div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="chip" data-go="soon">➕ Ajouter une sortie</button></div>`;
+ return h}
+function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0)+1;if(c.own>0)own[c.ext]=(own[c.ext]||0)+1});
+ const nAll=cards.length,nOwn=cards.filter(c=>c.own>0).length,copies=cards.reduce((a,c)=>a+c.own,0),value=cards.reduce((a,c)=>a+c.own*nb(c.price),0),H=hmHand(),
+ TL=[['find','🔎','Recherche'],['luck','🎲','Boosters'],['bind','📒','Classeurs'],['#sealed','📦','Scellé'],['trade','💶','Ventes'],['budget','💰','Budget'],['print','🖨️','Liste'],['soon','🗓️','Sorties']],
+ ser=EXTS.map(([e,nm])=>{const o=own[e]||0,n=tot[e]||0,p=pct(o,n);return `<button class="hmr" data-hext="${e}" style="--c:${SERCOL[e]}"><span class="hmcode">${e}</span><span><span class="hmnm">${esc(nm)}</span><span class="hmbar"><i style="width:${p}%"></i></span></span><span class="hmpc"><b>${p===100?'✓':p+'%'}</b><small>${o}/${n}</small></span></button>`}).join('');
+ return header()+remBanner()+greet()+hmFan(H)
+ +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
+ +`<div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur '+eur(value)+' selon tes prix':''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>`
+ +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
+ +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
+ +`<h2 class="hmh">📚 Mes séries</h2><div class="panel hmser">${ser}</div>`
+ +`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney()
+ +hmNews()
+ +`<div class="hmsoc"><h2 class="hmh" style="margin-top:0">Retrouve RioMan0ff</h2><div class="hmlinks"><a class="hml" href="https://www.whatnot.com/user/rioman0ff" target="_blank" rel="noopener noreferrer" aria-label="Profil Whatnot de RioMan0ff (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">📺</span><span><b>Whatnot</b><small>RioMan0ff</small></span></a><a class="hml" href="https://www.instagram.com/rioman___/" target="_blank" rel="noopener noreferrer" aria-label="Profil Instagram rioman___ (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">📸</span><span><b>Instagram</b><small>rioman___</small></span></a></div></div>`}
 const dayDiff=d=>Math.round((new Date(d+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5);
 function soonV(){const L=[...X.soon].sort((a,b)=>(a.d||'9999').localeCompare(b.d||'9999')),inp='width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin-top:4px';
 return header()+`<h2>🗓️ Prochaines séries</h2><div class="panel"><label class="sub">Nom de la série ou du produit</label><input id="so-n" placeholder="ex. FB06 – nom de la série" style="${inp}"><label class="sub" style="display:block;margin-top:8px">Date de sortie</label><input id="so-d" type="date" style="${inp}"><label class="sub" style="display:block;margin-top:8px">Note (facultatif)</label><input id="so-t" placeholder="ex. précommande ouverte" style="${inp}"><button class="btn" style="margin-top:8px" data-soonadd>➕ Ajouter</button></div>`+(L.length?L.map(x=>{const n=x.d?dayDiff(x.d):null,lab=n===null?'date inconnue':n<0?'sortie il y a '+(-n)+' j':n===0?"c'est aujourd'hui !":n===1?'demain':'dans '+n+' jours';return `<div class="panel" style="margin-top:10px"><b>${esc(x.n)}</b><span class="n">${esc(lab)}</span><div class="sub">${x.d?new Date(x.d+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):''}${x.t?' · '+esc(x.t):''}</div><button class="chip" style="margin-top:6px" data-soondel="${x.id}">🗑️ Retirer</button></div>`}).join(''):'<p class="sub">Rien de prévu pour le moment. Ajoute les prochaines sorties que tu attends.</p>')}
 function trashV(){const ic={binder:'📒',sale:'💶',exp:'💸',buy:'🧾'};return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-go="set">← Réglages</button><h2 style="margin-top:0">🗑️ Corbeille</h2><div class="panel">Ce que tu supprimes (classeurs, ventes, dépenses, achats de scellé) arrive ici et peut être restauré. Les cartes ne se suppriment pas : si tu t'es trompé de quantité, corrige-la avec − et +.</div>${X.trash.map(t=>`<div class="panel" style="margin-top:10px">${ic[t.t]||'📄'} <b>${esc(t.label)}</b><div class="sub">Supprimé le ${fmtD(t.d)}</div><div class="row"><button class="chip" data-trs="${t.id}">↩️ Restaurer</button><button class="chip" data-trd="${t.id}">✕ Supprimer pour de bon</button></div></div>`).join('')||'<p class="sub">La corbeille est vide.</p>'}${X.trash.length?'<button class="btn alt" style="margin-top:12px" data-trempty>Vider la corbeille</button>':''}`}
 function menuSheet(){return S.menu?`<div class="sheet" data-close><div role="dialog" class="menu"><h2 style="margin-top:0">Que veux-tu faire ?</h2><button class="btn alt" data-go="find"><span>🔎</span>Rechercher une carte</button><button class="btn alt" data-go="bind"><span>📒</span>Mes classeurs</button><button class="btn alt" data-go="soon"><span>🗓️</span>Prochaines séries</button><button class="btn alt" data-go="print"><span>🖨️</span>Liste à imprimer</button><button class="btn alt" data-go="budget"><span>💰</span>Budget</button><button class="btn alt" data-go="trade"><span>💶</span>Carnet de ventes</button><button class="btn alt" data-go="luck"><span>🎲</span>Mode hasard</button></div></div>`:''}
 function cfSheet(){return S.cf?`<div class="sheet" data-close><div role="dialog"><p style="font-size:16px">${S.cf.msg}</p><button class="btn" data-cfy>${S.cf.yes||'Oui'}</button><div style="height:8px"></div>${S.cf.alt?`<button class="btn alt" data-cfx>${S.cf.alt}</button><div style="height:8px"></div>`:''}<button class="btn alt" data-cfn>${S.cf.no||'Annuler'}</button></div></div>`:''}
-const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
+const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
 const greet=()=>{const h=new Date().getHours(),g=h>=5&&h<12?'Bonjour':h<18&&h>=12?'Bon après-midi':h>=18&&h<23?'Bonsoir':'Encore debout ?',N=cards.filter(c=>c.ext===S.ext),o=N.filter(c=>c.own>0).length,p=pct(o,N.length),k=Math.floor(Date.now()/864e5)%3,t=(X.act[today()]||{}).c||0;
  const m=p===0?['Ta série '+S.ext+' attend ses premières cartes.','Une carte à la fois : tout commence ici.','Prêt à lancer la chasse à la série '+S.ext+' ?'][k]:p<25?['Beau début sur '+S.ext+' : '+o+' cartes déjà !','Ça se remplit : '+o+' / '+N.length+' sur '+S.ext+'.','Continue, '+S.ext+' commence à prendre forme.'][k]:p<50?['Presque la moitié de '+S.ext+' ! Plus que '+(N.length-o)+' cartes.','Tu avances bien sur '+S.ext+' : '+p+' %.','Plus de '+p+' % de '+S.ext+', ça roule.'][k]:p<75?['Plus de la moitié de '+S.ext+' est à toi !','Le plus dur est fait sur '+S.ext+' : '+p+' %.','Tu as passé la moitié de '+S.ext+', bravo.'][k]:p<100?['Il ne te manque que '+(N.length-o)+' carte'+(N.length-o>1?'s':'')+' pour finir '+S.ext+' !','Dernière ligne droite sur '+S.ext+' : '+p+' %.','Tu y es presque : plus que '+(N.length-o)+' pour '+S.ext+'.'][k]:'Série '+S.ext+' complète, félicitations ! 🏆';
- return `<div style="font-size:19px;margin-bottom:2px"><b>${g}${g.endsWith('?')?'':' !'}</b></div><div class="sub" style="margin-bottom:8px">${m}</div>`};
+ return `<div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div>`};
 const homePanel=()=>{const t=X.act[today()]||{c:0,b:0},v=cards.filter(c=>c.ext===S.ext).reduce((a,c)=>a+c.own*nb(c.price),0),vt=cards.reduce((a,c)=>a+c.own*nb(c.price),0);return `<div class="panel" style="margin-bottom:10px">${greet()}<div class="sub">Valeur ${S.ext} : <b>${eur(v)}</b> · toutes séries : <b>${eur(vt)}</b> (selon tes prix)</div></div>`};
 function coll(){if(S.mode==='sealed')return sealed();const N=cards.filter(c=>c.ext===S.ext),NA=alt(S.ext).length,o=N.filter(c=>c.own>0).length,q=S.q.toLowerCase();
 const l=cards.filter(c=>c.ext===S.ext&&(!S.own||(S.own==='y'?c.own>0:c.own===0))&&(!S.ver||c.ver===S.ver)&&(!S.col||c.col===S.col)&&(!S.rar||c.rar===S.rar)&&(!S.fx||(S.fx==='fav'?X.fav[c.id]:S.fx==='sell'?X.sell[c.id]:X.upg[c.id]))&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)));
@@ -661,12 +867,14 @@ function burstView(){const last=S.last.slice(0,8).map(id=>cards.find(c=>c.id===i
 return header()+`<h2>Scanner</h2>${smBar()}<button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="row" style="margin-bottom:8px"><button class="chip" aria-pressed="${!S.balt}" data-ba="0">Normal</button><button class="chip" aria-pressed="${S.balt}" data-ba="1">Alternative Art</button></div>
 <div class="panel"><div class="sub" style="margin-bottom:8px">Tape les codes puis Entrée, par exemple <b>fb01-34 fb02-56</b> : chaque carte est ajoutée (+1). Sans série, c'est la série choisie ci-dessus. Ajoute <b>a</b> pour une Alt Art (fb01-34a) ou <b>x2</b> pour deux exemplaires (fb01-34x2).</div><input id="sc" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="off" placeholder="ex. fb01-34 fb02-56" value="${S.sc.replace(/"/g,'')}" style="${S_INP}"><button class="btn" style="margin-top:8px" data-bgo>➕ Ajouter</button></div>
 ${last.length?`<h2>Ajoutées à l'instant</h2><button class="btn alt" style="margin-bottom:8px" data-undo>↩️ Annuler la dernière (${last[0].id})</button><div class="grid">`+last.map(cardBtn).join('')+'</div>':''}`}
+function scanCov(){const s=new Set();cards.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});return [...s].sort().join(', ')||'aucune pour le moment'}
+function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
 function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bottom:8px" data-cam>📷 Scanner avec l’appareil photo</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Prendre une photo de la carte</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none"><button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
+return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none"><button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
-<p class="sub">Cadre la carte : le numéro en bas à droite (ex. FB01-035) est lu automatiquement. Une connexion internet est nécessaire pour le lecteur. Tu peux toujours saisir le numéro à la main.</p>`}
+<p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
 function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0);return header()+'<h2>Cartes recherchées</h2>'+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
 function stats(){const sa=sealAll(),sealN=sa.reduce((a,x)=>a+x.s.own,0),sealV=sa.reduce((a,x)=>a+x.s.own*num(x.s.price),0),val=cards.reduce((a,c)=>a+c.own*num(c.price),0)+sealV;
 const bar=(t,x,y)=>`<div class="panel" style="margin-top:10px">${t} : ${x} / ${y} · ${pct(x,y)} %<div class="bar"><i style="width:${pct(x,y)}%"></i></div></div>`;
@@ -682,7 +890,7 @@ function sheet(){const c=cards.find(x=>x.id===S.sel);if(!c)return'';
 const st=(k,t)=>`<div>${t}</div><div class="stepper"><button data-${k}="-1" aria-label="Retirer">➖</button><b>${c[k==='q'?'own':'want']}</b><button data-${k}="1" aria-label="Ajouter">➕</button></div>`;
 const sel=(k,t,o)=>`<div><label>${t}</label><select data-e="${k}"><option value="">—</option>${o.map(v=>`<option ${c[k]===v?'selected':''}>${v}</option>`).join('')}</select></div>`;
 return `<div class="sheet" data-close><div role="dialog" aria-label="${c.id}"><div class="detail">${art(c)}<div><h2 style="margin-top:0">${c.name||'Nom à compléter'}</h2>${c.id}<br><span class="sub">Version : ${c.ver}${c.rar?' · Rareté : '+c.rar:''}</span></div></div>
-<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div><div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${b.cards.includes(c.id)?' ✓':''}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
+<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div>${c.own>0?`<button class="vnsellbtn" data-vnsell="${c.id}">💶 Vendre cette carte</button>`:''}<div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${b.cards.includes(c.id)?' ✓':''}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
 <div class="fld">${sel('type','Type',TYP)}${sel('cond','État',CONDS)}<div><label>Prix indicatif (€)</label><input data-e="price" inputmode="decimal" placeholder="ex. 1,50" value="${esc(c.price)}"></div><div class="w"><label>Notes personnelles</label><input data-e="note" placeholder="ex. acheté en booster, coin abîmé" value="${esc(c.note)}"></div></div>
 <a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(c.id.replace(/_ALT\d?$/,''))}&language=7">💶 Voir le prix sur Cardmarket</a><button class="btn" data-close>Fermer</button></div></div>`}
 function pickSheet(){if(!S.pick)return'';
@@ -726,7 +934,7 @@ document.addEventListener('contextmenu',e=>{if(e.target.closest('button.card[dat
 (function(){let x0,y0;document.addEventListener('touchstart',e=>{if(!e.target.closest('.grid.bnd')){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
 document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<70||Math.abs(dy)>45)return;const bt=document.querySelector('[data-bpg="'+(dx<0?1:-1)+'"]');if(bt&&!bt.disabled)bt.click()},{passive:true})})();
 document.addEventListener('click',e=>{try{if(navigator.vibrate&&e.target.closest('.adj,.stepper button,.qb,.chip'))navigator.vibrate(8)}catch(_){}});
-document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty]');if(!t)return;const d=t.dataset;
+document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty],[data-vnpick],[data-vnclr],[data-vnq],[data-vnsell],[data-vnk],[data-vnt],[data-vnsells],[data-hburst],[data-hgo],[data-hf],[data-hpast]');if(!t)return;const d=t.dataset;
 if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false}
 else if(d.vopen!==undefined){S.hzv=true;window.scrollTo(0,0)}
 else if(d.vback!==undefined){S.hzv=false;window.scrollTo(0,0)}
@@ -754,7 +962,7 @@ else if(d.bmv!==undefined){const b=BIND.find(x=>x.id===S.bsel),i=+d.bmv,j=i+(+d.
 else if(d.bpg){S.bpg=Math.max(0,(S.bpg||0)+(+d.bpg));window.scrollTo(0,0)}
 else if(d.bre!==undefined){S.bre=!S.bre}
 else if(d.bsort!==undefined){const b=BIND.find(x=>x.id===S.bsel);if(b){b.cards.sort();saveB();toast('Classeur trié par numéro')}}
-else if(d.soonadd!==undefined){const n=$('#so-n').value.trim();if(!n){toast('Indique un nom');return}X.soon.push({id:'s'+Date.now().toString(36),n,d:$('#so-d').value,t:$('#so-t').value.trim()});saveX();toast('Ajouté ✓')}else if(d.soondel){X.soon=X.soon.filter(x=>x.id!==d.soondel);saveX()}else if(d.hext){S.ext=d.hext;S.tab='coll';window.scrollTo(0,0)}else if(d.trop!==undefined){trOpen(d.trop,d.trn||'');return}
+else if(d.soonadd!==undefined){const n=$('#so-n').value.trim();if(!n){toast('Indique un nom');return}X.soon.push({id:'s'+Date.now().toString(36),n,d:$('#so-d').value,t:$('#so-t').value.trim()});saveX();toast('Ajouté ✓')}else if(d.soondel){X.soon=X.soon.filter(x=>x.id!==d.soondel);saveX()}else if(d.hext){S.ext=d.hext;S.tab='coll';window.scrollTo(0,0)}else if(d.hburst!==undefined){S.tab='scan';S.burst=true;S.sel=null;S.menu=false;window.scrollTo(0,0)}else if(d.hgo){S.tab='coll';S.mode=d.hgo;S.sel=null;S.menu=false;window.scrollTo(0,0)}else if(d.hf){S.hf=d.hf}else if(d.hpast!==undefined){S.hpast=!S.hpast}else if(d.trop!==undefined){trOpen(d.trop,d.trn||'');return}
 else if(d.trx!==undefined){TR=null}
 else if(d.trg!==undefined||d.trw!==undefined){const k=d.trg!==undefined?'give':'want',id=d.trg||d.trw,a=TR[k],i=a.indexOf(id);if(i>=0)a.splice(i,1);else if(a.length<6)a.push(id);else toast('6 cartes maximum')}
 else if(d.trsend!==undefined){if(!TR.give.length||!TR.want.length){toast('Choisis au moins une carte de chaque côté');return}if(!TR.give.every(id=>(VIRT.q[id]||0)>0)||!TR.want.every(id=>(TR.theirs[id]||0)>0)){toast('Une des cartes n\'est plus disponible');return}frApi('/rest/v1/trades',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({a:SBS.uid,b:TR.uid,give:TR.give,want:TR.want,status:'pending'})}).then(()=>{toast('Échange proposé ✓');TR=null;return frLoad()}).catch(()=>toast('Envoi impossible'));return}
@@ -768,15 +976,34 @@ else if(d.sbin!==undefined||d.sbup!==undefined){const e=($('#sb-e').value||'').t
 else if(d.sbout!==undefined){S.cf={msg:'Veux-tu te déconnecter ? Ta collection sera retirée de cet appareil'+(Object.keys(PH).length?' (tes photos aussi)':'')+'. Elle reste dans ton compte : tu la retrouveras en te reconnectant.',yes:'✅ Oui, sauvegarder sur le compte puis me déconnecter',alt:'Oui, me déconnecter sans sauvegarder',no:'Non, rester connecté',act:'sbout'}}
 else if(d.sbpush!==undefined){SBAUTO=true;try{localStorage.setItem('fb_sba','1')}catch(e){}SBMSG='Envoi…';sbPush()}
 else if(d.sbpull!==undefined){SBMSG='Chargement…';render();sbRemote().then(r=>{if(!r){SBMSG='Aucune collection en ligne pour le moment';render();return}sbApply(r.data);SBAUTO=true;try{localStorage.setItem('fb_sba','1')}catch(e){}SBMSG='✓ Collection chargée depuis ton compte';render()}).catch(()=>{SBMSG='⏳ Connexion impossible pour le moment';render()})}
-else if(d.sedit){S.sed=d.sedit}else if(d.scancel!==undefined){S.sed=null}else if(d.ssave){const x=X.sales.find(y=>y.id===d.ssave);if(x){x.card=$('#se-c').value.trim()||'—';x.who=$('#se-w').value.trim();x.buy=$('#se-a').value.trim();x.price=$('#se-p').value.trim();const dv=$('#se-d').value;if(dv&&dv!==String(x.d).slice(0,10))x.d=new Date(dv+'T12:00:00').toISOString();saveX();toast('Vente modifiée ✓')}S.sed=null}else if(d.sphdel!==undefined){sphDel(S.sel)}else if(d.bsz){const b=BIND.find(x=>x.id===S.bsel);if(b){b.pg=+d.bsz;S.bpg=0;saveB()}}else if(d.bic){const b=BIND.find(x=>x.id===S.bsel);if(b){b.ic=d.bic;saveB()}}
+else if(d.sedit){S.sed=d.sedit}else if(d.scancel!==undefined){S.sed=null}else if(d.ssave){const x=X.sales.find(y=>y.id===d.ssave);if(x){{const nc=$('#se-c').value.trim()||'—';if(x.cid&&nc!==x.card)x.cid='';x.card=nc}x.who=$('#se-w').value.trim();{const ea=$('#se-a');if(ea)x.buy=ea.value.trim()}x.price=$('#se-p').value.trim();x.q=Math.max(1,parseInt($('#se-q').value)||1);const dv=$('#se-d').value;if(dv&&dv!==String(x.d).slice(0,10))x.d=new Date(dv+'T12:00:00').toISOString();saveX();toast('Vente modifiée ✓')}S.sed=null}else if(d.sphdel!==undefined){sphDel(S.sel)}else if(d.bsz){const b=BIND.find(x=>x.id===S.bsel);if(b){b.pg=+d.bsz;S.bpg=0;saveB()}}else if(d.bic){const b=BIND.find(x=>x.id===S.bsel);if(b){b.ic=d.bic;saveB()}}
 else if(d.bcl){const b=BIND.find(x=>x.id===S.bsel);if(b){b.col=d.bcl;saveB()}}
 else if(d.tcopy!==undefined){copyText(tradeText()).then(ok=>toast(ok?'Texte copié ✓':'Copie impossible ici'));return}
 else if(d.tshare!==undefined){const t=tradeText();if(navigator.share){navigator.share({text:t}).catch(()=>{})}else copyText(t).then(ok=>toast(ok?'Partage indisponible : texte copié ✓':'Partage impossible ici'));return}
 else if(d.timg!==undefined){S.timg=tradeImage()}
 else if(d.tdl!==undefined){try{const a=document.createElement('a');a.href=S.timg;a.download='echanges-appel-des-cartes.png';document.body.appendChild(a);a.click();a.remove();toast('Image téléchargée')}catch(e){toast('Maintiens l’image pour l’enregistrer')}return}
-else if(d.sadd!==undefined){const v=$('#sv-c').value.trim(),w=$('#sv-w').value.trim(),pr=$('#sv-p').value.trim(),bu=$('#sv-a').value.trim();if(!v&&!pr){toast('Indique une carte ou un prix');return}
-let label=v,sext='';const m=v.match(/^fb\s*0?(\d+)\s*[-_.]?\s*0*(\d+)\s*(a|alt)?$/i);if(m){const id='FB0'+m[1]+'-'+m[2].padStart(3,'0')+(m[3]?'_ALT':''),c=cards.find(x=>x.id===id);if(c){sext=c.ext;if($('#sv-r').checked&&c.own>0){c.own--;save()}}}
-X.sales.unshift({id:'s'+Date.now().toString(36),d:new Date().toISOString(),card:label||'—',who:w,price:pr,buy:bu,ext:sext});saveX();toast('Vente enregistrée ✓')}
+else if(d.vnk){VN.k=d.vnk;if(d.vnk==='s'&&!VN.e)VN.e=S.ext}
+else if(d.vnt){VN.t=d.vnt}
+else if(d.vnsells){const [se,st]=d.vnsells.split('|');vnReset();VN.k='s';VN.e=se;VN.t=st;S.ssel=null;S.menu=false;S.tab='trade';window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}
+else if(d.vnpick){vnSelect(d.vnpick);return}
+else if(d.vnclr!==undefined){vnClear();return}
+else if(d.vnq){VN.q=Math.max(1,Math.min(99,VN.q+(+d.vnq)));const n=$('#vn-qn');if(n)n.textContent=VN.q;vnCalc();return}
+else if(d.vnsell){const c=cards.find(x=>x.id===d.vnsell);if(c){vnReset();VN.k='c';VN.id=c.id;VN.c=c.name||c.id;if(c.price)VN.p=String(c.price);S.sel=null;S.zoom=false;S.menu=false;S.tab='trade';window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}}
+else if(d.sadd!==undefined&&VN.k==='s'){const e=VN.e||S.ext,t=VN.t,tt=SEALT.find(x=>x[0]===t),nm=(EXTS.find(x=>x[0]===e)||[0,''])[1],pr=VN.p.trim(),q=VN.q,st=sl(e,t);
+ if(VN.r&&st.own>0){st.own-=Math.min(q,st.own);saveSeal()}
+ let dd=new Date().toISOString();if(VN.d&&VN.d!==today())dd=new Date(VN.d+'T12:00:00').toISOString();
+ const id='s'+Date.now().toString(36);
+ X.sales.unshift({id,d:dd,card:tt[1]+' '+e+' · '+nm,cid:'',kind:'seal',se:e,st:t,who:VN.w.trim(),price:pr,buy:'',q,ext:e});saveX();VNNEW=id;setTimeout(()=>{VNNEW=''},2500);vnReset();
+ try{navigator.vibrate&&navigator.vibrate(25)}catch(_){}try{play('nice')}catch(_){}
+ toast('Vente enregistrée ✓'+(pr?' · '+eur(nb(pr)*q):''))}
+else if(d.sadd!==undefined){let c=VN.id&&cards.find(x=>x.id===VN.id),txt=VN.c.trim();if(!c&&txt)c=vnExact(txt);
+ const pr=VN.p.trim(),bu=VN.a.trim(),q=VN.q;if(!c&&!txt&&!pr){toast('Indique une carte ou un prix');return}
+ if(c&&VN.r&&c.own>0){c.own-=Math.min(q,c.own);save()}
+ let dd=new Date().toISOString();if(VN.d&&VN.d!==today())dd=new Date(VN.d+'T12:00:00').toISOString();
+ const id='s'+Date.now().toString(36),pf=(nb(pr)-nb(bu))*q;
+ X.sales.unshift({id,d:dd,card:c?c.id+' · '+(c.name||''):(txt||'—'),cid:c?c.id:'',who:VN.w.trim(),price:pr,buy:bu,q,ext:c?c.ext:''});saveX();VNNEW=id;setTimeout(()=>{VNNEW=''},2500);vnReset();
+ try{navigator.vibrate&&navigator.vibrate(25)}catch(_){}try{play('nice')}catch(_){}
+ toast('Vente enregistrée ✓'+(pr?' · '+(pf>=0?'+':'')+eur(pf):''))}
 else if(d.sdel){const x=X.sales.find(y=>y.id===d.sdel);if(x)toTrash('sale','Vente « '+x.card+' » '+(x.price||'')+' €',x);X.sales=X.sales.filter(x=>x.id!==d.sdel);saveX()}
 else if(d.th){TH=d.th;try{localStorage.setItem('fb_theme',TH)}catch(e){}applyTheme()}
 else if(d.zoom!==undefined){S.zoom=d.zoom;askTilt()}
@@ -894,13 +1121,13 @@ const inp='width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln)
 const rec=FR.list.filter(x=>x.st==='pending'&&!x.mine),sent=FR.list.filter(x=>x.st==='pending'&&x.mine),fr=FR.list.filter(x=>x.st==='accepted');
 return `<div class="panel" style="margin-bottom:10px">👥 Amis<div class="sub">Ajoute des amis avec leur pseudo.</div><div style="display:flex;gap:8px;margin-top:8px"><input id="fr-n" type="text" maxlength="20" placeholder="Pseudo de ton ami" style="${inp}"><button class="btn" style="width:auto;padding:0 16px" data-fradd>Ajouter</button></div>${FR.msg?`<div class="sub" style="margin-top:8px">${esc(FR.msg)}</div>`:''}${!FR.loaded?'<div class="sub" style="margin-top:8px">Chargement…</div>':''}
 ${rec.length?`<div class="sub" style="margin-top:12px">Demandes reçues</div>${rec.map(x=>row(x,`<button class="chip" data-fracc="${x.id}">✅ Accepter</button><button class="chip" data-frdel="${x.id}">✖</button>`)).join('')}`:''}
-${fr.length?`<div class="sub" style="margin-top:12px">Mes amis (${fr.length})</div>${fr.map(x=>row(x,`<button class="chip" data-trop="${x.uid}" data-trn="${esc(x.name)}">🔄 Échanger</button><button class="chip" data-frdel="${x.id}" aria-label="Retirer">✖</button>`)).join('')}`:(FR.loaded&&FR.ok&&!rec.length?'<div class="sub" style="margin-top:12px">Pas encore d\'amis dans la liste.</div>':'')}
+${fr.length?`<div class="sub" style="margin-top:12px">Mes amis (${fr.length})</div>${fr.map(x=>row(x,`<button class="chip" data-frdel="${x.id}" aria-label="Retirer">✖</button>`)).join('')}`:(FR.loaded&&FR.ok&&!rec.length?'<div class="sub" style="margin-top:12px">Pas encore d\'amis dans la liste.</div>':'')}
 ${FR.loaded&&FR.ok?trList():''}${sent.length?`<div class="sub" style="margin-top:12px">Demandes envoyées</div>${sent.map(x=>row(x,`<span class="sub">en attente</span><button class="chip" data-frdel="${x.id}">Annuler</button>`)).join('')}`:''}</div>`}
 
 
 /* ===== Échanges (collection virtuelle) ===== */
 function vpubSoon(){clearTimeout(window._vpt);window._vpt=setTimeout(vpubPush,4000)}
-async function vpubPush(){if(!SBS)return;try{const t=await sbTok();await sbFetch('/rest/v1/vpub?on_conflict=user_id',{method:'POST',headers:{Authorization:'Bearer '+t,Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:SBS.uid,q:VIRT.q})})}catch(e){}}
+async function vpubPush(){return;if(!SBS)return;try{const t=await sbTok();await sbFetch('/rest/v1/vpub?on_conflict=user_id',{method:'POST',headers:{Authorization:'Bearer '+t,Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:SBS.uid,q:VIRT.q})})}catch(e){}}
 const cn=id=>{const c=cards.find(x=>x.id===id);return c?c.name:id};
 function trSwap(out,inn){out.forEach(id=>{VIRT.q[id]=Math.max(0,(VIRT.q[id]||0)-1);if(!VIRT.q[id])delete VIRT.q[id]});inn.forEach(id=>{VIRT.q[id]=(VIRT.q[id]||0)+1});saveV()}
 async function trApplyMine(){for(const t of FR.tr||[]){if(t.a===SBS.uid&&t.status==='accepted'&&!t.applied_a&&!TRAPP.has(t.id)){TRAPP.add(t.id);trSwap(t.give,t.want);try{await frApi('/rest/v1/trades?id=eq.'+t.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({applied_a:true})});t.applied_a=true;toast('Échange accepté : tes cartes ont été mises à jour ✓')}catch(e){TRAPP.delete(t.id);trSwap(t.want,t.give)}}}}
@@ -925,94 +1152,757 @@ async function sphDel(id){if(!SBS||!id)return;try{const t=await sbTok(),r=await 
 if(sbOn()){sphLoad();addEventListener('focus',()=>sphLoad())}
 phLoad();render();
 </script>
-<script>/*camscan*/(function(){
-const TJS='https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js';
-let ov,vid,stream,worker,timer,busy=false,hist=[],paused=false,loading=null,scanning=false,tries=0;
-let BASE=null;
-function baseIds(){if(!BASE){const st=new Set();cards.forEach(c=>st.add(c.ext+'-'+String(c.n).padStart(3,'0')));BASE=[...st]}return BASE}
-function lev(a,b){const m=a.length,n=b.length;let p=new Array(n+1),q=new Array(n+1);for(let j=0;j<=n;j++)p[j]=j;
- for(let i=1;i<=m;i++){q[0]=i;for(let j=1;j<=n;j++)q[j]=Math.min(p[j]+1,q[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));[p,q]=[q,p]}return p[n]}
-/* texte brut -> {id,d} : le numéro de la liste le plus proche (d = nb de caractères faux). null si ambigu. */
-function parse(t){t=String(t||'').toUpperCase().replace(/[^A-Z0-9\-]/g,' ');
- const toks=t.split(/\s+/).filter(x=>x.length>=4);if(!toks.length)return null;
- const L=baseIds();let best=9,bid=null,tie=0;
- const wins=[];for(const k of toks){wins.push(k);if(k.length>9)for(let i=0;i+8<=k.length;i++){wins.push(k.slice(i,i+8));wins.push(k.slice(i,i+7))}}
- for(const w of wins){if(w.length<5||w.length>10)continue;for(const id of L){const d=lev(w,id);if(d<best){best=d;bid=id;tie=0}else if(d===best&&id!==bid)tie++}}
- return bid&&best<=3&&!tie?{id:bid,d:best}:null}
-function loadLib(){if(window.Tesseract)return Promise.resolve();
- return loading||(loading=new Promise((ok,ko)=>{const s=document.createElement('script');s.src=TJS;s.onload=ok;s.onerror=()=>{loading=null;ko(new Error('lib'))};document.head.appendChild(s)}))}
-async function getWorker(){if(worker)return worker;await loadLib();
- const mk=async o=>{const w=await Tesseract.createWorker('eng',1,o);await w.setParameters({tessedit_pageseg_mode:'7',tessedit_char_whitelist:'FB0123456789-',user_defined_dpi:'300'});return w};
- try{worker=await mk({})}catch(e1){worker=await mk({langPath:'https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int'})}
- return worker}
-function prep(src,sx,sy,sw,sh,mode){const sc=Math.max(1,Math.min(5,900/sw));const W=Math.round(sw*sc),H=Math.round(sh*sc),P=24;
- const c=document.createElement('canvas');c.width=W+2*P;c.height=H+2*P;const g=c.getContext('2d',{willReadFrequently:true});
- g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.imageSmoothingQuality='high';g.drawImage(src,sx,sy,sw,sh,P,P,W,H);
- if(mode==='raw')return c;
- const im=g.getImageData(P,P,W,H),d=im.data,n=W*H,hist=new Array(256).fill(0),gr=new Uint8Array(n);
- for(let i=0;i<n;i++){const v=(d[4*i]*.3+d[4*i+1]*.59+d[4*i+2]*.11)|0;gr[i]=v;hist[v]++}
- let sum=0;for(let i=0;i<256;i++)sum+=i*hist[i];let wB=0,sB=0,mx=0,th=128;
- for(let i=0;i<256;i++){wB+=hist[i];if(!wB)continue;const wF=n-wB;if(!wF)break;sB+=i*hist[i];const mB=sB/wB,mF=(sum-sB)/wF,v=wB*wF*(mB-mF)*(mB-mF);if(v>mx){mx=v;th=i}}
- const inv=mode==='inv';for(let i=0;i<n;i++){const bright=gr[i]>th;const o=(bright!==inv)?0:255;d[4*i]=d[4*i+1]=d[4*i+2]=o;d[4*i+3]=255}
- g.putImageData(im,P,P);return c}
-async function ocr(canvas,psm){const w=await getWorker();if(psm)await w.setParameters({tessedit_pageseg_mode:String(psm)});const r=await w.recognize(canvas);return r.data.text}
-function status(t){const e=ov&&ov.querySelector('#cs-st');if(e)e.textContent=t}
-function guide(){const r=ov.querySelector('#cs-g').getBoundingClientRect(),v=vid.getBoundingClientRect(),vw=vid.videoWidth,vh=vid.videoHeight;
- if(!vw)return null;const k=Math.max(v.width/vw,v.height/vh),ox=(v.width-vw*k)/2,oy=(v.height-vh*k)/2;
- return{x:(r.left-v.left-ox)/k,y:(r.top-v.top-oy)/k,w:r.width/k,h:r.height/k}}
-function setBtn(){const b=ov&&ov.querySelector('#cs-go');if(!b)return;b.style.display=paused?'none':'block';b.textContent=scanning?'⏳ Lecture… (appuie pour arrêter)':'▶️ Démarrer le scan'}
-const ZONES=[[.52,.84,.48,.13,7],[.60,.86,.40,.09,7],[.30,.80,.70,.20,6]];
-const ACC={};
-async function readFrame(src,x,y,w,h,passes){let out=[];
- for(const [a,b,c,d,psm] of ZONES.slice(0,passes)){for(const mode of ['bin','inv']){
-  const cv=prep(src,x+w*a,y+h*b,w*c,h*d,mode);const t=await ocr(cv,psm);const r=parse(t);if(r)out.push(r)}}
+<script>/*scan2*/(function(){
+/* ===== Scanner 2 : caméra + reconnaissance par l'illustration + lecture du numéro ===== */
+/* ===== Scanner : cœur de reconnaissance visuelle (pur JS, sans DOM) =====
+   image = {w,h,d:Uint8ClampedArray RGBA}
+   détection de la carte (Hough restreint autour du cadre guide) -> redressement -> descripteur (HOG + couleurs) -> comparaison à l'index */
+function makeCore(){
+const CARD_AR=.7155,CW=128,CH=180,INSET=.03;
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+
+/* ---------- redimensionnement par moyenne de zone (déterministe) ---------- */
+function resizeArea(img,ow,oh,sx=0,sy=0,sw=img.w,sh=img.h){
+ const out=new Uint8ClampedArray(ow*oh*4),{w,d}=img,fx=sw/ow,fy=sh/oh;
+ for(let y=0;y<oh;y++){const y0=sy+y*fy,y1=y0+fy;const iy0=Math.max(0,Math.floor(y0)),iy1=Math.min(img.h,Math.ceil(y1));
+  for(let x=0;x<ow;x++){const x0=sx+x*fx,x1=x0+fx;const ix0=Math.max(0,Math.floor(x0)),ix1=Math.min(w,Math.ceil(x1));
+   let r=0,g=0,b=0,a=0,ws=0;
+   for(let yy=iy0;yy<iy1;yy++){const wy=Math.min(yy+1,y1)-Math.max(yy,y0);if(wy<=0)continue;
+    for(let xx=ix0;xx<ix1;xx++){const wx=Math.min(xx+1,x1)-Math.max(xx,x0);if(wx<=0)continue;const ww=wx*wy,j=(yy*w+xx)*4;
+     r+=d[j]*ww;g+=d[j+1]*ww;b+=d[j+2]*ww;a+=d[j+3]*ww;ws+=ww}}
+   const o=(y*ow+x)*4;if(ws>0){out[o]=r/ws;out[o+1]=g/ws;out[o+2]=b/ws;out[o+3]=255}else{out[o+3]=255}}}
+ return{w:ow,h:oh,d:out}}
+
+/* ---------- filtres ---------- */
+function gray(img){const{w,h,d}=img,n=w*h,g=new Float32Array(n);for(let i=0,j=0;i<n;i++,j+=4)g[i]=.299*d[j]+.587*d[j+1]+.114*d[j+2];return g}
+function blur(src,w,h,sigma){
+ const r=Math.max(1,Math.ceil(sigma*3)),k=new Float32Array(2*r+1);let s=0;for(let i=-r;i<=r;i++){k[i+r]=Math.exp(-i*i/(2*sigma*sigma));s+=k[i+r]}for(let i=0;i<k.length;i++)k[i]/=s;
+ const tmp=new Float32Array(w*h),out=new Float32Array(w*h);
+ for(let y=0;y<h;y++){const o=y*w;for(let x=0;x<w;x++){let a=0;for(let i=-r;i<=r;i++){let xx=x+i;xx=xx<0?-xx:xx>=w?2*w-2-xx:xx;a+=src[o+xx]*k[i+r]}tmp[o+x]=a}}
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){let a=0;for(let i=-r;i<=r;i++){let yy=y+i;yy=yy<0?-yy:yy>=h?2*h-2-yy:yy;a+=tmp[yy*w+x]*k[i+r]}out[y*w+x]=a}
  return out}
-function vote(rs){for(const r of rs){ACC[r.id]=(ACC[r.id]||0)+(r.d===0?3:r.d===1?2:1)}
- let bi=null,bs=0;for(const k in ACC)if(ACC[k]>bs){bs=ACC[k];bi=k}return bs>=3?bi:null}
-async function tick(){if(!scanning||busy||paused||!vid||!vid.videoWidth)return;busy=true;tries++;
- try{const g=guide();if(g){const rs=await readFrame(vid,g.x,g.y,g.w,g.h,tries%2?3:2);const id=vote(rs);
-  if(id){found(id)}else if(tries>=14){scanning=false;setBtn();status('Rien de lu. Rapproche la carte (numéro en bas à droite dans le cadre jaune), bien nette, ou saisis le numéro ci-dessous.')}
-  else status('Lecture… '+tries+'/14 — garde la carte bien droite, nette et bien éclairée')}}
- catch(e){status('Lecteur : '+(e&&e.message?e.message:e)+' — saisis le numéro ci-dessous')}
- busy=false}
-function manual(){const v=(ov.querySelector('#cs-man').value||'').toUpperCase().replace(/[OI]/g,m=>m==='O'?'0':'1');
- const m=v.match(/(?:FB)?\s*(\d{1,2})\s*[-–_. ]\s*(\d{1,3})\s*$/)||v.match(/^\s*(?:FB)?(\d{2})(\d{3})\s*$/);
- if(!m){status('Format : 03-050 (série puis numéro) ou FB03-050');return}
- const id='FB'+m[1].padStart(2,'0')+'-'+m[2].padStart(3,'0');
- if(variants(id).length){found(id)}else status(id+' : cette carte n’existe pas dans la liste')}
-function variants(id){return cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'))}
-function found(id){paused=true;scanning=false;hist=[];for(const k in ACC)delete ACC[k];const vs=variants(id),c=vs[0];
- const p=ov.querySelector('#cs-res');
- p.innerHTML='<div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:center">'+art(c)+'<div><b>'+c.name+'</b><br><span class="sub">'+id+(c.rar?' · '+c.rar:'')+' · possédée : '+vs.map(v=>v.own).join('/')+'</span></div></div>'
-  +'<div class="row" style="margin-top:10px;gap:8px;flex-wrap:wrap">'+vs.map(v=>'<button class="btn" style="padding:10px" data-csadd="'+v.id+'">+1 '+(v.ver==='Normal'?'Normal':'Alt Art'+(v.id.endsWith('ALT2')?' 2':''))+'</button>').join('')+'<button class="btn alt" style="padding:10px" data-csno>Ignorer</button></div>';
- p.style.display='block';setBtn();status('Carte reconnue : '+id);if(navigator.vibrate)try{navigator.vibrate(40)}catch(_){}}
-function resume(){const p=ov.querySelector('#cs-res');p.style.display='none';p.innerHTML='';hist=[];for(const k in ACC)delete ACC[k];paused=false;scanning=false;setBtn();status('Aligne la carte, puis appuie sur « Démarrer le scan »')}
-async function open(){
- if(ov)return;ov=document.createElement('div');
- ov.style.cssText='position:fixed;inset:0;z-index:99999;background:#000;color:#fff;display:flex;flex-direction:column;font-family:inherit';
- ov.innerHTML='<video id="cs-v" playsinline muted autoplay style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>'
- +'<div id="cs-g" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);height:min(66vh,calc(86vw*1.4));aspect-ratio:5/7;border:3px solid #fff;border-radius:14px;box-shadow:0 0 0 100vmax rgba(0,0,0,.55)"><div style="position:absolute;right:2%;bottom:5%;width:42%;height:10%;border:2px solid #FFC83D;border-radius:6px"></div></div>'
- +'<div style="position:absolute;top:0;left:0;right:0;padding:12px;display:flex;justify-content:space-between;align-items:center"><b>📷 Scanner</b><button data-csx style="background:#222;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:16px">✕ Fermer</button></div>'
- +'<div style="position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.85))"><div id="cs-st" style="text-align:center;margin-bottom:8px;font-size:14px">Démarrage de la caméra…</div><button id="cs-go" data-csgo class="btn" style="width:100%;padding:16px;font-size:18px;margin-bottom:8px">▶️ Démarrer le scan</button><div style="display:flex;gap:8px;margin-bottom:8px"><input id="cs-man" placeholder="Ou tape le numéro : 03-050" autocomplete="off" style="flex:1;min-width:0;padding:12px;border-radius:10px;border:0;font-size:16px"><button data-csman class="btn alt" style="padding:12px 16px">OK</button></div><div id="cs-res" class="panel" style="display:none;color:var(--tx)"></div></div>';
- document.body.appendChild(ov);vid=ov.querySelector('#cs-v');
- try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
-  vid.srcObject=stream;await vid.play().catch(()=>{});status('Aligne la carte dans le cadre, puis appuie sur « Démarrer le scan »');timer=setInterval(tick,800);getWorker().then(()=>{if(!scanning)status('Aligne la carte dans le cadre, puis appuie sur « Démarrer le scan »')}).catch(e=>status('Lecteur indisponible : '+(e&&e.message?e.message:e)))}
- catch(e){status('Caméra : '+(e&&e.name||e)+'. Autorise la caméra, ou utilise « Prendre une photo ».')}}
-function close(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ov)ov.remove();ov=vid=null;paused=false;scanning=false;hist=[];render()}
-async function fromFile(f){if(!f)return;toast('Lecture de la photo…');
- try{const bmp=await createImageBitmap(f);for(const k in ACC)delete ACC[k];let id=null;
-  for(let r=0;r<2&&!id;r++){id=vote(await readFrame(bmp,0,0,bmp.width,bmp.height,3))}
-  if(id){S.sc=id;render();toast('Carte reconnue : '+id)}else toast('Numéro illisible. Cadre la carte entière, bien nette, ou saisis-le à la main.')}
- catch(e){toast('Lecteur indisponible : '+(e&&e.message||e))}}
-document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-csx],[data-csgo],[data-csadd],[data-csno],[data-camfile],[data-csman]');if(!t)return;e.stopPropagation();e.preventDefault();
- if(t.hasAttribute('data-cam'))open();
- else if(t.hasAttribute('data-camfile')){const i=document.getElementById('camfile');if(i)i.click()}
- else if(t.hasAttribute('data-csx'))close();
- else if(t.hasAttribute('data-csgo')){scanning=!scanning;tries=0;hist=[];for(const k in ACC)delete ACC[k];setBtn();status(scanning?'Lecture en cours… garde la carte bien cadrée':'Scan arrêté')}
- else if(t.hasAttribute('data-csman'))manual();
- else if(t.hasAttribute('data-csno'))resume();
- else{const id=t.getAttribute('data-csadd'),c=cards.find(x=>x.id===id);if(c){bump('c',1);c.own++;S.last.unshift(id);save();toast(c.name+' ajoutée ✓')}resume()}},true);
+function sobel(g,w,h){const ax=new Float32Array(w*h),ay=new Float32Array(w*h),mg=new Float32Array(w*h);
+ for(let y=0;y<h;y++){const ym=y>0?y-1:1,yp=y<h-1?y+1:h-2;
+  for(let x=0;x<w;x++){const xm=x>0?x-1:1,xp=x<w-1?x+1:w-2;
+   const a=g[ym*w+xm],b=g[ym*w+x],c=g[ym*w+xp],d=g[y*w+xm],f=g[y*w+xp],gg=g[yp*w+xm],hh=g[yp*w+x],ii=g[yp*w+xp];
+   const gx=((c+2*f+ii)-(a+2*d+gg))/8,gy=((gg+2*hh+ii)-(a+2*b+c))/8,i=y*w+x;
+   ax[i]=Math.abs(gx);ay[i]=Math.abs(gy);mg[i]=Math.sqrt(gx*gx+gy*gy)}}
+ return{ax,ay,mg}}
+function bil(G,w,h,x,y){let x0=Math.floor(x),y0=Math.floor(y);const fx=x-x0,fy=y-y0;
+ x0=x0<0?0:x0>w-2?w-2:x0;y0=y0<0?0:y0>h-2?h-2:y0;const i=y0*w+x0;
+ return G[i]*(1-fx)*(1-fy)+G[i+1]*fx*(1-fy)+G[i+w]*(1-fx)*fy+G[i+w+1]*fx*fy}
+
+/* ---------- détection du quadrilatère de la carte ---------- */
+const TS=(()=>{const a=[];for(let i=0;i<29;i++)a.push(Math.tan((-14+i)*Math.PI/180));return a})();
+function sideCands(G,w,h,p0,p1,center,half,vertical,K,sep){
+ const np=Math.max(1,Math.floor(p1-p0)),ns=Math.max(2,Math.floor(half)+1),du=2*half/(ns-1);
+ const best=new Float32Array(np),arg=new Int8Array(np);
+ for(let ip=0;ip<np;ip++){const p=p0+ip;let bv=-1,bt=0;
+  for(let it=0;it<TS.length;it++){const t=TS[it];let s=0;
+   for(let k=0;k<ns;k++){const u=-half+k*du;s+=vertical?bil(G,w,h,p+t*u,center+u):bil(G,w,h,center+u,p+t*u)}
+   s/=ns;if(s>bv){bv=s;bt=it}}
+  best[ip]=bv;arg[ip]=bt}
+ const order=[];for(let i=0;i<np;i++)order.push(i);order.sort((a,b)=>best[b]-best[a]);
+ const keep=[];for(const i of order){let ok=true;for(const k of keep)if(Math.abs(i-k)<sep){ok=false;break}
+  if(ok){keep.push(i);if(keep.length>=K)break}}
+ return keep.map(i=>({p:p0+i,t:TS[arg[i]],v:best[i]}))}
+function inter(v,hh,gcx,gcy){const x=(v.p+v.t*(hh.p-gcy-hh.t*gcx))/(1-v.t*hh.t),y=hh.p+hh.t*(x-gcx);return[x,y]}
+function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1])}
+/* roi : image ; guide : {cx,cy,gw,gh} en pixels roi. Retourne {quad:[TL,TR,BR,BL], conf, ar, strength} ou null */
+const DP={K:8,sigA:.05,sizeSig:0,posSig:0,pw:1};
+function detect(roi,guide,P){P=Object.assign({},DP,P||{});const K=P.K;
+ const{w,h}=roi,{cx:gcx,cy:gcy,gw,gh}=guide;
+ const g=blur(gray(roi),w,h,1.3),S=sobel(g,w,h);
+ // médiane approx. du gradient
+ const hist=new Uint32Array(256);let mx=0;for(let i=0;i<S.mg.length;i++)if(S.mg[i]>mx)mx=S.mg[i];const sc=255/(mx||1);for(let i=0;i<S.mg.length;i++)hist[Math.min(255,S.mg[i]*sc|0)]++;
+ let acc=0,med=0;for(let i=0;i<256;i++){acc+=hist[i];if(acc>=S.mg.length/2){med=(i+.5)/sc;break}}med+=1e-3;
+ const lo=.28,hi=.70;
+ const Ls=sideCands(S.ax,w,h,gcx-gw*hi,gcx-gw*lo,gcy,gh*.30,true,K,6),Rs=sideCands(S.ax,w,h,gcx+gw*lo,gcx+gw*hi,gcy,gh*.30,true,K,6);
+ const Ts=sideCands(S.ay,w,h,gcy-gh*hi,gcy-gh*lo,gcx,gw*.30,false,K,6),Bs=sideCands(S.ay,w,h,gcy+gh*lo,gcy+gh*hi,gcx,gw*.30,false,K,6);
+ let best=null,bs=-1;const pw=P.pw,f=pw===1?(v=>v):(v=>Math.pow(Math.max(v,0),pw));
+ for(const L of Ls)for(const R of Rs){if(Math.abs(L.t-R.t)>.14)continue;
+  for(const T of Ts){if(Math.abs(L.t+T.t)>.17)continue;
+   for(const B of Bs){if(Math.abs(T.t-B.t)>.14)continue;
+    const TL=inter(L,T,gcx,gcy),TR=inter(R,T,gcx,gcy),BR=inter(R,B,gcx,gcy),BL=inter(L,B,gcx,gcy);
+    const ww=(dist(TL,TR)+dist(BL,BR))/2,hh=(dist(TL,BL)+dist(TR,BR))/2,ar=ww/(hh+1e-6);
+    let pen=Math.exp(-Math.pow((ar-CARD_AR)/P.sigA,2));
+    if(P.sizeSig){const r=Math.log(hh/gh);pen*=Math.exp(-r*r/(P.sizeSig*P.sizeSig))}
+    if(P.posSig){const mx_=(TL[0]+TR[0]+BR[0]+BL[0])/4-gcx,my_=(TL[1]+TR[1]+BR[1]+BL[1])/4-gcy;pen*=Math.exp(-(mx_*mx_+my_*my_)/Math.pow(P.posSig*gh,2))}
+    const sc2=(f(L.v)+f(R.v)+f(T.v)+f(B.v))*pen;
+    if(sc2>bs){bs=sc2;best={quad:[TL,TR,BR,BL],ar,sup:(L.v+R.v+T.v+B.v)/4,sides:[L.v,R.v,T.v,B.v]}}}}}
+ if(!best)return null;
+ const strength=best.sup/med,mnSide=Math.min(...best.sides);
+ // confiance : le contour doit être fort en valeur ABSOLUE (sinon un fond uni + bruit ressemble à une carte), sur les 4 côtés
+ const conf=Math.min(clamp((strength-1.3)/3.5,0,1),clamp((best.sup-4)/8,0,1),clamp((mnSide-1)/2,0,1))*Math.exp(-Math.pow((best.ar-CARD_AR)/.07,2));
+ return{quad:best.quad,conf,ar:best.ar,strength,sup:best.sup,sides:best.sides,med}}
+
+/* ---------- homographie ---------- */
+function homUnitToQuad(q){ // carré unité (0,0),(1,0),(1,1),(0,1) -> quad q[TL,TR,BR,BL]
+ const[x0,y0]=q[0],[x1,y1]=q[1],[x2,y2]=q[2],[x3,y3]=q[3];
+ const dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3,dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3;
+ let a,b,c,d,e,f,g,h;
+ if(Math.abs(dx3)<1e-9&&Math.abs(dy3)<1e-9){a=x1-x0;b=x2-x1;c=x0;d=y1-y0;e=y2-y1;f=y0;g=0;h=0}
+ else{const den=dx1*dy2-dx2*dy1;g=(dx3*dy2-dx2*dy3)/den;h=(dx1*dy3-dx3*dy1)/den;
+  a=x1-x0+g*x1;b=x3-x0+h*x3;c=x0;d=y1-y0+g*y1;e=y3-y0+h*y3;f=y0}
+ return[a,b,c,d,e,f,g,h]} // x=(a u+b v+c)/(g u+h v+1)
+/* redresse une portion [u0,u1]x[v0,v1] (coordonnées carte 0..1) du quad en image ow x oh (bilinéaire) */
+function warpRect(img,quad,ow,oh,u0,v0,u1,v1){
+ const[a,b,c,d,e,f,g,h]=homUnitToQuad(quad),{w:iw,h:ih,d:id}=img,out=new Uint8ClampedArray(ow*oh*4);
+ for(let y=0;y<oh;y++){const v=v0+(v1-v0)*(y+.5)/oh;
+  for(let x=0;x<ow;x++){const u=u0+(u1-u0)*(x+.5)/ow,z=g*u+h*v+1,sx=(a*u+b*v+c)/z-.5,sy=(d*u+e*v+f)/z-.5;
+   const x0=Math.floor(sx),y0=Math.floor(sy),fx=sx-x0,fy=sy-y0;
+   const x0c=clamp(x0,0,iw-1),x1c=clamp(x0+1,0,iw-1),y0c=clamp(y0,0,ih-1),y1c=clamp(y0+1,0,ih-1);
+   const i00=(y0c*iw+x0c)*4,i10=(y0c*iw+x1c)*4,i01=(y1c*iw+x0c)*4,i11=(y1c*iw+x1c)*4,o=(y*ow+x)*4;
+   const w00=(1-fx)*(1-fy),w10=fx*(1-fy),w01=(1-fx)*fy,w11=fx*fy;
+   out[o]=id[i00]*w00+id[i10]*w10+id[i01]*w01+id[i11]*w11;out[o+1]=id[i00+1]*w00+id[i10+1]*w10+id[i01+1]*w01+id[i11+1]*w11;
+   out[o+2]=id[i00+2]*w00+id[i10+2]*w10+id[i01+2]*w01+id[i11+2]*w11;out[o+3]=255}}
+ return{w:ow,h:oh,d:out}}
+function warp(img,quad,ow=CW,oh=CH,inset=INSET){return warpRect(img,quad,ow,oh,inset,inset,1-inset,1-inset)}
+/* quad élargi dans le repère carte : eL,eR (fraction de la largeur), eT,eB (fraction de la hauteur) */
+function expandQuad(q,eL,eR,eT,eB){const h=homUnitToQuad(q),P=(u,v)=>{const z=h[6]*u+h[7]*v+1;return[(h[0]*u+h[1]*v+h[2])/z,(h[3]*u+h[4]*v+h[5])/z]};
+ return[P(-eL,-eT),P(1+eR,-eT),P(1+eR,1+eB),P(-eL,1+eB)]}
+function variantQuad(q,gw,gh,sx,sy,sc){const cx=(q[0][0]+q[1][0]+q[2][0]+q[3][0])/4,cy=(q[0][1]+q[1][1]+q[2][1]+q[3][1])/4;
+ return q.map(([x,y])=>[(x-cx)*sc+cx+sx*gw,(y-cy)*sc+cy+sy*gh])}
+
+/* ---------- descripteur ---------- */
+const HW=64,HH=90,CELL=8,NB=8,CGX=8,CGY=11;
+function nz(v){let s=0;for(let i=0;i<v.length;i++)s+=v[i]*v[i];s=1/(Math.sqrt(s)+1e-9);for(let i=0;i<v.length;i++)v[i]*=s;return v}
+function hogOf(gr,w,h){ // gr : Float32 w*h (64x90)
+ const g=blur(gr,w,h,.8),cw=(w/CELL)|0,ch=(h/CELL)|0,hist=new Float32Array(cw*ch*NB);
+ for(let y=0;y<ch*CELL;y++){const ym=y>0?y-1:1,yp=y<h-1?y+1:h-2;
+  for(let x=0;x<cw*CELL;x++){const xm=x>0?x-1:1,xp=x<w-1?x+1:w-2;
+   const gx=g[y*w+xp]-g[y*w+xm],gy=g[yp*w+x]-g[ym*w+x],mag=Math.sqrt(gx*gx+gy*gy);if(mag<1e-6)continue;
+   let an=Math.atan2(gy,gx);if(an<0)an+=Math.PI;if(an>=Math.PI)an-=Math.PI;
+   const bpos=an/Math.PI*NB,b0=Math.floor(bpos)%NB,b1=(b0+1)%NB,fr=bpos-Math.floor(bpos),ci=((y/CELL)|0)*cw+((x/CELL)|0);
+   hist[ci*NB+b0]+=mag*(1-fr);hist[ci*NB+b1]+=mag*fr}}
+ const out=new Float32Array((cw-1)*(ch-1)*4*NB);let o=0;const v=new Float32Array(4*NB);
+ for(let i=0;i<ch-1;i++)for(let j=0;j<cw-1;j++){let k=0;
+  for(const[di,dj]of[[0,0],[0,1],[1,0],[1,1]]){const base=((i+di)*cw+(j+dj))*NB;for(let q=0;q<NB;q++)v[k++]=hist[base+q]}
+  let s=0;for(let q=0;q<v.length;q++)s+=v[q]*v[q];const inv1=1/(Math.sqrt(s)+1e-3);
+  s=0;for(let q=0;q<v.length;q++){v[q]=Math.min(v[q]*inv1,.2);s+=v[q]*v[q]}
+  const inv2=1/(Math.sqrt(s)+1e-6);for(let q=0;q<v.length;q++)out[o++]=v[q]*inv2}
+ return out}
+function srgb2lin(c){c/=255;return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4)}
+function rgb2lab(r,g,b){const R=srgb2lin(r),G=srgb2lin(g),B=srgb2lin(b);
+ let X=(R*.4124564+G*.3575761+B*.1804375)/.95047,Y=R*.2126729+G*.7151522+B*.072175,Z=(R*.0193339+G*.119192+B*.9503041)/1.08883;
+ const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;X=f(X);Y=f(Y);Z=f(Z);return[116*Y-16,500*(X-Y),200*(Y-Z)]}
+/* card : image CWxCH (déjà redressée, rétrécie) -> {hog,col} bruts (normalisés L2) */
+function describe(card){
+ const{w,h,d}=card,gr=new Float32Array(HW*HH);
+ // moyenne 2x2 -> 64x90 en gris
+ for(let y=0;y<HH;y++)for(let x=0;x<HW;x++){let s=0;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){const j=((2*y+dy)*w+2*x+dx)*4;s+=.299*d[j]+.587*d[j+1]+.114*d[j+2]}gr[y*HW+x]=s/4}
+ const hog=nz(hogOf(gr,HW,HH));
+ // couleurs : 8x11 cellules de 16x16 (sur 128x176)
+ const col=new Float32Array(CGX*CGY*3);
+ for(let cy=0;cy<CGY;cy++)for(let cx=0;cx<CGX;cx++){let r=0,g=0,b=0;
+  for(let y=0;y<16;y++)for(let x=0;x<16;x++){const j=((cy*16+y)*w+cx*16+x)*4;r+=d[j];g+=d[j+1];b+=d[j+2]}
+  const lab=rgb2lab(r/256,g/256,b/256),o=(cy*CGX+cx)*3;col[o]=lab[0];col[o+1]=lab[1];col[o+2]=lab[2]}
+ for(let c=0;c<3;c++){let m=0;const n=CGX*CGY;for(let i=0;i<n;i++)m+=col[i*3+c];m/=n;let v=0;for(let i=0;i<n;i++){const t=col[i*3+c]-m;v+=t*t}const sd=Math.sqrt(v/n),den=sd+(c?4:1.6);for(let i=0;i<n;i++)col[i*3+c]=(col[i*3+c]-m)/den}
+ return{hog,col:nz(col)}}
+function describeRef(img){ // image ref native -> redressée par recadrage intérieur -> descripteur
+ const m=INSET,card=resizeArea(img,CW,CH,img.w*m,img.h*m,img.w*(1-2*m),img.h*(1-2*m));return describe(card)}
+
+/* ---------- index ---------- */
+function makeIndex(ids,descs){
+ const N=ids.length,Dh=descs[0].hog.length,Dc=descs[0].col.length,mh=new Float32Array(Dh),mc=new Float32Array(Dc);
+ for(const d of descs){for(let i=0;i<Dh;i++)mh[i]+=d.hog[i]/N;for(let i=0;i<Dc;i++)mc[i]+=d.col[i]/N}
+ const H=new Float32Array(N*Dh),C=new Float32Array(N*Dc);
+ descs.forEach((d,n)=>{const a=new Float32Array(Dh),b=new Float32Array(Dc);for(let i=0;i<Dh;i++)a[i]=d.hog[i]-mh[i];for(let i=0;i<Dc;i++)b[i]=d.col[i]-mc[i];nz(a);nz(b);H.set(a,n*Dh);C.set(b,n*Dc)});
+ return{ids,N,Dh,Dc,mh,mc,H,C,lrn:new Uint8Array(N)}}
+function center(index,d){const a=new Float32Array(index.Dh),b=new Float32Array(index.Dc);for(let i=0;i<index.Dh;i++)a[i]=d.hog[i]-index.mh[i];for(let i=0;i<index.Dc;i++)b[i]=d.col[i]-index.mc[i];return{hog:nz(a),col:nz(b)}}
+function scores(index,q){const{N,Dh,Dc,H,C}=index,out=new Float32Array(N);
+ for(let n=0;n<N;n++){let s=0,o=n*Dh;for(let i=0;i<Dh;i++)s+=H[o+i]*q.hog[i];let t=0;o=n*Dc;for(let i=0;i<Dc;i++)t+=C[o+i]*q.col[i];out[n]=(s+.5*t)/1.5}
+ return out}
+function top(sc,ids,k=5){const idx=[];for(let i=0;i<sc.length;i++)idx.push(i);idx.sort((a,b)=>sc[b]-sc[a]);const out=[],seen=new Set();
+ for(const i of idx){const id=ids[i];if(seen.has(id))continue;seen.add(id);out.push({id,i,s:sc[i]});if(out.length>=k)break}return out}
+/* ---------- apprentissage : descripteur d'une carte vue par la caméra, ajouté à l'index ---------- */
+function avgDesc(list){const Dh=list[0].hog.length,Dc=list[0].col.length,h=new Float32Array(Dh),c=new Float32Array(Dc);
+ for(const d of list){for(let i=0;i<Dh;i++)h[i]+=d.hog[i];for(let i=0;i<Dc;i++)c[i]+=d.col[i]}return{hog:nz(h),col:nz(c)}}
+function addRows(index,list){ // list : [{id,hog,col}] bruts (non centrés)
+ if(!list.length)return index;const{N,Dh,Dc}=index,M=N+list.length,H=new Float32Array(M*Dh),C=new Float32Array(M*Dc),L=new Uint8Array(M);
+ H.set(index.H);C.set(index.C);L.set(index.lrn||new Uint8Array(N));
+ list.forEach((d,k)=>{const a=new Float32Array(Dh),b=new Float32Array(Dc);for(let i=0;i<Dh;i++)a[i]=d.hog[i]-index.mh[i];for(let i=0;i<Dc;i++)b[i]=d.col[i]-index.mc[i];nz(a);nz(b);H.set(a,(N+k)*Dh);C.set(b,(N+k)*Dc);L[N+k]=1});
+ index.H=H;index.C=C;index.lrn=L;index.ids=index.ids.concat(list.map(d=>d.id));index.N=M;return index}
+function dropRows(index,pred){ // retire les lignes apprises dont l'id vérifie pred(id)
+ const{N,Dh,Dc}=index,keep=[];for(let i=0;i<N;i++)if(!(index.lrn[i]&&pred(index.ids[i])))keep.push(i);if(keep.length===N)return 0;
+ const M=keep.length,H=new Float32Array(M*Dh),C=new Float32Array(M*Dc),L=new Uint8Array(M),ids=[];
+ keep.forEach((i,k)=>{H.set(index.H.subarray(i*Dh,(i+1)*Dh),k*Dh);C.set(index.C.subarray(i*Dc,(i+1)*Dc),k*Dc);L[k]=index.lrn[i];ids.push(index.ids[i])});
+ index.H=H;index.C=C;index.lrn=L;index.ids=ids;index.N=M;return N-M}
+
+/* ---------- netteté (variance du laplacien normalisée) ---------- */
+function sharpness(card){const{w,h}=card,g=gray(card);let s=0,s2=0,n=0,m=0;
+ for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x,l=4*g[i]-g[i-1]-g[i+1]-g[i-w]-g[i+w];s+=l*l;m+=g[i];n++}
+ return Math.sqrt(s/n)/(m/n+20)}
+/* ---------- analyse complète d'un ROI (étagée) ---------- */
+const GRID=[-.04,0,.04],SCALES=[.94,1,1.06],WGRID=[-.08,-.04,0,.04,.08],WSCALES=[.9,.95,1,1.05,1.1];
+function crops(opt){if(opt.single)return[[0,0,1]];const sh=opt.wide?WGRID:GRID,sc=opt.wide?WSCALES:SCALES;const o=[];for(const sx of sh)for(const sy of sh)for(const s of sc)o.push([sx,sy,s]);return o}
+function runCrops(index,roi,quad,guide,list){let best=null;
+ for(const[sx,sy,s]of list){const qq=variantQuad(quad,guide.gw,guide.gh,sx,sy,s),card=warp(roi,qq),q=center(index,describe(card)),sc=scores(index,q);
+  let m=-9;for(let i=0;i<sc.length;i++)if(sc[i]>m)m=sc[i];if(!best||m>best.m)best={m,sc,qq,card}}
+ return best}
+function summarise(index,best,k=6){const tp=top(best.sc,index.ids,k),n=best.sc.length;let mu=0,v=0;for(let i=0;i<n;i++)mu+=best.sc[i];mu/=n;for(let i=0;i<n;i++){const d=best.sc[i]-mu;v+=d*d}const sd=Math.sqrt(v/n)+1e-9;
+ return{top:tp.map(x=>({id:x.id,s:+x.s.toFixed(4)})),margin:tp[0].s-tp[1].s,z:(tp[0].s-mu)/sd,z2:(tp[1].s-mu)/sd,mu,sd}}
+/* affinage de l'alignement : on déplace chaque bord du quad (en coordonnées carte) pour maximiser la ressemblance avec l'index */
+const CDS={L:[-.03,0,.03,.06,.09],R:[-.03,0,.03,.06,.09],T:[-.03,0,.03,.06,.09],B:[-.04,0,.04,.08,.12,.16,.2]};
+function evalHyp(index,roi,quad0,e){const qq=expandQuad(quad0,e[0],e[1],e[2],e[3]),card=warp(roi,qq),q=center(index,describe(card)),sc=scores(index,q);
+ let m=-9;for(let i=0;i<sc.length;i++)if(sc[i]>m)m=sc[i];return{m,sc,qq,card,e:e.slice()}}
+function refineCD(index,roi,quad0,rounds,start,ranges){let cur=start||evalHyp(index,roi,quad0,[0,0,0,0]),cache=new Map();const key=e=>e.map(v=>v.toFixed(3)).join(',');cache.set(key(cur.e),cur);
+ const R=ranges||CDS,order=[3,2,0,1],names=['L','R','T','B'];
+ for(let r=0;r<(rounds||2);r++){let moved=false;
+  for(const k of order){let bestK=cur;for(const v of R[names[k]]){const e=cur.e.slice();e[k]=v;const kk=key(e);let h=cache.get(kk);if(!h){h=evalHyp(index,roi,quad0,e);cache.set(kk,h)}if(h.m>bestK.m+1e-4)bestK=h}
+   if(bestK!==cur){cur=bestK;moved=true}}
+  if(!moved)break}
+ return cur}
+const OK1=.45,OKM=.10;
+/* seuil du z-score (écart du meilleur score à la moyenne, en écarts-types) : dépend de la taille de l'index */
+const zmin=n=>4.8+.25*Math.log(Math.max(1,n)/484);
+/* carte reconnue : score, marge et z-score suffisants ; un score très haut avec une grosse marge dispense du z-score */
+const accepted=(s,m,z,n)=>s>=.35&&m>=.08&&(z>=zmin(n)||(s>=.62&&m>=.14));
+/* sous-ensemble de l'index (les K lignes les mieux classées) : sert à l'affinage de l'alignement, 10 fois moins cher */
+function subIndex(index,sc,K){const n=sc.length,ord=[];for(let i=0;i<n;i++)ord.push(i);ord.sort((a,b)=>sc[b]-sc[a]);const pick=ord.slice(0,K),{Dh,Dc}=index,H=new Float32Array(K*Dh),C=new Float32Array(K*Dc);
+ pick.forEach((r,k)=>{H.set(index.H.subarray(r*Dh,(r+1)*Dh),k*Dh);C.set(index.C.subarray(r*Dc,(r+1)*Dc),k*Dc)});
+ return{ids:pick.map(r=>index.ids[r]),N:K,Dh,Dc,mh:index.mh,mc:index.mc,H,C}}
+const SUBK=64;
+function analyseStaged(index,roi,guide,opt={}){
+ const t0=Date.now(),det=opt.forceQuad?null:detect(roi,guide,opt.det);
+ const gq=[[guide.cx-guide.gw/2,guide.cy-guide.gh/2],[guide.cx+guide.gw/2,guide.cy-guide.gh/2],[guide.cx+guide.gw/2,guide.cy+guide.gh/2],[guide.cx-guide.gw/2,guide.cy+guide.gh/2]];
+ const BX=opt.noexp?[0,0,0,0]:[.026,.034,0,.030],quad=opt.forceQuad||(det?expandQuad(det.quad,...BX):gq),conf=opt.forceQuad?1:(det?det.conf:0);let stage=0,best=null;
+ if(opt.detOnly)return{det:det?{quad:det.quad,conf:det.conf,ar:det.ar,strength:det.strength}:null,conf,quad,top:[],margin:0,stage:-2,ms:Date.now()-t0};
+ if(!index||!index.N)return{det:det?{quad:det.quad,conf:det.conf,ar:det.ar,strength:det.strength}:null,conf,quad,top:[],margin:0,stage:-1,ms:Date.now()-t0};
+ let sc0=null;if(!opt.full){best=runCrops(index,roi,quad,guide,[[0,0,1]]);const sm=summarise(index,best);if(sm.top[0].s>=OK1&&sm.margin>=OKM&&(sm.z>=zmin(index.N)+.2||(sm.top[0].s>=.62&&sm.margin>=.14)))stage=0;else{sc0=best.sc;best=null}}
+ if(!best){stage=opt.wide?2:1;
+  if(opt.cd===false)best=runCrops(index,roi,quad,guide,crops(opt));
+  else{const q0=opt.forceQuad||(det?det.quad:gq),K=opt.sub===undefined?SUBK:opt.sub,ix=(sc0&&K>0&&index.N>K*1.5)?subIndex(index,sc0,K):index,
+   h0=evalHyp(ix,roi,q0,det&&!opt.forceQuad&&!opt.noexp?[.026,.034,0,.030]:[0,0,0,0]);
+   let h=refineCD(ix,roi,q0,opt.wide?3:2,h0);
+   // petit réglage global (décalage / échelle) autour du meilleur
+   const fine=[];for(const sx of[-.02,.02])for(const sy of[-.02,.02])fine.push([sx,sy,1]);fine.push([0,0,.97],[0,0,1.03]);
+   let fb=runCrops(ix,roi,h.qq,guide,fine);if(fb&&fb.m>h.m)h=fb;
+   if(ix!==index){const sc=scores(index,center(index,describe(h.card)));let m=-9;for(let i=0;i<sc.length;i++)if(sc[i]>m)m=sc[i];h={m,sc,qq:h.qq,card:h.card}}
+   best={m:h.m,sc:h.sc,qq:h.qq,card:h.card}}}
+ const sm=summarise(index,best);
+ return{det:det?{quad:det.quad,conf:det.conf,ar:det.ar,strength:det.strength}:null,conf,quad,qBest:best.qq,top:sm.top,margin:sm.margin,z:sm.z,z2:sm.z2,stage,sharp:sharpness(best.card),ms:Date.now()-t0}}
+/* ---------- (dé)sérialisation des descripteurs bruts ---------- */
+function packDescs(descs){const Dh=descs[0].hog.length,Dc=descs[0].col.length,out=new Float32Array(descs.length*(Dh+Dc));descs.forEach((d,i)=>{out.set(d.hog,i*(Dh+Dc));out.set(d.col,i*(Dh+Dc)+Dh)});return out}
+function unpackDescs(arr,n,Dh,Dc){const o=[];for(let i=0;i<n;i++){const b=i*(Dh+Dc);o.push({hog:arr.slice(b,b+Dh),col:arr.slice(b+Dh,b+Dh+Dc)})}return o}
+return{CARD_AR,CW,CH,INSET,resizeArea,gray,blur,sobel,detect,warp,warpRect,variantQuad,describe,describeRef,makeIndex,center,scores,top,avgDesc,addRows,dropRows,analyseStaged,packDescs,unpackDescs,homUnitToQuad,expandQuad,zmin,accepted,sharpness,rgb2lab,HD:2240,CD:264}}
+
+
+const CORE_V='c2';
+const SC=makeCore();
+
+/* ---------- worker : calcul de l'index et analyse des images (hors fil principal) ---------- */
+function workerMain(){
+ const SC=makeCore();let ids=[],descs=[],index=null,sig='',cv='',ring=[],store=[];
+ const idb=()=>new Promise((ok,ko)=>{const q=indexedDB.open('fbscan',1);q.onupgradeneeded=()=>q.result.createObjectStore('idx');q.onsuccess=()=>ok(q.result);q.onerror=()=>ko(q.error)});
+ const idbGet=async k=>{const d=await idb();return new Promise((ok,ko)=>{const r=d.transaction('idx').objectStore('idx').get(k);r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)})};
+ const idbPut=async(k,v)=>{const d=await idb();return new Promise((ok,ko)=>{const t=d.transaction('idx','readwrite');t.objectStore('idx').put(v,k);t.oncomplete=()=>ok();t.onerror=()=>ko(t.error)})};
+ /* cartes apprises : descripteurs quantifiés sur 8 bits, gardés sur l'appareil seulement */
+ const q8=a=>{let m=0;for(let i=0;i<a.length;i++){const v=a[i]<0?-a[i]:a[i];if(v>m)m=v}const s=m/127||1,o=new Int8Array(a.length);for(let i=0;i<a.length;i++)o[i]=Math.round(a[i]/s);return[o,s]};
+ const dq=(o,s)=>{const a=new Float32Array(o.length);for(let i=0;i<o.length;i++)a[i]=o[i]*s;return a};
+ const lids=()=>{const s=new Set();if(index)for(let i=0;i<index.N;i++)if(index.lrn[i])s.add(index.ids[i]);return[...s]};
+ const rebuild=()=>{SC.dropRows(index,()=>true);const rs=new Set(index.ids),rows=[];for(const e of store)if(!rs.has(e.id))rows.push({id:e.id,hog:dq(e.h,e.hs),col:dq(e.c,e.cs)});SC.addRows(index,rows)};
+ const saveStore=async()=>{try{await idbPut('learn',{v:1,cv,items:store})}catch(_){}};
+ const loadStore=async()=>{let c=null;try{c=await idbGet('learn')}catch(_){}
+  store=c&&c.v===1&&c.cv===cv&&Array.isArray(c.items)?c.items.filter(e=>e&&typeof e.id==='string'&&e.h instanceof Int8Array&&e.c instanceof Int8Array&&e.h.length===SC.HD&&e.c.length===SC.CD&&e.hs>0&&e.cs>0):[]};
+ const reply=(rid,ok,k)=>self.postMessage({t:'lrn',rid,ok,k:k||0,n:index?index.N:0,learned:lids()});
+ self.onmessage=async e=>{const m=e.data;
+  try{
+   if(m.t==='init'){sig=m.sig;cv=m.cv||'';let c=null;try{c=await idbGet('main')}catch(_){}
+    if(c&&c.sig===sig&&c.arr&&c.ids&&c.ids.length){ids=c.ids;descs=SC.unpackDescs(c.arr,ids.length,SC.HD,SC.CD);index=SC.makeIndex(ids,descs);await loadStore();rebuild();self.postMessage({t:'ready',n:index.N,cached:true,learned:lids()})}
+    else self.postMessage({t:'need'})}
+   else if(m.t==='ref'){ids.push(m.id);descs.push(SC.describeRef({w:m.w,h:m.h,d:new Uint8ClampedArray(m.buf)}))}
+   else if(m.t==='build'){index=SC.makeIndex(ids,descs);await loadStore();rebuild();self.postMessage({t:'ready',n:index.N,cached:false,learned:lids()});
+    try{await idbPut('main',{sig,ids,arr:SC.packDescs(descs)})}catch(_){}}
+   else if(m.t==='an'){const im={w:m.w,h:m.h,d:new Uint8ClampedArray(m.buf)},o=m.opt||{},r=SC.analyseStaged(index,im,m.guide,o);r.t='res';r.rid=m.rid;
+    const t=r.top&&r.top[0];
+    // on garde les dernières images d'une carte présente mais non reconnue (pour l'apprendre si elle est saisie à la main)
+    if(index&&r.stage>=0&&!(t&&SC.accepted(t.s,r.margin,r.z||0,index.N))&&(o.forceQuad||(r.det&&r.conf>=.5))){ring.push({rid:m.rid,img:im,quad:o.forceQuad||r.quad});if(ring.length>10)ring.shift()}
+    self.postMessage(r)}
+   else if(m.t==='learn'){const want=new Set(m.rids||[]),use=ring.filter(r=>want.has(r.rid)).slice(-3);
+    if(!index||!use.length){reply(m.rid,false);return}
+    const d=SC.avgDesc(use.map(r=>SC.describe(SC.warp(r.img,r.quad)))),[h8,hs]=q8(d.hog),[c8,cs]=q8(d.col),mine=store.filter(x=>x.id===m.id);
+    if(mine.length>=2)store=store.filter(x=>x!==mine[0]);
+    store.push({id:m.id,t:Date.now(),h:h8,hs,c:c8,cs});if(store.length>2500)store.shift();
+    rebuild();await saveStore();reply(m.rid,true,use.length)}
+   else if(m.t==='unlearn'){store=store.filter(x=>x.id!==m.id);if(index)rebuild();await saveStore();reply(m.rid,true)}
+   else if(m.t==='unlearnall'){store=[];if(index)rebuild();await saveStore();reply(m.rid,true)}
+  }catch(err){self.postMessage({t:'err',rid:m&&m.rid,msg:String(err&&err.message||err)})}}
+}
+const Eng=(()=>{
+ let w=null,state='idle',prog=0,pend=new Map(),seq=0,local=null,started=false,urgent=false,nIdx=484,learned=new Set(),onSt=()=>{};
+ const sigOf=()=>{let L=0,n=0;for(const k in CARDIMG){L+=CARDIMG[k].length;n++}return CORE_V+'|'+n+'|'+L};
+ const set=s=>{state=s;try{onSt()}catch(_){}};
+ function decode(url){return new Promise((ok,ko)=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;
+  const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(im,0,0);ok(g.getImageData(0,0,c.width,c.height))}catch(e){ko(e)}};im.onerror=()=>ko(new Error('img'));im.src=url})}
+ async function feed(post){const keys=Object.keys(CARDIMG);let n=0;
+  for(const id of keys){try{post(id,await decode(CARDIMG[id]))}catch(_){}n++;prog=n/keys.length;
+   if(n%2===0){await new Promise(r=>setTimeout(r,urgent?0:14));try{onSt()}catch(_){}}}}
+ function startLocal(){local={ids:[],descs:[],index:null,ring:[]};
+  feed((id,d)=>{local.ids.push(id);local.descs.push(SC.describeRef({w:d.width,h:d.height,d:d.data}))}).then(()=>{if(!local.ids.length)throw 0;local.index=SC.makeIndex(local.ids,local.descs);nIdx=local.ids.length;set('ready')}).catch(()=>set('fail'))}
+ function startWorker(){
+  let url;try{url=URL.createObjectURL(new Blob(['const makeCore='+makeCore.toString()+';('+workerMain.toString()+')();'],{type:'text/javascript'}));w=new Worker(url)}catch(e){w=null;return false}
+  w.onerror=()=>{if(state!=='ready'){try{w.terminate()}catch(_){}w=null;for(const p of pend.values())p.ko(new Error('worker'));pend.clear();startLocal()}};
+  w.onmessage=async e=>{const m=e.data;
+   if(m.t==='need'){await feed((id,d)=>{w&&w.postMessage({t:'ref',id,w:d.width,h:d.height,buf:d.data.buffer},[d.data.buffer])});w&&w.postMessage({t:'build'})}
+   else if(m.t==='ready'){nIdx=m.n||nIdx;learned=new Set(m.learned||[]);set('ready')}
+   else if(m.t==='res'||m.t==='err'||m.t==='lrn'){const p=pend.get(m.rid);if(p){pend.delete(m.rid);m.t==='err'?p.ko(new Error(m.msg)):p.ok(m)}}};
+  w.postMessage({t:'init',sig:sigOf(),cv:CORE_V});return true}
+ function rpc(msg){return new Promise((ok,ko)=>{if(!w)return ko(new Error('nw'));const rid=++seq,to=setTimeout(()=>{pend.delete(rid);ko(new Error('timeout'))},12000);pend.set(rid,{ok:r=>{clearTimeout(to);ok(r)},ko:e=>{clearTimeout(to);ko(e)}});msg.rid=rid;w.postMessage(msg)})}
+ const keep=m=>{if(m&&m.ok){nIdx=m.n||nIdx;learned=new Set(m.learned||[])}return m};
+ /* repli sans worker : mêmes opérations, en mémoire seulement */
+ function localLearn(id,rids){const L=local;if(!L||!L.index)return{ok:false};const want=new Set(rids||[]),use=L.ring.filter(r=>want.has(r.rid)).slice(-3);if(!use.length)return{ok:false};
+  const d=SC.avgDesc(use.map(r=>SC.describe(SC.warp(r.img,r.quad))));SC.dropRows(L.index,x=>x===id);SC.addRows(L.index,[{id,hog:d.hog,col:d.col}]);learned.add(id);return{ok:true,n:L.index.N,learned:[...learned]}}
+ function localForget(id){const L=local;if(!L||!L.index)return{ok:false};SC.dropRows(L.index,x=>id==null||x===id);if(id==null)learned=new Set();else learned.delete(id);return{ok:true,n:L.index.N,learned:[...learned]}}
+ return{
+  get state(){return state},get progress(){return prog},get ready(){return state==='ready'},get n(){return nIdx},set onState(f){onSt=f},set urgent(v){urgent=!!v},
+  start(){if(started)return;started=true;set('loading');if(!startWorker())startLocal()},
+  analyse(img,guide,opt){
+   if(w){const rid=++seq;return new Promise((ok,ko)=>{const to=setTimeout(()=>{pend.delete(rid);ko(new Error('timeout'))},15000);
+    pend.set(rid,{ok:r=>{clearTimeout(to);ok(r)},ko:e=>{clearTimeout(to);ko(e)}});const buf=img.d.buffer;w.postMessage({t:'an',rid,w:img.w,h:img.h,buf,guide,opt},[buf])})}
+   return new Promise(ok=>setTimeout(()=>{const rid=++seq,o=opt||{},r=SC.analyseStaged(local&&local.index,img,guide,o);r.rid=rid;const t=r.top&&r.top[0];
+    if(local&&local.index&&r.stage>=0&&!(t&&SC.accepted(t.s,r.margin,r.z||0,local.index.N))&&(o.forceQuad||(r.det&&r.conf>=.5))){local.ring.push({rid,img,quad:o.forceQuad||r.quad});if(local.ring.length>10)local.ring.shift()}
+    ok(r)},0))},
+  get learned(){return learned},
+  learn(id,rids){return(w?rpc({t:'learn',id,rids}):Promise.resolve(localLearn(id,rids))).then(keep)},
+  unlearn(id){return(w?rpc({t:'unlearn',id}):Promise.resolve(localForget(id))).then(keep)},
+  unlearnAll(){return(w?rpc({t:'unlearnall'}):Promise.resolve(localForget(null))).then(keep)}}
+})();
+setTimeout(()=>{try{Eng.start()}catch(_){}},4500);
+
+/* ---------- outils ---------- */
+const clampn=(v,a,b)=>v<a?a:v>b?b:v,NOW=()=>performance.now(),dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+let ov=null,vid=null,stream=null,track=null,caps={},alive=false,photo=null,photoUrl=null,svgQ=null,gEl=null,tmr=0,ocrW=null,ocrFail=false,ocrBusy=false,kbOn=false;
+const $q=(s,r)=>(r||ov).querySelector(s);
+let CIDM=null;const cardOf=id=>{if(!CIDM||CIDM.size!==cards.length)CIDM=new Map(cards.map(c=>[c.id,c]));return CIDM.get(id)};
+const variantsOf=id=>cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'));
+const baseOf=id=>String(id).replace(/_ALT\d*$/,'');
+const pref=(k,d)=>{try{const v=localStorage.getItem('fb_sc_'+k);return v===null?d:JSON.parse(v)}catch(_){return d}};
+const setPref=(k,v)=>{try{localStorage.setItem('fb_sc_'+k,JSON.stringify(v))}catch(_){}};
+const verLabel=c=>c.ver==='Normal'?'Normal':'Alt Art'+(c.id.endsWith('ALT2')?' 2':'');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---------- lecture du numéro (OCR, en renfort : demande internet la 1re fois) ---------- */
+const TJS='https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js';
+let tjsLoading=null;
+function loadTJS(){if(window.Tesseract)return Promise.resolve();return tjsLoading||(tjsLoading=new Promise((ok,ko)=>{const s=document.createElement('script');let done=false;const to=setTimeout(()=>{if(done)return;done=true;tjsLoading=null;try{s.remove()}catch(_){}ko(new Error('timeout'))},12000);
+ s.src=TJS;s.onload=()=>{if(done)return;done=true;clearTimeout(to);ok()};s.onerror=()=>{if(done)return;done=true;clearTimeout(to);tjsLoading=null;ko(new Error('lib'))};document.head.appendChild(s)}))}
+async function getOcr(){if(ocrW)return ocrW;await loadTJS();
+ const mk=async o=>{const w=await Tesseract.createWorker('eng',1,o);await w.setParameters({tessedit_char_whitelist:'FB0123456789-',user_defined_dpi:'300'});return w};
+ try{ocrW=await mk({})}catch(e1){ocrW=await mk({langPath:'https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int'})}
+ return ocrW}
+let BASEIDS=null;const baseIds=()=>{if(!BASEIDS||BASEIDS.n!==cards.length){const s=new Set();cards.forEach(c=>s.add(c.ext+'-'+String(c.n).padStart(3,'0')));BASEIDS={n:cards.length,l:[...s]}}return BASEIDS.l};
+const CONF={'B8':.3,'8B':.3,'08':.5,'80':.5,'06':.6,'60':.6,'38':.5,'83':.5,'56':.5,'65':.5,'68':.5,'86':.5,'59':.7,'95':.7,'17':.6,'71':.6,'27':.7,'72':.7,'49':.7,'94':.7,'0B':.5,'B0':.5,'3B':.6,'B3':.6,'1I':.2,'I1':.2};
+function wlev(a,b){const m=a.length,n=b.length;let p=new Array(n+1),q=new Array(n+1);for(let j=0;j<=n;j++)p[j]=j;
+ for(let i=1;i<=m;i++){q[0]=i;for(let j=1;j<=n;j++){const x=a[i-1],y=b[j-1],c=x===y?0:(CONF[x+y]||1);q[j]=Math.min(p[j]+1,q[j-1]+1,p[j-1]+c)}[p,q]=[q,p]}return p[n]}
+/* texte brut -> {id,d} : le numéro de la liste le plus proche (d = coût d'erreur). null si ambigu ou trop loin. */
+function ocrParse(t,prior){t=String(t||'').toUpperCase().replace(/[^A-Z0-9\-]/g,' ');
+ const toks=t.split(/\s+/).filter(x=>x.length>=4);if(!toks.length)return null;
+ const L=baseIds(),wins=new Set();for(const k of toks){wins.add(k);if(k.length>9)for(let i=0;i+8<=k.length;i++){wins.add(k.slice(i,i+8));wins.add(k.slice(i,i+7))}}
+ let best=9,bid=null,second=9;
+ for(const w of wins){if(w.length<5||w.length>10)continue;for(const id of L){let d=wlev(w,id);if(prior&&id.startsWith(prior))d-=.25;
+  if(d<best){if(id!==bid)second=best;best=d;bid=id}else if(id!==bid&&d<second)second=d}}
+ return bid&&best<=2.2&&second-best>=.45?{id:bid,d:best}:null}
+function otsu(g,n){const h=new Uint32Array(256);for(let i=0;i<n;i++)h[g[i]]++;let s=0;for(let i=0;i<256;i++)s+=i*h[i];let wB=0,sB=0,mx=0,th=128;
+ for(let i=0;i<256;i++){wB+=h[i];if(!wB)continue;const wF=n-wB;if(!wF)break;sB+=i*h[i];const mB=sB/wB,mF=(s-sB)/wF,v=wB*wF*(mB-mF)*(mB-mF);if(v>mx){mx=v;th=i}}return th}
+/* image {w,h,d} -> canvas préparé pour l'OCR (texte noir sur fond blanc) ; mode 'bin' (Otsu) ou 'gray' */
+function ocrPrep(img,mode,inv){const{w,h,d}=img,n=w*h,g=new Uint8Array(n);let lo=0,hi=255;
+ for(let i=0;i<n;i++)g[i]=(d[4*i]*.299+d[4*i+1]*.587+d[4*i+2]*.114)|0;
+ const hist=new Uint32Array(256);for(let i=0;i<n;i++)hist[g[i]]++;let acc=0;for(let i=0;i<256;i++){acc+=hist[i];if(acc>=n*.02){lo=i;break}}acc=0;for(let i=255;i>=0;i--){acc+=hist[i];if(acc>=n*.02){hi=i;break}}
+ const sc=255/Math.max(30,hi-lo);for(let i=0;i<n;i++)g[i]=clampn((g[i]-lo)*sc,0,255);
+ const th=otsu(g,n);let dark=0;for(let i=0;i<n;i++)if(g[i]<=th)dark++;
+ const textIsDark=dark<n/2;  // le texte est la classe minoritaire
+ const c=document.createElement('canvas');c.width=w+40;c.height=h+40;const x=c.getContext('2d'),im=x.createImageData(w+40,h+40),o=im.data;
+ for(let i=0;i<o.length;i+=4){o[i]=o[i+1]=o[i+2]=255;o[i+3]=255}
+ const flip=(textIsDark?false:true)!==!!inv;
+ for(let y=0;y<h;y++)for(let xx=0;xx<w;xx++){let v=g[y*w+xx];
+  if(mode==='bin')v=(v>th)?255:0;
+  if(flip)v=255-v;
+  const k=((y+20)*(w+40)+xx+20)*4;o[k]=o[k+1]=o[k+2]=v}
+ x.putImageData(im,0,0);return c}
+/* zone du numéro (coordonnées carte 0..1) */
+const NZ={u0:.58,u1:1.03,v0:.76,v1:1.02};
+/* le bord bas détecté est souvent trop haut : on essaie 3 hypothèses (bord bas +9 %, +3 %, +16 %) avec les 6 prétraitements */
+const OCRH=[[.026,.034,0,.09],[.026,.034,0,.03],[.026,.034,0,.16]],ocrPair=k=>[(k%3+((k/3)|0))%3,k%6],ocrQuad=(q,h)=>SC.expandQuad(q,...OCRH[h%OCRH.length]);
+function numberImage(src,sw,sh,qv){ // qv : quad en pixels de la source [TL,TR,BR,BL]
+ const hm=SC.homUnitToQuad(qv),pt=(u,v)=>{const z=hm[6]*u+hm[7]*v+1;return[(hm[0]*u+hm[1]*v+hm[2])/z,(hm[3]*u+hm[4]*v+hm[5])/z]};
+ const ps=[pt(NZ.u0,NZ.v0),pt(NZ.u1,NZ.v0),pt(NZ.u1,NZ.v1),pt(NZ.u0,NZ.v1)];
+ let x0=Math.min(...ps.map(p=>p[0]))-8,x1=Math.max(...ps.map(p=>p[0]))+8,y0=Math.min(...ps.map(p=>p[1]))-8,y1=Math.max(...ps.map(p=>p[1]))+8;
+ x0=Math.max(0,Math.floor(x0));y0=Math.max(0,Math.floor(y0));x1=Math.min(sw,Math.ceil(x1));y1=Math.min(sh,Math.ceil(y1));
+ const bw=x1-x0,bh=y1-y0;if(bw<12||bh<8)return null;
+ const k=Math.min(1,1400/bw),cw=Math.max(8,Math.round(bw*k)),ch=Math.max(8,Math.round(bh*k));
+ const c=document.createElement('canvas');c.width=cw;c.height=ch;const g=c.getContext('2d',{willReadFrequently:true});g.imageSmoothingQuality='high';g.drawImage(src,x0,y0,bw,bh,0,0,cw,ch);
+ const idt=g.getImageData(0,0,cw,ch),loc={w:cw,h:ch,d:idt.data},ql=qv.map(([x,y])=>[(x-x0)*k,(y-y0)*k]),ow=640,oh=Math.round(ow*((NZ.v1-NZ.v0)*1.3977)/(NZ.u1-NZ.u0));
+ return SC.warpRect(loc,ql,ow,oh,NZ.u0,NZ.v0,NZ.u1,NZ.v1)}
+const OCRV=[['bin',0,6],['gray',0,11],['bin',1,11],['gray',1,6],['bin',0,11],['bin',1,6]];
+/* lit le numéro d'un quad de la source ; renvoie {id,d} ou null ; lance une exception si le lecteur est indisponible */
+async function ocrRead(src,sw,sh,qv,variant,prior){const im=numberImage(src,sw,sh,qv);if(!im)return null;
+ const w=await getOcr(),[m,inv,psm]=OCRV[variant%OCRV.length];await w.setParameters({tessedit_pageseg_mode:String(psm)});
+ const r=await w.recognize(ocrPrep(im,m,inv));return ocrParse(r.data.text,prior)}
+
+/* ---------- interface ---------- */
+const CSS=`.cs{position:fixed;inset:0;z-index:99999;background:#000;color:#fff;font-family:Rubik,system-ui,sans-serif;overflow:hidden;--cc:#fff;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.cs video,.cs .cs-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}.cs .cs-img{object-fit:contain}
+.cs-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 14px;background:linear-gradient(rgba(0,0,0,.72),transparent);z-index:5}
+.cs-top .t{flex:1;min-width:0;font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.cs-dot{width:9px;height:9px;border-radius:50%;background:#7c7c7c;flex:none}.cs-dot.ok{background:#4FD58C}.cs-dot.ld{background:#FFC83D;animation:csp 1s ease-in-out infinite}.cs-dot.ko{background:#FF5A5A}
+@keyframes csp{50%{opacity:.35}}
+.cs-ib{min-width:44px;height:44px;border-radius:14px;border:0;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:17px;padding:0 12px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-family:inherit}
+.cs-ib[aria-pressed=true]{background:var(--ac,#E50914);color:var(--on,#fff)}
+.cs-g{position:absolute;left:50%;transform:translateX(-50%);top:calc(66px + env(safe-area-inset-top,0px));height:max(150px,min(56vh,calc(82vw*1.4),calc(100vh - 66px - 290px)));aspect-ratio:5/7;border-radius:16px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);pointer-events:none;z-index:2}
+.cs-g i{position:absolute;width:36px;height:36px;border:0 solid var(--cc);transition:border-color .2s}
+.cs-g i:nth-child(1){left:-3px;top:-3px;border-left-width:5px;border-top-width:5px;border-top-left-radius:18px}
+.cs-g i:nth-child(2){right:-3px;top:-3px;border-right-width:5px;border-top-width:5px;border-top-right-radius:18px}
+.cs-g i:nth-child(3){left:-3px;bottom:-3px;border-left-width:5px;border-bottom-width:5px;border-bottom-left-radius:18px}
+.cs-g i:nth-child(4){right:-3px;bottom:-3px;border-right-width:5px;border-bottom-width:5px;border-bottom-right-radius:18px}
+.cs.cs_flash .cs-g i{animation:csok .5s ease-out}@keyframes csok{40%{transform:scale(1.35)}}
+.cs.cs_ok{--cc:#4FD58C}.cs.cs_mid{--cc:#FFC83D}.cs.cs_bad{--cc:#FF7A6B}
+.cs.cs_ph .cs-g{display:none}
+.cs-q{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}.cs-q polygon{fill:rgba(255,255,255,.07);stroke:var(--cc);stroke-width:2.5;stroke-linejoin:round;transition:stroke .2s}
+.cs-hint{position:absolute;left:50%;transform:translateX(-50%);z-index:4;max-width:min(92vw,460px);text-align:center;font-size:14px;font-weight:500;background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 14px;border-radius:20px;line-height:1.3;pointer-events:none}
+.cs-panel{position:absolute;left:0;right:0;bottom:calc(74px + env(safe-area-inset-bottom,0px));padding:0 12px;display:flex;justify-content:center;z-index:6;pointer-events:none}
+.cs-card{position:relative;pointer-events:auto;width:100%;max-width:520px;background:rgba(20,14,14,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:14px;box-shadow:0 12px 44px rgba(0,0,0,.55);animation:csup .22s ease-out;max-height:calc(100vh - 160px);overflow:auto;overscroll-behavior:contain}
+@keyframes csup{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.cs-bar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:8px;padding:12px 12px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.8));z-index:6}
+.cs-bb{flex:1;max-width:150px;min-width:0;height:54px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.1;font-family:inherit;padding:0 4px;white-space:nowrap}
+.cs-bb span{font-size:19px}.cs-bb[aria-pressed=true]{background:var(--ac,#E50914);border-color:var(--ac,#E50914);color:var(--on,#fff)}
+.cs-res{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;padding-right:26px}
+.cs-art{width:84px;position:relative}.cs-art .art,.cs-th .art,.cs-cand .art{opacity:1!important;filter:none!important}
+.cs-nm{font-size:18px;font-weight:700;line-height:1.2;margin-bottom:3px}.cs-sub{font-size:13px;opacity:.72}.cs-own{font-size:13px;margin-top:4px}.cs-own b{font-size:15px}
+.cs-src{display:inline-block;margin-top:6px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.12)}
+.cs-act{display:flex;gap:8px;margin-top:12px}.cs-act button,.cs-btn{border:0;border-radius:14px;height:50px;font-size:16px;font-weight:700;padding:0 16px;color:#fff;background:rgba(255,255,255,.14);font-family:inherit}
+.cs-act .main,.cs-btn.main{flex:1;background:var(--ac,#E50914);color:var(--on,#fff);font-size:18px}.cs-act button:active,.cs-btn:active{transform:scale(.97)}
+.cs-x{position:absolute;right:10px;top:8px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:15px;font-family:inherit;z-index:2}
+.cs-link{background:none;border:0;color:#fff;opacity:.8;text-decoration:underline;font-size:13px;margin-top:10px;padding:6px 0;font-family:inherit}
+.cs-ok{display:flex;align-items:center;gap:10px}.cs-tick{width:40px;height:40px;border-radius:50%;background:#2fb872;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex:none;animation:cspop .3s ease-out}@keyframes cspop{from{transform:scale(.4)}to{transform:none}}
+.cs-ok .grow{flex:1;min-width:0}.cs-ok b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-ok button{height:44px;border-radius:12px;border:0;padding:0 14px;font-weight:700;font-size:15px;color:#fff;background:rgba(255,255,255,.15);font-family:inherit;flex:none}.cs-ok button.p{background:var(--ac,#E50914);color:var(--on,#fff)}
+.cs-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px;scrollbar-width:none}.cs-chips::-webkit-scrollbar{display:none}
+.cs-chip{flex:none;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;border-radius:18px;padding:7px 12px;font-size:13px;font-weight:600;font-family:inherit}.cs-chip[aria-pressed=true]{background:var(--ac,#E50914);border-color:var(--ac,#E50914);color:var(--on,#fff)}
+.cs-in{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border-radius:14px;padding:2px 6px 2px 14px;min-height:50px}.cs-in span{font-size:20px;font-weight:700;opacity:.75}.cs-in b{flex:1;font-size:28px;font-weight:700;letter-spacing:3px}.cs-in b.e{opacity:.35}
+.cs-bs{width:48px;height:42px;border-radius:12px;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:20px;font-family:inherit}
+.cs-kp{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.cs-k{height:46px;border-radius:12px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:21px;font-weight:700;font-family:inherit}.cs-k:active{background:rgba(255,255,255,.28)}
+.cs-flashmsg{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:14px;font-weight:600;background:rgba(47,184,114,.2);border-radius:12px;padding:8px 10px}.cs-flashmsg span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cs-flashmsg button{background:none;border:0;color:#fff;text-decoration:underline;font-size:14px;font-weight:700;font-family:inherit;flex:none;padding:8px 6px}
+.cs-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}.cs-row{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center}.cs-row .nm{font-size:14px;font-weight:600;line-height:1.2}.cs-row .sb{font-size:12px;opacity:.7}
+.cs-row button{height:42px;border-radius:12px;border:0;background:var(--ac,#E50914);color:var(--on,#fff);font-weight:700;font-size:15px;padding:0 14px;font-family:inherit}.cs-row button.g{background:rgba(255,255,255,.15);color:#fff}
+.cs-th{width:44px}
+.cs-cands{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.cs-cand{background:none;border:0;color:#fff;text-align:center;font-size:11px;padding:0;font-family:inherit}.cs-cand div{margin-top:3px;line-height:1.2}
+.cs-h{font-size:15px;font-weight:700;margin-bottom:4px;padding-right:34px}
+.cs-spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:css .8s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes css{to{transform:rotate(360deg)}}
+@media (min-aspect-ratio:6/5) and (max-height:760px),(min-aspect-ratio:3/2){
+ .cs-g{left:34%;top:calc(58px + env(safe-area-inset-top,0px));height:calc(100vh - 58px - 92px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+ .cs-panel{left:auto;right:0;top:60px;bottom:calc(84px + env(safe-area-inset-bottom,0px));width:min(430px,40vw);padding:0 12px 0 0;align-items:flex-end}
+ .cs-card{max-height:100%}
+ .cs-hint{top:calc(58px + env(safe-area-inset-top,0px))!important;left:34%}
+ .cs.cs_ph .cs-img{width:60%}
+}
+@media (prefers-reduced-motion:reduce){.cs *{animation:none!important;transition:none!important}}`;
+function ensureCss(){if(document.getElementById('cs-css'))return;const s=document.createElement('style');s.id='cs-css';s.textContent=CSS;document.head.appendChild(s)}
+function setClass(c){if(!ov)return;ov.classList.remove('cs_ok','cs_mid','cs_bad');if(c)ov.classList.add('cs_'+c)}
+function flash(){if(!ov)return;ov.classList.remove('cs_flash');void ov.offsetWidth;ov.classList.add('cs_flash')}
+function hint(t){const e=ov&&$q('#cs-hint');if(!e)return;if(e.textContent!==t)e.textContent=t;e.style.display=t?'block':'none'}
+function placeHint(){if(!ov||!gEl)return;const g=gEl.getBoundingClientRect(),h=$q('#cs-hint');if(h)h.style.top=(g.bottom+12)+'px'}
+function engineUI(){if(!ov)return;const d=$q('#cs-dot'),t=$q('#cs-est');if(!d)return;
+ if(Eng.state==='ready'){d.className='cs-dot ok';t.textContent=''}else if(Eng.state==='fail'){d.className='cs-dot ko';t.textContent='moteur indisponible'}
+ else{d.className='cs-dot ld';t.textContent='préparation '+Math.round(Eng.progress*100)+' %'}}
+Eng.onState=engineUI;
+
+const st={mode:'live',auto:false,sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',serie:'FB01',manMsg:null,
+ stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,lastSer:'',busy:false,qs:null,photoMode:false,unkR:[],unkT:0,ctx:null,learned:null};
+
+function mediaEl(kind){ // 'cam' -> <video>, 'photo' -> <img>
+ const old=ov.querySelector('#cs-v');const el=kind==='photo'?document.createElement('img'):document.createElement('video');
+ el.id='cs-v';if(kind==='photo'){el.className='cs-img';el.alt='Photo à analyser';el.draggable=false}else{el.setAttribute('playsinline','');el.muted=true;el.autoplay=true}
+ if(old){old.srcObject=null;old.remove()}ov.insertBefore(el,ov.firstChild);vid=el;return el}
+async function open(opts){
+ if(ov)return;opts=opts||{};ensureCss();Eng.urgent=true;Eng.start();
+ Object.assign(st,{mode:'live',sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',manMsg:null,stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,qs:null,busy:false,auto:!!pref('auto',false),serie:S.ext||'FB01',photoMode:!!opts.bitmap,unkR:[],unkT:0,ctx:null,learned:null});
+ ov=document.createElement('div');ov.className='cs'+(opts.bitmap?' cs_ph':'');ov.setAttribute('role','dialog');ov.setAttribute('aria-label','Scanner de cartes');
+ ov.innerHTML='<svg class="cs-q" id="cs-q"><polygon id="cs-poly" points="" style="display:none"/></svg>'
+  +'<div class="cs-g" id="cs-g"><i></i><i></i><i></i><i></i></div>'
+  +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span>Scanner</span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
+  +'<button class="cs-ib" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique">⚡<span style="font-size:12px">Auto</span></button><button class="cs-ib" id="cs-torch" data-a="torch" aria-label="Lampe" style="display:none">🔦</button></div>'
+  +'<div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
+  +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
+  +'<input type="file" id="cs-file" accept="image/*" capture="environment" hidden><input type="file" id="cs-gal" accept="image/*" hidden>';
+ document.body.appendChild(ov);alive=true;gEl=$q('#cs-g');svgQ=$q('#cs-poly');mediaEl(opts.bitmap?'photo':'cam');
+ ov.addEventListener('click',e=>{e.stopPropagation();onClick(e)});ov.addEventListener('change',onFileChange);addEventListener('resize',placeHint);
+ try{history.pushState({cs:1},'')}catch(_){}
+ placeHint();engineUI();countUI();
+ if(opts.bitmap){showPhoto(opts.bitmap,opts.url);return}
+ hint('Démarrage de la caméra…');
+ try{await startCamera();if(!alive)return;hint('Place la carte dans le cadre');loop()}
+ catch(e){if(!alive)return;const n=e&&e.name||'';hint(n==='NotAllowedError'||n==='SecurityError'?'Caméra refusée : autorise-la dans les réglages, ou utilise « Photo » / « Galerie ».':'Caméra indisponible'+(n?' ('+n+')':'')+' : utilise « Photo », « Galerie » ou saisis le numéro.');setClass('bad')}}
+async function startCamera(){
+ const ladder=[{video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false},{video:{facingMode:{ideal:'environment'}},audio:false},{video:true,audio:false}];
+ let err=null,s=null;for(const c of ladder){try{s=await navigator.mediaDevices.getUserMedia(c);break}catch(e){err=e;if(e&&(e.name==='NotAllowedError'||e.name==='SecurityError'))break}}
+ if(!s)throw err||new Error('cam');
+ if(!alive||photo){s.getTracks().forEach(t=>t.stop());return}
+ stream=s;vid.srcObject=stream;await vid.play().catch(()=>{});track=stream.getVideoTracks()[0];
+ try{caps=track.getCapabilities?track.getCapabilities():{}}catch(_){caps={}}
+ try{if(caps.focusMode&&caps.focusMode.includes('continuous'))await track.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch(_){}
+ const tb=$q('#cs-torch');if(tb&&caps.torch)tb.style.display='flex'}
+function stopCamera(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;track=null;caps={}}
+function close(fromPop){
+ alive=false;clearTimeout(tmr);stopCamera();Eng.urgent=false;
+ const n=st.sess.reduce((a,e)=>a+e.q,0);
+ if(ov){removeEventListener('resize',placeHint);if(vid)vid.srcObject=null;ov.remove()}ov=vid=gEl=svgQ=null;photo=null;
+ if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
+ if(!fromPop){try{if(history.state&&history.state.cs)history.back()}catch(_){}}
+ render();if(n)toast(n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':'')+' ✓')}
+addEventListener('popstate',()=>{if(ov)close(true)});
+document.addEventListener('keydown',e=>{if(!ov)return;
+ if(e.key==='Escape'){close();return}
+ if(st.mode==='man'){if(/^\d$/.test(e.key)){e.preventDefault();manKey(e.key)}else if(e.key==='Backspace'){e.preventDefault();manDel()}}});
+
+/* repère entre l'écran et l'image (vidéo : « cover », photo : « contain ») */
+function viewMap(){if(!vid)return null;const mw=photo?photo.width:vid.videoWidth,mh=photo?photo.height:vid.videoHeight;if(!mw||!mh)return null;
+ const v=vid.getBoundingClientRect(),k=photo?Math.min(v.width/mw,v.height/mh):Math.max(v.width/mw,v.height/mh);
+ return{mw,mh,k,ox:(v.width-mw*k)/2,oy:(v.height-mh*k)/2,vl:v.left,vt:v.top}}
+function guideRect(m){const r=gEl.getBoundingClientRect();
+ return{x:(r.left-m.vl-m.ox)/m.k,y:(r.top-m.vt-m.oy)/m.k,w:r.width/m.k,h:r.height/m.k,vw:m.mw,vh:m.mh}}
+const tmpA=document.createElement('canvas'),tmpB=document.createElement('canvas'),ctxA=tmpA.getContext('2d',{willReadFrequently:true}),ctxB=tmpB.getContext('2d',{willReadFrequently:true});
+/* rétrécit src[sx,sy,sw,sh] vers tw x th (moitiés successives = bon anti-crénelage) */
+function shrink(src,sx,sy,sw,sh,tw,th){let cur=src,cx=sx,cy=sy,cw=sw,ch=sh,flip=false;
+ while(cw>tw*2||ch>th*2){const nw=Math.max(tw,Math.round(cw/2)),nh=Math.max(th,Math.round(ch/2)),c=flip?tmpB:tmpA,g=flip?ctxB:ctxA;c.width=nw;c.height=nh;g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,cw,ch,0,0,nw,nh);cur=c;cx=cy=0;cw=nw;ch=nh;flip=!flip}
+ const c=flip?tmpB:tmpA,g=flip?ctxB:ctxA;c.width=tw;c.height=th;g.imageSmoothingQuality='high';g.drawImage(cur,cx,cy,cw,ch,0,0,tw,th);return g.getImageData(0,0,tw,th)}
+const EX=.38;
+/* extrait la zone d'analyse (cadre guide agrandi, échelle : cadre = 300 px de haut) */
+function grabROI(g,src){src=src||photo||vid;const vw=g.vw,vh=g.vh,x0=Math.max(0,g.x-g.w*EX),y0=Math.max(0,g.y-g.h*EX),x1=Math.min(vw,g.x+g.w*(1+EX)),y1=Math.min(vh,g.y+g.h*(1+EX)),sw=x1-x0,sh=y1-y0,s=Math.min(1,300/g.h);
+ const rw=Math.max(16,Math.round(sw*s)),rh=Math.max(16,Math.round(sh*s)),id=shrink(src,x0,y0,sw,sh,rw,rh);
+ return{img:{w:rw,h:rh,d:id.data},guide:{cx:(g.x+g.w/2-x0)*s,cy:(g.y+g.h/2-y0)*s,gw:g.w*s,gh:g.h*s},x0,y0,s}}
+function thumbOf(img){const w=12,h=16,o=new Float32Array(w*h),cw=img.w/w,ch=img.h/h;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const px=Math.min(img.w-1,Math.floor((x+.5)*cw)),py=Math.min(img.h-1,Math.floor((y+.5)*ch)),i=(py*img.w+px)*4;o[y*w+x]=.299*img.d[i]+.587*img.d[i+1]+.114*img.d[i+2]}return o}
+const thumbDiff=(a,b)=>{if(!a||!b)return 0;let s=0;for(let i=0;i<a.length;i++)s+=Math.abs(a[i]-b[i]);return s/a.length};
+function toScreen(q,roi,m){return q.map(([x,y])=>{const vx=roi.x0+x/roi.s,vy=roi.y0+y/roi.s;return[m.vl+m.ox+vx*m.k,m.vt+m.oy+vy*m.k]})}
+function drawPts(pts){if(!svgQ)return;if(!pts){svgQ.style.display='none';st.qs=null;return}
+ if(st.qs&&st.qs.length===4)pts=pts.map((p,i)=>[st.qs[i][0]*.45+p[0]*.55,st.qs[i][1]*.45+p[1]*.55]);st.qs=pts;
+ svgQ.setAttribute('points',pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));svgQ.style.display=''}
+
+/* ---------- boucle d'analyse (caméra) ---------- */
+async function loop(){if(!alive)return;
+ if(!photo&&vid&&vid.videoWidth&&!st.busy&&!document.hidden&&(Eng.ready||Eng.state==='fail')&&st.mode!=='man'&&st.mode!=='tray'){st.busy=true;try{await step()}catch(e){}st.busy=false}
+ if(alive)tmr=setTimeout(loop,st.mode==='res'||st.mode==='added'?200:40)}
+async function step(){const m=viewMap();if(!m)return;const g=guideRect(m);if(g.w<20)return;
+ const roi=grabROI(g),th=thumbOf(roi.img),res=await Eng.analyse(roi.img,roi.guide,{});if(!alive||photo)return;
+ st.lastAn={res,roi,m,th};onResult(res,roi,m,th)}
+function onResult(res,roi,m,th){const now=NOW(),conf=res.conf||0,t1=res.top&&res.top[0],s1=t1?t1.s:0,mg=res.margin||0;
+ const zm=SC.zmin(Eng.n),z1=res.z||0,present=conf>=.25||(s1>=.38&&mg>=.08&&z1>=zm);
+ if(res.rid!=null&&res.stage>=0&&res.det&&conf>=.5&&!(t1&&SC.accepted(s1,mg,z1,Eng.n))&&st.mode!=='added'){st.unkR.push(res.rid);if(st.unkR.length>6)st.unkR.shift();st.unkT=now}
+ drawPts(res.det&&conf>=.3?toScreen(res.quad,roi,m):null);
+ // présence / absence de la carte
+ if(present){st.goneSince=0;if(!st.trackSince)st.trackSince=now}else{st.trackSince=0;if(!st.goneSince)st.goneSince=now}
+ const goneFor=st.goneSince?now-st.goneSince:0;if(goneFor>500)st.free=true;
+ if(t1&&st.stick&&t1.id!==st.stick&&s1>=.5&&mg>=.12)st.free=true;   // une autre carte, très nette, est apparue
+ // ---- une carte est déjà affichée : attendre qu'elle parte ----
+ if(st.mode==='res'||st.mode==='added'||st.mode==='unk'){
+  const other=!!(t1&&st.lock&&t1.id!==st.lock.id&&s1>=.5&&mg>=.12);st.otherN=other?st.otherN+1:0;
+  st.chg=thumbDiff(st.thumb,th)>26?st.chg+1:0;
+  const limit=st.mode==='added'?600:1300;
+  if(goneFor>limit||st.otherN>=2||st.chg>=4){rearm();if(st.mode!=='live')return}
+  else return}
+ if(st.mode!=='live')return;
+ // ---- recherche d'une carte ----
+ if(t1){st.ring.push({id:t1.id,s:s1,m:mg,z:z1});if(st.ring.length>5)st.ring.shift()}
+ const lk=decideVisual();
+ if(lk&&!(lk.id===st.stick&&!st.free)){setLock(lk.id,isLearned(lk.id)?'learn':'img',lk.s,th);return}
+ // ---- indications ----
+ if(!present){hint(Eng.ready?'Place la carte dans le cadre':'Préparation du scanner…');setClass('');return}
+ setClass('mid');
+ const sz=res.det?dist(res.quad[0],res.quad[3])/roi.guide.gh:0;
+ if(res.det&&sz<.6)hint('Rapproche la carte du cadre');
+ else if(res.det&&sz>1.4)hint('Éloigne un peu la carte');
+ else if(res.sharp!==undefined&&res.sharp<.035&&conf<.5)hint('Image floue : stabilise la carte, évite les reflets');
+ else hint(ocrBusy?'Je lis le numéro…':'Je regarde la carte… ne bouge plus');
+ maybeOCR(res,m);
+ if(now-st.trackSince>(ocrFail?2200:3800))showUnknown(res)}
+function decideVisual(){const r=st.ring;if(!r.length)return null;const last=r[r.length-1],zm=SC.zmin(Eng.n),zok=(x,e)=>x.z>=zm+e||(x.s>=.62&&x.m>=.14);
+ if(!st.auto&&last.s>=.5&&last.m>=.12&&zok(last,.4))return{id:last.id,s:last.s};
+ const same=r.filter(x=>x.id===last.id&&x.s>=(st.auto?.4:.35)&&x.m>=.08&&zok(x,st.auto?.2:0));
+ if(same.length>=2)return{id:last.id,s:same.reduce((a,x)=>a+x.s,0)/same.length};return null}
+function rearm(){st.chg=0;st.otherN=0;st.ring=[];st.ocrAcc={};st.trackSince=0;st.lock=null;st.pick=null;
+ if(st.mode!=='man'&&st.mode!=='tray'){st.mode='live';panel()}setClass('');hint('Place la carte dans le cadre')}
+
+/* ---------- lecture du numéro en arrière-plan (cartes sans illustration connue) ---------- */
+async function maybeOCR(res,m){
+ if(ocrBusy||ocrFail||photo||st.mode!=='live')return;const now=NOW();
+ if(now-st.trackSince<1000||now-st.ocrAt<350)return;
+ const t1=res.top&&res.top[0];if(res.conf<.3||(t1&&t1.s>=.4&&SC.accepted(t1.s,res.margin,res.z||0,Eng.n)))return;
+ ocrBusy=true;st.ocrAt=now;
+ try{
+  const roi=st.lastAn&&st.lastAn.roi;if(!roi){ocrBusy=false;return}
+  const[hy,va]=ocrPair(st.ocrVar++),q=res.det?ocrQuad(res.det.quad,hy):res.quad,qv=q.map(([x,y])=>[roi.x0+x/roi.s,roi.y0+y/roi.s]);
+  const p=await ocrRead(vid,m.mw,m.mh,qv,va,(st.lastSer||'').slice(0,4));
+  if(p&&alive&&st.mode==='live'){st.ocrAcc[p.id]=(st.ocrAcc[p.id]||0)+(p.d<.3?3:p.d<1.1?2:1);
+   let bi=null,bs=0,tot=0;for(const k in st.ocrAcc){tot+=st.ocrAcc[k];if(st.ocrAcc[k]>bs){bs=st.ocrAcc[k];bi=k}}
+   if(bs>=4&&bs>=tot*.6&&!(baseOf(bi)===baseOf(st.stick||'')&&!st.free))setLock(bi,'ocr',0,st.lastAn&&st.lastAn.th)}
+ }catch(e){ocrFail=true;try{console.warn('scanner ocr:',e&&e.message||e)}catch(_){}if(alive&&st.mode==='unk')panel()}
+ ocrBusy=false}
+
+/* ---------- apprentissage : une carte saisie à la main est mémorisée (sur l'appareil seulement) ---------- */
+const isLearned=id=>Eng.learned.has(id)&&!CARDIMG[id];
+/* quand on passe à la saisie du numéro (ou qu'un numéro est lu) alors qu'une carte inconnue est devant la caméra, on retient ses dernières images */
+function snapCtx(){const here=photo||(st.unkR.length&&(!st.goneSince||NOW()-st.goneSince<800));if(here&&st.unkR.length)st.ctx={rids:st.unkR.slice(-3),t:NOW()}}
+function learnFrom(id){const cx=st.ctx;st.ctx=null;
+ if(!cx||!pref('learn',true)||!Eng.ready||CARDIMG[id]||NOW()-cx.t>90000)return;
+ if(st.lock&&(st.lock.src==='img'||st.lock.src==='learn'))return;
+ Eng.learn(id,cx.rids).then(m=>{if(m&&m.ok){st.learned=id;st.unkR=[];if(ov){if(st.mode==='added')panel();else if(st.mode==='man')manUpdate()}learnTab()}}).catch(()=>{})}
+function learnTab(){const el=document.getElementById('sc-learn');if(el&&window.scanLearn){const t=document.createElement('div');t.innerHTML=window.scanLearn();el.replaceWith(t.firstChild)}}
+
+/* ---------- résultat ---------- */
+function setLock(id,src,score,th){
+ const vs=variantsOf(baseOf(id));let pick=null;
+ if(src==='ocr'&&vs.length>1){pick=vs;const an=st.lastAn&&st.lastAn.res;if(an&&an.top){const hit=an.top.find(x=>vs.some(v=>v.id===x.id)&&x.s>=.3);if(hit){id=hit.id;pick=null}}}
+ const c=cardOf(id)||vs[0];if(!c)return;
+ if(src==='img'||src==='learn')st.unkR=[];else if(src==='ocr')snapCtx();
+ st.lock={id:c.id,src,score};st.pick=pick;st.thumb=th||st.thumb;st.chg=0;st.otherN=0;st.stick=baseOf(c.id)===c.id?c.id:c.id;st.free=false;st.lastSer=c.ext;
+ try{navigator.vibrate&&navigator.vibrate(35)}catch(_){}try{play('reveal')}catch(_){}
+ setClass('ok');hint('');
+ if(st.auto&&src==='img'&&!pick){doAdd(c.id,1);return}
+ st.mode='res';panel()}
+function showUnknown(res){if(st.mode==='unk'||st.mode!=='live')return;st.mode='unk';st.cands=(res.z||0)>=4.3?(res.top||[]).filter(x=>x.s>=.3).slice(0,3):[];setClass('bad');hint('');panel()}
+function doAdd(id,q,keep){const c=cardOf(id);if(!c)return;learnFrom(id);bump('c',q);c.own+=q;for(let i=0;i<q;i++)S.last.unshift(id);save();
+ st.sess.push({id,q,t:Date.now()});try{play('nice')}catch(_){}flash();
+ if(keep){st.manMsg={id};if(st.mode==='man')manUpdate()}
+ else{st.mode='added';st.stick=id;st.free=false;if(!st.lock)st.lock={id,src:'man'};panel()}
+ countUI()}
+function undoLast(){const e=st.sess.pop();if(!e)return;if(st.learned===e.id){st.learned=null;Eng.unlearn(e.id).then(learnTab).catch(()=>{})}const c=cardOf(e.id);if(c){c.own=Math.max(0,c.own-e.q);for(let i=0;i<e.q;i++){const k=S.last.indexOf(e.id);if(k>=0)S.last.splice(k,1)}save()}
+ st.manMsg=null;if(st.mode==='added'){st.mode='live';st.lock=null;st.ring=[];st.free=false;setClass('');hint('Retire la carte puis place la suivante')}
+ panel();countUI();toast('Annulé')}
+function countUI(){if(!ov)return;const n=st.sess.reduce((a,e)=>a+e.q,0),b=$q('#cs-n');if(b)b.textContent=n+' ajoutée'+(n>1?'s':'')}
+
+/* ---------- panneaux ---------- */
+const artH=c=>'<div class="cs-art">'+art(c)+'</div>';
+const nmOf=c=>esc(c.name||c.id);
+function resHTML(){const c=cardOf(st.lock.id);if(!c)return'';
+ if(st.pick)return'<button class="cs-x" data-a="skip" aria-label="Ignorer">✕</button><div class="cs-h">Quelle version ?</div><div class="cs-sub">Numéro lu : '+esc(baseOf(c.id))+'</div><div class="cs-list">'+st.pick.map(v=>'<div class="cs-row"><div class="cs-th">'+art(v)+'</div><div><div class="nm">'+nmOf(v)+'</div><div class="sb">'+esc(verLabel(v))+(v.rar?' · '+esc(v.rar):'')+' · possédée ×'+v.own+'</div></div><button data-a="addid" data-id="'+v.id+'">+1</button></div>').join('')+'</div>';
+ return'<button class="cs-x" data-a="skip" aria-label="Ignorer">✕</button><div class="cs-res">'+artH(c)+'<div><div class="cs-nm">'+nmOf(c)+'</div><div class="cs-sub">'+esc(c.id)+(c.rar?' · '+esc(c.rar):'')+(c.ver!=='Normal'?' · '+esc(verLabel(c)):'')+'</div><div class="cs-own">Possédée : <b>'+c.own+'</b></div><span class="cs-src">'+(st.lock.src==='img'?'🖼️ reconnue à l’illustration':st.lock.src==='learn'?'🧠 reconnue (déjà mémorisée)':st.lock.src==='ocr'?'🔢 reconnue au numéro':'⌨️ choisie à la main')+'</span></div></div>'
+  +'<div class="cs-act"><button class="main" data-a="add" data-q="1">＋1 Ajouter</button><button data-a="add" data-q="2">×2</button><button data-a="more" aria-label="Autres choix">⋯</button></div>'
+  +'<div style="text-align:center"><button class="cs-link" data-a="notit">Ce n’est pas la bonne carte</button></div>'}
+function addedHTML(){const e=st.sess[st.sess.length-1];if(!e)return'';const c=cardOf(e.id);if(!c)return'';
+ return'<div class="cs-ok"><div class="cs-tick">✓</div><div class="grow"><b>'+nmOf(c)+'</b><div class="cs-sub">'+(e.q>1?'+'+e.q+' · ':'')+'possédée ×'+c.own+' · '+esc(c.id)+(st.learned===e.id?' · 🧠 mémorisée':'')+'</div></div><button data-a="undo">Annuler</button><button class="p" data-a="again">＋1</button></div>'}
+function candBtns(l){return l.map(x=>{const c=cardOf(x.id);return c?'<button class="cs-cand" data-a="cand" data-id="'+c.id+'">'+art(c)+'<div>'+esc(c.id)+'</div></button>':''}).join('')}
+function unkHTML(){return'<button class="cs-x" data-a="skip" aria-label="Fermer">✕</button><div class="cs-h">'+(ocrBusy&&!ocrFail?'<span class="cs-spin"></span>':'')+'Carte non reconnue</div><div class="cs-sub">'+(ocrFail?'Cette carte n’est pas encore dans mes images, et la lecture du numéro est indisponible (hors connexion ?). Saisis son numéro : je la mémoriserai pour la reconnaître ensuite.':'Cette carte n’est pas encore dans mes images. Je tente de lire son numéro, ou saisis-le : je la mémoriserai pour la reconnaître ensuite.')+'</div>'
+ +(st.cands.length?'<div class="cs-sub" style="margin-top:10px">Peut-être :</div><div class="cs-cands">'+candBtns(st.cands)+'</div>':'')
+ +'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
+function candsHTML(){const an=st.lastAn&&st.lastAn.res,l=(an&&an.top||[]).slice(0,6);
+ return'<button class="cs-x" data-a="skip" aria-label="Fermer">✕</button><div class="cs-h">Autres possibilités</div>'+(l.length?'<div class="cs-cands">'+candBtns(l)+'</div>':'')+'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
+function manHTML(){const ex=EXTS.map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
+ const dg=['1','2','3','4','5','6','7','8','9','0'].map(d=>'<button class="cs-k" data-a="dig" data-d="'+d+'">'+d+'</button>').join('');
+ return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Saisir le numéro</div><div id="cs-mmsg"></div><div class="cs-chips" id="cs-chips">'+ex+'</div><div class="cs-in"><span id="cs-ser">'+st.serie+'-</span><b id="cs-numv"></b><button class="cs-bs" data-a="del" aria-label="Effacer le dernier chiffre">⌫</button></div><div class="cs-kp">'+dg+'</div><div class="cs-list" id="cs-mres"></div>'}
+function manUpdate(){if(!ov)return;const nv=$q('#cs-numv'),sr=$q('#cs-ser'),el=$q('#cs-mres'),mm=$q('#cs-mmsg');if(!nv||!el)return;
+ nv.textContent=st.manQ||'···';nv.className=st.manQ?'':'e';sr.textContent=st.serie+'-';
+ for(const b of ov.querySelectorAll('.cs-chip'))b.setAttribute('aria-pressed',String(b.dataset.e===st.serie));
+ if(mm){const e=st.manMsg&&cardOf(st.manMsg.id);mm.innerHTML=e?'<div class="cs-flashmsg"><span>✓ '+nmOf(e)+' · ×'+e.own+(st.learned===e.id?' · 🧠 mémorisée':'')+'</span><button data-a="again" aria-label="Ajouter un exemplaire de plus">+1</button><button data-a="undo">Annuler</button></div>':''}
+ const n=parseInt(st.manQ,10)||0;
+ if(!n){el.innerHTML='<div class="cs-sub">Tape les chiffres du numéro (ex. 35). La série se choisit au-dessus.</div>';return}
+ const l=cards.filter(c=>c.ext===st.serie&&c.n===n);
+ el.innerHTML=l.length?l.map(v=>'<div class="cs-row"><div class="cs-th">'+art(v)+'</div><div><div class="nm">'+nmOf(v)+'</div><div class="sb">'+esc(v.id)+' · '+esc(verLabel(v))+(v.rar?' · '+esc(v.rar):'')+' · ×'+v.own+'</div></div><button data-a="addman" data-id="'+v.id+'">+1</button></div>').join(''):'<div class="cs-sub">Aucune carte '+st.serie+'-'+String(n).padStart(3,'0')+' dans la liste.</div>'}
+function manKey(d){if(st.manQ.length>=3)st.manQ='';st.manQ+=d;st.manMsg=null;manUpdate()}
+function manDel(){st.manQ=st.manQ.slice(0,-1);manUpdate()}
+function trayHTML(){const g=new Map();st.sess.forEach(e=>g.set(e.id,(g.get(e.id)||0)+e.q));
+ const rows=[...g.entries()].reverse().map(([id,q])=>{const c=cardOf(id);return c?'<div class="cs-row"><div class="cs-th">'+art(c)+'</div><div><div class="nm">'+nmOf(c)+'</div><div class="sb">'+esc(id)+' · ajoutée ×'+q+' · total ×'+c.own+'</div></div><button class="g" data-a="rm" data-id="'+id+'" aria-label="Retirer un exemplaire">−1</button></div>':''}).join('');
+ return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Ajoutées pendant ce scan</div>'+(rows?'<div class="cs-list">'+rows+'</div>':'<div class="cs-sub">Rien pour l’instant. Cadre une carte ou saisis son numéro.</div>')}
+function panel(){if(!ov)return;const p=$q('#cs-panel');if(!p)return;let h='';
+ if(st.mode==='res')h=resHTML();else if(st.mode==='added')h=addedHTML();else if(st.mode==='unk')h=unkHTML();else if(st.mode==='cands')h=candsHTML();else if(st.mode==='man')h=manHTML();else if(st.mode==='tray')h=trayHTML();
+ p.innerHTML=h?'<div class="cs-card">'+h+'</div>':'';
+ if(st.mode==='man')manUpdate();
+ for(const b of ov.querySelectorAll('.cs-bb')){if(b.dataset.a==='man')b.setAttribute('aria-pressed',String(st.mode==='man'));if(b.dataset.a==='tray')b.setAttribute('aria-pressed',String(st.mode==='tray'))}
+ if(st.photoMode){const b=$q('#cs-shotb');if(b){b.dataset.a='cam';b.innerHTML='<span>📷</span>Caméra'}}else{const b=$q('#cs-shotb');if(b&&b.dataset.a==='cam'){b.dataset.a='shot';b.innerHTML='<span>📸</span>Photo'}}}
+function leaveOverlayPanel(){st.mode='live';st.ring=[];st.lock=null;st.pick=null;st.free=false;panel();setClass('');hint(photo?'':'Retire la carte puis place la suivante')}
+function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+ if(a==='close')close();
+ else if(a==='auto'){st.auto=!st.auto;setPref('auto',st.auto);t.setAttribute('aria-pressed',String(st.auto));toast(st.auto?'Ajout auto : les cartes sûres sont ajoutées tout de suite':'Ajout auto désactivé')}
+ else if(a==='torch'){const on=!t.dataset.on;t.dataset.on=on?'1':'';t.setAttribute('aria-pressed',String(!!on));try{track.applyConstraints({advanced:[{torch:!!on}]})}catch(_){}}
+ else if(a==='shot'){const i=$q('#cs-file');if(i)i.click()}
+ else if(a==='gal'){const i=$q('#cs-gal');if(i)i.click()}
+ else if(a==='cam')useCamera();
+ else if(a==='man'){if(st.mode==='man')leaveOverlayPanel();else{snapCtx();st.mode='man';st.manQ='';st.manMsg=null;panel()}}
+ else if(a==='tray'){if(st.mode==='tray')leaveOverlayPanel();else{st.mode='tray';panel()}}
+ else if(a==='back')leaveOverlayPanel();
+ else if(a==='ser'){st.serie=t.dataset.e;st.manQ='';st.manMsg=null;manUpdate()}
+ else if(a==='dig')manKey(t.dataset.d);
+ else if(a==='del')manDel();
+ else if(a==='add'){if(st.lock)doAdd(st.lock.id,+t.dataset.q||1)}
+ else if(a==='addid'){doAdd(t.dataset.id,1)}
+ else if(a==='addman'){const id=t.dataset.id;st.lastSer=cardOf(id).ext;st.manQ='';doAdd(id,1,true)}
+ else if(a==='again'){const e0=st.sess[st.sess.length-1];if(e0)doAdd(e0.id,1,st.mode==='man')}
+ else if(a==='undo')undoLast();
+ else if(a==='skip')leaveOverlayPanel();
+ else if(a==='notit'||a==='more'){if(a==='notit'&&st.lock&&st.lock.src==='learn'){const id=st.lock.id;Eng.unlearn(id).then(learnTab).catch(()=>{});toast('Compris : je l’oublie')}st.mode='cands';panel()}
+ else if(a==='cand'){const c=cardOf(t.dataset.id);if(c){st.lock={id:c.id,src:'man'};st.pick=null;st.stick=c.id;st.free=false;st.mode='res';panel()}}
+ else if(a==='rm'){const id=t.dataset.id,k=st.sess.map(x=>x.id).lastIndexOf(id),c=cardOf(id);if(k>=0&&c){const e0=st.sess[k];e0.q--;c.own=Math.max(0,c.own-1);const j=S.last.indexOf(id);if(j>=0)S.last.splice(j,1);if(e0.q<=0)st.sess.splice(k,1);save();countUI();panel()}}}
+function onFileChange(e){const i=e.target;if(i&&(i.id==='cs-file'||i.id==='cs-gal')){const f=i.files&&i.files[0];i.value='';fromFile(f)}}
+
+/* ---------- photo ---------- */
+async function fromFile(f){if(!f)return;let bmp;
+ try{bmp=await createImageBitmap(f,{imageOrientation:'from-image'})}catch(_){try{bmp=await createImageBitmap(f)}catch(e2){toast('Photo illisible');return}}
+ let url=null;try{url=URL.createObjectURL(f)}catch(_){}
+ if(ov)usePhoto(bmp,url);else open({bitmap:bmp,url})}
+function usePhoto(bmp,url){clearTimeout(tmr);stopCamera();st.busy=false;ov.classList.add('cs_ph');st.photoMode=true;showPhoto(bmp,url)}
+function showPhoto(bmp,url){if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}}photoUrl=url||null;photo=bmp;
+ const el=mediaEl('photo');if(url)el.src=url;else{const c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height;c.getContext('2d').drawImage(bmp,0,0);el.src=c.toDataURL('image/jpeg',.85)}
+ Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,thumb:null,cands:[],stick:null,free:true,ocrAcc:{},unkR:[],ctx:null});drawPts(null);setClass('');panel();
+ hint('Analyse de la photo…');photoRun()}
+function useCamera(){if(!ov)return;photo=null;if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
+ st.photoMode=false;ov.classList.remove('cs_ph');drawPts(null);Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{}});panel();setClass('');
+ mediaEl('cam');placeHint();hint('Démarrage de la caméra…');
+ startCamera().then(()=>{if(!alive||photo)return;hint('Place la carte dans le cadre');loop()}).catch(e=>{hint('Caméra indisponible : utilise « Photo » ou saisis le numéro.');setClass('bad')})}
+function rotated(src,W,H,deg){const c=document.createElement('canvas'),r=deg%180!==0;c.width=r?H:W;c.height=r?W:H;const g=c.getContext('2d');g.translate(c.width/2,c.height/2);g.rotate(deg*Math.PI/180);g.drawImage(src,-W/2,-H/2);return c}
+/* évalue une photo : toute l'image prise pour la carte (capture d'écran…), puis détection de la carte à plusieurs positions/échelles */
+async function evalPhoto(src,W,H){const out=[];
+ // (a) l'image entière est la carte
+ {const s=Math.min(1,440/Math.max(W,H)),rw=Math.max(16,Math.round(W*s)),rh=Math.max(16,Math.round(H*s)),id=shrink(src,0,0,W,H,rw,rh),ins=Math.min(rw,rh)*.004;
+  const q=[[ins,ins],[rw-ins,ins],[rw-ins,rh-ins],[ins,rh-ins]],r=await Eng.analyse({w:rw,h:rh,d:id.data},{cx:rw/2,cy:rh/2,gw:rw,gh:rh},{wide:true,full:true,forceQuad:q});
+  if(!alive)return out;out.push({r,roi:{x0:0,y0:0,s},tag:'full',ar:rw/rh})}
+ // (b) cherche la carte : on teste des cadres d'essai de plusieurs tailles et positions
+ const tries=[];for(const f of [.88,.7,.54,.4])for(const dy of [0,-.1,.1])for(const dx of [0,-.14,.14]){const gh=Math.min(H*f,W*1.4*f/.7),gw=gh*5/7,cx=W/2+dx*W,cy=H/2+dy*H;if(gw>W*1.05)continue;tries.push({x:cx-gw/2,y:cy-gh/2,w:gw,h:gh,vw:W,vh:H})}
+ const det=[];
+ for(const g of tries){const roi=grabROI(g,src),r=await Eng.analyse(roi.img,roi.guide,{detOnly:true});if(!alive)return out;if(r.det&&r.conf>=.2)det.push({g,roi,conf:r.conf,quad:r.det.quad})}
+ det.sort((a,b)=>b.conf-a.conf);const used=[];
+ for(const d of det){if(used.length>=3)break;const c=d.quad.reduce((a,p)=>[a[0]+p[0]/4,a[1]+p[1]/4],[0,0]),cxy=[d.roi.x0+c[0]/d.roi.s,d.roi.y0+c[1]/d.roi.s];
+  if(used.some(u=>Math.hypot(u[0]-cxy[0],u[1]-cxy[1])<Math.min(W,H)*.06))continue;used.push(cxy);
+  const roi=grabROI(d.g,src),r=await Eng.analyse(roi.img,roi.guide,{wide:true,full:true});if(!alive)return out;out.push({r,roi,g:d.g,tag:'det'})}
+ return out}
+function bestOf(list){let b=null;for(const e of list){const t=e.r.top&&e.r.top[0];if(!t)continue;if(!b||(e.r.z||0)>(b.r.z||0))b=e}return b}
+async function photoRun(){let me=photo;
+ try{
+  let n=0;while(!Eng.ready&&Eng.state!=='fail'&&n++<600&&alive&&photo===me){hint('Préparation du scanner… '+Math.round(Eng.progress*100)+' %');await sleep(100)}
+  if(!alive||photo!==me)return;
+  let W=photo.width,H=photo.height,src=photo,list=Eng.ready?await evalPhoto(src,W,H):[];if(!alive||photo!==me)return;
+  let b=bestOf(list);const okE=e=>{const t=e&&e.r.top&&e.r.top[0];return!!t&&SC.accepted(t.s,e.r.margin,e.r.z||0,Eng.n)};
+  // carte couchée sur le côté ? on essaie à 90° dans les deux sens
+  if(Eng.ready&&!okE(b)&&W>H*1.05){
+   const W0=photo.width,H0=photo.height;
+   for(const deg of [90,270]){const rc=rotated(photo,W0,H0,deg),l2=await evalPhoto(rc,rc.width,rc.height);if(!alive||photo!==me)return;const b2=bestOf(l2);
+    if(b2&&(!b||(okE(b2)&&!okE(b))||(okE(b2)===okE(b)&&(b2.r.z||0)>(b.r.z||0)))){b=b2;src=rc;W=rc.width;H=rc.height}if(okE(b))break}
+   if(src!==photo){const el=vid;try{el.src=src.toDataURL('image/jpeg',.85)}catch(_){}photo=src;me=photo;/* l'image affichée = l'image tournée */}}
+  const r=b&&b.r;st.lastAn=r?{res:r,roi:b.roi,m:viewMap(),th:null}:null;
+  if(r&&r.det&&b.tag==='det'){const m=viewMap();if(m)drawPts(toScreen(r.det.quad,b.roi,m))}
+  const t1=r&&r.top&&r.top[0];
+  if(t1&&SC.accepted(t1.s,r.margin,r.z||0,Eng.n)){st.cands=[];setLock(t1.id,isLearned(t1.id)?'learn':'img',t1.s,null);return}
+  if(r&&r.rid!=null&&(b.tag==='full'||(r.det&&r.conf>=.5))){st.unkR=[r.rid];st.unkT=NOW()}
+  // sinon : « carte non reconnue » s'affiche vite (saisie du numéro possible) pendant que je tente de lire le numéro en arrière-plan
+  st.cands=(r&&(r.z||0)>=4.3?r.top||[]:[]).filter(x=>x.s>=.3).slice(0,3);
+  const showUnk=()=>{if(alive&&photo===me&&st.mode==='live'){st.mode='unk';setClass('bad');hint('');panel()}};
+  if(!ocrFail&&b){hint('Lecture du numéro…');ocrBusy=true;const tu=setTimeout(showUnk,4000);
+   try{const qs=hy=>b.tag==='full'?[[W*.004,H*.004],[W*.996,H*.004],[W*.996,H*.996],[W*.004,H*.996]]:(r.det?ocrQuad(r.det.quad,hy):r.quad).map(([x,y])=>[b.roi.x0+x/b.roi.s,b.roi.y0+y/b.roi.s]);
+    const acc={},t0=NOW();for(let k=0;k<(b.tag==='full'?OCRV.length:12)&&NOW()-t0<30000;k++){const[hy,va]=ocrPair(k),p=await ocrRead(src,W,H,qs(hy),va,'');if(!alive||photo!==me)return;if(p)acc[p.id]=(acc[p.id]||0)+(p.d<.3?3:p.d<1.1?2:1);if(Object.values(acc).some(v=>v>=6))break}
+    let bi=null,bs=0;for(const k in acc)if(acc[k]>bs){bs=acc[k];bi=k}
+    if(bi&&bs>=3&&(st.mode==='live'||st.mode==='unk')){clearTimeout(tu);ocrBusy=false;st.lastAn=st.lastAn||{res:{top:[]},roi:null,m:null,th:null};setLock(bi,'ocr',0,null);return}
+   }catch(e){ocrFail=true;try{console.warn('scanner ocr:',e&&e.message||e)}catch(_){}}finally{clearTimeout(tu);ocrBusy=false}}
+  if(alive&&photo===me){if(st.mode==='live')showUnk();else if(st.mode==='unk')panel()}
+ }catch(e){if(alive)hint('Analyse impossible : '+(e&&e.message||e))}}
+
+/* ---------- branchement sur l'appli ---------- */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();
+ if(t.hasAttribute('data-cam'))open();else{const i=document.getElementById('camfile');if(i)i.click()}},true);
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='camfile'){const f=e.target.files[0];e.target.value='';fromFile(f)}},true);
+window.__scLearnN=()=>Eng.learned.size;
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-sclear]');if(!t)return;e.preventDefault();e.stopPropagation();
+ if(confirm('Oublier les '+Eng.learned.size+' cartes mémorisées par le scanner ?'))Eng.unlearnAll().then(()=>{learnTab();toast('Scanner réinitialisé')}).catch(()=>toast('Impossible pour le moment'))},true);
+window.__sc={SC,Eng,isLearned,snapCtx,learnFrom,evalPhoto,rotated,bestOf,open,close,st,ocrParse,numberImage,ocrPrep,ocrRead,NZ,OCRV,fromFile,getState:()=>({mode:st.mode,lock:st.lock,sess:st.sess,eng:Eng.state,auto:st.auto,stick:st.stick,free:st.free,photo:!!photo})};
+
 })();
 </script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
 </html>

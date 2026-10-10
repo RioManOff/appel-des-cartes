@@ -18,6 +18,127 @@ jobs:
       - run: npm install
       - run: npx cap add android
       - run: npx cap sync android
+      - name: Mettre le logo de l'appli (icône et écran de lancement)
+        continue-on-error: true
+        run: |
+          if ! python3 -c "import PIL" 2>/dev/null; then
+            python3 -m pip install --quiet pillow 2>/dev/null || python3 -m pip install --quiet --break-system-packages pillow || true
+          fi
+          python3 - <<'PYEOF'
+          # -*- coding: utf-8 -*-
+          """Logo de L'Appel des Cartes dans l'APK (étape du workflow apk.yml).
+
+          Part de docs/icon-512.png et remplace, dans le projet Android que Capacitor vient de créer :
+            - l'icône de l'appli (classique, ronde et « adaptative » d'Android 8 et plus)
+            - l'écran de lancement (fond noir + logo)
+          Ne fait JAMAIS échouer la fabrication de l'APK : au moindre souci, rien n'est modifié et l'icône par défaut reste.
+          """
+          import glob
+          import os
+          import sys
+          import traceback
+
+          try:
+              from PIL import Image, ImageDraw
+          except Exception as e:
+              print('::warning::Pillow indisponible (%s) : le logo par défaut est conservé' % e)
+              sys.exit(0)
+
+          LANCZOS = getattr(Image, 'Resampling', Image).LANCZOS
+          SRC = 'docs/icon-512.png'
+          RES = 'android/app/src/main/res'
+          FOND = (0, 0, 0)    # noir : fond de l'icône adaptative et de l'écran de lancement
+          DENSITES = {'mdpi': 48, 'hdpi': 72, 'xhdpi': 96, 'xxhdpi': 144, 'xxxhdpi': 192}    # icône classique, en pixels
+          ECHELLE = 0.72      # la zone sûre d'une icône adaptative fait 66/108 de sa taille : le logo y reste entier
+          XML_ADAPTATIVE = '''<?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@color/adc_icone_fond"/>
+              <foreground android:drawable="@mipmap/adc_icone_fg"/>
+          </adaptive-icon>
+          '''
+          XML_COULEUR = '''<?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="adc_icone_fond">#000000</color>
+          </resources>
+          '''
+
+
+          def masque(taille, forme, rayon=0.0):
+              k = 4
+              m = Image.new('L', (taille * k, taille * k), 0)
+              d = ImageDraw.Draw(m)
+              if forme == 'rond':
+                  d.ellipse((0, 0, taille * k - 1, taille * k - 1), fill=255)
+              else:
+                  d.rounded_rectangle((0, 0, taille * k - 1, taille * k - 1), radius=int(taille * k * rayon), fill=255)
+              return m.resize((taille, taille), LANCZOS)
+
+
+          def forme(im, f, rayon=0.0):
+              out = Image.new('RGBA', im.size, (0, 0, 0, 0))
+              out.paste(im, (0, 0), masque(im.size[0], f, rayon))
+              return out
+
+
+          def centre(logo, taille, echelle, fond):
+              base = Image.new('RGBA', (taille, taille), fond)
+              t = max(1, round(taille * echelle))
+              base.paste(logo.resize((t, t), LANCZOS), ((taille - t) // 2, (taille - t) // 2))
+              return base
+
+
+          def preparer():
+              if not os.path.isfile(SRC):
+                  print('::warning::%s introuvable : le logo par défaut est conservé' % SRC)
+                  return None
+              if not os.path.isdir(RES):
+                  print('::warning::dossier %s introuvable : le logo par défaut est conservé' % RES)
+                  return None
+              logo = Image.open(SRC).convert('RGBA')
+              if logo.size[0] != logo.size[1] or logo.size[0] < 128:
+                  raise ValueError('image carrée d’au moins 128 px attendue, reçu %s' % (logo.size,))
+              png, xml = [], []
+              for d, px in DENSITES.items():
+                  dossier = os.path.join(RES, 'mipmap-' + d)
+                  png.append((os.path.join(dossier, 'ic_launcher.png'), forme(centre(logo, px, 1.0, FOND + (255,)), 'carre', 0.18)))
+                  png.append((os.path.join(dossier, 'ic_launcher_round.png'), forme(centre(logo, px, 0.90, FOND + (255,)), 'rond')))
+                  png.append((os.path.join(dossier, 'adc_icone_fg.png'), centre(logo, round(px * 2.25), ECHELLE, (0, 0, 0, 0))))
+              for p in sorted(glob.glob(os.path.join(RES, 'drawable*', 'splash.png'))):
+                  with Image.open(p) as ancien:
+                      w, h = ancien.size
+                  t = min(round(min(w, h) * 0.62), round(logo.size[0] * 1.25))     # pas plus de 25 % d'agrandissement : reste net
+                  fond = Image.new('RGBA', (w, h), FOND + (255,))
+                  fond.paste(logo.resize((t, t), LANCZOS), ((w - t) // 2, (h - t) // 2))     # le fond du logo est noir : il se fond dans l'écran
+                  png.append((p, fond))
+              xml.append((os.path.join(RES, 'values', 'adc_icone.xml'), XML_COULEUR))
+              for nom in ('ic_launcher.xml', 'ic_launcher_round.xml'):
+                  xml.append((os.path.join(RES, 'mipmap-anydpi-v26', nom), XML_ADAPTATIVE))
+              return png, xml
+
+
+          def main():
+              res = preparer()
+              if res is None:
+                  return
+              png, xml = res
+              # tout est calculé : on écrit d'abord les images, puis les fichiers XML qui s'y réfèrent
+              for chemin, im in png:
+                  os.makedirs(os.path.dirname(chemin), exist_ok=True)
+                  im.save(chemin, 'PNG', optimize=True)
+              for chemin, texte in xml:
+                  os.makedirs(os.path.dirname(chemin), exist_ok=True)
+                  with open(chemin, 'w', encoding='utf-8', newline='\n') as f:
+                      f.write(texte)
+              print('Logo appliqué : %d images et %d fichiers XML' % (len(png), len(xml)))
+
+
+          try:
+              main()
+          except Exception:
+              traceback.print_exc()
+              print('::warning::Le logo n’a pas pu être appliqué : l’APK garde l’icône par défaut')
+          sys.exit(0)
+          PYEOF
       - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:

@@ -671,62 +671,136 @@ html.dbso,html.dbso body{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.sheet.in .sr-t{animation:none}.sr-t,.sr-im{transition:none}}
 @media(max-width:339px){.sr-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-height:520px){.sr-im{aspect-ratio:1/.8}.sr-pc{padding-top:10px}}
-/* ===== Stats : aperçu de la collection ===== */
-.ap-ban{position:relative;display:flex;align-items:center;gap:13px;margin-top:6px;padding:16px 14px 19px;border:1px solid var(--ln);border-radius:20px;overflow:hidden;background:linear-gradient(115deg,color-mix(in srgb,var(--ac) 22%,var(--sf)),var(--sf) 54%,color-mix(in srgb,#F5B400 14%,var(--sf)))}
-.ap-bt{flex:1;min-width:0}
-.ap-bt h2{margin:0;font:400 17px/1.15 "Bowlby One",Rubik,sans-serif}
-.ap-bt span{display:block;margin-top:5px;color:var(--mu);font-size:12.5px;line-height:1.3}
-.ap-bt span b{color:var(--tx);font-weight:600}
-.ap-sh{flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--ln);background:color-mix(in srgb,var(--tx) 7%,transparent);color:var(--tx)}
-.ap-pb{position:absolute;left:0;right:0;bottom:0;height:4px;background:color-mix(in srgb,var(--tx) 10%,transparent)}
-.ap-pb i{display:block;height:100%;width:var(--w,0%);background:linear-gradient(90deg,#F5B400,var(--ac))}
-.ap-ban svg,.ap-k svg,.ap-c svg,.ap-s svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8}
-.ap-sh svg{width:19px;height:19px}
-/* six tuiles */
-.ap-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.ap-k{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:146px;padding:14px 13px 13px 14px;border:1px solid var(--ln);border-radius:20px;overflow:hidden;text-align:left;color:var(--tx);background:var(--sf)}
-.ap-k:active,.ap-c:active{transform:scale(.985)}
-.ap-kl{display:block;padding-right:38px;font:600 11.5px/1.25 Rubik,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
-@media(max-width:380px){.ap-kl{min-height:2.5em}}
-.ap-kn{display:block;margin-top:9px;font:600 30px/1.05 Rubik,system-ui,sans-serif;letter-spacing:-.01em;white-space:nowrap}
-.ap-ks{display:block;margin-top:5px;font-size:13px;line-height:1.3;color:var(--mu)}
-.ap-kf{display:block;margin-top:auto;padding-top:12px;font:600 13px/1.3 Rubik,system-ui,sans-serif}
-.ap-k .ap-kw{position:absolute;right:8px;top:58px;width:60px;height:60px;stroke:var(--k);stroke-width:1.3;opacity:.18;pointer-events:none}
-.ap-go{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid var(--ln);background:color-mix(in srgb,var(--tx) 5%,transparent);color:var(--mu);font-style:normal}
-.ap-k>.ap-go{position:absolute;top:11px;right:11px}
-.ap-go svg{width:15px;height:15px;stroke-width:2}
-/* Mes séries */
-.ap-s{margin-top:22px;padding:18px 14px 14px;border:1px solid var(--ln);border-radius:24px;background:var(--sf)}
-.ap-sh2{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}
-.ap-sh2>div{flex:1 1 170px;min-width:0}
-.ap-sh2 h2{margin:0;font:400 19px/1.15 "Bowlby One",Rubik,sans-serif}
-.ap-sh2 p{margin:6px 0 0;color:var(--mu);font-size:13.5px;line-height:1.35}
-.ap-pill{flex:none;display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid var(--ln);border-radius:999px;background:transparent;color:var(--tx);font:500 13.5px/1 Rubik,system-ui,sans-serif;white-space:nowrap}
-.ap-pill svg{width:14px;height:14px;stroke-width:2}
-.ap-q{position:relative;display:block;margin-top:14px}
-.ap-q svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--mu);pointer-events:none}
-.ap-q input[type=search]{padding:13px 14px 13px 42px;border-radius:14px;background:var(--bg);font-size:15px}
-.ap-l{display:grid;gap:10px;margin-top:14px}
-.ap-c{display:block;width:100%;padding:14px;border:1px solid rgba(var(--cr),.36);border-radius:18px;text-align:left;color:var(--tx);background:linear-gradient(135deg,rgba(var(--cr),.09),rgba(var(--cr),0) 62%),color-mix(in srgb,var(--tx) 4%,var(--sf))}
-.ap-c.ok{border-color:rgba(245,180,0,.6)}
-.ap-ch{display:flex;align-items:center;gap:12px}
-.ap-th{flex:none;width:38px;height:60px;border-radius:6px;background:#0d0606 50% 4%/cover no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 6px 12px -5px rgba(var(--cr),.85)}
-.ap-cn{flex:1;min-width:0}
-.ap-cn b{display:block;font:600 16px/1.2 Rubik,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ap-cn small{display:block;margin-top:4px;font:600 12.5px/1 Rubik,system-ui,sans-serif;letter-spacing:.09em;color:var(--mu)}
-.ap-c .ap-go{border-color:rgba(var(--cr),.5);background:rgba(var(--cr),.14);color:var(--c)}
-.ap-r{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:15px}
-.ap-rl{font:600 12px/1 Rubik,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
-.ap-rv{font:600 14.5px/1 Rubik,system-ui,sans-serif;white-space:nowrap}
-.ap-rv em{margin-left:10px;font-style:normal;font-weight:500;color:var(--mu)}
-.ap-rv .g{color:var(--ok)}.ap-rv .y{color:#F5B400}
-:root[data-theme="light"] .ap-rv .y{color:#A87400}
-.ap-b{display:block;height:6px;margin-top:9px;border-radius:3px;background:var(--ln);overflow:hidden}
-.ap-b i{display:block;height:100%;width:var(--w,0%);border-radius:3px;background:linear-gradient(90deg,color-mix(in srgb,var(--ok) 65%,#000),var(--ok))}
-.ap-b.m i{background:linear-gradient(90deg,#F5B400,var(--ac))}
-.ap-m{display:block;margin-top:7px;font-size:13px;line-height:1.3;color:var(--mu)}
-.ap-d{margin-top:16px}
+/* ===== Stats : relevé du scouter ===== */
+@property --fp{syntax:"<number>";inherits:true;initial-value:0}
+/* la boule de cristal : un panneau toujours sombre, comme l'écran d'invocation */
+.ap-h{--au:#FFD21F;--p:0;position:relative;margin-top:6px;padding:12px 14px 16px;border-radius:26px;overflow:hidden;isolation:isolate;text-align:center;color:#F6F2F2;border:1px solid color-mix(in srgb,var(--au) 40%,#201616);background:radial-gradient(110% 62% at 50% 8%,color-mix(in srgb,var(--au) 22%,transparent),transparent 66%),linear-gradient(180deg,#150e0e,#0a0707 72%,#0e0909)}
+.ap-ht{position:absolute;left:10px;right:10px;top:8px;z-index:3;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none}
+.ap-ht>*{pointer-events:auto}
+.ap-mb{display:flex;align-items:center;gap:4px;padding:11px 8px 11px 6px;border:0;background:none;color:#B9ADAD;font:600 12px/1 Rubik,system-ui,sans-serif}
+.ap-mb .dbo{--s:13px;box-shadow:inset -1px -2px 3px rgba(110,25,0,.55),0 0 7px rgba(255,150,30,.55)}
+.ap-mb .dbo.off{background:radial-gradient(circle at 35% 28%,#5a4b4b,#241b1b 75%);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.16)}
+.ap-mb small{margin-left:4px;font-size:12px}
+.ap-sh{flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#F6F2F2}
+.ap-sh svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ap-bw{--fp:var(--p);position:relative;width:min(44vw,162px);aspect-ratio:1;margin:22px auto 0}
+.ap-bw::before{content:"";position:absolute;inset:-32%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--au) 50%,transparent),transparent 70%);animation:apglow 4.8s ease-in-out infinite alternate}
+@keyframes apglow{from{opacity:.55;transform:scale(.95)}to{opacity:1;transform:scale(1.05)}}
+.ap-h.rise .ap-bw{animation:apfill 1.5s cubic-bezier(.2,.75,.25,1) var(--ad,0s) both}
+@keyframes apfill{from{--fp:0}to{--fp:var(--p)}}
+/* lignes de vitesse de manga autour de la boule */
+.ap-fl{position:absolute;left:50%;top:50%;width:360%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:repeating-conic-gradient(from 2deg,rgba(255,255,255,.09) 0 .55deg,transparent .55deg 4.9deg),repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--au) 30%,transparent) 0 1.1deg,transparent 1.1deg 11.7deg);-webkit-mask-image:radial-gradient(closest-side,transparent 27%,#000 46%,rgba(0,0,0,.65) 62%,transparent 100%);mask-image:radial-gradient(closest-side,transparent 27%,#000 46%,rgba(0,0,0,.65) 62%,transparent 100%)}
+/* la sphère : verre sombre, liquide orange qui monte, étoiles allumées quand elles sont immergées */
+.ap-bl{position:absolute;inset:0;border-radius:50%;overflow:hidden;isolation:isolate;background:radial-gradient(circle at 36% 28%,rgba(150,180,220,.34),rgba(28,38,58,.94) 62%,#0c1018);box-shadow:0 0 0 2px rgba(255,255,255,.1),0 20px 28px -16px rgba(0,0,0,.95),0 0 38px color-mix(in srgb,var(--au) 38%,transparent)}
+.ap-bl::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 52%,rgba(12,3,0,.5) 100%);box-shadow:inset -9px -13px 22px rgba(70,14,0,.5),inset 5px 5px 14px rgba(255,255,255,.13)}
+.ap-lq{position:absolute;inset:0;transform:translateY(calc((100 - var(--fp)) * 1%));background:linear-gradient(180deg,#FFD66B 0,#FFB02E 7%,#F5821A 36%,#D8480A 70%,#8F2704 100%)}
+.ap-wv{position:absolute;left:0;top:-11px;width:200%;height:12px;fill:#FFD66B;animation:apwave 3.8s linear infinite}
+.ap-wv .s{fill:none;stroke:rgba(255,248,214,.9);stroke-width:1.2;vector-effect:non-scaling-stroke}
+@keyframes apwave{to{transform:translateX(-50%)}}
+.ap-bs,.ap-os{position:absolute;inset:0}
+.ap-bs i,.ap-os i{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);background:#C4161C;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ap-bs i{background:rgba(255,255,255,.16)}
+.ap-bs i.on{background:#C4161C}
+@keyframes apstar{0%{transform:translate(-50%,-50%);background:rgba(255,255,255,.16)}55%{transform:translate(-50%,-50%) scale(1.55);background:#FF7467}100%{transform:translate(-50%,-50%);background:#C4161C}}
+.ap-h.rise .ap-bs i.on{animation:apstar .55s ease-out calc(1.3s + var(--ad,0s)) both}
+.ap-hl{position:absolute;left:17%;top:9%;width:36%;height:21%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,0));transform:rotate(-30deg);pointer-events:none}
+/* le niveau de puissance */
+.ap-hn{position:relative;margin-top:13px}
+.ap-hk{display:block;font:500 13px/1 Rubik,system-ui,sans-serif;color:#B9ADAD}
+.ap-hv{display:inline-block;margin-top:8px;padding:0 6px;font:400 50px/1.04 "Bowlby One",Rubik,sans-serif;transform:skewX(-6deg);background:linear-gradient(180deg,#fff 8%,#FFEBB0 58%,color-mix(in srgb,var(--au) 82%,#fff));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5)) drop-shadow(0 0 16px color-mix(in srgb,var(--au) 42%,transparent))}
+.ap-hs{display:block;margin-top:7px;font-size:13.5px;color:#B9ADAD}
+.ap-hs b{color:#F6F2F2;font-weight:600}
+/* le rang et sa jauge de ki, dans un cadre de scouter */
+.ap-rk{position:relative;margin:13px 0 0;padding:12px 14px 13px;border-radius:15px;background:rgba(0,0,0,.36);border:1px solid color-mix(in srgb,var(--au) 26%,rgba(255,255,255,.05))}
+.ap-rk::before,.ap-rk::after{content:"";position:absolute;width:15px;height:15px;border:2px solid color-mix(in srgb,var(--au) 85%,#fff);pointer-events:none}
+.ap-rk::before{left:-1px;top:-1px;border-right:0;border-bottom:0;border-top-left-radius:15px}
+.ap-rk::after{right:-1px;bottom:-1px;border-left:0;border-top:0;border-bottom-right-radius:15px}
+.ap-rm{display:inline-block;margin:0;padding:0 4px;font:400 22px/1.15 "Bowlby One",Rubik,sans-serif;transform:skewX(-5deg);background:linear-gradient(180deg,#fff,var(--au) 82%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--au) 55%,transparent))}
+.ap-kg{--w:0%;position:relative;display:block;height:9px;border-radius:999px;background:var(--ln)}
+.ap-kg i{position:absolute;z-index:1;left:0;top:0;bottom:0;width:var(--w);border-radius:inherit}
+.ap-kg::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),rgba(0,0,0,.42) calc(10% - 1px) 10%)}
+.ap-rk .ap-kg{height:12px;margin-top:11px;background:rgba(255,255,255,.1);box-shadow:inset 0 1px 3px rgba(0,0,0,.7)}
+.ap-rk .ap-kg i{background:linear-gradient(90deg,color-mix(in srgb,var(--au) 50%,#000),var(--au) 70%,color-mix(in srgb,var(--au) 40%,#fff));box-shadow:0 0 12px color-mix(in srgb,var(--au) 75%,transparent)}
+.ap-rk .ap-kg i::before{content:"";position:absolute;right:-13px;top:50%;width:26px;height:26px;margin-top:-13px;background:radial-gradient(closest-side,rgba(255,255,255,.9),color-mix(in srgb,var(--au) 70%,transparent) 45%,transparent);pointer-events:none}
+.ap-rk .ap-kg i::after{content:"";position:absolute;right:-8px;top:50%;width:16px;height:16px;margin-top:-8px;background:#fff;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
+.ap-rk .ap-kg.z i::before,.ap-rk .ap-kg.z i::after{display:none}
+.ap-rc{margin:10px 0 0;font-size:13.5px;line-height:1.35;color:#B9ADAD}
+.ap-rc b{color:#F6F2F2;font-weight:600}
+/* titres de section : un éclair de ki et un trait de balayage */
+.ap-t{display:flex;align-items:center;gap:10px;margin:26px 2px 12px;font:400 18px/1.15 "Bowlby One",Rubik,sans-serif;color:var(--tx)}
+.ap-t::before{content:"";flex:none;width:11px;height:19px;background:linear-gradient(180deg,#FFD66B,#F26B10);clip-path:polygon(62% 0,0 58%,40% 58%,26% 100%,100% 38%,58% 38%)}
+.ap-t::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--ln),transparent)}
+/* le relevé : un grand panneau pour la valeur, des capsules pour le reste */
+.ap-vl,.ap-rd{--kr:245,180,0;position:relative;display:grid;width:100%;text-align:left;color:var(--tx);border:1px solid rgba(var(--kr),.4);background:linear-gradient(95deg,rgba(var(--kr),.2),rgba(var(--kr),.03) 46%,transparent 72%),var(--sf)}
+.ap-vl:active,.ap-rd:active,.ap-sr:active{transform:scale(.988)}
+.ap-vl{grid-template-columns:44px minmax(0,1fr);column-gap:12px;row-gap:12px;align-items:center;padding:13px 14px 14px 12px;border-radius:26px}
+.ap-vr{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;padding-left:2px}
+.ap-vn{font:400 36px/1 "Bowlby One",Rubik,sans-serif;letter-spacing:-.01em;white-space:nowrap;text-shadow:0 0 16px rgba(var(--kr),.3)}
+.ap-vf{display:inline-flex;align-items:center;gap:3px;font:500 13px/1 Rubik,system-ui,sans-serif;color:color-mix(in srgb,rgb(var(--kr)) 70%,var(--tx))}
+.ap-vf svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ap-rd{grid-template-columns:44px minmax(0,1fr) fit-content(40%) 14px;align-items:center;column-gap:12px;margin-top:8px;padding:10px 14px 10px 10px;border-radius:999px}
+.ap-em{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:color-mix(in srgb,rgb(var(--kr)) 80%,var(--tx));background:radial-gradient(circle at 35% 28%,rgba(var(--kr),.38),rgba(var(--kr),.1) 70%);box-shadow:0 0 0 1.5px rgba(var(--kr),.62),0 0 16px rgba(var(--kr),.32)}
+.ap-em svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ap-rt{min-width:0}
+.ap-rt b,.ap-vt b{display:block;font:600 15.5px/1.2 Rubik,system-ui,sans-serif}
+.ap-rt small,.ap-vt small{display:block;margin-top:3px;color:var(--mu);font-size:12.5px;line-height:1.3}
+.ap-rt small em{font-style:normal;font-weight:600;color:var(--tx)}
+.ap-rv{min-width:0;text-align:right}
+.ap-rv strong{display:block;font:400 22px/1 "Bowlby One",Rubik,sans-serif;white-space:nowrap}
+.ap-rv small{display:block;margin-top:5px;color:var(--mu);font-size:12px;line-height:1.15}
+.ap-ch{flex:none;width:14px;height:14px;fill:none;stroke:var(--mu);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* radar des séries */
+.ap-lg+.ap-rd{margin-top:0}
+.ap-lg{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 2px 12px;color:var(--mu);font-size:12.5px;line-height:1.35}
+.ap-lg span{display:inline-flex;align-items:center;gap:6px}
+.ap-lg i{display:inline-block;width:16px;height:6px;border-radius:3px;background:linear-gradient(90deg,#1E7FD6,#58C8FF)}
+.ap-lg i.m{background:linear-gradient(90deg,#C98A00,#F5B400)}
+.ap-q{position:relative;display:block;margin-top:12px}
+.ap-q svg{position:absolute;left:16px;top:50%;width:18px;height:18px;transform:translateY(-50%);fill:none;stroke:var(--mu);stroke-width:1.9;stroke-linecap:round;pointer-events:none}
+.ap-q input[type=search]{padding:13px 16px 13px 44px;border-radius:999px;background:var(--sf);font-size:15px}
+.ap-l{display:grid;gap:10px;margin-top:12px}
+.ap-sr{position:relative;display:flex;align-items:center;gap:13px;width:100%;padding:13px 12px 13px 13px;border-radius:22px;overflow:hidden;text-align:left;color:var(--tx);border:1px solid rgba(var(--cr),.36);background:linear-gradient(100deg,rgba(var(--cr),.16),rgba(var(--cr),0) 64%),var(--sf)}
+.ap-sr.ok{border-color:rgba(245,180,0,.72);box-shadow:0 0 0 1px rgba(245,180,0,.22),0 10px 26px -14px rgba(245,180,0,.7)}
+.ap-pk{position:absolute;top:0;right:0;bottom:0;width:48%;background-position:50% 12%;background-size:cover;background-repeat:no-repeat;opacity:.2;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 80%);mask-image:linear-gradient(90deg,transparent,#000 80%)}
+:root[data-theme="light"] .ap-pk{opacity:.13}
+.ap-ob{position:relative;flex:none;display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;overflow:hidden;isolation:isolate;background:radial-gradient(circle at 36% 28%,rgba(150,180,220,.3),rgba(28,38,58,.94) 66%,#0c1018);box-shadow:0 0 0 1.5px rgba(var(--cr),.75),0 0 14px rgba(var(--cr),.38)}
+.ap-ob::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 36% 26%,rgba(255,255,255,.5) 0,rgba(255,255,255,0) 20%),radial-gradient(circle at 50% 50%,transparent 54%,rgba(12,3,0,.45) 100%);box-shadow:inset -3px -5px 8px rgba(70,14,0,.45)}
+.ap-ol{position:absolute;inset:0;transform:translateY(calc((100 - var(--fp)) * 1%));background:linear-gradient(180deg,#FFD66B 0,#FFB02E 10%,#F5821A 40%,#D8480A 78%,#8F2704)}
+.ap-ol::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,244,200,.95);box-shadow:0 0 5px rgba(255,220,120,.9)}
+.ap-ob.f .ap-ol{transform:none}
+.ap-ob.f .ap-ol::before{display:none}
+.ap-ob.f{box-shadow:0 0 0 1.5px #F5B400,0 0 18px rgba(245,180,0,.65)}
+.ap-ob b{position:relative;z-index:2;font:400 17px/1 "Bowlby One",Rubik,sans-serif;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 6px rgba(0,0,0,.65)}
+.ap-ob b small{margin-left:1px;font-size:10px}
+.ap-os{z-index:1}
+.ap-sb{position:relative;flex:1;min-width:0}
+.ap-sn{display:flex;align-items:center;gap:8px}
+.ap-sn b{flex:1;min-width:0;font:600 16px/1.2 Rubik,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-sn em{flex:none;font:400 12px/1 "Bowlby One",Rubik,sans-serif;font-style:normal;color:color-mix(in srgb,var(--c) 75%,var(--tx))}
+.ap-g{display:grid;grid-template-columns:68px minmax(0,1fr) 60px;align-items:center;column-gap:8px;margin-top:8px}
+.ap-gt{font:600 11.5px/1 Rubik,system-ui,sans-serif;color:var(--mu);white-space:nowrap}
+.ap-gv{text-align:right;font:600 12.5px/1 Rubik,system-ui,sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ap-g .ap-kg{height:8px}
+.ap-g .ap-kg i{background:linear-gradient(90deg,#1E7FD6,#58C8FF 72%,#EAF8FF);box-shadow:0 0 8px rgba(88,200,255,.55)}
+.ap-g.m .ap-kg i{background:linear-gradient(90deg,#C98A00,#F5B400 72%,#FFE9A3);box-shadow:0 0 8px rgba(245,180,0,.5)}
+.ap-ms{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:9px;font-size:12.5px;line-height:1.3;color:var(--mu)}
+.ap-ms b{flex:none;font-weight:600;color:var(--tx);white-space:nowrap}
+.ap-gv.ok{color:var(--ok)}
+.ap-ms.g{color:var(--ok);font-weight:600}
+.ap-d{margin-top:18px}
 .ap-fn{margin:14px 2px 0;line-height:1.4}
+@media (max-width:379px){
+ .ap-rd{grid-template-columns:40px minmax(0,1fr) fit-content(38%) 12px;column-gap:10px;padding:9px 12px 9px 9px}
+ .ap-rd .ap-em{width:40px;height:40px}
+ .ap-rt b,.ap-vt b{font-size:15px}
+}
+@media (max-width:339px){
+ .ap-rd{grid-template-columns:36px minmax(0,1fr) fit-content(38%)}
+ .ap-rd .ap-em{width:36px;height:36px}
+ .ap-rd .ap-em svg{width:19px;height:19px}
+ .ap-rd>.ap-ch{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ap-bw::before,.ap-wv,.ap-h.rise .ap-bw,.ap-h.rise .ap-bs i.on{animation:none}}
 /* feuille « Ma valeur » */
 .ap-tr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
 .ap-tr:last-child{border-bottom:0}
@@ -1954,47 +2028,65 @@ ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margi
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
 function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">Cartes manquantes × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
-/* ===== Stats : aperçu de la collection (tuiles + progression des séries) ===== */
+/* ===== Stats : relevé du scouter (boule de cristal, rang, séries qui se chargent) ===== */
+let apT0=Date.now();/* instant d'arrivée sur l'écran : la boule se remplit à ce moment-là, une seule fois */
 const apIc={
- up:'<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M15 7h5v5"/>',
+ coin:'<circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="5.7" stroke-width="1.1"/><path d="M12 8.9l.76 2.05 2.19.09-1.71 1.36.58 2.11L12 13.3l-1.82 1.2.58-2.11-1.71-1.36 2.19-.09z" fill="currentColor" stroke="none"/>',
  card:'<rect x="8" y="3" width="12" height="16" rx="2"/><path d="M4.5 7.5V19a2 2 0 0 0 2 2H16"/><path d="M11 8h6M11 12h6"/>',
  box:'<path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/>',
  alt:'<path d="M11 3c.8 5 3 7.2 8 8-5 .8-7.2 3-8 8-.8-5-3-7.2-8-8 5-.8 7.2-3 8-8z"/><path d="M19 3v4M17 5h4"/>',
  heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
  swap:'<path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/>',
+ radar:'<circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4" stroke-width="1.3"/><path d="m12 12 5.6-5.6"/><circle cx="16.4" cy="15.8" r="1.25" fill="currentColor" stroke="none"/>',
  find:'<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
  share:'<path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/>',
- go:'<path d="M7 17 17 7M8.5 7H17v8.5"/>'};
+ go:'<path d="m9 5 7 7-7 7"/>'};
 const apSvg=(k,c)=>`<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${apIc[k]}</svg>`,
- apGo=`<i class="ap-go" aria-hidden="true">${apSvg('go','')}</i>`,
  apNf=n=>Math.round(n).toLocaleString('fr-FR'),
  /* montant compact des petites lignes : centimes sous 100 €, euros entiers au-dessus */
- apE=v=>v<100?eur(v):Math.round(v).toLocaleString('fr-FR')+' €',
+ apE=v=>v<100?eur(v):Math.round(v).toLocaleString('fr-FR')+'\u00a0€',
+ apA=v=>'≈\u00a0'+apE(v),
  apS=n=>n>1?'s':'',
- /* taille du gros chiffre d'une tuile : plus le texte est long, plus il rétrécit (pas de débordement) */
- apFs=s=>{const n=String(s).length;return n<=5?32:n<=7?30:n<=9?27:n<=10?25:n<=11?22:n<=12?20:n<=14?17:15},
+ /* tailles des chiffres en Bowlby One (police large) : plus le texte est long, plus il rétrécit */
+ apFv=s=>{const n=String(s).length;return n<=8?36:n<=10?33:n<=12?28:n<=14?24:20},
+ apFr=s=>{const n=String(s).length;return n<=3?24:n<=5?21:n<=6?19:n<=7?16:n<=8?14:12},
  /* pourcentage affiché : jamais 100 % tant qu'il manque une carte */
  apPc=(a,b)=>b?(a>=b?100:Math.min(99,Math.round(a/b*100))):0,
- /* largeur d'une barre : un petit trait visible dès la première carte */
+ /* largeur d'une jauge : un petit trait visible dès la première carte */
  apW=(a,b)=>b&&a>0?Math.min(100,Math.max(3,a/b*100)):0,
- apNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
-/* une tuile : étiquette, gros chiffre, ligne grise, ligne en gras, icône en filigrane et bouton rond ↗ */
-const apK=(att,col,ic,lab,num,sub,foot,aria)=>`<button class="ap-k" ${att} style="--k:${col}" aria-label="${aria}"><span class="ap-kl">${lab}</span><b class="ap-kn" style="font-size:${apFs(num)}px">${num}</b><span class="ap-ks">${sub}</span><span class="ap-kf">${foot}</span>${apSvg(ic,'ap-kw')}${apGo}</button>`;
+ apNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,''),
+ /* couleur de l'aura, une par rang : Terrien, Guerrier Z, Saiyan, Super Saiyan, 2, 3, God, Blue, Ultra Instinct */
+ apAU=['#9FB8D0','#FF9A1E','#FF6A2B','#FFD21F','#FFE45C','#FFB300','#FF4D5E','#3DB8FF','#E3EEFA'],
+ /* les étoiles : « allumées » quand le liquide les recouvre */
+ apStars=(n,f)=>DBSTAR[n].map(([a,b])=>`<i${f&&f(b)?' class="on"':''} style="left:${a}%;top:${b}%;width:${DBSZ[n]}%"></i>`).join(''),
+ /* la surface du liquide : deux vagues qui glissent en boucle */
+ apWave='<svg class="ap-wv" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6Q12.5 1 25 6T50 6T75 6T100 6T125 6T150 6T175 6T200 6V12H0Z"/><path class="s" d="M0 6Q12.5 1 25 6T50 6T75 6T100 6T125 6T150 6T175 6T200 6"/></svg>';
 
-/* la liste « Mes séries » (réécrite seule quand on tape dans la recherche) */
-function apList(){const q=apNorm(S.sq),L=EXTS.filter(([e,nm])=>!q||apNorm(e+nm).includes(q));
- if(!L.length)return `<p class="sub" style="margin:4px 2px 0">Aucune série ne correspond à « ${esc(S.sq)} ».</p>`;
- return L.map(([e,nm])=>{
-  const N=nrm(e),AL=alt(e),nn=N.length,na=AL.length,tot=nn+na,o=N.filter(c=>c.own>0).length,ao=AL.filter(c=>c.own>0).length,ow=o+ao,
-   cN=N.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0),cA=AL.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0),
-   done=nn>0&&o>=nn,mN=nn-o,mA=na-ao,
-   f1=done?'Full Set complet !':`Il te manque ${mN} carte${apS(mN)}${cN>0?' · ≈ '+apE(cN):''}`,
-   f2=ow>=tot?'Master Set complet !':done?`${mA} Alt Art manquante${apS(mA)}${cA>0?' · ≈ '+apE(cA):''}`:mA===0?'Toutes les Alt Art sont là, il reste le Full Set':`${mA} Alt Art manquante${apS(mA)} et le Full Set`;
-  return `<button class="ap-c${done?' ok':''}" data-apx="${e}" style="--c:${SERCOL[e]||'#E50914'};--cr:${srRGB(e)}" aria-label="${e} ${esc(nm)} : full set ${o} sur ${nn}${na?', master set '+ow+' sur '+tot:''}. Ouvrir la série">`
-   +`<span class="ap-ch"><span class="ap-th srp-${e}" aria-hidden="true"></span><span class="ap-cn"><b>${esc(nm)}</b><small>${e}</small></span>${apGo}</span>`
-   +`<span class="ap-r"><span class="ap-rl">Full set</span><span class="ap-rv"><span class="g">${o} / ${nn}</span><em>${apPc(o,nn)} %</em></span></span><span class="ap-b" aria-hidden="true" style="--w:${apW(o,nn)}%"><i></i></span><span class="ap-m">${f1}</span>`
-   +(na?`<span class="ap-r"><span class="ap-rl">Master set</span><span class="ap-rv"><span class="y">${ow} / ${tot}</span><em>${apPc(ow,tot)} %</em></span></span><span class="ap-b m" aria-hidden="true" style="--w:${apW(ow,tot)}%"><i></i></span><span class="ap-m">${f2}</span>`:'')
-   +`</button>`}).join('')}
+/* une ligne du relevé : emblème, libellé, petit texte, gros chiffre à droite */
+const apEm=ic=>`<span class="ap-em">${apSvg(ic,'')}</span>`,
+ apRd=(att,kr,ic,lab,sub,num,foot,aria)=>`<button class="ap-rd" ${att} style="--kr:${kr}" aria-label="${aria}">${apEm(ic)}<span class="ap-rt"><b>${lab}</b><small>${sub}</small></span><span class="ap-rv"><strong style="font-size:${apFr(num)}px">${num}</strong>${foot?`<small>${foot}</small>`:''}</span>${apSvg('go','ap-ch')}</button>`;
+
+/* l'état de chaque série (utilisé par la liste et par « prochain objectif ») */
+function apSer(){return EXTS.map(([e,nm])=>{
+ const N=nrm(e),AL=alt(e),nn=N.length,na=AL.length,tot=nn+na,o=N.filter(c=>c.own>0).length,ao=AL.filter(c=>c.own>0).length,ow=o+ao,
+  cN=N.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0),cA=AL.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0);
+ return{e,nm,nn,na,tot,o,ow,cN,cA,done:nn>0&&o>=nn,full:tot>0&&ow>=tot,mN:nn-o,mA:na-ao}})}
+
+/* la liste « Radar des séries » (réécrite seule quand on tape dans la recherche) */
+function apList(){const q=apNorm(S.sq),L=apSer().filter(s=>!q||apNorm(s.e+s.nm).includes(q));
+ if(!L.length)return `<p class="sub" style="margin:12px 2px 0">Aucune série ne correspond à « ${esc(S.sq)} ».</p>`;
+ return L.map(s=>{
+  const mp=apPc(s.ow,s.tot),
+   msg=s.full?`<span>${s.na?'Master Set complet : série maîtrisée !':'Full Set complet : série maîtrisée !'}</span>`
+    :s.done?`<span>Il te manque ${s.mA} Alt Art</span>${s.cA>0?`<b>${apA(s.cA)}</b>`:''}`
+    :`<span>Il te manque ${s.mN} carte${apS(s.mN)}</span>${s.cN>0?`<b>${apA(s.cN)}</b>`:''}`;
+  return `<button class="ap-sr${s.full?' ok':''}" data-apx="${s.e}" style="--c:${SERCOL[s.e]||'#E50914'};--cr:${srRGB(s.e)};--fp:${apW(s.ow,s.tot).toFixed(1)}" aria-label="${s.e} ${esc(s.nm)} : full set ${s.o} sur ${s.nn}${s.na?', master set '+s.ow+' sur '+s.tot:''}. Ouvrir la série">`
+   +`<span class="ap-pk srp-${s.e}" aria-hidden="true"></span>`
+   +`<span class="ap-ob${s.full?' f':''}" aria-hidden="true"><span class="ap-ol"></span>${s.full?`<span class="ap-os">${apStars(4)}</span>`:`<b>${mp}<small>%</small></b>`}</span>`
+   +`<span class="ap-sb"><span class="ap-sn"><b>${esc(s.nm)}</b><em>${s.e}</em>${apSvg('go','ap-ch')}</span>`
+   +`<span class="ap-g"><span class="ap-gt">Full Set</span><span class="ap-kg" style="--w:${apW(s.o,s.nn)}%"><i></i></span><span class="ap-gv${s.done?' ok':''}">${s.o} / ${s.nn}</span></span>`
+   +(s.na?`<span class="ap-g m"><span class="ap-gt">Master Set</span><span class="ap-kg" style="--w:${apW(s.ow,s.tot)}%"><i></i></span><span class="ap-gv${s.full?' ok':''}">${s.ow} / ${s.tot}</span></span>`:'')
+   +`<span class="ap-ms${s.full?' g':''}">${msg}</span></span></button>`}).join('')}
 
 /* détail facultatif : avancement par type et par rareté (cartes numérotées, toutes séries) */
 function apDetail(){
@@ -2010,18 +2102,37 @@ function stats(){
   AL=alt(),aOwn=AL.filter(c=>c.own>0).length,aV=AL.reduce((a,c)=>a+c.own*pxv(c),0),
   W=cards.filter(c=>c.want>0),swn=sa.filter(x=>x.s.want>0).length,wn=W.length+swn,wc=W.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0),
   P=tradeData().prop,pn=P.reduce((a,x)=>a+x.q,0),pv=P.reduce((a,x)=>a+x.q*pxv(x.c),0),
-  K=[
-   apK('data-apv','#F5B400','up','Valeur totale',eV,MKON?'Tendance des prix':'D’après tes prix saisis','Voir le détail','Valeur totale : '+eV+'. Ouvrir le détail'),
-   apK('data-go="coll"','#2BB8D8','card','Mes cartes',apNf(copies),apNf(uniq)+' carte'+apS(uniq)+' différente'+apS(uniq),cardV>0?'≈ '+apE(cardV)+' estimés':'Voir ma collection','Mes cartes : '+copies+' exemplaire'+apS(copies)+', '+uniq+' différente'+apS(uniq)+'. Ouvrir la collection'),
-   apK('data-hgo="sealed"','#3FB65A','box','Mes scellés',apNf(sealN),sealN?apNf(sealU)+' produit'+apS(sealU)+' différent'+apS(sealU):'Aucun scellé',sealV>0?'≈ '+apE(sealV)+' estimés':'Voir mes scellés','Mes scellés : '+sealN+'. Ouvrir les scellés'),
-   apK('data-apa','#B14FE0','alt','Alt Art',apNf(aOwn),'sur '+apNf(AL.length)+' existantes',aV>0?'≈ '+apE(aV)+' estimés':'Voir mes Alt Art','Alternative Art : '+aOwn+' sur '+AL.length+'. Ouvrir les Alt Art'),
-   apK('data-go="want"','#FF4D6A','heart','Recherchées',apNf(wn),wn?W.length+' carte'+apS(W.length)+(swn?' · '+swn+' scellé'+apS(swn):''):'Rien de suivi',wc>0?'≈ '+apE(wc)+' à acheter':'Voir ma liste','Recherchées : '+wn+'. Ouvrir la liste'),
-   apK('data-go="dup"','#8E8E9A','swap','Je propose',apNf(pn),pn?'Échange ou vente':'Rien à proposer',pv>0?'≈ '+apE(pv)+' proposés':'Voir mes doublons','Je propose : '+pn+' exemplaire'+apS(pn)+'. Ouvrir les doublons')];
+  SS=apSer(),ev=dbEval(),lit=ev.balls.filter(b=>b.lit).length,rk=dbRank(uniq),au=apAU[rk.i]||apAU[1],
+  pw=apW(uniq,all),pc=apPc(uniq,all),left=Math.max(0,rk.to-uniq),
+  gw=rk.to?Math.max(0,Math.min(100,(uniq-rk.from)/(rk.to-rk.from)*100)):100,
+  el=Date.now()-apT0,rise=el<1700,
+  /* prochain objectif : la série la plus proche de son Full Set, puis de son Master Set */
+  nxt=(()=>{if(!uniq)return '';
+   let s=SS.filter(x=>!x.done&&x.nn>0).sort((a,b)=>a.mN-b.mN)[0],f=1;
+   if(!s){s=SS.filter(x=>!x.full&&x.na>0).sort((a,b)=>a.mA-b.mA)[0];f=0}
+   if(!s)return '';
+   const n=f?s.mN:s.mA,u=f?'carte':'Alt Art',k=f?'Full Set':'Master Set';
+   return apRd(`data-apx="${s.e}"`,'88,200,255','radar','Prochain objectif',s.e+' · '+k,n,u+(f?apS(n):''),'Prochain objectif : '+s.e+', '+n+' '+u+(f?apS(n):'')+' pour le '+k+'. Ouvrir la série')})();
  return header()
- +`<div class="ap-ban"><span class="dbo" style="--s:42px" aria-hidden="true">${DBSTAR[4].map(([a,b])=>`<i style="left:${a}%;top:${b}%;width:${DBSZ[4]}%"></i>`).join('')}</span><div class="ap-bt"><h2>Aperçu de ma collection</h2><span><b>${apNf(uniq)}</b> / ${apNf(all)} cartes · <b>${pct(uniq,all)} %</b></span></div><button class="ap-sh" data-share aria-label="Partager ma collection">${apSvg('share','')}</button><span class="ap-pb" aria-hidden="true" style="--w:${apW(uniq,all)}%"><i></i></span></div>`
- +`<div class="ap-g">${K.join('')}</div>`
- +`<section class="ap-s"><div class="ap-sh2"><div><h2>Mes séries</h2><p>Suivi de progression full set et master set.</p></div><button class="ap-pill" data-go="coll">Cartes &amp; Scellés par série ${apSvg('go','')}</button></div>`
- +`<label class="ap-q">${apSvg('find','')}<input id="sq" type="search" autocomplete="off" enterkeyhint="search" placeholder="Rechercher une série ou un code…" aria-label="Rechercher une série ou un code" value="${esc(S.sq)}"></label><div class="ap-l" id="apl">${apList()}</div></section>`
+ /* — la boule de cristal : elle se remplit avec ta collection, le rang et la jauge de ki en dessous — */
+ +`<section class="ap-h${rise?' rise':''}" style="--au:${au};--p:${pw.toFixed(1)}${rise?';--ad:'+(-Math.round(el))+'ms':''}">`
+ +`<div class="ap-ht"><button class="ap-mb" data-go="dball" aria-label="Dragon Balls : ${lit} sur 7. Ouvrir">${ev.balls.map(b=>`<span class="dbo${b.lit?'':' off'}"></span>`).join('')}<small>${lit}/7</small></button><button class="ap-sh" data-share aria-label="Partager ma collection">${apSvg('share','')}</button></div>`
+ +`<div class="ap-bw" role="img" aria-label="Collection complète à ${pc} % : ${uniq} cartes différentes sur ${all}"><span class="ap-fl"></span><span class="ap-bl">${uniq>0?`<span class="ap-lq">${apWave}</span>`:''}<span class="ap-bs">${apStars(4,b=>b>100-pw)}</span><span class="ap-hl"></span></span></div>`
+ +`<div class="ap-hn"><span class="ap-hk">Niveau de puissance</span><b class="ap-hv">${apNf(uniq)}</b><span class="ap-hs">cartes différentes sur ${apNf(all)} · <b>${pc} %</b></span></div>`
+ +`<div class="ap-rk"><h2 class="ap-rm">${rk.name}</h2><div class="ap-kg${gw<=0?' z':''}" style="--w:${gw.toFixed(1)}%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(gw)}" aria-label="${rk.next?'Progression vers '+rk.next:'Rang maximum'}"><i></i></div>`
+ +`<p class="ap-rc">${rk.next?`Encore <b>${apNf(left)}</b> carte${apS(left)} différente${apS(left)} pour atteindre <b>${rk.next}</b>`:'Rang maximum atteint : tu as dépassé toutes les limites !'}</p></div></section>`
+ /* — le relevé du scouter : la valeur en grand, puis cinq lignes — */
+ +`<section><h2 class="ap-t">Relevé du scouter</h2>`
+ +`<button class="ap-vl" data-apv style="--kr:245,180,0" aria-label="Valeur de la collection : ${eV}. Ouvrir le détail">${apEm('coin')}<span class="ap-vt"><b>Valeur de ma collection</b><small>${MKON?'Tendance des prix Cardmarket':'D’après tes prix saisis'}</small></span><span class="ap-vr"><strong class="ap-vn" style="font-size:${apFv(eV)}px">${eV}</strong><span class="ap-vf">Voir le détail ${apSvg('go','')}</span></span></button>`
+ +apRd('data-go="coll"','61,184,255','card','Mes cartes',apNf(uniq)+' différente'+apS(uniq),apNf(copies),cardV>0?apA(cardV):'','Mes cartes : '+copies+' exemplaire'+apS(copies)+', '+uniq+' différente'+apS(uniq)+'. Ouvrir la collection')
+ +apRd('data-hgo="sealed"','255,138,43','box','Mes scellés',sealN?apNf(sealU)+' produit'+apS(sealU):'Aucun scellé',apNf(sealN),sealV>0?apA(sealV):'','Mes scellés : '+sealN+'. Ouvrir les scellés')
+ +apRd('data-apa','177,79,224','alt','Alt Art','sur '+apNf(AL.length)+' existantes',apNf(aOwn),aV>0?apA(aV):'','Alternative Art : '+aOwn+' sur '+AL.length+'. Ouvrir les Alt Art')
+ +apRd('data-go="want"','255,77,106','heart','Recherchées',wn?W.length+' carte'+apS(W.length)+(swn?', '+swn+' scellé'+apS(swn):''):'Rien de suivi',apNf(wn),wc>0?apA(wc)+' à\u00a0acheter':'','Recherchées : '+wn+'. Ouvrir la liste')
+ +apRd('data-go="dup"','143,160,178','swap','Je propose',pn?'Échange ou vente':'Rien à proposer',apNf(pn),pv>0?apA(pv):'','Je propose : '+pn+' exemplaire'+apS(pn)+'. Ouvrir les doublons')
+ +`</section>`
+ /* — le radar des séries : chaque série est une boule qui se charge — */
+ +`<section><h2 class="ap-t">Radar des séries</h2><p class="ap-lg"><span><i></i>Full Set : toutes les cartes numérotées</span><span><i class="m"></i>Master Set : avec les Alt Art</span></p>${nxt}`
+ +`<label class="ap-q">${apSvg('find','')}<input id="sq" type="search" autocomplete="off" enterkeyhint="search" placeholder="Série ou code (ex. FB05)" aria-label="Chercher une série par son nom ou son code" value="${esc(S.sq)}"></label><div class="ap-l" id="apl">${apList()}</div></section>`
  +`<div class="ap-d"><button class="chip" aria-pressed="${!!S.apd}" data-apd>Détails par type et par rareté</button></div>${S.apd?apDetail():''}`
  +`<p class="sub ap-fn">${MKON?'Valeur = quantité × ton prix, sinon la tendance des prix Cardmarket du '+MKDF+'. Les scellés comptent quand tu as saisi leur prix.':'Prix Cardmarket désactivé dans Réglages : seuls les prix que tu as saisis comptent.'}</p>`}
 
@@ -2360,7 +2471,7 @@ else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own';s[k]=Math.max(0,s[k]+(+
 else if(d.col){applyColor(d.col)}
 else if(d.pick!==undefined){S.pick=true}
 else if(d.ext){S.ext=d.ext;S.pick=false;window.scrollTo(0,0)}
-else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;if(d.go==='stats')S.sq='';S.sel=null;S.vsh=false;S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
+else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;if(d.go==='stats'){S.sq='';apT0=Date.now()}S.sel=null;S.vsh=false;S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
 else if(d.sortopen!==undefined){S.menu=false;S.srt=true}
 else if(d.csort!==undefined){if(d.csort!==CSK){CSK=d.csort;CSD=0;saveCS()}S.srt=false}
 else if(d.csortd!==undefined){const bs=CSORTS.find(x=>x[0]===CSK)[2];CSD=(+d.csortd===bs)?0:1;saveCS();S.srt=false}

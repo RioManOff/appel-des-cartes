@@ -327,6 +327,110 @@ input:focus,select:focus{outline:none;border-color:var(--ac)!important;box-shado
 .hmlinks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .hml{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);text-decoration:none;min-height:62px}
 .hml .hmi{font-size:26px;line-height:1}.hml b{display:block;font-size:14.5px}.hml small{display:block;color:var(--mu);font-size:12px;overflow-wrap:anywhere}
+
+/* ===== Classeurs v2 ===== */
+:root{--bk-pg1:#271919;--bk-pg2:#170E0E;--bk-sl:rgba(255,255,255,.16);--bk-slb:rgba(255,255,255,.05)}
+:root[data-theme="light"]{--bk-pg1:#FFFFFF;--bk-pg2:#F1EAEA;--bk-sl:rgba(60,20,20,.18);--bk-slb:rgba(60,20,20,.045)}
+.bk-shelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px;margin:18px 0 12px}
+.bk-cover{position:relative;display:block;width:100%;aspect-ratio:3/4.1;padding:0;border:0;border-radius:6px 16px 16px 6px;text-align:left;color:#fff;overflow:hidden;background:linear-gradient(155deg,color-mix(in srgb,var(--bc) 90%,#fff),color-mix(in srgb,var(--bc) 80%,#000) 52%,color-mix(in srgb,var(--bc) 50%,#000));box-shadow:0 18px 26px -16px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -3px 0 rgba(0,0,0,.28)}
+.bk-cover::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 6px)}
+.bk-cover:active{transform:scale(.97)}
+.bk-spine{position:absolute;left:0;top:0;bottom:0;width:16%;background:linear-gradient(90deg,rgba(0,0,0,.46),rgba(0,0,0,.14));border-right:1px solid rgba(0,0,0,.4);box-shadow:1px 0 0 rgba(255,255,255,.14);z-index:1}
+.bk-spine i{position:absolute;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#adb3be 55%,#6b717d);box-shadow:0 1px 2px rgba(0,0,0,.7)}
+.bk-spine i:nth-child(1){top:15%}.bk-spine i:nth-child(2){top:50%;margin-top:-5px}.bk-spine i:nth-child(3){bottom:15%}
+.bk-face{position:absolute;inset:0 0 0 16%;display:flex;flex-direction:column;align-items:center;padding:10px;gap:6px;z-index:1}
+.bk-ic{position:absolute;right:7px;top:7px;font-size:16px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:2}
+.bk-win{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;padding-top:14px}
+.bk-cc{display:block;height:100%;aspect-ratio:5/7;transform:rotate(-3deg);filter:drop-shadow(0 8px 8px rgba(0,0,0,.5))}
+.bk-cc .art{width:100%;height:100%;aspect-ratio:auto;border:2px solid rgba(255,255,255,.88);border-radius:7px;box-shadow:none}
+.bk-noc{font-size:48px;opacity:.92}
+.bk-nm{font:400 13px/1.15 "Bowlby One",Rubik,sans-serif;text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 2px rgba(0,0,0,.55);width:100%;overflow-wrap:anywhere}
+.bk-st{font-size:11.5px;font-weight:600;opacity:.95}
+.bk-cb{display:block;height:5px;width:100%;border-radius:4px;background:rgba(0,0,0,.38);overflow:hidden}.bk-cb i{display:block;height:100%;background:#fff;border-radius:4px}
+.bk-empty{text-align:center;margin-top:16px;padding:28px 18px}.bk-ei{font-size:56px;line-height:1.1;margin-bottom:6px}.bk-empty b{font:400 17px/1.25 "Bowlby One",Rubik,sans-serif;display:block}
+.bk-inp{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin:4px 0 10px}
+.bk-kinds{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bk-kind{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:12px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:var(--tx)}
+.bk-kind span{font-size:24px;line-height:1.1}.bk-kind b{font-size:14.5px}.bk-kind small{font-size:11.5px;color:var(--mu);line-height:1.25}
+.bk-kind[aria-pressed="true"]{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,var(--sf));box-shadow:0 0 0 2px color-mix(in srgb,var(--ac) 35%,transparent)}
+.bk-lay{display:inline-flex;align-items:center;gap:7px}
+.bk-mini{display:inline-grid;grid-template-columns:repeat(var(--c),5px);gap:2px}.bk-mini u{display:block;width:5px;height:6px;border-radius:1.5px;background:currentColor;opacity:.8}
+.bk-pre b{font:400 17px/1.2 "Bowlby One",Rubik,sans-serif}
+.bk-top{display:flex;gap:8px;align-items:center;margin:2px 0 8px}.bk-gear{flex:none;width:44px;height:44px;font-size:20px;color:var(--tx)}
+.bk-title{flex:1;min-width:0;display:flex;align-items:center;gap:8px;margin:0;font-size:17px;line-height:1.2}.bk-title>span:first-child{flex:none}.bk-tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bk-sum{padding:10px 14px}.bk-sum .bar{margin:6px 0}
+.bk-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.bk-tool{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;padding:6px 2px;border-radius:14px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:600 11.5px/1.1 Rubik,sans-serif}
+.bk-tool span{font-size:20px;line-height:1.1}
+.bk-tool:active{transform:scale(.96)}
+.bk-tool[aria-pressed="true"]{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 16%,var(--sf));box-shadow:0 0 0 2px color-mix(in srgb,var(--ac) 30%,transparent)}
+.bk-upd,.bk-orgb{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0;border:1px solid var(--ac)}.bk-upd{flex-direction:column;align-items:stretch}.bk-upd .row{margin:0}
+.bk-upd .row,.bk-orgb .chip{flex:none;margin:0}
+.bk-hint{margin:10px 0;border-style:dashed}
+.bk-wrap{flex-wrap:wrap;overflow:visible}
+.chip:disabled{opacity:.4}
+.bk-danger{color:#ff6b6b;border-color:color-mix(in srgb,#ff6b6b 45%,var(--ln))}
+.bk-find{margin:10px 0}.bk-find input{margin:0}
+.bk-fr{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 4px;border:0;border-bottom:1px solid var(--ln);background:none;color:var(--tx);min-height:54px}
+.bk-fr:last-child{border-bottom:0}.bk-fr:active{background:color-mix(in srgb,var(--ac) 10%,transparent)}
+.bk-ml{max-height:48vh;overflow:auto;-webkit-overflow-scrolling:touch}
+.bk-pw{margin:12px 0 0;perspective:1100px;touch-action:pan-y}
+.bk-page{position:relative;padding:18px 14px 8px 40px;border-radius:6px 16px 16px 6px;border:1px solid var(--ln);background:linear-gradient(180deg,var(--bk-pg1),var(--bk-pg2));box-shadow:0 24px 32px -24px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05);transform-origin:0 50%}
+.bk-page::before{content:"";position:absolute;left:0;top:0;bottom:0;width:28px;border-radius:6px 0 0 6px;background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(0,0,0,0));pointer-events:none}
+.bk-holes i{position:absolute;left:11px;width:12px;height:12px;border-radius:50%;background:var(--bg);box-shadow:inset 0 2px 3px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.07)}
+.bk-rings i{position:absolute;left:-10px;width:38px;height:11px;border-radius:6px;background:linear-gradient(180deg,#f5f6f9,#a3a9b4 55%,#d7dbe2);box-shadow:0 2px 4px rgba(0,0,0,.55),inset 0 0 0 1px rgba(0,0,0,.2);z-index:2;pointer-events:none}
+.bk-holes i:nth-child(1),.bk-rings i:nth-child(1){top:16%}.bk-holes i:nth-child(2),.bk-rings i:nth-child(2){top:50%}.bk-holes i:nth-child(3),.bk-rings i:nth-child(3){bottom:16%}
+.bk-holes i:nth-child(2){margin-top:-6px}.bk-rings i:nth-child(2){margin-top:-5px}.bk-holes i:nth-child(3){margin-bottom:-1px}.bk-rings i:nth-child(3){margin-bottom:-1px}
+.bk-grid{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:8px}
+.bk-slot{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;display:block;width:100%;aspect-ratio:5/7.1;padding:0;border:1px solid var(--bk-sl);border-radius:9px;background:var(--bk-slb);color:inherit;font:inherit;touch-action:pan-y;overflow:hidden;-webkit-touch-callout:none;transition:transform .15s,box-shadow .15s,outline-color .15s,opacity .15s}
+.bk-slot .art{position:absolute;inset:3px;width:auto;height:auto;aspect-ratio:auto;border-width:1px;border-radius:6px;font-size:clamp(20px,8vw,34px);box-shadow:0 4px 8px -3px rgba(0,0,0,.75)}
+.bk-slot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(118deg,rgba(255,255,255,.14),transparent 34%,transparent 66%,rgba(255,255,255,.06));z-index:3}
+.bk-slot:active{transform:scale(.97)}
+.bk-num{font:400 clamp(20px,7.5vw,32px) "Bowlby One",sans-serif;opacity:.95;text-shadow:0 2px 4px rgba(0,0,0,.45)}
+.bk-nm2{position:absolute;left:4px;right:4px;bottom:5px;font:600 9.5px/1.15 Rubik,sans-serif;text-align:center;color:rgba(255,255,255,.92);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 2px rgba(0,0,0,.65)}
+.bk-slot.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-style:dashed;background:transparent;color:var(--mu)}
+.bk-slot.empty::after{display:none}
+.bk-plus{font-size:26px;line-height:1;opacity:.8}.bk-sn{font-size:11px;opacity:.65}
+.bk-slot.sel{outline:3px solid var(--ac);outline-offset:2px;transform:translateY(-3px) scale(1.03);box-shadow:0 14px 22px -10px rgba(0,0,0,.9);z-index:2}
+.bk-slot.hl{animation:bkhl 1.4s ease-out 1}
+@keyframes bkhl{0%,45%{box-shadow:0 0 0 4px var(--ac),0 0 26px 6px color-mix(in srgb,var(--ac) 70%,transparent);transform:scale(1.06);z-index:2}100%{box-shadow:none;transform:none}}
+.bk-slot.bk-lift{opacity:.3}
+.bk-slot.bk-drop{outline:3px dashed var(--ac);outline-offset:1px;background:color-mix(in srgb,var(--ac) 24%,transparent)}
+.bk-org .bk-slot{cursor:grab}
+.bk-ghost{position:fixed;left:0;top:0;z-index:95;pointer-events:none;border-radius:8px;box-shadow:0 22px 32px -8px rgba(0,0,0,.9);will-change:transform;opacity:.97}
+.bk-ghost .art{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:8px}
+.bk-dragging,.bk-dragging *{cursor:grabbing!important;-webkit-user-select:none!important;user-select:none!important}
+.bk-pn{text-align:center;font-size:12px;color:var(--mu);margin-top:8px}
+.bk-tn .bk-page{animation:bkn .28s cubic-bezier(.2,.8,.25,1) both}
+.bk-tp .bk-page{animation:bkpv .28s cubic-bezier(.2,.8,.25,1) both}
+@keyframes bkn{from{opacity:.2;transform:translateX(34px) rotateY(-12deg)}to{opacity:1;transform:none}}
+@keyframes bkpv{from{opacity:.2;transform:translateX(-34px) rotateY(12deg)}to{opacity:1;transform:none}}
+.bk-nav{position:sticky;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:5;margin:10px 0 4px;padding:6px;border-radius:20px;border:1px solid var(--ln);background:color-mix(in srgb,var(--sf) 90%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 12px 26px -12px rgba(0,0,0,.8)}.bk-nav .btn{width:auto;min-width:60px;padding:10px 16px}
+.bk-pgn{flex:1;display:flex;flex-direction:column;align-items:center;border:0;background:none;color:var(--tx);padding:2px}.bk-pgn small{font-size:11px;color:var(--mu)}
+.bk-range{width:100%;accent-color:var(--ac);margin:6px 0 0}
+.bk-bar{position:sticky;bottom:calc(172px + env(safe-area-inset-bottom,0px));z-index:4;margin-top:12px;padding:10px 12px;border-radius:18px;background:var(--sf);border:1px solid var(--ac);box-shadow:0 14px 30px -8px rgba(0,0,0,.8)}
+.bk-bi{display:flex;align-items:center;gap:10px}.bk-bi .vnin{flex:1;min-width:0}.bk-bi .chip{flex:none}
+.bk-bh{font-size:12.5px;color:var(--mu);margin:4px 0 6px}
+.bk-tool.sm{min-height:50px;padding:5px 2px;font-size:11px}.bk-tool.sm span{font-size:17px}
+.bk-pki{margin-bottom:0}
+.bk-pkb{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 8px;margin:8px 0 2px}.bk-pkc{display:flex;gap:6px}.bk-pkc .chip{margin:0}
+.card.bk-on .art{outline:3px solid var(--ac);outline-offset:-3px}
+.bk-in{position:absolute;left:4px;top:4px;z-index:2;font:600 10px Rubik,sans-serif;background:var(--ok);color:var(--okt,#04210f);padding:1px 6px;border-radius:8px;pointer-events:none}
+.bk-fab{position:sticky;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:4;margin-top:14px}
+.bk-go{box-shadow:0 14px 30px -8px rgba(0,0,0,.85),0 6px 16px -6px var(--ac)}
+.bk-go:disabled{background:var(--sf);color:var(--mu);border:1px dashed var(--ln);box-shadow:0 10px 24px -10px rgba(0,0,0,.8)}
+.bk-pgs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.bk-pgc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:8px 2px;min-height:54px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx)}
+.bk-pgc b{font-size:15px}.bk-pgc small{font-size:10.5px;color:var(--mu)}
+.bk-pgc.full{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--sf))}.bk-pgc.full small{color:var(--ok);font-weight:700}
+.bk-pgc.part{border-color:color-mix(in srgb,var(--ac) 55%,var(--ln))}
+.bk-pgc.blank{border-style:dashed;opacity:.7}
+.bk-pgc.cur{outline:3px solid var(--ac);outline-offset:1px}
+
+.bk-slot img,.bk-slot .art{pointer-events:none;-webkit-user-drag:none}
+.bk-slot .art *{-webkit-user-select:none;user-select:none}
+@media (prefers-reduced-motion:reduce){.bk-tn .bk-page,.bk-tp .bk-page,.bk-slot.hl{animation:none}.bk-slot,.bk-cover{transition:none}}
+.bk-park{position:fixed!important;left:-9999px;top:0;width:60px;opacity:0}
 </style>
 </head>
 <body>
@@ -408,28 +512,378 @@ ${sealBuys(e,t)}<div class="fld"><div class="w"><label>Prix payé / indicatif (�
 ${s.own>0?`<button class="vnsellbtn" data-vnsells="${e}|${t[0]}">💶 Vendre ce produit</button>`:''}<a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(EXTS.find(x=>x[0]===e)[1]+' '+t[1].replace(' de display',''))}&language=7">💶 Voir le prix sur Cardmarket</a>
 <button class="btn" data-close>Fermer</button></div></div>`}
 const modeBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${S.mode==='cards'}" data-mode="cards">🃏 Cartes</button><button class="chip" aria-pressed="${S.mode==='sealed'}" data-mode="sealed">📦 Scellé (booster, display, case)</button></div>`;
-const binMeta=b=>{const l=b.cards.map(id=>cards.find(c=>c.id===id)).filter(Boolean);return {l,o:l.filter(c=>c.own>0).length}};
-const ICONS=['📒','📕','📗','📘','📙','🔥','⭐','🐉','💎','👑','⚡','🎴'];
-const bcol=b=>b.col||'var(--ac)';
-function binders(){const b=BIND.find(x=>x.id===S.bsel);if(b&&S.bpick)return bpicker(b);if(b)return binderView(b);
-return header()+`<h2>Mes classeurs</h2><div class="panel"><label class="sub">Nom du nouveau classeur</label><input id="bn" placeholder="ex. Mes Leaders, Alt Art rouges…" value="${esc(S.bnew)}" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin-top:4px"><button class="btn" style="margin-top:8px" data-bnew>➕ Créer le classeur</button></div>`+(BIND.length?BIND.map(b=>{const m=binMeta(b);return `<button class="panel ext" data-bopen="${b.id}" style="margin-top:10px;border-left:6px solid ${bcol(b)}">${b.cov&&CARDIMG[b.cov]?`<img src="${CARDIMG[b.cov]}" alt="" style="float:left;width:38px;aspect-ratio:5/7;object-fit:cover;border-radius:5px;margin-right:10px;box-shadow:0 4px 8px rgba(0,0,0,.5)">`:''}<b>${b.ic||'📒'} ${esc(b.name)}</b><span class="n">${m.o} / ${m.l.length}</span><div class="bar"><i style="width:${pct(m.o,m.l.length)}%;background:${bcol(b)}"></i></div></button>`}).join(''):'<p class="sub">Aucun classeur pour le moment. Crée-en un, puis choisis les cartes que tu veux y mettre, de toutes les séries.</p>')}
-function binderView(b){const m=binMeta(b),hasPh=false;ARTMODE='';const html=binderViewInner(b,m,hasPh);ARTMODE='';return html}
-function binderViewInner(b,m,hasPh){const PG=[4,9,12].includes(b.pg)?b.pg:9,np=Math.max(1,Math.ceil(m.l.length/PG)),pg=Math.min(S.bpg||0,np-1),base=pg*PG;
-const slots=Array.from({length:PG},(_,j)=>{const c=m.l[base+j];if(!c)return `<div><button class="card" data-bpick style="width:100%"><div class="art slotE">＋</div><div class="meta">Emplacement vide<br><span>${base+j+1}</span></div></button></div>`;
-const i=base+j;return `<div>${cardBtn(c)}${S.bre?`<div class="mvr"><button data-bmv="${i}" data-bd="-1" aria-label="Déplacer avant">◀</button><button data-bmv="${i}" data-bd="1" aria-label="Déplacer après">▶</button></div>`:''}</div>`}).join('');
-return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-bback>← Mes classeurs</button><h2 style="margin-top:0">${b.ic||'📒'} ${esc(b.name)}</h2><div class="panel" style="border-top:4px solid ${bcol(b)}">Possédées : <b>${m.o} / ${m.l.length}</b> (${pct(m.o,m.l.length)} %) · <b>${m.l.length-m.o}</b> manquantes<div class="bar"><i style="width:${pct(m.o,m.l.length)}%;background:${bcol(b)}"></i></div></div>
-<button class="btn" style="margin:10px 0" data-bpick>➕ Ajouter / retirer des cartes</button>
-<div class="row"><button class="chip" aria-pressed="${S.bre}" data-bre>↔️ Réorganiser</button>${hasPh?`<button class="chip" aria-pressed="${S.bph!==false}" data-bph>📷 Mes photos</button>`:''}<button class="chip" data-bsort>🔢 Trier par numéro</button></div>
-<div class="pgn"><button class="btn alt" data-bpg="-1" ${pg<=0?'disabled style="opacity:.4"':''}>◀</button><b>Page ${pg+1} / ${np}</b><button class="btn alt" data-bpg="1" ${pg>=np-1?'disabled style="opacity:.4"':''}>▶</button></div>
-<div class="grid bnd" style="grid-template-columns:repeat(${PG===4?2:3},1fr)">${slots}</div>
-<div class="panel" style="margin-top:14px"><label class="sub">Cartes par page</label><div class="row">${[4,9,12].map(n=>`<button class="chip" aria-pressed="${PG===n}" data-bsz="${n}">${n}</button>`).join('')}</div><label class="sub">Couverture</label><select data-bcov style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin:4px 0 10px"><option value="">Aucune</option>${m.l.map(c=>`<option value="${c.id}" ${b.cov===c.id?'selected':''}>${esc(c.id+' · '+c.name)}</option>`).join('')}</select><label class="sub">Icône</label><div class="row">${ICONS.map(i=>`<button class="chip ico" aria-pressed="${(b.ic||'📒')===i}" data-bic="${i}">${i}</button>`).join('')}</div><label class="sub">Couleur</label><div class="swr">${THEMES.map(([n,h])=>`<button class="sw" style="background:${h}" aria-label="${n}" aria-pressed="${b.col===h}" data-bcl="${h}"></button>`).join('')}</div></div>
-<div class="panel" style="margin-top:14px"><label class="sub">Renommer le classeur</label><input data-bname value="${esc(b.name)}" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin-top:4px"><button class="btn alt" style="margin-top:8px" data-bdel>🗑️ Supprimer ce classeur</button></div>`}
-function bpicker(b){const q=S.bq.toLowerCase(),inB=new Set(b.cards);
-const l=cards.filter(c=>(!S.bx||c.ext===S.bx)&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)));
-return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-bdone>← Retour au classeur « ${esc(b.name)} »</button><div class="panel"><b>${b.cards.length}</b> carte${b.cards.length>1?'s':''} dans ce classeur · touche une carte pour l'ajouter ou la retirer</div>
-<div style="height:10px"></div><input type="search" id="bq" placeholder="🔎 Nom ou numéro (ex. 035)" value="${esc(S.bq)}" aria-label="Rechercher">
-<div class="row"><button class="chip" aria-pressed="${S.bx===''}" data-bx="all">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.bx===x[0]}" data-bx="${x[0]}">${x[0]}</button>`).join('')}</div>
-<div class="sub">${l.length} carte${l.length>1?'s':''}</div><div class="grid">${l.map(c=>`<div class="tile"><button class="card ${inB.has(c.id)?'':'dim'}" data-bt="${c.id}" aria-label="${c.id}" aria-pressed="${inB.has(c.id)}" style="width:100%">${art(c)}<div class="meta">${c.name||''}<br><span>${c.id}</span></div></button>${inB.has(c.id)?'<span class="chk">✓</span>':''}</div>`).join('')}</div>`}
+/* ===== Classeurs v2 : emplacements, pages, glisser-déposer ===== */
+const BK_IC=['📒','📕','📗','📘','📙','🔥','⭐','🐉','💎','👑','⚡','🎴'],BK_PGS=[4,9,12],bkCols=n=>n===4?2:3;
+const BKC={},BKO={};cards.forEach((c,i)=>{BKC[c.id]=c;BKO[c.id]=i});
+let BKP={};try{BKP=JSON.parse(localStorage.getItem('fb_bkp')||'{}')||{}}catch(e){}
+const bkSaveP=()=>{try{localStorage.setItem('fb_bkp',JSON.stringify(BKP))}catch(e){}};
+S.b2={org:false,sel:null,hl:null,dir:0,sh:'',finding:false,find:'',hist:[],new:null,pk:[],q:'',x:[],own:'',ver:'',rar:[],lim:60,tgt:null};
+const bkId=()=>'b'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const bkGet=()=>BIND.find(x=>x.id===S.bsel)||null;
+const bkPG=b=>BK_PGS.includes(b.pg)?b.pg:9;
+const bkPages=b=>Math.max(1,b.np||0,Math.ceil(b.cards.length/bkPG(b)));
+const bkPlural=(n,s,p)=>n+' '+(n>1?(p||s+'s'):s);
+const bkChip=(at,label,on,cls)=>`<button class="chip${cls?' '+cls:''}" ${at} aria-pressed="${!!on}">${label}</button>`;
+const bkVib=n=>{try{navigator.vibrate&&navigator.vibrate(n)}catch(_){}};
+/* --- normalisation : anciens classeurs (liste de cartes) -> emplacements --- */
+function bkNorm(b){
+ if(!b||typeof b!=='object')return null;
+ if(!b.id)b.id=bkId();
+ b.name=String(b.name||'Classeur');
+ const seen=new Set(),out=[];
+ (Array.isArray(b.cards)?b.cards:[]).forEach(id=>{
+  if(typeof id!=='string'||!id){out.push('');return}
+  if(BKC[id]){if(seen.has(id)){out.push('');return}seen.add(id)}
+  out.push(id)});
+ while(out.length&&out[out.length-1]==='')out.pop();
+ b.cards=out;if(!BK_PGS.includes(b.pg))b.pg=9;
+ if(b.skip&&!Array.isArray(b.skip))delete b.skip;
+ if(b.np!==undefined&&!(b.np>0))delete b.np;
+ b.v=2;return b}
+const bkNormAll=()=>{BIND=BIND.map(bkNorm).filter(Boolean)};
+bkNormAll();
+/* --- statistiques --- */
+function bkMeta(b){const PG=bkPG(b),np=bkPages(b);let n=0,own=0,val=0,full=0;const per=[];
+ for(let p=0;p<np;p++){let pn=0,po=0;for(let j=0;j<PG;j++){const c=BKC[b.cards[p*PG+j]];if(c){pn++;if(c.own>0){po++;val+=nb(c.price)}}}per.push([pn,po]);n+=pn;own+=po;if(pn===PG&&po===pn)full++}
+ return {n,own,val,full,np,PG,per}}
+const bkPos=(b,i)=>{const PG=bkPG(b);return 'p.'+(Math.floor(i/PG)+1)+' · n°'+(i%PG+1)};
+const bkTag=(b,id)=>{const k=b.cards.indexOf(id);return k>=0?' ✓ '+bkPos(b,k):''};
+/* --- opérations sur les emplacements --- */
+const bkTrim=b=>{while(b.cards.length&&b.cards[b.cards.length-1]==='')b.cards.pop()};
+const bkCommit=b=>{bkTrim(b);saveB()};
+function bkHist(b){const h=S.b2.hist;h.push({id:b.id,cards:b.cards.slice(),skip:(b.skip||[]).slice(),np:b.np});if(h.length>40)h.shift()}
+function bkUndo(){const b=bkGet();if(!b)return false;const h=S.b2.hist;
+ for(let k=h.length-1;k>=0;k--)if(h[k].id===b.id){const x=h.splice(k,1)[0];b.cards=x.cards;if(x.skip.length)b.skip=x.skip;else delete b.skip;if(x.np)b.np=x.np;else delete b.np;S.b2.sel=null;saveB();toast('Annulé ↩️');return true}
+ toast('Rien à annuler');return false}
+const bkPad=(b,n)=>{while(b.cards.length<n)b.cards.push('')};
+function bkMove(b,from,to){if(from===to)return;bkPad(b,Math.max(from,to)+1);const a=b.cards[from];b.cards[from]=b.cards[to];b.cards[to]=a}
+function bkSkip(b,id){if(b.rule&&id){b.skip=b.skip||[];if(!b.skip.includes(id))b.skip.push(id)}}
+function bkAdd(b,ids,t){
+ const have=new Set(b.cards);ids=[...new Set(ids)].filter(id=>BKC[id]&&!have.has(id)).sort((x,y)=>BKO[x]-BKO[y]);
+ if(!ids.length)return 0;
+ if(t==null){bkTrim(b);b.cards.push(...ids)}
+ else{let j=t;ids.forEach(id=>{while(j<b.cards.length&&b.cards[j]&&BKC[b.cards[j]])j++;bkPad(b,j);b.cards[j]=id;j++})}
+ if(b.skip){b.skip=b.skip.filter(x=>!ids.includes(x));if(!b.skip.length)delete b.skip}
+ return ids.length}
+function bkToggle(b,id){const k=b.cards.indexOf(id);if(k>=0){b.cards.splice(k,1);bkSkip(b,id)}else bkAdd(b,[id],null);bkCommit(b)}
+const bkPageEmpty=(b,p)=>{const PG=bkPG(b);for(let j=0;j<PG;j++)if(BKC[b.cards[p*PG+j]])return false;return true};
+/* --- règles (séries, raretés) : sert à proposer les nouvelles cartes du catalogue --- */
+function bkRuleIds(r){
+ let l=cards.filter(c=>(!r.ext||!r.ext.length||r.ext.includes(c.ext))&&(!r.rar||!r.rar.length||r.rar.includes(c.rar)));
+ const alt=r.alt||'after';
+ if(alt==='none')l=l.filter(c=>c.ver==='Normal');
+ else if(alt==='only')l=l.filter(c=>c.ver!=='Normal');
+ else if(alt==='end'){const o=[];EXTS.forEach(([e])=>{const L=l.filter(c=>c.ext===e);o.push(...L.filter(c=>c.ver==='Normal'),...L.filter(c=>c.ver!=='Normal'))});l=o}
+ return l.map(c=>c.id)}
+const bkUpdIds=b=>{if(!b.rule)return [];const have=new Set(b.cards),sk=new Set(b.skip||[]);return bkRuleIds(b.rule).filter(id=>!have.has(id)&&!sk.has(id))};
+/* --- création par modèle --- */
+const BK_KINDS=[['set','📘','Une série complète','Toutes les cartes de la série, dans l’ordre'],['own','✅','Mes cartes','Celles que je possède, ou celles qui me manquent'],['rare','💎','Les plus rares','Par rareté : SR, SCR, Leaders…'],['fav','⭐','Mes favoris','Les cartes marquées ⭐'],['dbl','💱','Mes doubles','Cartes en plusieurs exemplaires ou à échanger'],['empty','✋','Un classeur vide','Je choisis les cartes moi-même']];
+const bkDraft=()=>({kind:'set',name:'',sx:[S.ext||'FB01'],alt:'after',rar:['SR','SCR'],own:'n',pg:9});
+function bkNewIds(n){
+ switch(n.kind){
+  case 'set':return bkRuleIds({ext:n.sx,alt:n.alt});
+  case 'rare':return bkRuleIds({ext:n.sx,rar:n.rar,alt:n.alt});
+  case 'own':return bkRuleIds({ext:n.sx,alt:'after'}).filter(id=>n.own==='y'?BKC[id].own>0:BKC[id].own<=0);
+  case 'fav':return cards.filter(c=>X.fav[c.id]).map(c=>c.id);
+  case 'dbl':return cards.filter(c=>c.own>1||X.sell[c.id]).map(c=>c.id);
+  default:return []}}
+function bkSerName(sx,short){if(sx.length===1)return short?sx[0]:sx[0]+' · '+EXTS.find(x=>x[0]===sx[0])[1];if(!sx.length)return 'toutes les séries';return sx.length<=3?sx.join(' + '):sx.length+' séries'}
+function bkAutoName(n){
+ switch(n.kind){
+  case 'set':return n.sx.length?bkSerName(n.sx):'Toutes les séries';
+  case 'own':return (n.own==='y'?'Mes cartes':'Cartes manquantes')+(n.sx.length?' · '+bkSerName(n.sx,1):'');
+  case 'rare':return 'Mes '+(n.rar.length?n.rar.join(' · '):'cartes rares')+(n.sx.length?' · '+bkSerName(n.sx,1):'');
+  case 'fav':return 'Mes favoris';case 'dbl':return 'Mes doubles';default:return 'Nouveau classeur'}}
+const bkAutoIcon=n=>({set:'📘',own:n.own==='y'?'✅':'🎯',rare:'💎',fav:'⭐',dbl:'💱',empty:'📒'})[n.kind];
+const bkAutoCol=n=>n.kind==='set'&&n.sx.length===1?SERCOL[n.sx[0]]:'';
+function bkCreate(){
+ const n=S.b2.new,ids=bkNewIds(n);
+ if(n.kind!=='empty'&&!ids.length){toast('Aucune carte ne correspond : change tes choix');return false}
+ const b={id:bkId(),name:((n.name||'').trim()||bkAutoName(n)).slice(0,40),cards:ids.slice(),pg:n.pg,ic:bkAutoIcon(n),v:2,t:Date.now()};
+ const col=bkAutoCol(n);if(col)b.col=col;
+ if(n.kind==='set')b.rule={ext:n.sx.slice(),alt:n.alt};else if(n.kind==='rare')b.rule={ext:n.sx.slice(),rar:n.rar.slice(),alt:n.alt};
+ const cv=ids.find(id=>CARDIMG[id]);if(cv)b.cov=cv;
+ BIND.unshift(b);saveB();S.bsel=b.id;S.bpg=0;S.bpick=false;S.b2.new=null;S.b2.org=false;S.b2.sel=null;S.b2.sh='';S.b2.finding=false;
+ toast('Classeur créé ✓'+(ids.length?' · '+bkPlural(ids.length,'carte'):''));return true}
+/* ===================== VUES ===================== */
+function bkArt(c){const im=CARDIMG[c.id];
+ return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}">${im?`<img class="cimg" src="${im}" alt="" draggable="false"><small>${p3(c.n)}</small>`:`<span class="bk-num">${p3(c.n)}</span><span class="bk-nm2">${esc(c.name||'')}</span>`}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
+function bkSlot(b,i,hl){
+ const id=b.cards[i],c=id?BKC[id]:null,sel=S.b2.sel===i,org=S.b2.org;
+ const cls='bk-slot'+(c?'':' empty')+(sel?' sel':'')+(hl?' hl':'')+(c&&!c.own?' miss':'');
+ if(!c)return `<button class="${cls}" data-b2="slot" data-i="${i}" aria-label="Emplacement ${i+1} vide${org?'':' : touche pour choisir une carte'}"${org?` aria-pressed="${sel}"`:''}><span class="bk-plus">＋</span><span class="bk-sn">${i+1}</span></button>`;
+ return `<button class="${cls}" data-b2="slot" data-i="${i}" aria-label="Emplacement ${i+1} : ${esc(c.name||c.id)}, ${c.id}, ${c.own?'possédée ×'+c.own:'manquante'}"${org?` aria-pressed="${sel}"`:''}>${bkArt(c)}</button>`}
+function bkPageHTML(b,pg,dir,hl){
+ const PG=bkPG(b),base=pg*PG,cols=bkCols(PG);let s='';
+ for(let j=0;j<PG;j++)s+=bkSlot(b,base+j,hl===base+j);
+ return `<div class="bk-pw${dir?' bk-t'+(dir>0?'n':'p'):''}" data-pw><div class="bk-page${S.b2.org?' bk-org':''}" style="--bc:${b.col||'var(--ac)'}"><span class="bk-holes" aria-hidden="true"><i></i><i></i><i></i></span><span class="bk-rings" aria-hidden="true"><i></i><i></i><i></i></span><div class="bk-grid" style="--cols:${cols}">${s}</div></div></div>`}
+function bkCover(b){
+ const m=bkMeta(b),c=(b.cov&&BKC[b.cov])||BKC[b.cards.find(id=>BKC[id]&&CARDIMG[id])],col=b.col||'var(--ac)',p=pct(m.own,m.n);
+ return `<button class="bk-cover" data-b2="open" data-b2p="${b.id}" style="--bc:${col}" aria-label="${esc(b.name)} : ${m.own} sur ${m.n} cartes, ${m.np} pages"><span class="bk-spine" aria-hidden="true"><i></i><i></i><i></i></span><span class="bk-face"><span class="bk-ic" aria-hidden="true">${b.ic||'📒'}</span><span class="bk-win" aria-hidden="true">${c?`<span class="bk-cc">${art({...c,own:1})}</span>`:`<span class="bk-noc">${b.ic||'📒'}</span>`}</span><b class="bk-nm">${esc(b.name)}</b><span class="bk-st">${m.own} / ${m.n} · ${p} %</span><span class="bk-cb"><i style="width:${p}%"></i></span></span></button>`}
+function bkShelf(){
+ return header()+`<h2>Mes classeurs</h2><button class="btn" data-b2="new">＋ Nouveau classeur</button>`
+ +(BIND.length?`<div class="bk-shelf">${BIND.map(bkCover).join('')}</div><p class="sub">Touche un classeur pour l’ouvrir. Dedans : maintiens une carte appuyée puis glisse-la pour la déplacer, touche un emplacement vide pour y ranger une carte.</p>`
+ :`<div class="panel bk-empty"><div class="bk-ei" aria-hidden="true">📒</div><b>Range ta collection comme dans un vrai classeur</b><p class="sub">Des pages, des emplacements, et en grisé les cartes qu’il te manque : tu retrouves chaque carte à la même place que dans ton classeur.</p></div>`)}
+const bkMini=n=>`<span class="bk-mini" style="--c:${bkCols(n)}" aria-hidden="true">${'<u></u>'.repeat(n)}</span>`;
+function bkNewView(){
+ const n=S.b2.new,ids=bkNewIds(n),PG=n.pg,pages=Math.max(1,Math.ceil(ids.length/PG)),k=n.kind;
+ const sx=`<label class="sub">Séries (aucune cochée = toutes)</label><div class="row">${EXTS.map(([e])=>bkChip(`data-b2="newsx" data-b2p="${e}"`,e,n.sx.includes(e))).join('')}</div>`;
+ const alt=`<label class="sub">Alternative Art</label><div class="row">${[['after','Après la carte'],['end','À la fin de la série'],['none','Sans Alt Art'],['only','Alt Art seulement']].map(([a,t])=>bkChip(`data-b2="newalt" data-b2p="${a}"`,t,n.alt===a)).join('')}</div>`;
+ const opts=k==='set'?sx+alt:k==='own'?`<label class="sub">Quelles cartes ?</label><div class="row">${[['y','Possédées'],['n','Manquantes']].map(([a,t])=>bkChip(`data-b2="newown" data-b2p="${a}"`,t,n.own===a)).join('')}</div>`+sx:k==='rare'?`<label class="sub">Raretés</label><div class="row">${RAR.map(r=>bkChip(`data-b2="newrar" data-b2p="${r}"`,r,n.rar.includes(r))).join('')}</div>`+sx+alt:'';
+ return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-b2="newx">← Mes classeurs</button><h2 style="margin-top:0">Nouveau classeur</h2>
+ <div class="panel"><label class="sub" for="b2-nn">Nom du classeur</label><input class="bk-inp" id="b2-nn" data-b2in="newname" value="${esc(n.name||bkAutoName(n))}" maxlength="40" autocomplete="off" aria-label="Nom du classeur"></div>
+ <h2>Que veux-tu y ranger ?</h2><div class="bk-kinds">${BK_KINDS.map(([a,i,t,d])=>`<button class="bk-kind" data-b2="newk" data-b2p="${a}" aria-pressed="${k===a}"><span aria-hidden="true">${i}</span><b>${t}</b><small>${d}</small></button>`).join('')}</div>
+ ${opts?`<div class="panel" style="margin-top:12px">${opts}</div>`:''}
+ <h2>Emplacements par page</h2><div class="row">${BK_PGS.map(g=>bkChip(`data-b2="newpg" data-b2p="${g}"`,bkMini(g)+' '+g,PG===g,'bk-lay')).join('')}</div>
+ <div class="panel bk-pre" style="margin-top:12px"><b>${k==='empty'?'Classeur vide':bkPlural(ids.length,'carte')+' · '+bkPlural(pages,'page')}</b><div class="sub">${k==='empty'?'Tu pourras ajouter des cartes et les placer où tu veux.':ids.length?'Tu pourras tout réorganiser ensuite.':'Rien ne correspond pour l’instant : change tes choix.'}</div></div>
+ <button class="btn" style="margin-top:12px" data-b2="newgo" ${k!=='empty'&&!ids.length?'disabled':''}>Créer le classeur</button>`}
+function bkNav(b,pg,np){
+ return `<div class="pgn bk-nav" role="navigation" aria-label="Pages du classeur"><button class="btn alt" data-b2="prev" aria-label="Page précédente" ${pg<=0?'disabled':''}>◀</button><button class="bk-pgn" data-b2="pages" aria-label="Aller à une page"><b>Page ${pg+1} / ${np}</b><small>toucher pour choisir</small></button><button class="btn alt" data-b2="next" aria-label="Page suivante" ${pg>=np-1?'disabled':''}>▶</button></div>`}
+const bkRange=(pg,np)=>np>2?`<input type="range" class="bk-range" min="1" max="${np}" value="${pg+1}" data-b2in="range" aria-label="Glisser pour changer de page">`:'';
+function bkFindRes(b){
+ const q=S.b2.find.trim().toLowerCase();if(!q)return '<div class="sub" style="margin-top:8px">Tape un nom ou un numéro : je te dis à quelle page et dans quel emplacement elle se trouve.</div>';
+ const PG=bkPG(b),o=[];b.cards.forEach((id,i)=>{const c=BKC[id];if(c&&(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q))o.push([i,c])});
+ if(!o.length)return '<div class="sub" style="margin-top:8px">Aucune carte de ce classeur ne correspond.</div>';
+ return o.slice(0,30).map(([i,c])=>`<button class="bk-fr" data-b2="fres" data-i="${i}"><span class="vnth sm">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${c.id} · ${c.own?'possédée ×'+c.own:'manquante'}</small></span><span class="vnst${c.own?'':' no'}">${bkPos(b,i)}</span></button>`).join('')+(o.length>30?`<div class="sub">… et ${o.length-30} autres : précise ta recherche.</div>`:'')}
+const bkFindPanel=b=>`<div class="panel bk-find"><input type="search" id="b2-find" data-b2in="find" placeholder="🔎 Nom ou numéro dans ce classeur" value="${esc(S.b2.find)}" aria-label="Trouver une carte dans ce classeur" autocomplete="off"><div id="b2-fres">${bkFindRes(b)}</div></div>`;
+const bkOrgBanner=()=>`<div class="panel bk-orgb"><div><b>✋ Organisation</b><div class="sub">Touche une carte puis sa destination, ou maintiens-la appuyée et glisse-la (vers le bord de l’écran pour changer de page).</div></div><button class="chip" data-b2="org">✓ Terminé</button></div>`;
+function bkSelBar(b){
+ const i=S.b2.sel,id=b.cards[i],c=id&&BKC[id];
+ const T=(a,ic,t)=>`<button class="bk-tool sm" data-b2="${a}"><span aria-hidden="true">${ic}</span>${t}</button>`;
+ return `<div class="bk-bar" role="group" aria-label="Actions sur l’emplacement sélectionné"><div class="bk-bi">${c?`<span class="vnth sm">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${c.id} · ${bkPos(b,i)} — touche l’emplacement où la mettre</small></span>`:`<span class="vnin"><b>Emplacement vide</b><small>${bkPos(b,i)} — touche une carte pour la placer ici</small></span>`}<button class="chip" data-b2="selx" aria-label="Désélectionner">✕</button></div><div class="bk-tools" style="margin:8px 0 0">${c?T('selfiche','📄','Fiche')+T('selclear','🕳️','Vider')+T('selrem','➖','Retirer')+T('selins','⬅️','Insérer'):T('selfill','＋','Choisir')+T('seldel','➖','Supprimer')+T('selins','⬅️','Insérer')}</div></div>`}
+function bkSetSheet(b,m){
+ const PG=m.PG,pg=S.bpg||0,empty=bkPageEmpty(b,pg),cov=b.cards.filter(id=>BKC[id]&&CARDIMG[id]);
+ return `<div class="sheet" data-b2="shbd"><div role="dialog" aria-label="Réglages du classeur"><h2 style="margin-top:0">${b.ic||'📒'} Réglages du classeur</h2>
+ <label class="sub" for="b2-nm">Nom</label><input class="bk-inp" id="b2-nm" data-b2in="name" value="${esc(b.name)}" maxlength="40" autocomplete="off">
+ <label class="sub">Emplacements par page</label><div class="row">${BK_PGS.map(n=>bkChip(`data-b2="pg" data-b2p="${n}"`,bkMini(n)+' '+n,PG===n,'bk-lay')).join('')}</div>
+ <label class="sub">Icône</label><div class="row">${BK_IC.map(i=>bkChip(`data-b2="ic" data-b2p="${i}"`,i,(b.ic||'📒')===i,'ico')).join('')}</div>
+ <label class="sub">Couleur</label><div class="swr">${THEMES.map(([n,h])=>`<button class="sw" style="background:${h}" aria-label="${n}" aria-pressed="${b.col===h}" data-b2="cl" data-b2p="${h}"></button>`).join('')}</div>
+ ${cov.length?`<label class="sub" for="b2-cv">Couverture</label><select class="bk-inp" id="b2-cv" data-b2in="cov"><option value="">Automatique</option>${cov.map(id=>`<option value="${id}" ${b.cov===id?'selected':''}>${esc(id+' · '+(BKC[id].name||''))}</option>`).join('')}</select>`:''}
+ <label class="sub" style="display:block;margin-top:12px">Ranger</label><div class="row bk-wrap"><button class="chip" data-b2="sort">🔢 Trier par numéro</button><button class="chip" data-b2="compact">🧹 Combler les emplacements vides</button></div>
+ <label class="sub">Pages</label><div class="row bk-wrap"><button class="chip" data-b2="pgins">＋ Page vide avant la page ${pg+1}</button><button class="chip" data-b2="pgadd">＋ Page vide à la fin</button><button class="chip" data-b2="pgdel" ${empty&&m.np>1?'':'disabled'}>🗑️ Supprimer la page ${pg+1} (vide)</button></div>
+ <div class="row bk-wrap" style="margin-top:6px"><button class="chip" data-b2="dup">📑 Dupliquer</button><button class="chip bk-danger" data-b2="del">🗑️ Supprimer le classeur</button></div>
+ <button class="btn" data-b2="shx" style="margin-top:12px">Fermer</button></div></div>`}
+function bkPagesSheet(b,m){
+ const cur=S.bpg||0;
+ return `<div class="sheet" data-b2="shbd"><div role="dialog" aria-label="Aller à une page"><h2 style="margin-top:0">Aller à une page</h2><div class="sub">${bkPlural(m.np,'page')} · ${m.PG} emplacements par page</div><div class="bk-pgs">${m.per.map(([pn,po],p)=>{const st=pn===0?'blank':pn===m.PG&&po===pn?'full':po>0?'part':'none';return `<button class="bk-pgc ${st}${p===cur?' cur':''}" data-b2="page" data-b2p="${p}" aria-label="Page ${p+1} : ${pn?po+' sur '+pn:'vide'}"><b>${p+1}</b><small>${pn?(st==='full'?'✓':po+'/'+pn):'vide'}</small></button>`}).join('')}</div><button class="btn" data-b2="shx" style="margin-top:12px">Fermer</button></div></div>`}
+function bkMissText(b){const rows=[];b.cards.forEach((id,i)=>{const c=BKC[id];if(c&&!c.own)rows.push(bkPos(b,i)+' · '+c.id+' '+(c.name||''))});return '📒 '+b.name+' — cartes manquantes ('+rows.length+')\n'+rows.join('\n')}
+function bkMissSheet(b){
+ const rows=[];b.cards.forEach((id,i)=>{const c=BKC[id];if(c&&!c.own)rows.push([i,c])});
+ return `<div class="sheet" data-b2="shbd"><div role="dialog" aria-label="Cartes manquantes"><h2 style="margin-top:0">📋 Cartes manquantes</h2><div class="sub">${bkPlural(rows.length,'carte')} à trouver pour compléter « ${esc(b.name)} »</div>${rows.length?`<div class="row bk-wrap" style="margin:10px 0"><button class="chip" data-b2="copy">📋 Copier la liste</button><button class="chip" data-b2="share">📤 Partager</button></div><div class="bk-ml">${rows.slice(0,120).map(([i,c])=>`<button class="bk-fr" data-b2="fres" data-i="${i}"><span class="vnth sm">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${c.id}</small></span><span class="vnst no">${bkPos(b,i)}</span></button>`).join('')}${rows.length>120?`<div class="sub">… et ${rows.length-120} autres (elles sont dans la liste copiée).</div>`:''}</div>`:'<p>🎉 Rien ne manque : toutes les cartes de ce classeur sont à toi !</p>'}<button class="btn" data-b2="shx" style="margin-top:12px">Fermer</button></div></div>`}
+function bkSheets(b,m){const s=S.b2.sh;return s==='set'?bkSetSheet(b,m):s==='pages'?bkPagesSheet(b,m):s==='miss'?bkMissSheet(b):''}
+function bkView(b){
+ const m=bkMeta(b),np=m.np;
+ S.bpg=Math.max(0,Math.min(S.bpg||0,np-1));
+ const pg=S.bpg,hl=S.b2.hl,dir=S.b2.dir;S.b2.hl=null;S.b2.dir=0;
+ if(BKP[b.id]!==pg){BKP[b.id]=pg;bkSaveP()}
+ const col=b.col||'var(--ac)',p=pct(m.own,m.n),up=bkUpdIds(b),hasH=S.b2.hist.some(h=>h.id===b.id);
+ return header()
+ +`<div class="bk-top"><button class="ib bk-gear" data-b2="back" aria-label="Retour à mes classeurs">←</button><h2 class="bk-title"><span aria-hidden="true">${b.ic||'📒'}</span><span class="bk-tt">${esc(b.name)}</span></h2>${hasH?'<button class="ib bk-gear" data-b2="undo" aria-label="Annuler la dernière modification">↩️</button>':''}<button class="ib bk-gear" data-b2="set" aria-label="Réglages du classeur">⚙️</button></div>`
+ +`<div class="panel bk-sum" style="border-top:4px solid ${col}"><div>Possédées : <b>${m.own} / ${m.n}</b> (${p} %) · <b>${m.n-m.own}</b> manquante${m.n-m.own>1?'s':''}</div><div class="bar"><i style="width:${p}%;background:${col}"></i></div><div class="sub">${bkPlural(np,'page')}${m.full?' · '+bkPlural(m.full,'complète'):''}${m.val>0?' · valeur '+eur(m.val):''}</div></div>`
+ +(up.length?`<div class="panel bk-upd"><div><b>➕ ${bkPlural(up.length,'nouvelle carte')}</b><div class="sub">Le catalogue contient ${up.length>1?'des cartes':'une carte'} de ce classeur qui n’${up.length>1?'y sont':'y est'} pas encore.</div></div><div class="row bk-wrap"><button class="chip" data-b2="upd">Ajouter à la fin</button><button class="chip" data-b2="updx">Ignorer</button></div></div>`:'')
+ +`<div class="bk-tools" role="toolbar" aria-label="Outils du classeur"><button class="bk-tool" data-b2="find" aria-pressed="${S.b2.finding}"><span aria-hidden="true">🔎</span>Trouver</button><button class="bk-tool" data-b2="add"><span aria-hidden="true">＋</span>Ajouter</button><button class="bk-tool" data-b2="org" aria-pressed="${S.b2.org}"><span aria-hidden="true">✋</span>Organiser</button><button class="bk-tool" data-b2="miss"><span aria-hidden="true">📋</span>Manquantes</button></div>`
+ +(S.b2.finding?bkFindPanel(b):'')+(S.b2.org?bkOrgBanner():'')
+ +(m.n===0?`<div class="panel bk-hint">Ce classeur est vide. Touche un emplacement, ou <b>＋ Ajouter</b>, pour choisir tes cartes.</div>`:'')
+ +bkPageHTML(b,pg,dir,hl)+bkRange(pg,np)
+ +(S.b2.org&&S.b2.sel!=null?bkSelBar(b):'')+bkNav(b,pg,np)+bkSheets(b,m)}
+/* --- sélecteur de cartes --- */
+function bkPickList(){const P=S.b2,q=P.q.trim().toLowerCase();
+ return cards.filter(c=>(!P.x.length||P.x.includes(c.ext))&&(!P.rar.length||P.rar.includes(c.rar))&&(P.own===''||(P.own==='y'?c.own>0:c.own<=0))&&(P.ver===''||(P.ver==='n'?c.ver==='Normal':c.ver!=='Normal'))&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)))}
+function bkPkTiles(b){
+ const l=bkPickList(),P=S.b2,inB=new Set(b.cards),sel=new Set(P.pk),shown=l.slice(0,P.lim);
+ return {html:shown.map(c=>{const inb=inB.has(c.id),on=sel.has(c.id);
+  return `<div class="tile"><button class="card${inb?' dim':''}${on?' bk-on':''}" data-b2="pk" data-b2p="${c.id}" aria-label="${esc(c.name||c.id)} ${c.id}${inb?', déjà dans le classeur':''}" aria-pressed="${on}" style="width:100%">${art(c)}<div class="meta">${esc(c.name||'')||'<span>Nom à compléter</span>'}<br><span>${c.id}</span></div></button>${on?'<span class="chk">✓</span>':''}${inb?'<span class="bk-in">✓ dans le classeur</span>':''}</div>`}).join('')||'<p class="sub" style="grid-column:1/-1">Aucune carte ne correspond. Retire un filtre.</p>',
+  total:l.length,shown:shown.length,addable:l.filter(c=>!inB.has(c.id)).length}}
+const bkFab=()=>{const n=S.b2.pk.length,t=S.b2.tgt;return `<button class="btn bk-go" data-b2="pkgo" ${n?'':'disabled'}>${n?(t!=null?'📥 Placer '+bkPlural(n,'carte')+' dès l’emplacement '+(t+1):'📥 Ajouter '+bkPlural(n,'carte')+' au classeur'):'Touche des cartes pour les choisir'}</button>`};
+function bkPkRefresh(){const b=bkGet();if(!b)return;const R=bkPkTiles(b),r=document.getElementById('b2-res');if(!r)return;
+ r.innerHTML=R.html;const m=document.getElementById('b2-more');if(m)m.innerHTML=R.shown<R.total?`<button class="btn alt" data-b2="pkmore">Afficher plus (${R.total-R.shown})</button>`:'';
+ const c=document.getElementById('b2-cnt');if(c)c.textContent=bkPlural(R.total,'carte')+' · '+R.addable+' à ajouter';const f=document.getElementById('b2-fab');if(f)f.innerHTML=bkFab()}
+function bkPickView(b){
+ const P=S.b2,R=bkPkTiles(b),PG=bkPG(b);
+ return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-b2="pkdone">← Retour au classeur « ${esc(b.name)} »</button>`
+ +`<div class="panel bk-pki"><b>Ajouter des cartes</b><div class="sub">${P.tgt!=null?'Les cartes choisies prennent les emplacements vides à partir de l’emplacement '+(P.tgt+1)+' (page '+(Math.floor(P.tgt/PG)+1)+').':'Les cartes choisies sont ajoutées à la suite du classeur, dans l’ordre des numéros.'}</div></div>`
+ +`<div style="height:10px"></div><input type="search" id="b2-q" data-b2in="q" placeholder="🔎 Nom ou numéro (ex. 035)" value="${esc(P.q)}" aria-label="Rechercher une carte" autocomplete="off">`
+ +`<div class="row"><button class="chip" aria-pressed="${!P.x.length}" data-b2="pksx" data-b2p="">Toutes les séries</button>${EXTS.map(([e])=>bkChip(`data-b2="pksx" data-b2p="${e}"`,e,P.x.includes(e))).join('')}</div>`
+ +`<div class="row">${[['','Toutes'],['y','Possédées'],['n','Manquantes']].map(([k,t])=>bkChip(`data-b2="pkown" data-b2p="${k}"`,t,P.own===k)).join('')}${[['','Normal + Alt'],['n','Normal'],['a','Alt Art']].map(([k,t])=>bkChip(`data-b2="pkver" data-b2p="${k}"`,t,P.ver===k)).join('')}</div>`
+ +`<div class="row">${RAR.map(r=>bkChip(`data-b2="pkrar" data-b2p="${r}"`,r,P.rar.includes(r))).join('')}</div>`
+ +`<div class="bk-pkb"><span class="sub" id="b2-cnt">${bkPlural(R.total,'carte')} · ${R.addable} à ajouter</span><span class="bk-pkc"><button class="chip" data-b2="pkall">☑ Tout cocher</button><button class="chip" data-b2="pknone">Décocher</button></span></div>`
+ +`<div class="grid" id="b2-res">${R.html}</div><div id="b2-more">${R.shown<R.total?`<button class="btn alt" data-b2="pkmore">Afficher plus (${R.total-R.shown})</button>`:''}</div><div class="bk-fab" id="b2-fab">${bkFab()}</div>`}
+function binders(){
+ const b=bkGet();
+ if(!b&&S.b2.new)return bkNewView();
+ if(b&&S.bpick)return bkPickView(b);
+ if(b)return bkView(b);
+ return bkShelf()}
+/* ===================== ÉVÉNEMENTS ===================== */
+function bkFlip(d){const b=bkGet();if(!b)return;const np=bkPages(b),n=Math.max(0,Math.min(np-1,(S.bpg||0)+d));if(n===S.bpg)return;S.bpg=n;S.b2.dir=d;render()}
+function bkReveal(){
+ const hs=document.querySelector('.bk-slot.hl'),el=hs||document.querySelector('[data-pw]');if(!el)return;
+ const r=el.getBoundingClientRect();
+ if(r.top<70||r.bottom>innerHeight-176)window.scrollTo(0,Math.max(0,scrollY+r.top-(hs?innerHeight*.3:84)))}
+function bkOpenPick(tgt){const P=S.b2,b=bkGet();S.bpick=true;P.tgt=tgt==null?null:tgt;P.pk=[];P.q='';P.x=b&&b.rule&&b.rule.ext?b.rule.ext.slice():[];P.own='';P.ver='';P.rar=[];P.lim=60;P.sel=null;window.scrollTo(0,0)}
+function bkGoTo(i,hl){const b=bkGet();if(!b)return;const PG=bkPG(b),np=bkPages(b);S.bpg=Math.max(0,Math.min(np-1,Math.floor(i/PG)));if(hl)S.b2.hl=i;S.b2.sh='';S.b2.finding=false;render();bkReveal()}
+function bkPkToggle(id){
+ const P=S.b2,b=bkGet();if(!b)return;
+ if(b.cards.includes(id)){toast('Déjà dans ce classeur : '+bkPos(b,b.cards.indexOf(id)));return}
+ const k=P.pk.indexOf(id);if(k>=0)P.pk.splice(k,1);else P.pk.push(id);
+ const btn=document.querySelector('[data-b2="pk"][data-b2p="'+id+'"]');
+ if(btn){const on=k<0;btn.classList.toggle('bk-on',on);btn.setAttribute('aria-pressed',on);const tile=btn.parentNode;let c=tile.querySelector('.chk');if(on&&!c){c=document.createElement('span');c.className='chk';c.textContent='✓';tile.appendChild(c)}else if(!on&&c)c.remove()}
+ const f=document.getElementById('b2-fab');if(f)f.innerHTML=bkFab()}
+function bkClick(e){
+ const t=e.target.closest('[data-b2]');if(!t)return;
+ const a=t.dataset.b2,p=t.dataset.b2p,P=S.b2;let b=bkGet(),done=false;
+ if(a==='shbd'){if(e.target.closest('.sheet>div'))return;P.sh=''}
+ else if(a==='new'){P.new=bkDraft();S.bsel=null;S.bpick=false;window.scrollTo(0,0)}
+ else if(a==='newx'){P.new=null;window.scrollTo(0,0)}
+ else if(a==='newk'){const n=P.new;n.kind=p;if(!n.sxT)n.sx=p==='set'?[S.ext||'FB01']:[]}
+ else if(a==='newsx'){const n=P.new,k=n.sx.indexOf(p);n.sxT=1;if(k>=0)n.sx.splice(k,1);else n.sx.push(p);n.sx.sort()}
+ else if(a==='newalt'){P.new.alt=p}
+ else if(a==='newown'){P.new.own=p}
+ else if(a==='newrar'){const n=P.new,k=n.rar.indexOf(p);if(k>=0)n.rar.splice(k,1);else n.rar.push(p)}
+ else if(a==='newpg'){P.new.pg=+p}
+ else if(a==='newgo'){if(!bkCreate())done=true;else window.scrollTo(0,0)}
+ else if(a==='open'){S.bsel=p;S.bpg=BKP[p]||0;S.bpick=false;P.org=false;P.sel=null;P.sh='';P.finding=false;P.find='';window.scrollTo(0,0)}
+ else if(a==='back'){S.bsel=null;S.bpick=false;P.org=false;P.sel=null;P.sh='';P.finding=false;RESTORE=true}
+ else if(!b){return}
+ else if(a==='slot'){
+  const i=+t.dataset.i,id=b.cards[i],c=id&&BKC[id];
+  if(P.org){
+   if(P.sel==null)P.sel=i;
+   else if(P.sel===i)P.sel=null;
+   else{bkHist(b);const f=P.sel,ft=b.cards[f]&&BKC[b.cards[f]];bkMove(b,f,i);bkCommit(b);P.sel=null;P.hl=i;toast(ft&&c?'Cartes échangées':'Carte déplacée');bkVib(12)}
+  }else if(c)S.sel=id;
+  else{bkOpenPick(i)}}
+ else if(a==='prev'){bkFlip(-1);done=true}
+ else if(a==='next'){bkFlip(1);done=true}
+ else if(a==='page'){S.bpg=+p;P.sh='';P.dir=0;render();bkReveal();done=true}
+ else if(a==='pages'){P.sh='pages'}
+ else if(a==='org'){P.org=!P.org;P.sel=null}
+ else if(a==='undo'){bkUndo()}
+ else if(a==='find'){P.finding=!P.finding;if(P.finding)setTimeout(()=>{const i=document.getElementById('b2-find');if(i)i.focus()},60)}
+ else if(a==='fres'){bkGoTo(+t.dataset.i,true);done=true}
+ else if(a==='miss'){P.sh='miss'}
+ else if(a==='copy'){copyText(bkMissText(b)).then(ok=>toast(ok?'Liste copiée ✓':'Copie impossible ici'));done=true}
+ else if(a==='share'){const x=bkMissText(b);if(navigator.share)navigator.share({text:x}).catch(()=>{});else copyText(x).then(ok=>toast(ok?'Partage indisponible : liste copiée ✓':'Partage impossible ici'));done=true}
+ else if(a==='add'){bkOpenPick(null)}
+ else if(a==='pkdone'){S.bpick=false;RESTORE=true}
+ else if(a==='pk'){bkPkToggle(p);done=true}
+ else if(a==='pksx'){if(!p)P.x=[];else{const k=P.x.indexOf(p);if(k>=0)P.x.splice(k,1);else P.x.push(p)}P.lim=60}
+ else if(a==='pkown'){P.own=p;P.lim=60}
+ else if(a==='pkver'){P.ver=p;P.lim=60}
+ else if(a==='pkrar'){const k=P.rar.indexOf(p);if(k>=0)P.rar.splice(k,1);else P.rar.push(p);P.lim=60}
+ else if(a==='pkall'){const inB=new Set(b.cards);bkPickList().forEach(c=>{if(!inB.has(c.id)&&!P.pk.includes(c.id))P.pk.push(c.id)})}
+ else if(a==='pknone'){P.pk=[]}
+ else if(a==='pkmore'){P.lim+=60}
+ else if(a==='pkgo'){
+  if(!P.pk.length)return;bkHist(b);const first=P.pk.slice().sort((x,y)=>BKO[x]-BKO[y])[0],n=bkAdd(b,P.pk,P.tgt);bkCommit(b);
+  S.bpick=false;P.pk=[];const i=b.cards.indexOf(first);if(i>=0){S.bpg=Math.floor(i/bkPG(b));P.hl=i}
+  toast(n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':'')+' ✓');bkVib(15);window.scrollTo(0,0)}
+ else if(a==='set'){P.sh='set'}
+ else if(a==='shx'){P.sh=''}
+ else if(a==='ic'){b.ic=p;saveB()}
+ else if(a==='cl'){b.col=p;saveB()}
+ else if(a==='pg'){const o=bkPG(b),first=(S.bpg||0)*o;b.pg=+p;S.bpg=Math.floor(first/b.pg);S.b2.sel=null;saveB()}
+ else if(a==='sort'){bkHist(b);const l=b.cards.filter(id=>BKC[id]).sort((x,y)=>BKO[x]-BKO[y]);b.cards=l;bkCommit(b);toast('Classeur trié par numéro')}
+ else if(a==='compact'){bkHist(b);b.cards=b.cards.filter(id=>id&&BKC[id]);bkCommit(b);toast('Emplacements vides comblés')}
+ else if(a==='pgadd'){bkHist(b);b.np=bkPages(b)+1;saveB();S.bpg=b.np-1;P.sh='';toast('Page vide ajoutée')}
+ else if(a==='pgins'){bkHist(b);const PG=bkPG(b),i=(S.bpg||0)*PG;if(i>=b.cards.length)b.np=bkPages(b)+1;else for(let k=0;k<PG;k++)b.cards.splice(i,0,'');saveB();P.sh='';toast('Page vide insérée')}
+ else if(a==='pgdel'){const PG=bkPG(b),pg=S.bpg||0;if(bkPageEmpty(b,pg)&&bkPages(b)>1){bkHist(b);if(pg*PG<b.cards.length)b.cards.splice(pg*PG,PG);const need=Math.ceil(b.cards.length/PG);if(b.np)b.np=Math.max(need,b.np-1)||undefined;if(!b.np)delete b.np;bkCommit(b);S.bpg=Math.max(0,Math.min(pg,bkPages(b)-1));P.sh='';toast('Page supprimée')}}
+ else if(a==='dup'){const c=JSON.parse(JSON.stringify(b));c.id=bkId();c.name=(b.name+' (copie)').slice(0,40);BIND.unshift(c);saveB();P.sh='';toast('Classeur dupliqué ✓')}
+ else if(a==='del'){P.sh='';S.cf={msg:'Supprimer le classeur « '+esc(b.name)+' » ? Il ira dans la corbeille (Réglages) et tu pourras le restaurer. Tes cartes ne sont pas supprimées.',act:'delb'}}
+ else if(a==='selx'){P.sel=null}
+ else if(a==='selfiche'){const id=b.cards[P.sel];if(id&&BKC[id])S.sel=id}
+ else if(a==='selclear'){bkHist(b);const id=b.cards[P.sel];bkSkip(b,id);b.cards[P.sel]='';bkCommit(b);P.sel=null;toast('Emplacement laissé vide')}
+ else if(a==='selrem'){bkHist(b);const id=b.cards[P.sel];bkSkip(b,id);b.cards.splice(P.sel,1);bkCommit(b);P.sel=null;toast('Carte retirée du classeur')}
+ else if(a==='selins'){bkHist(b);bkPad(b,P.sel);b.cards.splice(P.sel,0,'');bkCommit(b);P.sel=P.sel+1;toast('Emplacement vide inséré')}
+ else if(a==='seldel'){bkHist(b);if(P.sel<b.cards.length)b.cards.splice(P.sel,1);bkCommit(b);P.sel=null;toast('Emplacement supprimé')}
+ else if(a==='selfill'){const i=P.sel;P.sel=null;bkOpenPick(i)}
+ else if(a==='upd'){bkHist(b);const n=bkAdd(b,bkUpdIds(b),null);bkCommit(b);toast(n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''))}
+ else if(a==='updx'){b.skip=[...(b.skip||[]),...bkUpdIds(b)];saveB()}
+ else return;
+ if(!done){const had=P.hl!=null;render();if(had)bkReveal()}}
+document.addEventListener('click',e=>{
+ if(BKD.noclick&&Date.now()<BKD.noclick&&e.target.closest&&e.target.closest('[data-pw]')){e.stopPropagation();e.preventDefault();BKD.noclick=0;return}
+ bkClick(e)},true);
+document.addEventListener('input',e=>{
+ const el=e.target,k=el.dataset&&el.dataset.b2in;if(!k)return;
+ if(k==='q'){S.b2.q=el.value;S.b2.lim=60;bkPkRefresh()}
+ else if(k==='find'){S.b2.find=el.value;const b=bkGet(),r=document.getElementById('b2-fres');if(b&&r)r.innerHTML=bkFindRes(b)}
+ else if(k==='newname'){const n=S.b2.new;if(n)n.name=el.value}
+ else if(k==='range'){const l=document.querySelector('.bk-pgn b');if(l)l.textContent='Page '+el.value+' / '+el.max}});
+document.addEventListener('change',e=>{
+ const el=e.target,k=el.dataset&&el.dataset.b2in;if(!k)return;const b=bkGet();
+ if(k==='name'&&b){const v=el.value.trim();if(v){b.name=v.slice(0,40);saveB();render()}}
+ else if(k==='cov'&&b){if(el.value)b.cov=el.value;else delete b.cov;saveB();render()}
+ else if(k==='range'&&b){S.bpg=+el.value-1;S.b2.dir=0;render();bkReveal()}});
+document.addEventListener('keydown',e=>{
+ if(S.tab!=='bind'||!S.bsel||S.bpick||S.sel||S.b2.sh||/INPUT|SELECT|TEXTAREA/.test((e.target||{}).tagName||''))return;
+ if(e.key==='ArrowLeft'){bkFlip(-1)}else if(e.key==='ArrowRight'){bkFlip(1)}});
+document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('.bk-slot'))e.preventDefault()});
+/* --- glisser-déposer + balayage --- */
+const BKD={st:0,pid:0,t:'',sx:0,sy:0,x:0,y:0,i:-1,tm:0,g:null,over:-1,ft:0,at:0,t0:0,ed:0,moved:false,has:false,noclick:0,el:null};
+/* le doigt reste attaché à la pochette touchée : on y écoute touchmove (bloque le défilement pendant un glissé) et, si la page est redessinée en plein glissé, on la garde hors écran pour ne pas perdre les évènements */
+const bkTM=e=>{if(BKD.st===2&&e.cancelable)e.preventDefault()};
+function bkPark(){const el=BKD.el;if(el&&BKD.t!=='mouse'&&!el.isConnected){el.classList.add('bk-park');document.body.appendChild(el)}}
+function bkUnpark(){const el=BKD.el;if(el){el.removeEventListener('touchmove',bkTM);if(el.classList.contains('bk-park'))el.remove()}BKD.el=null}
+function bkReset(){clearTimeout(BKD.tm);clearTimeout(BKD.ft);clearInterval(BKD.at);bkUnpark();if(BKD.g){BKD.g.remove();BKD.g=null}document.documentElement.classList.remove('bk-dragging');document.querySelectorAll('.bk-drop,.bk-lift').forEach(n=>n.classList.remove('bk-drop','bk-lift'));BKD.st=0}
+const bkOn=()=>S.tab==='bind'&&S.bsel&&!S.bpick&&!!document.querySelector('[data-pw]');
+function bkGhostPos(){if(BKD.g)BKD.g.style.transform='translate('+(BKD.x-BKD.g.offsetWidth/2)+'px,'+(BKD.y-BKD.g.offsetHeight*.6)+'px) rotate(3deg)'}
+function bkLift(){const s=document.querySelector('.bk-slot[data-i="'+BKD.i+'"]');if(s)s.classList.add('bk-lift')}
+function bkDragStart(hold){
+ const b=bkGet();if(!b||BKD.st===2)return;
+ BKD.st=2;BKD.moved=!hold;BKD.over=-1;BKD.ed=0;
+ const sl=document.querySelector('.bk-slot[data-i="'+BKD.i+'"]');if(sl)sl.classList.add('bk-lift');
+ const g=document.createElement('div');g.className='bk-ghost';const a=sl&&sl.querySelector('.art');g.innerHTML=a?a.outerHTML:'';
+ const r=sl?sl.getBoundingClientRect():{width:90,height:126};g.style.width=Math.round(r.width*.92)+'px';g.style.height=Math.round(r.height*.92)+'px';
+ document.body.appendChild(g);BKD.g=g;bkGhostPos();bkVib(14);
+ BKD.at=setInterval(()=>{const y=BKD.y,H=innerHeight;if(y<110)scrollBy(0,-14);else if(y>H-120)scrollBy(0,14)},50);
+ document.documentElement.classList.add('bk-dragging')}
+function bkDragFlip(d){
+ if(BKD.st!==2)return;const b=bkGet();if(!b)return;
+ const np=bkPages(b),n=Math.max(0,Math.min(np-1,(S.bpg||0)+d));
+ if(n!==S.bpg){S.bpg=n;S.b2.dir=d;render();bkPark();bkLift()}
+ BKD.over=-1;const dd=BKD.x<44?-1:BKD.x>innerWidth-44?1:0;BKD.ed=dd;clearTimeout(BKD.ft);if(dd)BKD.ft=setTimeout(()=>bkDragFlip(dd),800)}
+function bkDragMove(){
+ if(Math.hypot(BKD.x-BKD.sx,BKD.y-BKD.sy)>8)BKD.moved=true;
+ bkGhostPos();
+ const el=document.elementFromPoint(BKD.x,BKD.y),sl=el&&el.closest?el.closest('.bk-slot'):null,i=sl?+sl.dataset.i:-1;
+ if(i!==BKD.over){document.querySelectorAll('.bk-drop').forEach(n=>n.classList.remove('bk-drop'));if(sl&&i!==BKD.i)sl.classList.add('bk-drop');BKD.over=i}
+ const d=BKD.x<44?-1:BKD.x>innerWidth-44?1:0;
+ if(d!==BKD.ed){BKD.ed=d;clearTimeout(BKD.ft);if(d)BKD.ft=setTimeout(()=>bkDragFlip(d),650)}}
+function bkDragDrop(cancel){
+ clearInterval(BKD.at);clearTimeout(BKD.ft);bkUnpark();
+ const b=bkGet(),from=BKD.i,over=BKD.over,moved=BKD.moved;
+ if(BKD.g){BKD.g.remove();BKD.g=null}
+ document.documentElement.classList.remove('bk-dragging');
+ document.querySelectorAll('.bk-drop,.bk-lift').forEach(n=>n.classList.remove('bk-drop','bk-lift'));
+ BKD.noclick=Date.now()+160;
+ if(cancel||!b)return;
+ if(!moved){S.b2.org=true;S.b2.sel=from;bkVib(10);render();return}
+ if(over>=0&&over!==from){bkHist(b);const ft=b.cards[from]&&BKC[b.cards[from]],tt=b.cards[over]&&BKC[b.cards[over]];bkMove(b,from,over);bkCommit(b);S.b2.hl=over;S.b2.sel=null;toast(ft&&tt?'Cartes échangées':'Carte déplacée');bkVib(10);render()}}
+document.addEventListener('pointerdown',e=>{
+ if(BKD.st){if(!e.isPrimary)return;bkReset()}
+ if(!bkOn()||(e.pointerType==='mouse'&&e.button!==0))return;
+ const pw=e.target.closest('[data-pw]');if(!pw)return;
+ const s=e.target.closest('.bk-slot'),b=bkGet();
+ BKD.st=1;BKD.pid=e.pointerId;BKD.t=e.pointerType;BKD.sx=BKD.x=e.clientX;BKD.sy=BKD.y=e.clientY;BKD.t0=Date.now();BKD.moved=false;
+ BKD.i=s?+s.dataset.i:-1;if(s&&e.pointerType!=='mouse')s.addEventListener('touchmove',bkTM,{passive:false});BKD.el=s;BKD.has=!!(b&&BKD.i>=0&&b.cards[BKD.i]&&BKC[b.cards[BKD.i]]);
+ clearTimeout(BKD.tm);
+ if(BKD.has&&e.pointerType!=='mouse')BKD.tm=setTimeout(()=>{if(BKD.st===1)bkDragStart(true)},420)},true);
+document.addEventListener('pointermove',e=>{
+ if(!BKD.st||e.pointerId!==BKD.pid)return;
+ BKD.x=e.clientX;BKD.y=e.clientY;
+ if(BKD.st===1){if(Math.hypot(BKD.x-BKD.sx,BKD.y-BKD.sy)>10){if(BKD.has&&BKD.t==='mouse')bkDragStart(false);else clearTimeout(BKD.tm)}return}
+ if(BKD.st===2)bkDragMove()},true);
+const bkEnd=e=>{
+ if(!BKD.st||e.pointerId!==BKD.pid)return;
+ clearTimeout(BKD.tm);const st=BKD.st;BKD.st=0;
+ if(st===2){bkDragDrop(e.type==='pointercancel');return}
+ bkUnpark();
+ if(e.type==='pointerup'&&BKD.t!=='mouse'){
+  const dx=e.clientX-BKD.sx,dy=e.clientY-BKD.sy,dt=Date.now()-BKD.t0;
+  if(Math.abs(dx)>60&&Math.abs(dy)<50&&Math.abs(dx)>Math.abs(dy)*1.6&&dt<800){BKD.noclick=Date.now()+160;bkFlip(dx<0?1:-1)}}};
+document.addEventListener('pointerup',bkEnd,true);document.addEventListener('pointercancel',bkEnd,true);
+addEventListener('blur',()=>{if(BKD.st)bkReset()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&BKD.st)bkReset()});
 function find(){const q=S.fq.toLowerCase().trim(),l=q?cards.filter(c=>(c.name+' '+c.id+' '+c.n+' '+c.rar+' '+c.ver).toLowerCase().includes(q)):[];
 return header()+`<h2>Rechercher une carte</h2><input type="search" id="fq" placeholder="🔎 Nom ou numéro dans toutes les séries" value="${esc(S.fq)}" aria-label="Rechercher">`+(q?`<div class="sub" style="margin-top:8px">${l.length} carte${l.length>1?'s':''}${l.length>120?' · affichage des 120 premières, précise ta recherche':''}</div><div class="grid">${l.slice(0,120).map(cardBtn).join('')}</div>`:'<p class="sub">Tape un nom (Vegeta), un numéro (035), une rareté (SR) ou « Alternative ».</p>')}
 function dups(){const l=cards.filter(c=>c.own>3).sort((a,b)=>a.id<b.id?-1:1),ex=l.reduce((a,c)=>a+c.own-3,0);
@@ -597,7 +1051,7 @@ function printV(){const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-
 return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2><button class="btn alt" style="margin-bottom:8px;text-align:left" data-pick>📚 Série : <b>${S.ext} · ${EXTS.find(x=>x[0]===S.ext)[1]}</b> ▾</button><div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div><div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>
 <div class="panel pzl" style="margin-top:6px"><b>${lab} — ${sr}</b><div class="sub">${l.length} carte${l.length>1?'s':''} · ${fmtD(new Date())} · L'Appel des Cartes</div>${l.map(c=>`<div class="tr"><span>${S.pr==='missing'?'☐ ':''}${cid(c.id)} · ${esc(c.name||'')}${c.rar?' ('+c.rar+')':''}</span><b>${S.pr==='own'?'×'+c.own:S.pr==='missing'&&c.want?'cherchée ×'+c.want:''}</b></div>`).join('')||'<div class="sub">Rien dans cette liste.</div>'}</div>`}
 function printText(){const {lab,l}=printList();return lab+' — '+(S.pal?'toutes les séries':S.ext)+' ('+l.length+')\n'+l.map(c=>cid(c.id)+' '+(c.name||'')+(c.rar?' ('+c.rar+')':'')+(S.pr==='own'?' ×'+c.own:'')).join('\n')}
-const TUT=[['👋','Bienvenue !','L\'Appel des Cartes gère ta collection Dragon Ball Fusion World (édition japonaise, FB01 à FB11). Tout reste sur ton téléphone, sans compte.'],['🗂️','Ta collection','Choisis une série, puis touche une carte pour la modifier. Les boutons − et + sur chaque carte changent sa quantité. L\'onglet « Scellé » gère boosters, displays et cases.'],['📷','Le scanner','Tape un numéro de carte pour l\'ajouter vite. En mode Rafale, saisis plusieurs codes d\'un coup (ex. fb01-34 fb02-56).'],['＋','Le bouton du milieu','Il ouvre le menu : recherche, classeurs, cartes recherchées, ventes, liste à imprimer et mode hasard.'],['🎲','Mode hasard','Ouvre des boosters, displays et cases virtuels. Ils ne touchent jamais ta vraie collection. Pour ouvrir un paquet, glisse le doigt dessus pour le déchirer.'],['💾','Sauvegarde','Exporte ta collection dans un fichier depuis Réglages. L\'appli te le rappelle régulièrement.']];
+const TUT=[['👋','Bienvenue !','L\'Appel des Cartes gère ta collection Dragon Ball Fusion World (édition japonaise, FB01 à FB11). Tout reste sur ton téléphone, sans compte.'],['🗂️','Ta collection','Choisis une série, puis touche une carte pour la modifier. Les boutons − et + sur chaque carte changent sa quantité. L\'onglet « Scellé » gère boosters, displays et cases.'],['📷','Le scanner','Tape un numéro de carte pour l\'ajouter vite. En mode Rafale, saisis plusieurs codes d\'un coup (ex. fb01-34 fb02-56).'],['＋','Le bouton du milieu','Il ouvre le menu : recherche, classeurs, cartes recherchées, ventes, liste à imprimer et mode hasard.'],['📒','Les classeurs','Range tes cartes comme dans un vrai classeur : des pages, des emplacements, et en grisé celles qu\'il te manque. Maintiens une carte appuyée puis glisse-la pour la déplacer, ou touche un emplacement vide pour la ranger.'],['🎲','Mode hasard','Ouvre des boosters, displays et cases virtuels. Ils ne touchent jamais ta vraie collection. Pour ouvrir un paquet, glisse le doigt dessus pour le déchirer.'],['💾','Sauvegarde','Exporte ta collection dans un fichier depuis Réglages. L\'appli te le rappelle régulièrement.']];
 function tutSheet(){if(S.tut===null)return '';const k=S.tut,t=TUT[k];return `<div class="sheet"><div role="dialog" aria-label="Tutoriel" style="text-align:center"><div style="font-size:54px">${t[0]}</div><h2 style="margin:6px 0">${t[1]}</h2><p style="font-size:16px">${t[2]}</p><div class="sub">${k+1} / ${TUT.length}</div><button class="btn" style="margin-top:10px" data-tn>${k>=TUT.length-1?'C\'est parti !':'Suivant →'}</button>${k<TUT.length-1?'<button class="btn alt" style="margin-top:8px" data-tx>Passer</button>':''}</div></div>`}
 let SND='1';try{SND=localStorage.getItem('fb_snd')||'1'}catch(e){}
 let AC=null;const ac=()=>{if(SND==='0')return null;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}},VOL=()=>SND==='2'?.45:.2;
@@ -890,7 +1344,7 @@ function sheet(){const c=cards.find(x=>x.id===S.sel);if(!c)return'';
 const st=(k,t)=>`<div>${t}</div><div class="stepper"><button data-${k}="-1" aria-label="Retirer">➖</button><b>${c[k==='q'?'own':'want']}</b><button data-${k}="1" aria-label="Ajouter">➕</button></div>`;
 const sel=(k,t,o)=>`<div><label>${t}</label><select data-e="${k}"><option value="">—</option>${o.map(v=>`<option ${c[k]===v?'selected':''}>${v}</option>`).join('')}</select></div>`;
 return `<div class="sheet" data-close><div role="dialog" aria-label="${c.id}"><div class="detail">${art(c)}<div><h2 style="margin-top:0">${c.name||'Nom à compléter'}</h2>${c.id}<br><span class="sub">Version : ${c.ver}${c.rar?' · Rareté : '+c.rar:''}</span></div></div>
-<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div>${c.own>0?`<button class="vnsellbtn" data-vnsell="${c.id}">💶 Vendre cette carte</button>`:''}<div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${b.cards.includes(c.id)?' ✓':''}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
+<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div>${c.own>0?`<button class="vnsellbtn" data-vnsell="${c.id}">💶 Vendre cette carte</button>`:''}<div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${bkTag(b,c.id)}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
 <div class="fld">${sel('type','Type',TYP)}${sel('cond','État',CONDS)}<div><label>Prix indicatif (€)</label><input data-e="price" inputmode="decimal" placeholder="ex. 1,50" value="${esc(c.price)}"></div><div class="w"><label>Notes personnelles</label><input data-e="note" placeholder="ex. acheté en booster, coin abîmé" value="${esc(c.note)}"></div></div>
 <a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(c.id.replace(/_ALT\d?$/,''))}&language=7">💶 Voir le prix sur Cardmarket</a><button class="btn" data-close>Fermer</button></div></div>`}
 function pickSheet(){if(!S.pick)return'';
@@ -902,7 +1356,7 @@ function initTilt(){document.querySelectorAll('.tilt').forEach(el=>{const mv=e=>
 if(!TILTON&&window.DeviceOrientationEvent){TILTON=true;window.addEventListener('deviceorientation',e=>{const el=document.querySelector('.tilt');if(!el||e.gamma==null||el.matches(':active'))return;setTilt(el,clamp01(.5+Math.max(-30,Math.min(30,e.gamma))/60),clamp01(.5+Math.max(-30,Math.min(30,(e.beta||0)-40))/60))})}}
 const askTilt=()=>{try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{})}catch(e){}};
 let LAST={sk:'',vk:''};
-const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.bpg,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
+const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,S.b2&&S.b2.sh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
 let RESTORE=false;const SCRM={};
 function render(){const y=window.scrollY,sd=document.querySelector('.sheet>div'),st=sd?sd.scrollTop:0,sk=sheetKey(),vk=viewKey(),sameS=sk===LAST.sk,sameV=vk===LAST.vk;
 if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCore();LAST={sk,vk};
@@ -919,7 +1373,7 @@ const bn=$('#bn');if(bn){bn.oninput=e=>{S.bnew=e.target.value}}
 const q=$('#q');if(q){q.oninput=e=>{S.q=e.target.value;const p=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}}}
 
 addEventListener('scroll',()=>{SCRM[viewKey()]=window.scrollY},{passive:true});
-document.addEventListener('click',e=>{if(e.target.closest('[data-bback],[data-go],[data-vback],[data-oback],[data-dback],[data-pback],[data-back]')){RESTORE=true;setTimeout(()=>{RESTORE=false},0)}},true);
+document.addEventListener('click',e=>{if(e.target.closest('[data-bback],[data-b2="back"],[data-b2="pkdone"],[data-go],[data-vback],[data-oback],[data-dback],[data-pback],[data-back]')){RESTORE=true;setTimeout(()=>{RESTORE=false},0)}},true);
 (function(){const sp=document.getElementById('splash');if(sp)setTimeout(()=>{sp.classList.add('out');setTimeout(()=>sp.remove(),400)},700)})();
 // 16: long press on a card
 (function(){let t,sx,sy,done=false;const close=()=>{const m=document.getElementById('lpm');if(m)m.remove()};
@@ -930,9 +1384,6 @@ document.addEventListener('pointermove',e=>{if(t&&(Math.abs(e.clientX-sx)>10||Ma
 ['pointerup','pointercancel'].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(t);t=null}));
 document.addEventListener('click',e=>{if(done&&e.target.closest('button.card[data-n]')){done=false;e.stopPropagation();e.preventDefault()}},true);
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button.card[data-n]'))e.preventDefault()})})();
-// 5: swipe binder pages
-(function(){let x0,y0;document.addEventListener('touchstart',e=>{if(!e.target.closest('.grid.bnd')){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
-document.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<70||Math.abs(dy)>45)return;const bt=document.querySelector('[data-bpg="'+(dx<0?1:-1)+'"]');if(bt&&!bt.disabled)bt.click()},{passive:true})})();
 document.addEventListener('click',e=>{try{if(navigator.vibrate&&e.target.closest('.adj,.stepper button,.qb,.chip'))navigator.vibrate(8)}catch(_){}});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty],[data-vnpick],[data-vnclr],[data-vnq],[data-vnsell],[data-vnk],[data-vnt],[data-vnsells],[data-hburst],[data-hgo],[data-hf],[data-hpast]');if(!t)return;const d=t.dataset;
 if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false}
@@ -957,11 +1408,7 @@ else if(d.bgo!==undefined){burstAdd();return}
 else if(d.undo!==undefined){const id=S.last.shift(),c=cards.find(x=>x.id===id);if(c&&c.own>0){c.own--;save();toast('Retirée : '+id)}}
 else if(d.fav){if(X.fav[d.fav])delete X.fav[d.fav];else X.fav[d.fav]=1;saveX()}
 else if(d.sell){if(X.sell[d.sell])delete X.sell[d.sell];else X.sell[d.sell]=1;saveX()}
-else if(d.bsx){const b=BIND.find(x=>x.id===d.bsx);if(b){const k=b.cards.indexOf(S.sel);if(k>=0)b.cards.splice(k,1);else b.cards.push(S.sel);saveB()}}
-else if(d.bmv!==undefined){const b=BIND.find(x=>x.id===S.bsel),i=+d.bmv,j=i+(+d.bd);if(b&&j>=0&&j<b.cards.length){[b.cards[i],b.cards[j]]=[b.cards[j],b.cards[i]];S.bpg=Math.floor(j/9);saveB()}}
-else if(d.bpg){S.bpg=Math.max(0,(S.bpg||0)+(+d.bpg));window.scrollTo(0,0)}
-else if(d.bre!==undefined){S.bre=!S.bre}
-else if(d.bsort!==undefined){const b=BIND.find(x=>x.id===S.bsel);if(b){b.cards.sort();saveB();toast('Classeur trié par numéro')}}
+else if(d.bsx){const b=BIND.find(x=>x.id===d.bsx);if(b)bkToggle(b,S.sel)}
 else if(d.soonadd!==undefined){const n=$('#so-n').value.trim();if(!n){toast('Indique un nom');return}X.soon.push({id:'s'+Date.now().toString(36),n,d:$('#so-d').value,t:$('#so-t').value.trim()});saveX();toast('Ajouté ✓')}else if(d.soondel){X.soon=X.soon.filter(x=>x.id!==d.soondel);saveX()}else if(d.hext){S.ext=d.hext;S.tab='coll';window.scrollTo(0,0)}else if(d.hburst!==undefined){S.tab='scan';S.burst=true;S.sel=null;S.menu=false;window.scrollTo(0,0)}else if(d.hgo){S.tab='coll';S.mode=d.hgo;S.sel=null;S.menu=false;window.scrollTo(0,0)}else if(d.hf){S.hf=d.hf}else if(d.hpast!==undefined){S.hpast=!S.hpast}else if(d.trop!==undefined){trOpen(d.trop,d.trn||'');return}
 else if(d.trx!==undefined){TR=null}
 else if(d.trg!==undefined||d.trw!==undefined){const k=d.trg!==undefined?'give':'want',id=d.trg||d.trw,a=TR[k],i=a.indexOf(id);if(i>=0)a.splice(i,1);else if(a.length<6)a.push(id);else toast('6 cartes maximum')}
@@ -976,8 +1423,7 @@ else if(d.sbin!==undefined||d.sbup!==undefined){const e=($('#sb-e').value||'').t
 else if(d.sbout!==undefined){S.cf={msg:'Veux-tu te déconnecter ? Ta collection sera retirée de cet appareil'+(Object.keys(PH).length?' (tes photos aussi)':'')+'. Elle reste dans ton compte : tu la retrouveras en te reconnectant.',yes:'✅ Oui, sauvegarder sur le compte puis me déconnecter',alt:'Oui, me déconnecter sans sauvegarder',no:'Non, rester connecté',act:'sbout'}}
 else if(d.sbpush!==undefined){SBAUTO=true;try{localStorage.setItem('fb_sba','1')}catch(e){}SBMSG='Envoi…';sbPush()}
 else if(d.sbpull!==undefined){SBMSG='Chargement…';render();sbRemote().then(r=>{if(!r){SBMSG='Aucune collection en ligne pour le moment';render();return}sbApply(r.data);SBAUTO=true;try{localStorage.setItem('fb_sba','1')}catch(e){}SBMSG='✓ Collection chargée depuis ton compte';render()}).catch(()=>{SBMSG='⏳ Connexion impossible pour le moment';render()})}
-else if(d.sedit){S.sed=d.sedit}else if(d.scancel!==undefined){S.sed=null}else if(d.ssave){const x=X.sales.find(y=>y.id===d.ssave);if(x){{const nc=$('#se-c').value.trim()||'—';if(x.cid&&nc!==x.card)x.cid='';x.card=nc}x.who=$('#se-w').value.trim();{const ea=$('#se-a');if(ea)x.buy=ea.value.trim()}x.price=$('#se-p').value.trim();x.q=Math.max(1,parseInt($('#se-q').value)||1);const dv=$('#se-d').value;if(dv&&dv!==String(x.d).slice(0,10))x.d=new Date(dv+'T12:00:00').toISOString();saveX();toast('Vente modifiée ✓')}S.sed=null}else if(d.sphdel!==undefined){sphDel(S.sel)}else if(d.bsz){const b=BIND.find(x=>x.id===S.bsel);if(b){b.pg=+d.bsz;S.bpg=0;saveB()}}else if(d.bic){const b=BIND.find(x=>x.id===S.bsel);if(b){b.ic=d.bic;saveB()}}
-else if(d.bcl){const b=BIND.find(x=>x.id===S.bsel);if(b){b.col=d.bcl;saveB()}}
+else if(d.sedit){S.sed=d.sedit}else if(d.scancel!==undefined){S.sed=null}else if(d.ssave){const x=X.sales.find(y=>y.id===d.ssave);if(x){{const nc=$('#se-c').value.trim()||'—';if(x.cid&&nc!==x.card)x.cid='';x.card=nc}x.who=$('#se-w').value.trim();{const ea=$('#se-a');if(ea)x.buy=ea.value.trim()}x.price=$('#se-p').value.trim();x.q=Math.max(1,parseInt($('#se-q').value)||1);const dv=$('#se-d').value;if(dv&&dv!==String(x.d).slice(0,10))x.d=new Date(dv+'T12:00:00').toISOString();saveX();toast('Vente modifiée ✓')}S.sed=null}else if(d.sphdel!==undefined){sphDel(S.sel)}
 else if(d.tcopy!==undefined){copyText(tradeText()).then(ok=>toast(ok?'Texte copié ✓':'Copie impossible ici'));return}
 else if(d.tshare!==undefined){const t=tradeText();if(navigator.share){navigator.share({text:t}).catch(()=>{})}else copyText(t).then(ok=>toast(ok?'Partage indisponible : texte copié ✓':'Partage impossible ici'));return}
 else if(d.timg!==undefined){S.timg=tradeImage()}
@@ -1031,25 +1477,16 @@ else if(d.shop!==undefined){S.shop=true;window.scrollTo(0,0)}
 else if(d.shback!==undefined){S.shop=false;window.scrollTo(0,0)}
 else if(d.shsell!==undefined){let g=0,n=0;cards.forEach(c=>{const q=VIRT.q[c.id]||0;if(q>1){g+=(q-1)*ptsOf(c);n+=q-1;VIRT.q[c.id]=1}});VIRT.pts=(VIRT.pts||0)+g;saveV();toast(n?n+' doublons vendus : +'+g+' pts':'Aucun doublon')}
 else if(d.shbuy){const n=+d.shbuy,cost=n===1?BPRICE:DPRICE;if((VIRT.pts||0)<cost){toast('Pas assez de points');return}VIRT.pts-=cost;saveV();S.shop=false;S.celeb=null;S.op=newOp(n===1?'pack':'box');window.scrollTo(0,0)}
-else if(d.trs){const k=X.trash.findIndex(x=>x.id===d.trs);if(k>=0){const t=X.trash[k];if(t.t==='binder'){if(!BIND.find(b=>b.id===t.data.id))BIND.unshift(t.data);saveB()}else if(t.t==='sale')X.sales.unshift(t.data);else if(t.t==='exp')X.exp.unshift(t.data);else if(t.t==='buy')X.buys.unshift(t.data);X.trash.splice(k,1);saveX();toast('Restauré ✓')}}
+else if(d.trs){const k=X.trash.findIndex(x=>x.id===d.trs);if(k>=0){const t=X.trash[k];if(t.t==='binder'){if(!BIND.find(b=>b.id===t.data.id))BIND.unshift(bkNorm(t.data));saveB()}else if(t.t==='sale')X.sales.unshift(t.data);else if(t.t==='exp')X.exp.unshift(t.data);else if(t.t==='buy')X.buys.unshift(t.data);X.trash.splice(k,1);saveX();toast('Restauré ✓')}}
 else if(d.trd){X.trash=X.trash.filter(x=>x.id!==d.trd);saveX()}
 else if(d.trempty!==undefined){S.cf={msg:'Vider définitivement la corbeille ?',act:'emptytrash'}}
 else if(d.snd!==undefined){SND=d.snd;try{localStorage.setItem('fb_snd',SND)}catch(e){}play('nice')}
 else if(d.sndt!==undefined){play('open');setTimeout(()=>play('scr'),500)}
 else if(d.phdel!==undefined){const id=S.sel;if(id)phDel(id).then(()=>{toast('Photo retirée');render()})}
-else if(d.bph!==undefined){S.bph=S.bph===false}
 else if(d.zph!==undefined){S.zph=!S.zph}
 else if(d.menu!==undefined){S.menu=!S.menu}
 else if(d.cfx!==undefined){const a=S.cf&&S.cf.act;S.cf=null;if(a==='sbout')sbLogout(true)}else if(d.cfn!==undefined){S.cf=null;S.cfd=null}
-else if(d.cfy!==undefined){const a=S.cf&&S.cf.act;if(a==='imp'){applySnap(S.cfd);save();saveSeal();saveB();toast('Collection importée ✓')}else if(a==='sbout'){sbLogout(false)}else if(a==='resetv'){VIRT={q:{},b:0};saveV();toast('Collection virtuelle réinitialisée')}else if(a==='emptytrash'){X.trash=[];saveX();toast('Corbeille vidée')}else if(a==='delb'){const bb=BIND.find(x=>x.id===S.bsel);if(bb)toTrash('binder','Classeur « '+bb.name+' » ('+bb.cards.length+' cartes)',bb);BIND=BIND.filter(x=>x.id!==S.bsel);S.bsel=null;S.bpick=false;saveB();toast('Classeur supprimé')}S.cf=null;S.cfd=null}
-else if(d.bnew!==undefined){const n=S.bnew.trim();if(!n){toast('Donne un nom au classeur');return}const id='b'+Date.now().toString(36);BIND.unshift({id,name:n,cards:[]});S.bnew='';saveB();S.bsel=id;S.bpick=true;S.bq='';S.bx=''}
-else if(d.bopen){S.bsel=d.bopen;S.bpick=false;window.scrollTo(0,0)}
-else if(d.bback!==undefined){S.bsel=null;S.bpick=false;window.scrollTo(0,0)}
-else if(d.bpick!==undefined){S.bpick=true;S.bq='';window.scrollTo(0,0)}
-else if(d.bdone!==undefined){S.bpick=false;window.scrollTo(0,0)}
-else if(d.bdel!==undefined){const b=BIND.find(x=>x.id===S.bsel);S.cf={msg:'Supprimer le classeur « '+esc(b.name)+' » ? (tes cartes ne sont pas supprimées)',act:'delb'}}
-else if(d.bt){const b=BIND.find(x=>x.id===S.bsel),k=b.cards.indexOf(d.bt);if(k>=0)b.cards.splice(k,1);else b.cards.push(d.bt);saveB()}
-else if(d.bx){S.bx=d.bx==='all'?'':d.bx}
+else if(d.cfy!==undefined){const a=S.cf&&S.cf.act;if(a==='imp'){applySnap(S.cfd);save();saveSeal();saveB();toast('Collection importée ✓')}else if(a==='sbout'){sbLogout(false)}else if(a==='resetv'){VIRT={q:{},b:0};saveV();toast('Collection virtuelle réinitialisée')}else if(a==='emptytrash'){X.trash=[];saveX();toast('Corbeille vidée')}else if(a==='delb'){const bb=BIND.find(x=>x.id===S.bsel);if(bb)toTrash('binder','Classeur « '+bb.name+' » ('+bkMeta(bb).n+' cartes)',bb);BIND=BIND.filter(x=>x.id!==S.bsel);S.bsel=null;S.bpick=false;saveB();toast('Classeur supprimé')}S.cf=null;S.cfd=null}
 else if(d.cq){const c=cards.find(x=>x.id===d.cq);if(+d.cd>0)bump('c',1);c.own=Math.max(0,c.own+(+d.cd));save()}
 else if(d.sn){if(d.sx)S.ext=d.sx;S.ssel=d.sn}
 else if(d.mode){S.mode=d.mode;window.scrollTo(0,0)}
@@ -1057,7 +1494,7 @@ else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own';s[k]=Math.max(0,s[k]+(+
 else if(d.col){applyColor(d.col)}
 else if(d.pick!==undefined){S.pick=true}
 else if(d.ext){S.ext=d.ext;S.pick=false;window.scrollTo(0,0)}
-else if(d.go){S.tab=d.go;S.sel=null;S.menu=false;S.bpick=false;S.hzv=false;window.scrollTo(0,0)}
+else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;S.sel=null;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
 else if(d.f){if(d.f==='ext'||d.f==='scx')S[d.f]=d.v;else S[d.f]=S[d.f]===d.v?'':d.v}
 else if(d.n){S.sel=d.n}
 else if(d.q||d.w){const c=cards.find(x=>x.id===S.sel),k=d.q?'own':'want';if(d.q&&+d.q>0)bump('c',1);c[k]=Math.max(0,c[k]+(+(d.q||d.w)));save()}
@@ -1068,7 +1505,7 @@ document.addEventListener('change',e=>{if(e.target.id==='phs'){sphUp(e.target.fi
 
 const defName={},defType={};cards.forEach(c=>{defName[c.id]=c.name;defType[c.id]=c.type});
 function snap(){const o={};cards.forEach(c=>{const r={};if(c.own)r.o=c.own;if(c.want)r.w=c.want;if(c.price)r.p=c.price;if(c.cond)r.c=c.cond;if(c.note)r.n=c.note;if(c.name!==defName[c.id])r.nm=c.name;if(c.type!==defType[c.id])r.t=c.type;if(Object.keys(r).length)o[c.id]=r});return {cards:o,sealed:SEAL,binders:BIND,virt:VIRT,x:X,ph:PH,at:Date.now()}}
-function applySnap(s){cards.forEach(c=>{const r=(s.cards||{})[c.id]||{};c.own=r.o||0;c.want=r.w||0;c.price=r.p||'';c.cond=r.c||'';c.note=r.n||'';c.name=r.nm!==undefined?r.nm:defName[c.id];c.type=r.t||defType[c.id]});SEAL=s.sealed||{};BIND=Array.isArray(s.binders)?s.binders:[];VIRT=s.virt&&s.virt.q?s.virt:{q:{},b:0};X=mkX(s.x||{});phReplaceAll(s.ph);saveX();saveV()}
+function applySnap(s){cards.forEach(c=>{const r=(s.cards||{})[c.id]||{};c.own=r.o||0;c.want=r.w||0;c.price=r.p||'';c.cond=r.c||'';c.note=r.n||'';c.name=r.nm!==undefined?r.nm:defName[c.id];c.type=r.t||defType[c.id]});SEAL=s.sealed||{};BIND=Array.isArray(s.binders)?s.binders:[];bkNormAll();VIRT=s.virt&&s.virt.q?s.virt:{q:{},b:0};X=mkX(s.x||{});phReplaceAll(s.ph);saveX();saveV()}
 const markExp=()=>{LASTEXP=Date.now();try{localStorage.setItem('fb_lastexp',String(LASTEXP))}catch(e){}};
 async function exportFile(){const d=snap(),txt=JSON.stringify({app:'appel-des-cartes',v:1,...d}),name='appel-des-cartes-'+new Date().toISOString().slice(0,10)+'.json';
 try{const dl=window.claude&&claude.use?await claude.use('downloads'):null;if(dl){await dl.save({filename:name,data:txt});markExp();toast('Sauvegarde exportée ✓');return}}catch(e){if(e&&e.code&&e.code!=='unavailable'){toast('Export annulé');return}}

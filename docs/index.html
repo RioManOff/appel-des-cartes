@@ -100,7 +100,20 @@ nav .mid{flex:0 0 60px;background:none!important}
 nav .mid i{top:-26px;width:58px;height:58px;font-size:28px;box-shadow:0 8px 20px -4px color-mix(in srgb,var(--ac) 70%,#000),0 0 0 5px color-mix(in srgb,var(--sf) 82%,transparent);border:0;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
 nav .mid:active i{transform:translateX(-50%) scale(.9)}
 #app{padding-bottom:118px}#toast{bottom:calc(98px + env(safe-area-inset-bottom,0px))}#lpm{bottom:110px}
-#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:opacity .35s ease}#splash.out{opacity:0;pointer-events:none}#splash b{font:400 26px 'Bowlby One',sans-serif;color:var(--ac)}#splash i{font-style:normal;font-size:64px;animation:floaty 2.6s ease-in-out infinite}#lpm{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:10px;display:flex;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.6);animation:pop .2s ease-out}#lpm button{border:1px solid var(--ln);background:var(--bg);color:var(--tx);border-radius:12px;padding:10px 12px;font:inherit;font-size:20px;min-width:52px}#lpm small{display:block;font-size:11px}.grid.bnd .art{box-shadow:0 10px 18px -6px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.5)}.grid.bnd .card{transition:transform .2s}.grid.bnd .card:active{transform:translateY(2px)}
+#splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(120% 90% at 50% 38%,color-mix(in srgb,var(--ac) 16%,var(--bg)),var(--bg) 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s ease,transform .45s ease}
+#splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
+#splash .orb{margin-bottom:22px;--o:min(56vw,230px,40vh);position:relative;width:var(--o);aspect-ratio:1;display:grid;place-items:center}
+#splash .ball{width:46%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff6c8 0,#ffc233 26%,#f0830f 62%,#b84a05 100%);box-shadow:0 0 38px color-mix(in srgb,#ff9a1f 60%,transparent),inset -6px -8px 14px rgba(120,40,0,.45);display:grid;place-items:center;font:400 clamp(26px,9vw,40px) 'Bowlby One',sans-serif;color:#c4161c;text-shadow:0 1px 0 #ffd27a;animation:spBob 2.4s ease-in-out infinite}
+#splash .dot{position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px;border-radius:50%;background:var(--ln);transform:rotate(calc(var(--i)*32.727deg)) translateY(calc(var(--o)*-.5));transition:background .3s,box-shadow .3s,scale .3s}
+#splash .dot.on{background:var(--c);box-shadow:0 0 12px var(--c);scale:1.35}
+#splash.wait .orb::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:var(--ac);animation:spSpin 1.4s linear infinite}
+#splash b{font:400 clamp(22px,7vw,28px) 'Bowlby One',sans-serif;color:var(--ac);text-align:center}
+#splash .bar{width:min(62vw,240px);height:6px;border-radius:6px;background:var(--ln);overflow:hidden}
+#splash .bar>u{display:block;height:100%;width:6%;background:linear-gradient(90deg,var(--ac),#ffb23a);border-radius:6px;transition:width .35s ease}
+#splash small{color:var(--mu);font-size:13px;min-height:1.2em}
+@keyframes spBob{50%{transform:translateY(-7px)}}
+@keyframes spSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#splash .ball,#splash.wait .orb::after{animation:none}#splash,#splash .bar>u,#splash .dot{transition:none}}#lpm{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:60;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:10px;display:flex;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.6);animation:pop .2s ease-out}#lpm button{border:1px solid var(--ln);background:var(--bg);color:var(--tx);border-radius:12px;padding:10px 12px;font:inherit;font-size:20px;min-width:52px}#lpm small{display:block;font-size:11px}.grid.bnd .art{box-shadow:0 10px 18px -6px rgba(0,0,0,.85),0 2px 4px rgba(0,0,0,.5)}.grid.bnd .card{transition:transform .2s}.grid.bnd .card:active{transform:translateY(2px)}
 .art{box-shadow:0 6px 14px -8px rgba(0,0,0,.8);transition:filter .25s ease,opacity .25s ease}
 .art.miss{filter:grayscale(1) brightness(.72);opacity:.62}
 .card:not(:disabled):active .art{transform:scale(.97)}
@@ -501,7 +514,7 @@ input:focus,select:focus{outline:none;border-color:var(--ac)!important;box-shado
 </style>
 </head>
 <body>
-<div id="splash"><i>🐉</i><b>L'Appel des Cartes</b></div>
+<div id="splash" class="wait" role="status" aria-live="polite"><div class="orb"><span class="dot" style="--i:0"></span><span class="dot" style="--i:1"></span><span class="dot" style="--i:2"></span><span class="dot" style="--i:3"></span><span class="dot" style="--i:4"></span><span class="dot" style="--i:5"></span><span class="dot" style="--i:6"></span><span class="dot" style="--i:7"></span><span class="dot" style="--i:8"></span><span class="dot" style="--i:9"></span><span class="dot" style="--i:10"></span><div class="ball">★</div></div><b>L'Appel des Cartes</b><div class="bar"><u></u></div><small>Chargement des cartes…</small></div>
 <div id="app"></div>
 <div id="toast" role="status"></div>
 <nav aria-label="Navigation"><div id="nav"></div></nav>
@@ -551,7 +564,7 @@ async function phDel(id){delete PH[id];try{const d=await phDB();d.transaction('p
 async function phReplaceAll(o){PH={...(o||{})};try{const d=await phDB(),st=d.transaction('ph','readwrite').objectStore('ph');st.clear();Object.keys(PH).forEach(k=>st.put(PH[k],k))}catch(e){}}
 function addPhoto(f,id){if(!f||!id)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const M=520,k=Math.min(1,M/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);phSet(id,cv.toDataURL('image/jpeg',.82)).then(()=>{toast('Photo enregistrée ✓');render()})};im.onerror=()=>toast('Image non lisible');im.src=rd.result};rd.readAsDataURL(f)}
 const CARDIMG={};
-const IMGP=new Promise(res=>{let n=0;const T=EXTS.length;EXTS.forEach(([e])=>{const sc=document.createElement('script');sc.src='cards-'+e+'.js';sc.async=true;const d=()=>{if(++n===T){res();try{render()}catch(_){}}};sc.onload=sc.onerror=d;document.head.appendChild(sc)})});;
+const IMGP=new Promise(res=>{let n=0;const T=EXTS.length;EXTS.forEach(([e])=>{const sc=document.createElement('script');sc.src='cards-'+e+'.js';sc.async=true;const d=()=>{window.__ld=[++n,T,e];window.__spu&&window.__spu();if(n===T){res();try{render()}catch(_){}}};sc.onload=sc.onerror=d;document.head.appendChild(sc)})});;
 function art(c){return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}" >${CARDIMG[c.id]?`<img class="cimg" src="${CARDIMG[c.id]}" alt="${esc(c.name||c.id)}" draggable="false">`:p3(c.n)}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
 function cardBtn(c){return `<div class="tile"><button class="card" data-n="${c.id}" aria-label="${c.id}" style="width:100%">${art(c)}<div class="meta">${c.name||'<span>Nom à compléter</span>'}<br><span>${c.id}</span></div></button>${X.fav[c.id]?'<span class="mk">⭐</span>':''}${X.sell[c.id]?'<span class="mk s">💱</span>':''}${X.upg[c.id]?'<span class="mk u">🔧</span>':''}<button class="adj m" data-cq="${c.id}" data-cd="-1" aria-label="Retirer une carte">−</button><button class="adj p" data-cq="${c.id}" data-cd="1" aria-label="Ajouter une carte">+</button></div>`}
 const header=()=>`<header><div><h1>🐉 L'Appel des Cartes</h1><div class="sub">${S.tab==='coll'||S.tab==='scan'?S.ext+' · '+EXTS.find(x=>x[0]===S.ext)[1]:'FB01 → FB11'}</div></div></header>`;
@@ -1544,7 +1557,17 @@ const q=$('#q');if(q){q.oninput=e=>{S.q=e.target.value;const p=e.target.selectio
 
 addEventListener('scroll',()=>{SCRM[viewKey()]=window.scrollY},{passive:true});
 document.addEventListener('click',e=>{if(e.target.closest('[data-bback],[data-b2="back"],[data-b2="pkdone"],[data-go],[data-vback],[data-oback],[data-dback],[data-pback],[data-back]')){RESTORE=true;setTimeout(()=>{RESTORE=false},0)}},true);
-(function(){const sp=document.getElementById('splash');if(sp)setTimeout(()=>{sp.classList.add('out');setTimeout(()=>sp.remove(),400)},700)})();
+(function(){const sp=document.getElementById('splash');if(!sp)return;
+const dots=[...sp.querySelectorAll('.dot')],bar=sp.querySelector('.bar>u'),tx=sp.querySelector('small');
+dots.forEach((d,k)=>d.style.setProperty('--c',(SERCOL[EXTS[k]&&EXTS[k][0]]||'#f0830f')));
+let done=0,t0=Date.now(),closed=0;
+function upd(){const l=window.__ld;if(!l)return;done=l[0];dots.forEach((d,k)=>d.classList.toggle('on',k<done));bar.style.width=Math.max(6,Math.round(done/l[1]*100))+'%';tx.textContent=done<l[1]?'Cartes '+done+' / '+l[1]:'Prêt !'}
+window.__spu=upd;upd();
+function close(){if(closed)return;closed=1;sp.classList.remove('wait');bar.style.width='100%';dots.forEach(d=>d.classList.add('on'));tx.textContent='Prêt !';setTimeout(()=>{sp.classList.add('out');setTimeout(()=>sp.remove(),500)},RM?0:350)}
+const MIN=900,MAX=7000;
+IMGP.then(()=>setTimeout(close,Math.max(0,MIN-(Date.now()-t0))));
+setTimeout(close,MAX);
+})();
 // 16: long press on a card
 (function(){let t,sx,sy,done=false;const close=()=>{const m=document.getElementById('lpm');if(m)m.remove()};
 document.addEventListener('pointerdown',e=>{close();done=false;const b=e.target.closest('button.card[data-n]');if(!b)return;sx=e.clientX;sy=e.clientY;const id=b.dataset.n;

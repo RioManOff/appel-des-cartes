@@ -671,6 +671,71 @@ html.dbso,html.dbso body{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.sheet.in .sr-t{animation:none}.sr-t,.sr-im{transition:none}}
 @media(max-width:339px){.sr-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-height:520px){.sr-im{aspect-ratio:1/.8}.sr-pc{padding-top:10px}}
+/* ===== Stats : aperçu de la collection ===== */
+.ap-ban{position:relative;display:flex;align-items:center;gap:13px;margin-top:6px;padding:16px 14px 19px;border:1px solid var(--ln);border-radius:20px;overflow:hidden;background:linear-gradient(115deg,color-mix(in srgb,var(--ac) 22%,var(--sf)),var(--sf) 54%,color-mix(in srgb,#F5B400 14%,var(--sf)))}
+.ap-bt{flex:1;min-width:0}
+.ap-bt h2{margin:0;font:400 17px/1.15 "Bowlby One",Rubik,sans-serif}
+.ap-bt span{display:block;margin-top:5px;color:var(--mu);font-size:12.5px;line-height:1.3}
+.ap-bt span b{color:var(--tx);font-weight:600}
+.ap-sh{flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--ln);background:color-mix(in srgb,var(--tx) 7%,transparent);color:var(--tx)}
+.ap-pb{position:absolute;left:0;right:0;bottom:0;height:4px;background:color-mix(in srgb,var(--tx) 10%,transparent)}
+.ap-pb i{display:block;height:100%;width:var(--w,0%);background:linear-gradient(90deg,#F5B400,var(--ac))}
+.ap-ban svg,.ap-k svg,.ap-c svg,.ap-s svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8}
+.ap-sh svg{width:19px;height:19px}
+/* six tuiles */
+.ap-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ap-k{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:146px;padding:14px 13px 13px 14px;border:1px solid var(--ln);border-radius:20px;overflow:hidden;text-align:left;color:var(--tx);background:var(--sf)}
+.ap-k:active,.ap-c:active{transform:scale(.985)}
+.ap-kl{display:block;padding-right:38px;font:600 11.5px/1.25 Rubik,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
+@media(max-width:380px){.ap-kl{min-height:2.5em}}
+.ap-kn{display:block;margin-top:9px;font:600 30px/1.05 Rubik,system-ui,sans-serif;letter-spacing:-.01em;white-space:nowrap}
+.ap-ks{display:block;margin-top:5px;font-size:13px;line-height:1.3;color:var(--mu)}
+.ap-kf{display:block;margin-top:auto;padding-top:12px;font:600 13px/1.3 Rubik,system-ui,sans-serif}
+.ap-k .ap-kw{position:absolute;right:8px;top:58px;width:60px;height:60px;stroke:var(--k);stroke-width:1.3;opacity:.18;pointer-events:none}
+.ap-go{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid var(--ln);background:color-mix(in srgb,var(--tx) 5%,transparent);color:var(--mu);font-style:normal}
+.ap-k>.ap-go{position:absolute;top:11px;right:11px}
+.ap-go svg{width:15px;height:15px;stroke-width:2}
+/* Mes séries */
+.ap-s{margin-top:22px;padding:18px 14px 14px;border:1px solid var(--ln);border-radius:24px;background:var(--sf)}
+.ap-sh2{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}
+.ap-sh2>div{flex:1 1 170px;min-width:0}
+.ap-sh2 h2{margin:0;font:400 19px/1.15 "Bowlby One",Rubik,sans-serif}
+.ap-sh2 p{margin:6px 0 0;color:var(--mu);font-size:13.5px;line-height:1.35}
+.ap-pill{flex:none;display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border:1px solid var(--ln);border-radius:999px;background:transparent;color:var(--tx);font:500 13.5px/1 Rubik,system-ui,sans-serif;white-space:nowrap}
+.ap-pill svg{width:14px;height:14px;stroke-width:2}
+.ap-q{position:relative;display:block;margin-top:14px}
+.ap-q svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--mu);pointer-events:none}
+.ap-q input[type=search]{padding:13px 14px 13px 42px;border-radius:14px;background:var(--bg);font-size:15px}
+.ap-l{display:grid;gap:10px;margin-top:14px}
+.ap-c{display:block;width:100%;padding:14px;border:1px solid rgba(var(--cr),.36);border-radius:18px;text-align:left;color:var(--tx);background:linear-gradient(135deg,rgba(var(--cr),.09),rgba(var(--cr),0) 62%),color-mix(in srgb,var(--tx) 4%,var(--sf))}
+.ap-c.ok{border-color:rgba(245,180,0,.6)}
+.ap-ch{display:flex;align-items:center;gap:12px}
+.ap-th{flex:none;width:38px;height:60px;border-radius:6px;background:#0d0606 50% 4%/cover no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 6px 12px -5px rgba(var(--cr),.85)}
+.ap-cn{flex:1;min-width:0}
+.ap-cn b{display:block;font:600 16px/1.2 Rubik,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-cn small{display:block;margin-top:4px;font:600 12.5px/1 Rubik,system-ui,sans-serif;letter-spacing:.09em;color:var(--mu)}
+.ap-c .ap-go{border-color:rgba(var(--cr),.5);background:rgba(var(--cr),.14);color:var(--c)}
+.ap-r{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:15px}
+.ap-rl{font:600 12px/1 Rubik,system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
+.ap-rv{font:600 14.5px/1 Rubik,system-ui,sans-serif;white-space:nowrap}
+.ap-rv em{margin-left:10px;font-style:normal;font-weight:500;color:var(--mu)}
+.ap-rv .g{color:var(--ok)}.ap-rv .y{color:#F5B400}
+:root[data-theme="light"] .ap-rv .y{color:#A87400}
+.ap-b{display:block;height:6px;margin-top:9px;border-radius:3px;background:var(--ln);overflow:hidden}
+.ap-b i{display:block;height:100%;width:var(--w,0%);border-radius:3px;background:linear-gradient(90deg,color-mix(in srgb,var(--ok) 65%,#000),var(--ok))}
+.ap-b.m i{background:linear-gradient(90deg,#F5B400,var(--ac))}
+.ap-m{display:block;margin-top:7px;font-size:13px;line-height:1.3;color:var(--mu)}
+.ap-d{margin-top:16px}
+.ap-fn{margin:14px 2px 0;line-height:1.4}
+/* feuille « Ma valeur » */
+.ap-tr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}
+.ap-tr:last-child{border-bottom:0}
+.ap-tn{flex:1;min-width:0}
+.ap-tn b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-tn small{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+.ap-tv{flex:none;text-align:right}
+.ap-tv b{display:block;font-weight:600}
+.ap-tv small{display:block;margin-top:2px;color:var(--mu);font-size:12px}
 </style>
 </head>
 <body>
@@ -1889,13 +1954,86 @@ ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margi
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
 function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">Cartes manquantes × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
-function stats(){const sa=sealAll(),sealN=sa.reduce((a,x)=>a+x.s.own,0),sealV=sa.reduce((a,x)=>a+x.s.own*num(x.s.price),0),val=cards.reduce((a,c)=>a+c.own*pxv(c),0)+sealV;
-const bar=(t,x,y)=>`<div class="panel" style="margin-top:10px">${t} : ${x} / ${y} · ${pct(x,y)} %<div class="bar"><i style="width:${pct(x,y)}%"></i></div></div>`;
-const RAR=['L','C','UC','R','SR','SCR'],byR=RAR.map(r=>{const T=cards.filter(c=>c.ver==='Normal'&&c.rar===r);return bar(r,T.filter(c=>c.own>0).length,T.length)}).join(''),byT=['Leader','Battle','Extra'].map(t=>{const T=cards.filter(c=>c.ver==='Normal'&&c.type===t);return bar(t,T.filter(c=>c.own>0).length,T.length)}).join('');
-const per=EXTS.map(([e,nm])=>{const T=cards.filter(c=>c.ext===e),t=T.filter(c=>c.own>0).length,N=nrm(e),o=N.filter(c=>c.own>0).length,A=alt(e),ao=A.filter(c=>c.own>0).length;return `<h2>${e} · ${nm}</h2>`+bar('Progression totale',t,T.length)+`<div class="sub" style="margin:6px 2px">${T.length-t} cartes manquantes</div>`+bar('Cartes numérotées',o,N.length)+bar('Alternative Art',ao,A.length)}).join('');
-return header()+`<div class="hmhrow"><h2>Statistiques</h2><button class="chip" data-share>📤 Partager</button></div><div class="big"><div class="panel"><b>${cards.reduce((a,c)=>a+c.own,0)}</b>cartes au total</div><div class="panel"><b>${cards.length-cards.filter(c=>c.own>0).length}</b>manquantes</div></div>
-<div class="panel" style="margin-top:10px"><b>📦 ${sealN}</b> produit${sealN>1?'s':''} scellé${sealN>1?'s':''}${sa.filter(x=>x.s.own).map(x=>`<div class="sub">${x.e} · ${x.t[1]} : ×${x.s.own}</div>`).join('')}</div>
-<div class="panel" style="margin-top:10px">Valeur estimée : <b>${eur(val)}</b><div class="sub">Cartes : quantité × ton prix, sinon le prix Cardmarket${MKON?' du '+MKDF:' (désactivé dans Réglages)'} · scellé : ceux dont tu as saisi le prix</div></div><h2>Par rareté (cartes numérotées, toutes séries)</h2>${byR}<h2>Par type</h2>${byT}${per}`}
+/* ===== Stats : aperçu de la collection (tuiles + progression des séries) ===== */
+const apIc={
+ up:'<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M15 7h5v5"/>',
+ card:'<rect x="8" y="3" width="12" height="16" rx="2"/><path d="M4.5 7.5V19a2 2 0 0 0 2 2H16"/><path d="M11 8h6M11 12h6"/>',
+ box:'<path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/>',
+ alt:'<path d="M11 3c.8 5 3 7.2 8 8-5 .8-7.2 3-8 8-.8-5-3-7.2-8-8 5-.8 7.2-3 8-8z"/><path d="M19 3v4M17 5h4"/>',
+ heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+ swap:'<path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/>',
+ find:'<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+ share:'<path d="M12 15V3M8 7l4-4 4 4"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/>',
+ go:'<path d="M7 17 17 7M8.5 7H17v8.5"/>'};
+const apSvg=(k,c)=>`<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${apIc[k]}</svg>`,
+ apGo=`<i class="ap-go" aria-hidden="true">${apSvg('go','')}</i>`,
+ apNf=n=>Math.round(n).toLocaleString('fr-FR'),
+ /* montant compact des petites lignes : centimes sous 100 €, euros entiers au-dessus */
+ apE=v=>v<100?eur(v):Math.round(v).toLocaleString('fr-FR')+' €',
+ apS=n=>n>1?'s':'',
+ /* taille du gros chiffre d'une tuile : plus le texte est long, plus il rétrécit (pas de débordement) */
+ apFs=s=>{const n=String(s).length;return n<=5?32:n<=7?30:n<=9?27:n<=10?25:n<=11?22:n<=12?20:n<=14?17:15},
+ /* pourcentage affiché : jamais 100 % tant qu'il manque une carte */
+ apPc=(a,b)=>b?(a>=b?100:Math.min(99,Math.round(a/b*100))):0,
+ /* largeur d'une barre : un petit trait visible dès la première carte */
+ apW=(a,b)=>b&&a>0?Math.min(100,Math.max(3,a/b*100)):0,
+ apNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+/* une tuile : étiquette, gros chiffre, ligne grise, ligne en gras, icône en filigrane et bouton rond ↗ */
+const apK=(att,col,ic,lab,num,sub,foot,aria)=>`<button class="ap-k" ${att} style="--k:${col}" aria-label="${aria}"><span class="ap-kl">${lab}</span><b class="ap-kn" style="font-size:${apFs(num)}px">${num}</b><span class="ap-ks">${sub}</span><span class="ap-kf">${foot}</span>${apSvg(ic,'ap-kw')}${apGo}</button>`;
+
+/* la liste « Mes séries » (réécrite seule quand on tape dans la recherche) */
+function apList(){const q=apNorm(S.sq),L=EXTS.filter(([e,nm])=>!q||apNorm(e+nm).includes(q));
+ if(!L.length)return `<p class="sub" style="margin:4px 2px 0">Aucune série ne correspond à « ${esc(S.sq)} ».</p>`;
+ return L.map(([e,nm])=>{
+  const N=nrm(e),AL=alt(e),nn=N.length,na=AL.length,tot=nn+na,o=N.filter(c=>c.own>0).length,ao=AL.filter(c=>c.own>0).length,ow=o+ao,
+   cN=N.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0),cA=AL.reduce((a,c)=>a+(c.own>0?0:pxv(c)),0),
+   done=nn>0&&o>=nn,mN=nn-o,mA=na-ao,
+   f1=done?'Full Set complet !':`Il te manque ${mN} carte${apS(mN)}${cN>0?' · ≈ '+apE(cN):''}`,
+   f2=ow>=tot?'Master Set complet !':done?`${mA} Alt Art manquante${apS(mA)}${cA>0?' · ≈ '+apE(cA):''}`:mA===0?'Toutes les Alt Art sont là, il reste le Full Set':`${mA} Alt Art manquante${apS(mA)} et le Full Set`;
+  return `<button class="ap-c${done?' ok':''}" data-apx="${e}" style="--c:${SERCOL[e]||'#E50914'};--cr:${srRGB(e)}" aria-label="${e} ${esc(nm)} : full set ${o} sur ${nn}${na?', master set '+ow+' sur '+tot:''}. Ouvrir la série">`
+   +`<span class="ap-ch"><span class="ap-th srp-${e}" aria-hidden="true"></span><span class="ap-cn"><b>${esc(nm)}</b><small>${e}</small></span>${apGo}</span>`
+   +`<span class="ap-r"><span class="ap-rl">Full set</span><span class="ap-rv"><span class="g">${o} / ${nn}</span><em>${apPc(o,nn)} %</em></span></span><span class="ap-b" aria-hidden="true" style="--w:${apW(o,nn)}%"><i></i></span><span class="ap-m">${f1}</span>`
+   +(na?`<span class="ap-r"><span class="ap-rl">Master set</span><span class="ap-rv"><span class="y">${ow} / ${tot}</span><em>${apPc(ow,tot)} %</em></span></span><span class="ap-b m" aria-hidden="true" style="--w:${apW(ow,tot)}%"><i></i></span><span class="ap-m">${f2}</span>`:'')
+   +`</button>`}).join('')}
+
+/* détail facultatif : avancement par type et par rareté (cartes numérotées, toutes séries) */
+function apDetail(){
+ const bar=(t,x,y)=>`<div class="panel" style="margin-top:10px">${t} : ${x} / ${y} · ${pct(x,y)} %<div class="bar"><i style="width:${pct(x,y)}%"></i></div></div>`,
+  byR=['L','C','UC','R','SR','SCR'].map(r=>{const T=cards.filter(c=>c.ver==='Normal'&&c.rar===r);return bar(r,T.filter(c=>c.own>0).length,T.length)}).join(''),
+  byT=['Leader','Battle','Extra'].map(t=>{const T=cards.filter(c=>c.ver==='Normal'&&c.type===t);return bar(t,T.filter(c=>c.own>0).length,T.length)}).join('');
+ return `<h2>Par type</h2>${byT}<h2>Par rareté (cartes numérotées, toutes séries)</h2>${byR}`}
+
+function stats(){
+ const sa=sealAll(),sealN=sa.reduce((a,x)=>a+x.s.own,0),sealU=sa.filter(x=>x.s.own>0).length,sealV=sa.reduce((a,x)=>a+x.s.own*num(x.s.price),0),
+  cardV=cards.reduce((a,c)=>a+c.own*pxv(c),0),val=cardV+sealV,eV=eur(val),
+  copies=cards.reduce((a,c)=>a+c.own,0),uniq=cards.filter(c=>c.own>0).length,all=cards.length,
+  AL=alt(),aOwn=AL.filter(c=>c.own>0).length,aV=AL.reduce((a,c)=>a+c.own*pxv(c),0),
+  W=cards.filter(c=>c.want>0),swn=sa.filter(x=>x.s.want>0).length,wn=W.length+swn,wc=W.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0),
+  P=tradeData().prop,pn=P.reduce((a,x)=>a+x.q,0),pv=P.reduce((a,x)=>a+x.q*pxv(x.c),0),
+  K=[
+   apK('data-apv','#F5B400','up','Valeur totale',eV,MKON?'Tendance des prix':'D’après tes prix saisis','Voir le détail','Valeur totale : '+eV+'. Ouvrir le détail'),
+   apK('data-go="coll"','#2BB8D8','card','Mes cartes',apNf(copies),apNf(uniq)+' carte'+apS(uniq)+' différente'+apS(uniq),cardV>0?'≈ '+apE(cardV)+' estimés':'Voir ma collection','Mes cartes : '+copies+' exemplaire'+apS(copies)+', '+uniq+' différente'+apS(uniq)+'. Ouvrir la collection'),
+   apK('data-hgo="sealed"','#3FB65A','box','Mes scellés',apNf(sealN),sealN?apNf(sealU)+' produit'+apS(sealU)+' différent'+apS(sealU):'Aucun scellé',sealV>0?'≈ '+apE(sealV)+' estimés':'Voir mes scellés','Mes scellés : '+sealN+'. Ouvrir les scellés'),
+   apK('data-apa','#B14FE0','alt','Alt Art',apNf(aOwn),'sur '+apNf(AL.length)+' existantes',aV>0?'≈ '+apE(aV)+' estimés':'Voir mes Alt Art','Alternative Art : '+aOwn+' sur '+AL.length+'. Ouvrir les Alt Art'),
+   apK('data-go="want"','#FF4D6A','heart','Recherchées',apNf(wn),wn?W.length+' carte'+apS(W.length)+(swn?' · '+swn+' scellé'+apS(swn):''):'Rien de suivi',wc>0?'≈ '+apE(wc)+' à acheter':'Voir ma liste','Recherchées : '+wn+'. Ouvrir la liste'),
+   apK('data-go="dup"','#8E8E9A','swap','Je propose',apNf(pn),pn?'Échange ou vente':'Rien à proposer',pv>0?'≈ '+apE(pv)+' proposés':'Voir mes doublons','Je propose : '+pn+' exemplaire'+apS(pn)+'. Ouvrir les doublons')];
+ return header()
+ +`<div class="ap-ban"><span class="dbo" style="--s:42px" aria-hidden="true">${DBSTAR[4].map(([a,b])=>`<i style="left:${a}%;top:${b}%;width:${DBSZ[4]}%"></i>`).join('')}</span><div class="ap-bt"><h2>Aperçu de ma collection</h2><span><b>${apNf(uniq)}</b> / ${apNf(all)} cartes · <b>${pct(uniq,all)} %</b></span></div><button class="ap-sh" data-share aria-label="Partager ma collection">${apSvg('share','')}</button><span class="ap-pb" aria-hidden="true" style="--w:${apW(uniq,all)}%"><i></i></span></div>`
+ +`<div class="ap-g">${K.join('')}</div>`
+ +`<section class="ap-s"><div class="ap-sh2"><div><h2>Mes séries</h2><p>Suivi de progression full set et master set.</p></div><button class="ap-pill" data-go="coll">Cartes &amp; Scellés par série ${apSvg('go','')}</button></div>`
+ +`<label class="ap-q">${apSvg('find','')}<input id="sq" type="search" autocomplete="off" enterkeyhint="search" placeholder="Rechercher une série ou un code…" aria-label="Rechercher une série ou un code" value="${esc(S.sq)}"></label><div class="ap-l" id="apl">${apList()}</div></section>`
+ +`<div class="ap-d"><button class="chip" aria-pressed="${!!S.apd}" data-apd>Détails par type et par rareté</button></div>${S.apd?apDetail():''}`
+ +`<p class="sub ap-fn">${MKON?'Valeur = quantité × ton prix, sinon la tendance des prix Cardmarket du '+MKDF+'. Les scellés comptent quand tu as saisi leur prix.':'Prix Cardmarket désactivé dans Réglages : seuls les prix que tu as saisis comptent.'}</p>`}
+
+/* feuille « Ma valeur » : d'où vient le total, et ce qui pèse le plus */
+function valSheet(){if(!S.vsh)return '';
+ const sa=sealAll(),sealV=sa.reduce((a,x)=>a+x.s.own*num(x.s.price),0),cardV=cards.reduce((a,c)=>a+c.own*pxv(c),0),
+  top=cards.filter(c=>c.own>0&&pxv(c)>0).sort((a,b)=>pxv(b)*b.own-pxv(a)*a.own).slice(0,6);
+ return `<div class="sheet" data-close><div role="dialog" aria-label="Ma valeur"><h2 style="margin-top:0">💶 Ma valeur</h2>
+<div class="panel"><div class="kv"><span>Cartes</span><b>${eur(cardV)}</b></div><div class="kv"><span>Scellés</span><b>${eur(sealV)}</b></div><div class="kv"><span>Total</span><b>${eur(cardV+sealV)}</b></div></div>
+<div class="sub" style="margin:8px 2px 0">${MKON?'Prix : le tien quand tu en as saisi un, sinon la tendance des prix Cardmarket du '+MKDF+'. Scellés : seulement ceux dont tu as saisi le prix.':'Prix Cardmarket désactivé dans Réglages : seuls les prix que tu as saisis comptent.'}</div>
+${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
+<button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
 const BUILD='10 oct. 2026';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
@@ -2058,7 +2196,7 @@ function initTilt(){if(RM)return;document.querySelectorAll('.tilt').forEach(el=>
 if(!TILTON&&window.DeviceOrientationEvent){TILTON=true;window.addEventListener('deviceorientation',e=>{const el=document.querySelector('.tilt');if(!el||e.gamma==null||el.matches(':active'))return;setTilt(el,clamp01(.5+Math.max(-30,Math.min(30,e.gamma))/60),clamp01(.5+Math.max(-30,Math.min(30,(e.beta||0)-40))/60))})}}
 const askTilt=()=>{try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{})}catch(e){}};
 let LAST={sk:'',vk:''};
-const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
+const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
 let RESTORE=false;const SCRM={};
 function render(){const y=window.scrollY,sd=document.querySelector('.sheet>div'),st=sd?sd.scrollTop:0,sk=sheetKey(),vk=viewKey(),sameS=sk===LAST.sk,sameV=vk===LAST.vk;
 if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCore();LAST={sk,vk};
@@ -2066,12 +2204,13 @@ if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=s
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch()}
-function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet();
+function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="Rechercher ou classeur"><i>${S.menu?'✕':'＋'}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
 const fq=$('#fq');if(fq){fq.oninput=e=>{S.fq=e.target.value;const p=e.target.selectionStart;render();const n=$('#fq');n.focus();n.setSelectionRange(p,p)}}
 const bn=$('#bn');if(bn){bn.oninput=e=>{S.bnew=e.target.value}}
+const sq=$('#sq');if(sq){sq.oninput=e=>{S.sq=e.target.value;const l=$('#apl');if(l)l.innerHTML=apList()}}
 const q=$('#q');if(q){q.oninput=e=>{S.q=e.target.value;const p=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}}}
 
 addEventListener('scroll',()=>{SCRM[viewKey()]=window.scrollY},{passive:true});
@@ -2097,8 +2236,12 @@ document.addEventListener('pointermove',e=>{if(t&&(Math.abs(e.clientX-sx)>10||Ma
 document.addEventListener('click',e=>{if(done&&e.target.closest('button.card[data-n]')){done=false;e.stopPropagation();e.preventDefault()}},true);
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button.card[data-n]'))e.preventDefault()})})();
 document.addEventListener('click',e=>{try{if(navigator.vibrate&&e.target.closest('.adj,.stepper button,.qb,.chip'))navigator.vibrate(8)}catch(_){}});
-document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oresume],[data-cdlock],[data-oshop],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sacc],[data-vib],[data-mot],[data-gcs],[data-acf],[data-start],[data-scq],[data-csort],[data-csortd],[data-sortopen],[data-dbplay],[data-dbgold],[data-mkt],[data-share],[data-sharesend],[data-sharedl],[data-sharecopy],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty],[data-vnpick],[data-vnclr],[data-vnq],[data-vnsell],[data-vnk],[data-vnt],[data-vnsells],[data-hburst],[data-hgo],[data-hf],[data-hpast]');if(!t||t===document.documentElement)return;const d=t.dataset;
-if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false;S.shr=null;S.srt=false}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oresume],[data-cdlock],[data-oshop],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sacc],[data-vib],[data-mot],[data-gcs],[data-acf],[data-start],[data-scq],[data-csort],[data-csortd],[data-sortopen],[data-dbplay],[data-dbgold],[data-mkt],[data-share],[data-sharesend],[data-sharedl],[data-sharecopy],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty],[data-vnpick],[data-vnclr],[data-vnq],[data-vnsell],[data-vnk],[data-vnt],[data-vnsells],[data-hburst],[data-hgo],[data-hf],[data-hpast],[data-apv],[data-apx],[data-apa],[data-apd]');if(!t||t===document.documentElement)return;const d=t.dataset;
+if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false;S.shr=null;S.srt=false;S.vsh=false}
+else if(d.apv!==undefined){S.vsh=true}
+else if(d.apx){S.ext=d.apx;S.tab='coll';S.mode='cards';S.own='';S.ver='';S.fx='';S.q='';S.sel=null;S.menu=false;window.scrollTo(0,0)}
+else if(d.apa!==undefined){S.tab='coll';S.mode='cards';S.ver='Alternative Art';S.own='';S.fx='';S.q='';S.sel=null;S.menu=false;window.scrollTo(0,0)}
+else if(d.apd!==undefined){S.apd=!S.apd}
 else if(d.vopen!==undefined){S.hzv=true;window.scrollTo(0,0)}
 else if(d.vback!==undefined){S.hzv=false;window.scrollTo(0,0)}
 else if(d.vown!==undefined){S.hzo=!S.hzo}
@@ -2217,7 +2360,7 @@ else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own';s[k]=Math.max(0,s[k]+(+
 else if(d.col){applyColor(d.col)}
 else if(d.pick!==undefined){S.pick=true}
 else if(d.ext){S.ext=d.ext;S.pick=false;window.scrollTo(0,0)}
-else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;S.sel=null;S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
+else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;if(d.go==='stats')S.sq='';S.sel=null;S.vsh=false;S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
 else if(d.sortopen!==undefined){S.menu=false;S.srt=true}
 else if(d.csort!==undefined){if(d.csort!==CSK){CSK=d.csort;CSD=0;saveCS()}S.srt=false}
 else if(d.csortd!==undefined){const bs=CSORTS.find(x=>x[0]===CSK)[2];CSD=(+d.csortd===bs)?0:1;saveCS();S.srt=false}

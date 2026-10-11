@@ -813,6 +813,52 @@ html.dbso,html.dbso body{overflow:hidden}
 .ap-tv{flex:none;text-align:right}
 .ap-tv b{display:block;font-weight:600}
 .ap-tv small{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+/* ===== Courbe du prix d'une carte ===== */
+.pxc .pxhd{align-items:center;flex-wrap:wrap;gap:6px 8px}
+.pxrg{display:flex;gap:4px}
+.pxrg .chip{padding:5px 10px;min-height:30px;font-size:12.5px;font-weight:500;color:var(--mu)}
+.pxrg .chip[aria-pressed="true"]{color:var(--on,#fff)}
+.pxrd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:2px 0 0}
+.pxrd b{font:700 21px/1.2 Rubik,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.pxrd span{font-size:12px;color:var(--mu);white-space:nowrap}
+.pxsv{display:block;width:100%;height:auto;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;cursor:crosshair}
+.pxsv text{font:500 10px Rubik,system-ui,sans-serif;fill:var(--mu)}
+.pxgl{stroke:var(--ln);stroke-width:1;stroke-dasharray:3 4}
+.pxln{fill:none;stroke:var(--ac);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.pxdt{fill:var(--sf);stroke:var(--ac);stroke-width:1.5}
+.pxlast{fill:var(--ac);stroke:var(--sf);stroke-width:2}
+.pxcl{stroke:var(--mu);stroke-width:1;stroke-dasharray:2 3}
+.pxft{display:flex;justify-content:space-between;gap:8px;margin-top:2px;padding-top:7px;border-top:1px solid var(--ln);font-size:12.5px;color:var(--mu)}
+.pxft b{color:var(--tx);font-weight:600;font-variant-numeric:tabular-nums}
+.pxwait{display:flex;align-items:center;justify-content:center;min-height:84px;padding:6px 10px;text-align:center;font-size:12.5px;line-height:1.45;color:var(--mu)}
+.pxwait span{max-width:290px}
+.pxth{stroke:var(--ok);stroke-width:1.5;stroke-dasharray:5 4}
+.pxsv .pxtt{fill:var(--ok);font-weight:600}
+/* ===== Alertes de prix ===== */
+.alp .cmh{align-items:center}
+.alp .cmh .chip{min-height:30px;padding:4px 12px;font-size:12.5px;font-weight:500;color:var(--mu)}
+.alp.hit{border-color:var(--ok)}
+.alf{display:flex;align-items:center;justify-content:space-between;gap:8px 10px;flex-wrap:wrap;margin:6px 0 2px}
+.alf label{flex:1 1 150px;font-size:13px;color:var(--mu)}
+.alw{display:flex;align-items:center;gap:6px}
+.alw input{width:96px;padding:9px 11px;text-align:right;font:inherit;font-size:16px;font-variant-numeric:tabular-nums;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:12px}
+.alw input:focus{outline:2px solid var(--ac);outline-offset:1px}
+.alw b{font-weight:600}
+.alp .sub{margin:4px 0 4px;font-size:12.5px}
+.alok{color:var(--ok)}
+.alb{display:flex;align-items:center;gap:12px;width:100%;margin:8px 0 10px;text-align:left;color:var(--tx);border:1.5px solid var(--ac)}
+.alb1{font-size:24px;line-height:1}
+.alb2{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.alb2 small{color:var(--mu);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alb3{color:var(--mu);font-size:22px}
+.alr{display:flex;align-items:center;gap:10px;width:100%;padding:10px 0;background:none;border:0;border-bottom:1px solid var(--ln);text-align:left;color:var(--tx)}
+.alr:last-child{border-bottom:0}
+.alt{flex:1;min-width:0}
+.alt b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alt small em{font-style:normal;font-size:10.5px;font-weight:600;margin-left:8px;padding:2px 8px;border-radius:9px;background:var(--ac);color:var(--on,#fff);vertical-align:1px}
+.alt small,.alv small{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+.alv{flex:none;text-align:right}
+.alv b{display:block;font-weight:600;color:var(--ok)}
 </style>
 </head>
 <body>
@@ -834,7 +880,7 @@ const saveV=()=>{try{localStorage.setItem('fb_virt',JSON.stringify(VIRT));localS
 let BIND=[];try{BIND=JSON.parse(localStorage.getItem('fb_binders')||'[]')||[]}catch(e){}
 const saveB=()=>{try{localStorage.setItem('fb_binders',JSON.stringify(BIND));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
 const SEALT=[['booster','Booster','1 paquet'],['display','Display','24 boosters'],['case','Case de display','12 displays']];
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db)});
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al)});
 let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v)X=mkX(v)}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -876,8 +922,118 @@ async function pxLoad(){PXT=Date.now();try{
  const txt=await r.text();if(txt===PXTXT)return;
  if(!pxApply(JSON.parse(txt),txt))return;
  try{localStorage.setItem('fb_prixj',txt)}catch(e){}
- if(!pxQuiet())render()}catch(e){}}
+ if(!pxQuiet())render()}catch(e){}finally{alCheck()}}
 function pxNet(){pxLoad();document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-PXT>3*36e5)pxLoad()})}
+/* ===== Courbe du prix d'une carte : historique de la « Tendance des prix » (fichiers docs/hist/FB01.json…) ===== */
+const PXH={},PXRG=[['7','7 j',7],['30','30 j',30],['90','90 j',90]];
+let PXR='',PXV=null;   /* PXR : durée choisie sur la courbe ('' = automatique) · PXV : courbe affichée (sert au doigt qui la parcourt) */
+const pxDay=d=>Date.UTC(+d.slice(0,4),+d.slice(5,7)-1,+d.slice(8,10))/864e5,pxDt=d=>d.slice(8,10)+'/'+d.slice(5,7),pxL=v=>v>=100?Math.round(v).toLocaleString('fr-FR')+' €':eur(v);
+/* vérifie le fichier avant de s'en servir : bonne série, dates qui se suivent, une valeur par date pour chaque carte */
+function pxHok(j,e){try{
+  if(!j||j.v!==1||j.e!==e||!Array.isArray(j.d)||!j.d.length||j.d.length>400||!j.t||typeof j.t!=='object')return null;
+  if(!j.d.every((x,i)=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&(!i||x>j.d[i-1])))return null;
+  for(const k in j.t){const c=j.t[k];if(!Array.isArray(c)||c.length!==j.d.length||!c.every(v=>typeof v==='number'&&v>=0&&v<1e8))return null}
+  return j}catch(x){return null}}
+/* va chercher l'historique d'une série (une seule fois par session, puis toutes les 3 h si on rouvre une fiche) */
+function pxHist(e){const k=PXH[e];if(!/^FB\d\d$/.test(e))return null;
+  if(k&&(k.p||Date.now()-k.t<(k.j?3*36e5:6e4)))return k;
+  const o=k||(PXH[e]={j:null,t:0,p:null});o.t=Date.now();
+  o.p=fetch('hist/'+e+'.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{const v=pxHok(j,e);if(v)o.j=v}).catch(()=>{}).then(()=>{o.p=null;o.t=Date.now();pxChartRefresh()});
+  return o}
+/* points [date, prix] de la carte : l'historique + le prix du jour déjà chargé (prix.json) */
+function pxSeries(c){const k=PXH[c.ext],j=k&&k.j,pts=[];
+  if(j){const col=j.t[c.id];if(col)for(let i=0;i<col.length;i++)if(col[i]>0)pts.push([j.d[i],col[i]/100])}
+  if(MKA[c.id]&&MKT[c.id]){const l=pts[pts.length-1];if(!l||l[0]<MKD)pts.push([MKD,MKT[c.id]]);else if(l[0]===MKD)l[1]=MKT[c.id]}
+  return pts}
+/* contenu de l'encadré : en-tête, durées, prix lu, courbe, plus bas / plus haut */
+function pxChartIn(c){
+  const k=PXH[c.ext],pts=pxSeries(c),n=pts.length,hd=r=>`<div class="cmh"><span>📈 Évolution du prix</span><span>${r}</span></div>`;PXV=null;
+  if(n<2)return hd('')+(k&&k.p&&!k.j?'<div class="pxwait"><span>Chargement de la courbe…</span></div>':'<div class="pxwait"><span>La courbe se construit : un nouveau relevé de prix s’ajoute chaque nuit. Reviens demain&nbsp;!</span></div>');
+  const last=pts[n-1],span=pxDay(last[0])-pxDay(pts[0][0]),av=PXRG.filter(r=>span>r[2]);
+  let rg=PXR||(span>30?'30':'0');if(rg!=='0'&&!av.some(r=>r[0]===rg))rg='0';
+  let sh=pts;if(rg!=='0'){const lim=pxDay(last[0])-(+rg);sh=pts.filter(p=>pxDay(p[0])>=lim);if(sh.length<2){sh=pts;rg='0'}}
+  let lo=1e12,hi=0;for(const p of sh){if(p[1]<lo)lo=p[1];if(p[1]>hi)hi=p[1]}
+  const th=c.want>0&&X.al&&X.al[c.id]||0,lo2=th?Math.min(lo,th):lo,hi2=th?Math.max(hi,th):hi;   /* ton seuil d'alerte (carte recherchée) */
+  const W=Math.max(240,Math.min(464,Math.min(520,innerWidth)-56)),H=132,L=8,T=14,B=22,pw=W-L-50,ph=H-T-B,gx=L+pw,d0=pxDay(sh[0][0]),d1=pxDay(sh[sh.length-1][0]);
+  const xs=d=>L+(pxDay(d)-d0)/(d1-d0)*pw,ys=v=>hi2>lo2?T+(hi2-v)/(hi2-lo2)*ph:T+ph/2,f1=v=>v.toFixed(1);
+  const lab=d=>new Date(pxDay(d)*864e5).toLocaleDateString('fr-FR',{weekday:'short',day:'2-digit',month:'2-digit',timeZone:'UTC'});
+  const P=sh.map(p=>({x:xs(p[0]),y:ys(p[1]),f:eur(p[1]),t:lab(p[0])})),q=P[P.length-1];
+  const ln=P.map((u,i)=>(i?'L':'M')+f1(u.x)+' '+f1(u.y)).join(''),ar=ln+'L'+f1(q.x)+' '+(T+ph)+'L'+f1(P[0].x)+' '+(T+ph)+'Z';
+  const days=Math.round(d1-d0)+1,chips=av.length?[...av.map(r=>[r[0],r[1]]),['0','Tout']].map(([v,t])=>`<button class="chip" data-pxr="${v}" aria-pressed="${rg===v}">${t}</button>`).join(''):'';
+  PXV={w:W,p:P,last:{f:eur(last[1]),t:'au '+pxDt(last[0])}};
+  const gl=(y,t,k)=>`<text${k?' class="pxtt"':''} x="${gx+9}" y="${f1(y+3.5)}">${t}</text>`;
+  const grid=hi2>lo2?`<line class="pxgl" x1="${L}" x2="${gx}" y1="${T}" y2="${T}"/><line class="pxgl" x1="${L}" x2="${gx}" y1="${T+ph}" y2="${T+ph}"/>${gl(T,pxL(hi2),th&&hi2===th)}${gl(T+ph,pxL(lo2),th&&lo2===th)}`
+    :`<line class="pxgl" x1="${L}" x2="${gx}" y1="${T+ph/2}" y2="${T+ph/2}"/>${gl(T+ph/2,pxL(hi2),th&&hi2===th)}`;
+  const ty=th?ys(th):0,thl=th?`<line class="pxth" x1="${L}" x2="${gx}" y1="${f1(ty)}" y2="${f1(ty)}"/>${hi2>lo2&&th!==hi2&&th!==lo2?gl(ty,pxL(th),1):''}`:'';
+  return `<div class="cmh pxhd"><span>📈 Évolution du prix</span>${chips?`<span class="pxrg">${chips}</span>`:`<span>${days} jours</span>`}</div>
+<div class="pxrd"><b id="pxv">${PXV.last.f}</b><span id="pxd">${PXV.last.t}</span></div>
+<svg class="pxsv" viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe de la tendance des prix sur ${days} jours : de ${eur(lo)} à ${eur(hi)}, dernier relevé ${PXV.last.f}${th?', ton seuil d’alerte '+eur(th):''}">
+<defs><linearGradient id="pxg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ac);stop-opacity:.34"/><stop offset="1" style="stop-color:var(--ac);stop-opacity:0"/></linearGradient></defs>
+${grid}<text x="${L}" y="${H-6}">${pxDt(sh[0][0])}</text><text x="${gx}" y="${H-6}" text-anchor="end">${pxDt(sh[sh.length-1][0])}</text>
+<path d="${ar}" fill="url(#pxg)"/>${thl}<path d="${ln}" class="pxln"/>${P.length<=16?P.map(u=>`<circle class="pxdt" cx="${f1(u.x)}" cy="${f1(u.y)}" r="2.4"/>`).join(''):''}
+<line id="pxcl" class="pxcl" y1="${T-4}" y2="${T+ph}" visibility="hidden"/><circle id="pxcd" class="pxlast" r="4.6" visibility="hidden"/><circle class="pxlast" cx="${f1(q.x)}" cy="${f1(q.y)}" r="4.6"/></svg>
+<div class="pxft"><span>Plus bas <b>${eur(lo)}</b></span><span>Plus haut <b>${eur(hi)}</b></span></div>`}
+/* l'encadré dans la fiche : seulement pour les cartes qui ont une vraie « Tendance des prix » */
+function pxChartHtml(c){if(!MKON||!MKA[c.id])return '';pxHist(c.ext);return `<div class="cmt pxc" id="pxch" data-id="${c.id}">${pxChartIn(c)}</div>`}
+/* redessine seulement l'encadré (historique arrivé, durée changée) : le reste de la fiche ne bouge pas */
+function pxChartRefresh(){const el=document.getElementById('pxch');if(!el)return;const c=cards.find(x=>x.id===el.dataset.id);if(c)el.innerHTML=pxChartIn(c)}
+/* durée de la courbe + doigt (ou souris) qui parcourt la courbe : le prix et la date de la journée touchée s'affichent */
+(function(){let dn=false;
+  const on=e=>e&&e.closest&&e.closest('.pxsv'),
+  show=(e,rst)=>{const v=PXV,s=document.querySelector('.pxsv'),rd=document.getElementById('pxv'),dd=document.getElementById('pxd'),cl=document.getElementById('pxcl'),cd=document.getElementById('pxcd');if(!v||!s||!rd||!dd||!cl||!cd)return;
+    if(rst){rd.textContent=v.last.f;dd.textContent=v.last.t;cl.setAttribute('visibility','hidden');cd.setAttribute('visibility','hidden');return}
+    const r=s.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*v.w;let b=v.p[0];for(const u of v.p)if(Math.abs(u.x-x)<Math.abs(b.x-x))b=u;
+    rd.textContent=b.f;dd.textContent=b.t;cl.setAttribute('x1',b.x);cl.setAttribute('x2',b.x);cl.setAttribute('visibility','visible');cd.setAttribute('cx',b.x);cd.setAttribute('cy',b.y);cd.setAttribute('visibility','visible')},
+  end=()=>{if(dn){dn=false;show(null,true)}};
+  document.addEventListener('pointerdown',e=>{if(on(e.target)){dn=true;show(e)}});
+  document.addEventListener('pointermove',e=>{if(on(e.target)&&(dn||e.pointerType==='mouse'))show(e)});
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  document.addEventListener('pointerout',e=>{if(e.pointerType==='mouse'&&on(e.target)&&!on(e.relatedTarget))show(null,true)});
+  document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-pxr]');if(b){PXR=b.dataset.pxr;pxChartRefresh()}})})();
+/* ===== Alertes de prix : un seuil par carte recherchée, annoncé à l'ouverture de l'appli ===== */
+function alNorm(o){const r={};if(o&&typeof o==='object')for(const k in o){const v=+o[k];if(/^[\w-]{3,24}$/.test(k)&&v>0&&v<1e5)r[k]=Math.round(v*100)/100}return r}
+let ALS={},ALN=0;try{ALS=JSON.parse(localStorage.getItem('fb_als')||'{}')||{}}catch(e){}   /* alertes déjà annoncées sur CET appareil (pas synchronisé : chaque appareil prévient une fois) */
+const alSave=()=>{try{localStorage.setItem('fb_als',JSON.stringify(ALS))}catch(e){}};
+/* alertes en cours : carte recherchée (pas encore en assez d'exemplaires) dont le prix Cardmarket est au seuil ou en dessous */
+function alList(){const r=[];if(!MKON)return r;for(const id in X.al){const c=cards.find(x=>x.id===id),t=X.al[id],p=c?cmP(c):0;if(c&&c.want>c.own&&p>0&&p<=t)r.push({c,p,t,est:!MKA[id]})}return r.sort((a,b)=>a.c.id<b.c.id?-1:1)}
+const eurN=v=>eur(v).replace(' €','\u00a0€');
+const alBusy=()=>pxQuiet()||!!document.querySelector('.sheet,#dbs')||!!document.getElementById('splash')||!!(S.op||S.dl||S.burst);   /* autre chose est en cours : saisie, fiche ouverte, ouverture de booster, duel, invocation… */
+/* à l'ouverture (et quand de nouveaux prix arrivent) : annonce les cartes qui viennent de passer sous leur seuil */
+function alCheck(){try{
+  const act=alList(),on=new Set(act.map(a=>a.c.id));let ch=false;
+  for(const id in ALS)if(!on.has(id)){delete ALS[id];ch=true}   /* prix remonté, carte trouvée ou alerte retirée : l'alerte pourra sonner de nouveau */
+  if(ch)alSave();
+  const nw=act.filter(a=>!ALS[a.c.id]);if(!nw.length||S.alsh)return;
+  if(alBusy()){if(ALN++<12)setTimeout(alCheck,5000);return}
+  ALN=0;S.alnew=nw.map(a=>a.c.id);S.alsh=true;render()}catch(e){}}
+/* fermer la fenêtre : les alertes affichées sont considérées comme vues */
+function alClose(){if(S.alsh){for(const a of alList())ALS[a.c.id]=1;alSave()}S.alsh=false;S.alnew=null}
+function alSheet(){if(!S.alsh)return '';const L=alList(),nw=new Set(S.alnew||[]);
+  return `<div class="sheet" data-close><div role="dialog" aria-label="Alertes de prix"><h2 style="margin-top:0">🔔 Alertes de prix</h2>
+${L.length?`<div class="sub" style="margin:-2px 2px 10px">Ces cartes recherchées sont au prix que tu voulais, ou moins cher (tendance Cardmarket du ${MKDF}).</div><div class="panel" style="padding:4px 14px">${L.map(a=>`<button class="alr" data-alc="${a.c.id}"><span class="vnth sm">${art({...a.c,own:1})}</span><span class="alt"><b>${esc(a.c.name||a.c.id)}</b><small>${a.c.id.replace(/_ALT\d?$/,'')}${a.c.ver!=='Normal'?' · Alt Art':''}${nw.has(a.c.id)?'<em>Nouveau</em>':''}</small></span><span class="alv"><b>${a.est?'≈ ':''}${eurN(a.p)}</b><small>seuil ${eurN(a.t)}</small></span></button>`).join('')}</div>`
+:'<div class="panel"><div class="sub">Aucune carte recherchée n’est sous son seuil pour le moment.</div></div>'}
+<button class="btn" data-close style="margin-top:12px">OK</button></div></div>`}
+/* accueil : rappel tant qu'une alerte est en cours */
+function alBanner(){const L=alList();if(!L.length)return '';
+  return `<button class="panel alb" data-alo><span class="alb1" aria-hidden="true">🔔</span><span class="alb2"><b>${L.length>1?L.length+' cartes sous ton seuil':'1 carte sous ton seuil'}</b><small>${L.slice(0,2).map(a=>esc(a.c.name||a.c.id)+' '+eurN(a.p)).join(' · ')}${L.length>2?' …':''}</small></span><span class="alb3" aria-hidden="true">›</span></button>`}
+/* fiche d'une carte recherchée : le seuil */
+function alRow(c){if(!MKON||!(c.want>0))return '';const p=cmP(c);if(!p)return '';
+  const t=X.al[c.id]||0,ok=c.want>c.own,hit=!!t&&ok&&p<=t,sug=Math.max(.01,Math.round(p*.85*20)/20);
+  return `<div class="cmt alp${hit?' hit':''}" id="alp"><div class="cmh"><span>🔔 Alerte de prix</span>${t?`<button class="chip" data-alx="${c.id}" aria-label="Retirer l’alerte">Retirer</button>`:''}</div>
+<div class="alf"><label for="alin">Prévenir quand le prix passe à</label><span class="alw"><input id="alin" data-alin="${c.id}" inputmode="decimal" autocomplete="off" placeholder="ex. ${fmtP(sug.toFixed(2))}" value="${t?fmtP(t):''}"><b>€</b></span></div>
+<div class="sub">${!t?'À l’ouverture de l’appli, je te signale cette carte si sa tendance Cardmarket passe à ce prix ou en dessous.':!ok?'Tu as déjà tous les exemplaires recherchés : l’alerte est en pause.':hit?`<b class="alok">Seuil atteint</b> : ${MKA[c.id]?'':'≈ '}${eurN(p)} aujourd’hui pour un seuil de ${eurN(t)}.`:`Active : je te préviens à l’ouverture de l’appli si la tendance passe à ${eurN(t)} ou moins (aujourd’hui ${eurN(p)}).`}</div></div>`}
+/* liste « Cartes recherchées » : rappel du seuil */
+const alTag=c=>{const t=MKON&&X.al[c.id];if(!t)return '';const p=cmP(c);return p>0&&p<=t&&c.want>c.own?`<div class="sub alok">🔔 sous ton seuil de ${eurN(t)}</div>`:`<div class="sub">🔔 seuil ${eurN(t)}</div>`};
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||t.dataset.alin===undefined)return;const c=cards.find(x=>x.id===t.dataset.alin);if(!c)return;const v=nb(t.value);
+  if(v>0&&v<1e5){X.al[c.id]=Math.round(v*100)/100;if(c.want>c.own&&cmP(c)>0&&cmP(c)<=X.al[c.id])ALS[c.id]=1;else delete ALS[c.id];toast('Alerte réglée à '+eur(X.al[c.id]))}
+  else{delete X.al[c.id];delete ALS[c.id];if(t.value.trim())toast('Prix non reconnu : alerte retirée')}
+  alSave();saveX();render()});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-alo],[data-alc],[data-alx]');if(!b)return;
+  if(b.dataset.alo!==undefined){S.alnew=[];S.alsh=true;render()}
+  else if(b.dataset.alc){const id=b.dataset.alc;alClose();S.sel=id;render()}
+  else if(b.dataset.alx){delete X.al[b.dataset.alx];delete ALS[b.dataset.alx];alSave();saveX();render()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.alsh){alClose();render()}});
+setTimeout(alCheck,6000);   /* au cas où le fichier des prix tarde : on vérifie quand même avec les prix déjà connus */
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -1754,7 +1910,7 @@ function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0
  const nAll=cards.length,nOwn=cards.filter(c=>c.own>0).length,copies=cards.reduce((a,c)=>a+c.own,0),value=cards.reduce((a,c)=>a+c.own*pxv(c),0),H=hmHand(),
  TL=[['find','🔎','Recherche'],['luck','🎲','Boosters'],['bind','📒','Classeurs'],['#sealed','📦','Scellé'],['trade','💶','Ventes'],['budget','💰','Budget'],['print','🖨️','Liste'],['soon','🗓️','Sorties']],
  ser=EXTS.map(([e,nm])=>{const o=own[e]||0,n=tot[e]||0,p=pct(o,n);return `<button class="hmr" data-hext="${e}" style="--c:${SERCOL[e]}"><span class="hmcode">${e}</span><span><span class="hmnm">${esc(nm)}</span><span class="hmbar"><i style="width:${p}%"></i></span></span><span class="hmpc"><b>${p===100?'✓':p+'%'}</b><small>${o}/${n}</small></span></button>`}).join('');
- return header()+remBanner()+greet()+hmFan(H)
+ return header()+remBanner()+alBanner()+greet()+hmFan(H)
  +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
  +`<div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>`
  +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
@@ -2030,7 +2186,7 @@ return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bot
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
-function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">Cartes manquantes × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
+function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">Cartes manquantes × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}${alTag(c)}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
 /* ===== Stats : relevé du scouter (boule de cristal, rang, séries qui se chargent) ===== */
 let apT0=Date.now();/* instant d'arrivée sur l'écran : la boule se remplit à ce moment-là, une seule fois */
 const apIc={
@@ -2196,7 +2352,7 @@ function sheet(){const c=cards.find(x=>x.id===S.sel);if(!c)return'';
 const st=(k,t)=>`<div>${t}</div><div class="stepper"><button data-${k}="-1" aria-label="Retirer">➖</button><b>${c[k==='q'?'own':'want']}</b><button data-${k}="1" aria-label="Ajouter">➕</button></div>`;
 const sel=(k,t,o)=>`<div><label>${t}</label><select data-e="${k}"><option value="">—</option>${o.map(v=>`<option ${c[k]===v?'selected':''}>${v}</option>`).join('')}</select></div>`;
 return `<div class="sheet" data-close><div role="dialog" aria-label="${c.id}"><div class="detail">${art(c)}<div><h2 style="margin-top:0">${c.name||'Nom à compléter'}</h2>${c.id}<br><span class="sub">Version : ${c.ver}${c.rar?' · Rareté : '+c.rar:''}</span>${cmP(c)?`<br><span class="sub">💶 Cardmarket : <b>${eur(cmP(c))}</b></span>`:''}</div></div>
-<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div>${c.own>0?`<button class="vnsellbtn" data-vnsell="${c.id}">💶 Vendre cette carte</button>`:''}${mkTab(c)}<div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${bkTag(b,c.id)}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
+<div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('q','Possédée')}${st('w','Recherchée')}</div><div class="qa">${[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m[c.id]?'on':''}" data-${k}="${c.id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('')}<button class="qb" data-zoom="${c.id}" aria-label="Zoom">🔍<small>Agrandir</small></button></div></div>${c.own>0?`<button class="vnsellbtn" data-vnsell="${c.id}">💶 Vendre cette carte</button>`:''}${mkTab(c)}${pxChartHtml(c)}${alRow(c)}<div class="sub">📒 Classeurs</div><div class="row">${BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(c.id)}" data-bsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${bkTag(b,c.id)}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>'}</div>
 <div class="fld">${sel('type','Type',TYP)}${sel('cond','État',CONDS)}<div><label>Prix indicatif (€)</label><input data-e="price" inputmode="decimal" placeholder="${cmP(c)?fmtP(cmP(c)):'ex. 1,50'}" value="${esc(c.price)}"></div>${MKON?`<div class="w sub" style="margin-top:-4px">${cmP(c)?(c.price?'Ton prix est utilisé à la place de celui de Cardmarket.':(MKA[c.id]?'Laisse vide pour utiliser le prix Cardmarket (tendance du '+MKDF+').':'Laisse vide pour utiliser l’estimation Cardmarket du '+MKDF+'.')):'Pas de prix Cardmarket pour cette carte : note le tien si tu veux.'}</div>`:''}<div class="w"><label>Notes personnelles</label><input data-e="note" placeholder="ex. acheté en booster, coin abîmé" value="${esc(c.note)}"></div></div>
 <a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(c.id.replace(/_ALT\d?$/,''))}&language=7">💶 Voir le prix sur Cardmarket</a><button class="btn" data-close>Fermer</button></div></div>`}
 /* ===== Sélecteur de séries v2 : affiches qui se remplissent, tri, flèches ‹ ›, clavier ===== */
@@ -2310,7 +2466,7 @@ function initTilt(){if(RM)return;document.querySelectorAll('.tilt').forEach(el=>
 if(!TILTON&&window.DeviceOrientationEvent){TILTON=true;window.addEventListener('deviceorientation',e=>{const el=document.querySelector('.tilt');if(!el||e.gamma==null||el.matches(':active'))return;setTilt(el,clamp01(.5+Math.max(-30,Math.min(30,e.gamma))/60),clamp01(.5+Math.max(-30,Math.min(30,(e.beta||0)-40))/60))})}}
 const askTilt=()=>{try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{})}catch(e){}};
 let LAST={sk:'',vk:''};
-const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
+const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh,!!S.alsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
 let RESTORE=false;const SCRM={};
 function render(){const y=window.scrollY,sd=document.querySelector('.sheet>div'),st=sd?sd.scrollTop:0,sk=sheetKey(),vk=viewKey(),sameS=sk===LAST.sk,sameV=vk===LAST.vk;
 if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCore();LAST={sk,vk};
@@ -2318,7 +2474,7 @@ if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=s
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch()}
-function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet();
+function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="Rechercher ou classeur"><i>${S.menu?'✕':'＋'}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
@@ -2351,7 +2507,7 @@ document.addEventListener('click',e=>{if(done&&e.target.closest('button.card[dat
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button.card[data-n]'))e.preventDefault()})})();
 document.addEventListener('click',e=>{try{if(navigator.vibrate&&e.target.closest('.adj,.stepper button,.qb,.chip'))navigator.vibrate(8)}catch(_){}});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go],[data-f],[data-n],[data-q],[data-w],[data-close],[data-act],[data-add],[data-pick],[data-ext],[data-col],[data-mode],[data-sk],[data-sn],[data-cq],[data-vopen],[data-vback],[data-vown],[data-vreset],[data-oi],[data-oresume],[data-cdlock],[data-oshop],[data-oback],[data-dgo],[data-dback],[data-pgo],[data-pback],[data-pdo],[data-pall],[data-lr],[data-lall],[data-sm],[data-ba],[data-bgo],[data-undo],[data-menu],[data-bnew],[data-bopen],[data-bback],[data-bpick],[data-bdone],[data-bdel],[data-bt],[data-bx],[data-cfy],[data-cfx],[data-cfn],[data-fav],[data-sell],[data-bsx],[data-bmv],[data-bpg],[data-bre],[data-bsort],[data-bic],[data-bsz],[data-sphdel],[data-sedit],[data-ssave],[data-scancel],[data-sbin],[data-sbup],[data-fradd],[data-trop],[data-trg],[data-trw],[data-trsend],[data-trx],[data-tracc],[data-trref],[data-trcan],[data-fracc],[data-frdel],[data-sbpseudo],[data-sbout],[data-sbpush],[data-sbpull],[data-hext],[data-soonadd],[data-soondel],[data-bcl],[data-tcopy],[data-tshare],[data-timg],[data-tdl],[data-sadd],[data-sdel],[data-th],[data-zoom],[data-zx],[data-upg],[data-tn],[data-tx],[data-tut],[data-rem],[data-rx],[data-sxf],[data-prt],[data-print],[data-nx],[data-phdel],[data-bph],[data-zph],[data-pcopy],[data-pal],[data-snd],[data-sndt],[data-sacc],[data-vib],[data-mot],[data-gcs],[data-acf],[data-start],[data-scq],[data-csort],[data-csortd],[data-sortopen],[data-dbplay],[data-dbgold],[data-mkt],[data-share],[data-sharesend],[data-sharedl],[data-sharecopy],[data-sbuy],[data-sopen1],[data-sbdel],[data-exadd],[data-exdel],[data-dl],[data-dlx],[data-dlgo],[data-shop],[data-shback],[data-shsell],[data-shbuy],[data-trs],[data-trd],[data-trempty],[data-vnpick],[data-vnclr],[data-vnq],[data-vnsell],[data-vnk],[data-vnt],[data-vnsells],[data-hburst],[data-hgo],[data-hf],[data-hpast],[data-apv],[data-apx],[data-apa],[data-apd]');if(!t||t===document.documentElement)return;const d=t.dataset;
-if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false;S.shr=null;S.srt=false;S.vsh=false}
+if(d.close!==undefined){if(e.target.closest('.sheet>div')&&!t.matches('button'))return;S.sel=null;S.ssel=null;S.pick=false;S.cf=null;S.menu=false;S.zoom=false;S.shr=null;S.srt=false;S.vsh=false;alClose()}
 else if(d.apv!==undefined){S.vsh=true}
 else if(d.apx){S.ext=d.apx;S.tab='coll';S.mode='cards';S.own='';S.ver='';S.fx='';S.q='';S.sel=null;S.menu=false;window.scrollTo(0,0)}
 else if(d.apa!==undefined){S.tab='coll';S.mode='cards';S.ver='Alternative Art';S.own='';S.fx='';S.q='';S.sel=null;S.menu=false;window.scrollTo(0,0)}
@@ -2474,7 +2630,7 @@ else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own';s[k]=Math.max(0,s[k]+(+
 else if(d.col){applyColor(d.col)}
 else if(d.pick!==undefined){S.pick=true}
 else if(d.ext){S.ext=d.ext;S.pick=false;window.scrollTo(0,0)}
-else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;if(d.go==='stats'){S.sq='';apT0=Date.now()}S.sel=null;S.vsh=false;S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
+else if(d.go){if(d.go==='bind'&&S.tab==='bind'&&!S.sel){S.bsel=null;S.b2.new=null}S.tab=d.go;if(d.go==='stats'){S.sq='';apT0=Date.now()}S.sel=null;S.vsh=false;alClose();S.shr=null;S.srt=false;S.menu=false;S.bpick=false;S.hzv=false;S.b2.sh='';S.b2.org=false;S.b2.sel=null;S.b2.finding=false;if(d.go!=='bind')S.b2.new=null;window.scrollTo(0,0)}
 else if(d.sortopen!==undefined){S.menu=false;S.srt=true}
 else if(d.csort!==undefined){if(d.csort!==CSK){CSK=d.csort;CSD=0;saveCS()}S.srt=false}
 else if(d.csortd!==undefined){const bs=CSORTS.find(x=>x[0]===CSK)[2];CSD=(+d.csortd===bs)?0:1;saveCS();S.srt=false}

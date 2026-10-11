@@ -1,7 +1,8 @@
 name: Prix Cardmarket
 
-# Chaque nuit, télécharge les prix publiés par Cardmarket et met à jour docs/prix.json.
-# L'appli lit ce fichier au démarrage (les prix intégrés à l'appli servent de secours).
+# Chaque nuit, télécharge les prix publiés par Cardmarket, met à jour docs/prix.json et ajoute le prix du jour
+# à l'historique (docs/hist/FB01.json, FB02.json…) qui sert aux courbes de prix.
+# L'appli lit ces fichiers (les prix intégrés à l'appli servent de secours).
 # Pour le lancer tout de suite : onglet Actions > Prix Cardmarket > Run workflow.
 
 on:
@@ -23,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Télécharger les prix et écrire docs/prix.json
+      - name: Télécharger les prix, écrire docs/prix.json et l'historique
         env:
           PYTHONUTF8: '1'
         run: |
@@ -33,12 +34,17 @@ jobs:
           """Prix Cardmarket pour L'Appel des Cartes.
 
           Télécharge les fichiers que Cardmarket publie chaque nuit (Dragon Ball Super Card Game = jeu 13),
-          associe chaque produit à une carte de l'appli et écrit docs/prix.json :
+          associe chaque produit à une carte de l'appli, écrit docs/prix.json et garde l'historique des prix :
 
             {"v":1,"date":"AAAA-MM-JJ","n":1553,"t":{"FB01-001":0.36,...},"a":{"FB01-001":[0.25,0.39,0.02],...}}
 
             t = prix « Tendance des prix » (à défaut : moyenne ou prix le plus bas connu)
             a = prix moyens sur 30 jours, 7 jours et 1 jour (seulement quand la tendance existe)
+
+          Historique : chaque nuit, la « Tendance des prix » du jour est ajoutée dans docs/hist/FB01.json, FB02.json…
+          (un fichier par série, 120 jours au plus, prix en centimes, 0 = pas de prix ce jour-là) :
+
+            {"v":1,"e":"FB01","d":["2026-10-10","2026-10-11"],"t":{"FB01-001":[36,35],...}}
 
           Une même carte peut avoir plusieurs versions sur Cardmarket : le 1er produit est la carte normale,
           le 2e l'Alternative Art (_ALT), le 3e la seconde Alternative Art (_ALT2).
@@ -60,6 +66,7 @@ jobs:
           SORTIE = os.environ.get('PRIX_OUT', 'docs/prix.json')
           LOCAL = os.environ.get('PRIX_LOCAL', '')          # dossier avec les 2 fichiers (essais hors ligne)
           SUFFIXES = ['', '_ALT', '_ALT2']
+          JOURS_MAX = 120                                   # durée de l'historique gardé pour chaque série
           # Extensions Cardmarket de chaque série, par ordre de préférence (édition japonaise d'abord pour FB01 à FB05).
           # Une série qui n'est pas dans cette liste (FB12 et suivantes) est détectée toute seule : ce sont les extensions
           # qui contiennent presque autant de cartes que la plus grande, la plus récente passant en premier.
@@ -105,6 +112,82 @@ jobs:
                       if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
                           return v, k
               return None, None
+
+
+          def lire_hist(chemin, serie):
+              """Historique déjà enregistré pour une série : (dates, {carte: [centimes]}), ou None s'il manque ou s'il est abîmé."""
+              try:
+                  with open(chemin, encoding='utf-8') as f:
+                      h = json.load(f)
+                  d, t = h['d'], h['t']
+                  bon = (h.get('v') == 1 and h.get('e') == serie and isinstance(d, list) and isinstance(t, dict)
+                         and all(isinstance(x, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', x) for x in d)
+                         and all(d[i] < d[i + 1] for i in range(len(d) - 1))
+                         and all(isinstance(c, list) and len(c) == len(d)
+                                 and all(isinstance(x, int) and not isinstance(x, bool) and x >= 0 for x in c) for c in t.values()))
+                  return (d, t) if bon else None
+              except Exception:
+                  return None
+
+
+          def maj_historique(dossier, date, tendance, avant):
+              """Ajoute le prix du jour à docs/hist/<série>.json (un fichier par série).
+
+              tendance : {carte: prix « Tendance des prix »}, seulement pour les cartes qui ont une vraie tendance
+              avant    : ancien prix.json (sert à démarrer l'historique d'une série avec le relevé de la veille)
+              Relancé le même jour, le script remplace la dernière valeur : le résultat ne change pas."""
+              dossier_h = os.path.join(dossier or '.', 'hist')
+              os.makedirs(dossier_h, exist_ok=True)
+              par = collections.defaultdict(dict)
+              for cid, v in tendance.items():
+                  par[cid.split('-')[0]][cid] = int(round(v * 100))
+              ecrits = 0
+              for serie in sorted(par):
+                  chemin = os.path.join(dossier_h, serie + '.json')
+                  h = lire_hist(chemin, serie)
+                  if h is None:
+                      if os.path.exists(chemin):
+                          print('Historique de %s illisible : je le reconstruis.' % serie)
+                      d, t = [], {}
+                      if avant and isinstance(avant.get('date'), str) and avant['date'] < date:
+                          d = [avant['date']]
+                          anciennes = avant.get('a') or {}
+                          for cid, v in (avant.get('t') or {}).items():
+                              if cid.startswith(serie + '-') and cid in anciennes and isinstance(v, (int, float)) and v > 0:
+                                  t[cid] = [int(round(v * 100))]
+                  else:
+                      d, t = h
+                  if d and d[-1] > date:
+                      print('Historique de %s : le fichier Cardmarket (%s) est plus ancien que le dernier relevé (%s), je n’y touche pas.' % (serie, date, d[-1]))
+                      continue
+                  if not d or d[-1] < date:
+                      d.append(date)
+                  k = len(d) - 1
+                  auj = par[serie]
+                  for cid in set(t) | set(auj):
+                      col = t.get(cid, [])
+                      col = col + [0] * (k + 1 - len(col))
+                      col[k] = auj.get(cid, 0)
+                      t[cid] = col
+                  if len(d) > JOURS_MAX:
+                      coupe = len(d) - JOURS_MAX
+                      d = d[coupe:]
+                      t = {cid: col[coupe:] for cid, col in t.items()}
+                  t = {cid: col for cid, col in t.items() if any(col)}
+                  texte = json.dumps({'v': 1, 'e': serie, 'd': d, 't': {cid: t[cid] for cid in sorted(t)}},
+                                     ensure_ascii=False, separators=(',', ':')) + '\n'
+                  try:
+                      with open(chemin, encoding='utf-8') as f:
+                          if f.read() == texte:
+                              continue
+                  except OSError:
+                      pass
+                  tmp = chemin + '.tmp'
+                  with open(tmp, 'w', encoding='utf-8') as f:
+                      f.write(texte)
+                  os.replace(tmp, chemin)
+                  ecrits += 1
+              print('Historique : %d série(s) mise(s) à jour dans %s' % (ecrits, dossier_h))
 
 
           def main():
@@ -155,9 +238,10 @@ jobs:
                   echec('trop peu de prix reconnus (%d) : je n’écris rien' % len(t))
               try:
                   with open(SORTIE, encoding='utf-8') as f:
-                      avant = len(json.load(f).get('t', {}))
+                      prec = json.load(f)
+                  avant = len(prec.get('t', {}))
               except Exception:
-                  avant = 0
+                  prec, avant = None, 0
               if avant and len(t) < 0.9 * avant:
                   echec('seulement %d prix reconnus contre %d dans le fichier actuel : je n’écrase rien' % (len(t), avant))
 
@@ -171,6 +255,7 @@ jobs:
                   f.write(texte)
               os.replace(tmp, SORTIE)
               print('OK : %d prix (dont %d avec moyennes), prix du %s -> %s' % (len(t), len(a), date, SORTIE))
+              maj_historique(dossier, date, {cid: t[cid] for cid in a}, prec if isinstance(prec, dict) else None)
 
 
           if __name__ == '__main__':
@@ -179,7 +264,7 @@ jobs:
 
       - name: Enregistrer les nouveaux prix
         run: |
-          git add docs/prix.json
+          git add docs/prix.json docs/hist
           if git diff --cached --quiet; then
             echo "Les prix sont déjà à jour."
           else

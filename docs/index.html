@@ -1534,6 +1534,7 @@ function ppData(){
   if(X.pp.tr){
     d.sell=tradeData().prop.sort((a,b)=>srt(a.c,b.c)).slice(0,60).map(x=>[x.c.id,Math.min(99,x.q)]);
     d.want=cards.filter(c=>c.want>c.own).sort(srt).slice(0,60).map(c=>[c.id,Math.min(99,c.want-c.own)])}
+  try{msBindInit();const mo=MS_ALL.filter(c=>c.own>0);d.ms={u:mo.length,n:mo.reduce((a,c)=>a+c.own,0),a:mo.filter(c=>c.ver!=='Normal').length,ex:MS_SETS.map(t=>[t.id,MS_ALL.filter(c=>c.ext===t.id&&c.own>0).length])}}catch(e){}
   return d}
 /* ce que je reçois : on ne fait confiance à rien (n'importe qui peut écrire n'importe quoi dans sa propre ligne) */
 function ppClean(d){
@@ -1544,6 +1545,7 @@ function ppClean(d){
   const ids=(a,max,pair)=>{if(!Array.isArray(a))return null;const out=[],s=new Set();
     for(const x of a){if(out.length>=max)break;const id=pair?(Array.isArray(x)?x[0]:null):x;if(typeof id!=='string'||s.has(id)||!swCard(id))continue;s.add(id);out.push(pair?[id,Math.max(1,N(x[1],99))]:id)}return out};
   r.vit=ids(d.vit,12,false);r.sell=ids(d.sell,60,true);r.want=ids(d.want,60,true);
+  try{if(d.ms&&typeof d.ms==='object'&&Array.isArray(d.ms.ex)){msBindInit();const mt=d.ms.t||d.ms,tot=MS_ALL.length,sn=new Map(MS_SETS.map(t=>[t.id,t.c.length])),mx=[],sd=new Set();for(const x of d.ms.ex.slice(0,20)){if(!Array.isArray(x)||!sn.has(x[0])||sd.has(x[0]))continue;sd.add(x[0]);mx.push([x[0],N(x[1],sn.get(x[0]))])}r.ms={u:N(d.ms.u,tot),n:N(d.ms.n,99999),a:N(d.ms.a,tot),ex:mx}}}catch(e){}
   return r}
 /* ---------- publication (compte connecté) ---------- */
 async function ppPush(){
@@ -1553,7 +1555,7 @@ async function ppPush(){
   try{
     if(PPS.u!==u||!PPS.pr)await frProfile(SBS.pseudo);                 /* la ligne « pseudo » doit exister pour que le profil soit trouvable */
     await frApi('/rest/v1/pubprof?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:u,is_public:pub,data:pub?ppData():{},updated_at:new Date().toISOString()})});
-    PPS={u,pr:1,pub:pub?1:0,at,t:Date.now()};ppSaveS();ok=true
+    PPS={u,pr:1,pub:pub?1:0,at,t:Date.now(),v:2};ppSaveS();ok=true
   }catch(e){PPF=Date.now();PPERR=e&&e.status===404?'nosrv':/déjà pris/.test((e&&e.message)||'')?'taken':'net'}
   PPB=false;ppStatDraw();if(PPQ){PPQ=false;setTimeout(ppTick,50)}return ok}
 /* toutes les 30 s : republier si ma collection a changé (au plus une fois toutes les 2 min), ou retirer le profil s'il vient d'être désactivé */
@@ -1561,7 +1563,7 @@ function ppTick(){
   if(!SBS||!SBS.pseudo||PPB)return;
   if(PPERR&&Date.now()-PPF<(PPERR==='nosrv'?6e5:3e4))return;
   const at=localStorage.getItem('fb_at')||'',mine=PPS.u===SBS.uid;
-  if(X.pp.on){if(!mine||!PPS.pub||(at!==PPS.at&&Date.now()-(PPS.t||0)>=12e4))ppPush()}
+  if(X.pp.on){if(!mine||!PPS.pub||PPS.v!==2||(at!==PPS.at&&Date.now()-(PPS.t||0)>=12e4))ppPush()}
   else if(mine&&PPS.pub)ppPush()}
 setInterval(ppTick,30000);setTimeout(ppTick,4000);
 /* se déconnecter retire aussi le profil des recherches (il revient tout seul à la prochaine connexion) */
@@ -1685,8 +1687,9 @@ function ppBody(name,P,t,mine){
     else h+=`<p class="sub ppno">Aucune carte en commun pour un échange pour l’instant.</p>`}
   h+=`<div class="ppst"><div><b>${cmNum(P.t.u)}</b><small>cartes différentes<br>sur ${cmNum(cards.length)}</small></div><div><b>${cmNum(P.t.n)}</b><small>exemplaires<br>au total</small></div><div><b>${cmNum(P.t.a)}</b><small>Alt Art<br>différentes</small></div></div>`;
   h+=`<div class="panel dbh ppdb"><span class="dbh1"><b>Dragon Balls</b><span class="dbh2">${P.db} / 7 · ${rk.name}</span></span><span class="dbrow" aria-hidden="true">${[1,2,3,4,5,6,7].map(k=>dbOrb(k,k<=P.db)).join('')}</span></div>`;
-  h+=`<section class="panel cmc"><div class="cmh"><b>Séries</b><span class="sub">${P.ex.reduce((a,x)=>a+x[1],0)>0?'cartes possédées':''}</span></div>${EXTS.map(([e,nm])=>{const o=em.get(e)||0,n=exn[e]||0,p=pct(o,n);
+  h+=`<section class="panel cmc"><div class="cmh"><b>Fusion World · séries</b><span class="sub">${P.ex.reduce((a,x)=>a+x[1],0)>0?'cartes possédées':''}</span></div>${EXTS.map(([e,nm])=>{const o=em.get(e)||0,n=exn[e]||0,p=pct(o,n);
     return `<div class="ppsr"><b class="ppsc" style="color:${SERCOL[e]||'var(--tx)'}">${e}</b><span class="ppsn">${esc(nm)}<span class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${o}" aria-label="${e}"><i style="width:${p}%;background:${SERCOL[e]||'var(--ac)'}"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></div>`}).join('')}</section>`;
+  if(P.ms){msBindInit();const mem=new Map(P.ms.ex);h+=`<section class="panel cmc ppms"><div class="cmh"><b>Masters · séries</b><span class="sub">${cmNum(P.ms.u)} / ${cmNum(MS_ALL.length)} cartes · ${cmNum(P.ms.n)} ex.</span></div>${MS_SETS.map(t=>{const o=mem.get(t.id)||0,n=t.c.length,p=pct(o,n),col='rgb('+(MS_COL[t.id]||'229,9,20')+')';return `<div class="ppsr"><b class="ppsc" style="color:${col}">${t.id}</b><span class="ppsn">${esc(t.n)}<span class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${o}" aria-label="${t.id}"><i style="width:${p}%;background:${col}"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></div>`}).join('')}</section>`}
   if(P.vit&&P.vit.length)h+=`<section class="panel cmc"><div class="cmh"><b>⭐ Vitrine</b><span class="sub">${P.vit.length} carte${P.vit.length>1?'s':''}</span></div><div class="swstr" style="margin-top:10px">${P.vit.map(id=>{const c=swCard(id);return c?`<button type="button" class="swq" data-n="${esc(id)}"><span class="vnth">${art({...c,own:1})}</span><b>${esc(c.name||c.id)}</b><small>${esc(c.id.replace(/_ALT\d?/,''))}</small></button>`:''}).join('')}</div></section>`;
   const sellMine=new Set(tradeData().prop.map(x=>x.c.id));
   h+=ppListSec('sell','🔁 À échanger',P.sell,c=>!mine&&c.want>c.own?'tu la cherches':'');

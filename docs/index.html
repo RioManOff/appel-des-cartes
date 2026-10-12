@@ -1075,6 +1075,16 @@ body.chfocus nav{display:none}body.chfocus .chc{bottom:8px}
 .mys .n{flex:none}
 .mysi{flex:none;width:46px;height:52px;object-fit:contain;background:none!important;border-radius:0!important}
 .mysj{display:flex;align-items:center;justify-content:center;font-size:30px}
+
+.setbk{margin:2px 0 4px}
+.setbk .chip{min-height:38px}
+.stg{display:flex;flex-direction:column;gap:0;margin-bottom:14px;padding:0 14px}
+.stg .set:last-child{border-bottom:0}
+.stg .set{min-height:56px}
+.stg .stt{flex:1;text-align:left;font-weight:500}
+.stg .str{max-width:48%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.setone>.sgp>.sgh{display:none}
+.setone>.sgp{margin-top:6px}
 </style>
 </head>
 <body>
@@ -2537,6 +2547,10 @@ document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest
  if(h){e.stopPropagation();S.tab='mys';S.menu=false;S.sel=null;window.scrollTo(0,0);render();return}
  const m=e.target.closest&&e.target.closest('[data-mysms]');
  if(m&&S.tab==='mys'){e.stopPropagation();X.game='ms';saveX();S.mss=m.dataset.mysms;S.msm='sealed';S.tab='coll';S.msel=null;window.scrollTo(0,0);render()}},true);
+/* ===== Réglages en pages : accueil des réglages + une page par sujet ===== */
+const SETP={compte:['👤','Compte et profil'],data:['💾','Mes données'],aff:['🎨','Affichage'],son:['🔊','Sons et vibrations'],scn:['📷','Scanner'],prix:['💶','Prix des cartes'],aide:['🧭','Aide et infos']};
+document.addEventListener('click',e=>{const n=e.target.closest&&e.target.closest('#nav [data-go="set"]');if(n&&S.setp){S.setp=''}
+ const b=e.target.closest&&e.target.closest('[data-setp]');if(b){e.stopPropagation();S.setp=b.dataset.setp||'';S.tab='set';window.scrollTo(0,0);render()}},true);
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3809,7 +3823,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 oct. 2026 · 11';
+const BUILD='12 oct. 2026 · 12';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
@@ -3851,7 +3865,16 @@ const dat=sg('💾','Mes données','Elles restent sur ton appareil, sauf si tu t
 const own=cards.filter(c=>c.own>0).length,tot=cards.reduce((a,c)=>a+c.own,0),imgs=Object.keys(CARDIMG).length;
 const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
 <div class="panel" style="margin-top:12px">${kv('Cartes différentes possédées',own+' / '+cards.length)}${kv('Exemplaires au total',tot)}${kv('Images de cartes',imgs+' / '+cards.length)}${kv('Version',BUILD)}</div>`);
-return header()+`<h2>Réglages</h2>${status}${accS}${ppSet(sg,trow)}${disp}${prx}${snd}${scn}${dat}${help}`}
+const sp=S.setp&&SETP[S.setp]?S.setp:'';
+const g=(a,ic,t,r)=>lrow('data-setp="'+a+'"',ic,t,(r?esc(r)+' ':'')+'›');
+if(sp){const body={compte:accS+ppSet(sg,trow),data:dat,aff:disp,son:snd,scn:scn,prix:prx,aide:help}[sp];
+ return header()+`<div class="setbk"><button class="chip" data-setp="">‹ Réglages</button></div><h2>${SETP[sp][0]} ${SETP[sp][1]}</h2><div class="${['compte'].includes(sp)?'':'setone'}">${body}</div>`}
+const thn={dark:'Sombre',light:'Clair',auto:'Automatique'}[TH]||'',snn=['Coupés','Discrets','Normaux'][+SND]||'',bks=LASTEXP?'Exporté '+agoFr(LASTEXP):has?'À sauvegarder':'Vide';
+return header()+`<h2>Réglages</h2>${status}`
+ +`<div class="panel stg">${g('compte','👤','Compte et profil',lg?(SBS.pseudo||'Connecté'):'Mode local')}${g('data','💾','Mes données',bks)}</div>`
+ +`<div class="panel stg">${g('aff','🎨','Affichage',thn)}${g('son','🔊','Sons et vibrations',snn)}${g('scn','📷','Scanner',SCQ?'Demande si doublon':'Ajout direct')}</div>`
+ +`<div class="panel stg">${g('prix','💶','Prix des cartes',MKON?'Cardmarket activé':'Désactivé')}</div>`
+ +`<div class="panel stg">${g('aide','🧭','Aide et infos',BUILD)}</div>`}
 function sheet(){const c=cards.find(x=>x.id===S.sel);if(!c)return'';
 const st=(k,t)=>`<div>${t}</div><div class="stepper"><button data-${k}="-1" aria-label="Retirer">➖</button><b>${c[k==='q'?'own':'want']}</b><button data-${k}="1" aria-label="Ajouter">➕</button></div>`;
 const sel=(k,t,o)=>`<div><label>${t}</label><select data-e="${k}"><option value="">—</option>${o.map(v=>`<option ${c[k]===v?'selected':''}>${v}</option>`).join('')}</select></div>`;

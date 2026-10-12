@@ -988,6 +988,25 @@ a.set{color:var(--tx);text-decoration:none}
 .chc .btn:disabled{opacity:.4;box-shadow:none}
 .chn{text-align:right;color:var(--mu);font-size:11.5px;margin-top:-2px}.chn:empty{display:none}
 body.chfocus nav{display:none}body.chfocus .chc{bottom:8px}
+/* ===== Menu « + » : Que veux-tu faire ? ===== */
+.mnu{padding-top:18px}
+.mnu h2{margin:0 0 4px}
+.mn-s{margin-top:12px}
+.mn-h{margin:0 2px 8px;font:600 12.5px/1.2 Rubik,system-ui,sans-serif;letter-spacing:.02em;color:var(--mu)}
+.mn-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mnu .mn-t{position:relative;display:flex;align-items:center;gap:10px;width:100%;min-height:50px;margin:0;padding:6px 10px 6px 7px;border:1px solid var(--ln);border-radius:16px;background:var(--sf);color:var(--tx);font:600 13.5px/1.22 Rubik,system-ui,sans-serif;text-align:left;touch-action:manipulation}
+.mnu .mn-t>i{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;font-size:19px;font-style:normal;line-height:1;background:color-mix(in srgb,var(--ac) 13%,transparent)}
+.mnu .mn-t>span{flex:1 1 auto;min-width:0;font-size:inherit;overflow-wrap:anywhere}
+.mnu .mn-t:active{transform:scale(.98);background:color-mix(in srgb,var(--sf) 84%,var(--ac))}
+.mnu .mn-t.pri{border-color:var(--ac);background:var(--ac);color:var(--on,#fff);box-shadow:0 8px 18px -10px var(--ac)}
+.mnu .mn-t.pri:active{background:var(--ac);filter:brightness(.92)}
+.mnu .mn-t.pri>i{background:rgba(255,255,255,.2)}
+.mnu .mn-g>.mn-t:last-child:nth-child(odd){grid-column:1/-1}
+.mnu .mn-t .cmbd{margin:0 0 0 auto;flex:none}
+@media(hover:hover){.mnu .mn-t:not(.pri):hover{border-color:color-mix(in srgb,var(--ac) 55%,var(--ln))}}
+.sheet.in .mn-t{animation:mnin .26s cubic-bezier(.2,.9,.25,1) backwards;animation-delay:calc(var(--i)*14ms + 40ms)}
+@keyframes mnin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:339px){.mn-g{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -1460,7 +1479,7 @@ function ppFind(){return `<section class="panel cmc"><div class="cmh"><b>🔎 Ch
 COMM.push({o:30,h:ppHub},{o:40,h:cmFriends},{o:50,h:ppFind});
 function commV(){frEnsure();ppRecent();const lg=!!SBS;
   return header()+`<h2>👥 Communauté</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
-   +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et jouer au tournoi. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
+   +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et leur écrire. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
    +COMM.slice().sort((a,b)=>a.o-b.o).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
 
 /* ---------- page d'un profil ---------- */
@@ -1810,6 +1829,45 @@ setInterval(()=>{
   else if(now-MS.t>=MSI.u)msPoll()},1000);
 setTimeout(()=>{if(SBS)msPoll()},3500);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SBS){MS.t=0;CH.t=0}});
+/* ===== Menu « + » : « Que veux-tu faire ? » — des rubriques, des tuiles à 2 colonnes ===== */
+/* [icône, texte, attribut du bouton, style (pri = mis en avant), clé spéciale] */
+const MNG=[
+ ['Ajouter des cartes',[
+  ['📷','Scanner une carte','data-cam','pri'],
+  ['⚡','Saisir en rafale','data-hburst'],
+  ['🔎','Chercher une carte','data-go="find"'],
+  ['🎲','Ouvrir des boosters','data-go="luck"']]],
+ ['Ma collection',[
+  ['📒','Mes classeurs','data-go="bind"'],
+  ['📦','Mes scellés','data-hgo="sealed"'],
+  ['🎯','Cartes recherchées','data-go="want"'],
+  ['🔁','Mes doublons','data-go="dup"'],
+  ['🐉','Dragon Balls','data-go="dball"'],
+  ['🗓️','Prochaines séries','data-go="soon"']]],
+ ['Argent',[
+  ['💰','Budget','data-go="budget"'],
+  ['💶','Carnet de ventes','data-go="trade"'],
+  ['⚖️','Calculateur d’échange','data-go="swap"'],
+  ['🔔','Alertes de prix','data-mn="al"','','al']]],
+ ['Amis et partage',[
+  ['👥','Communauté','data-go="comm"','','cm'],
+  
+  ['🪪','Mon profil public','data-mn="me"'],
+  ['📤','Partager ma collection','data-share'],
+  ['🖨️','Liste à imprimer','data-go="print"']]]];
+function mnTile(t,i){const ic=t[0],tx=t[1],at=t[2],cl=t[3],k=t[4];let bd='';
+  if(k==='cm')bd=cmBdg();
+  else if(k==='al'){if(!MKON)return '';const n=alList().length;if(n)bd=`<b class="cmbd" aria-label="${n} carte${n>1?'s':''} sous ton seuil">${n}</b>`}
+  return `<button type="button" class="mn-t${cl?' '+cl:''}" ${at} style="--i:${i}"><i aria-hidden="true">${ic}</i><span>${tx}</span>${bd}</button>`}
+function mnSheet(){let i=0;
+  return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Que veux-tu faire ?"><h2 style="margin-top:0">Que veux-tu faire ?</h2>${MNG.map(g=>{const b=g[1].map(x=>mnTile(x,i++)).join('');return b?`<section class="mn-s"><h3 class="mn-h">${g[0]}</h3><div class="mn-g">${b}</div></section>`:''}).join('')}</div></div>`}
+/* le scanner s'ouvre par son propre écouteur : on referme juste le menu derrière lui */
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.mnu [data-cam]');if(t){S.menu=false;setTimeout(render,0)}},true);
+/* les deux entrées qui ont besoin d'un peu de code : alertes de prix et mon profil public */
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.mnu [data-mn]');if(!b)return;const k=b.dataset.mn;
+  if(k==='al'){S.menu=false;S.alnew=[];S.alsh=true;render()}
+  else if(k==='me'){if(SBS&&SBS.pseudo)ppOpen(SBS.pseudo);else{S.menu=false;S.tab='comm';S.sel=null;S.vsh=false;window.scrollTo(0,0);render()}}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.menu&&!e.defaultPrevented){S.menu=false;render()}});
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -2453,7 +2511,7 @@ function printV(){const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-
 return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div><div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>
 <div class="panel pzl" style="margin-top:6px"><b>${lab} — ${sr}</b><div class="sub">${l.length} carte${l.length>1?'s':''} · ${fmtD(new Date())} · L'Appel des Cartes</div>${l.map(c=>`<div class="tr"><span>${S.pr==='missing'?'☐ ':''}${cid(c.id)} · ${esc(c.name||'')}${c.rar?' ('+c.rar+')':''}</span><b>${S.pr==='own'?'×'+c.own:S.pr==='missing'&&c.want?'cherchée ×'+c.want:''}</b></div>`).join('')||'<div class="sub">Rien dans cette liste.</div>'}</div>`}
 function printText(){const {lab,l}=printList();return lab+' — '+(S.pal?'toutes les séries':S.ext)+' ('+l.length+')\n'+l.map(c=>cid(c.id)+' '+(c.name||'')+(c.rar?' ('+c.rar+')':'')+(S.pr==='own'?' ×'+c.own:'')).join('\n')}
-const TUT=[['👋','Bienvenue !','L\'Appel des Cartes gère ta collection Dragon Ball Fusion World (édition japonaise, FB01 à FB11). Tout reste sur ton téléphone, sans compte.'],['🗂️','Ta collection','Touche la barre de série en haut pour voir les 11 affiches : elles se colorent au fil de ta progression. Les flèches ‹ › passent à la série voisine. Puis touche une carte pour la modifier : − et + changent sa quantité. L\'onglet « Scellé » gère boosters, displays et cases.'],['📷','Le scanner','Tape un numéro de carte pour l\'ajouter vite. En mode Rafale, saisis plusieurs codes d\'un coup (ex. fb01-34 fb02-56).'],['＋','Le bouton du milieu','Il ouvre le menu : recherche, classeurs, cartes recherchées, ventes, liste à imprimer et mode hasard.'],['📒','Les classeurs','Range tes cartes comme dans un vrai classeur : des pages, des emplacements, et en grisé celles qu\'il te manque. Maintiens une carte appuyée puis glisse-la pour la déplacer, ou touche un emplacement vide pour la ranger.'],['🎲','Mode hasard','Ouvre des boosters, displays et cases virtuels. Ils ne touchent jamais ta vraie collection. Pour ouvrir un paquet, glisse le doigt dessus pour le déchirer. Un booster par jour (00h), un display par semaine (lundi 00h), une case par mois (le 1er, 00h).'],['💾','Sauvegarde','Exporte ta collection dans un fichier depuis Réglages. L\'appli te le rappelle régulièrement.']];
+const TUT=[['👋','Bienvenue !','L\'Appel des Cartes gère ta collection Dragon Ball Fusion World (édition japonaise, FB01 à FB11). Tout reste sur ton téléphone, sans compte.'],['🗂️','Ta collection','Touche la barre de série en haut pour voir les 11 affiches : elles se colorent au fil de ta progression. Les flèches ‹ › passent à la série voisine. Puis touche une carte pour la modifier : − et + changent sa quantité. L\'onglet « Scellé » gère boosters, displays et cases.'],['📷','Le scanner','Tape un numéro de carte pour l\'ajouter vite. En mode Rafale, saisis plusieurs codes d\'un coup (ex. fb01-34 fb02-56).'],['＋','Le bouton du milieu','Il ouvre « Que veux-tu faire ? » : ajouter des cartes (scanner, rafale, recherche, boosters), ranger ta collection, suivre ton argent et retrouver tes amis.'],['📒','Les classeurs','Range tes cartes comme dans un vrai classeur : des pages, des emplacements, et en grisé celles qu\'il te manque. Maintiens une carte appuyée puis glisse-la pour la déplacer, ou touche un emplacement vide pour la ranger.'],['🎲','Mode hasard','Ouvre des boosters, displays et cases virtuels. Ils ne touchent jamais ta vraie collection. Pour ouvrir un paquet, glisse le doigt dessus pour le déchirer. Un booster par jour (00h), un display par semaine (lundi 00h), une case par mois (le 1er, 00h).'],['💾','Sauvegarde','Exporte ta collection dans un fichier depuis Réglages. L\'appli te le rappelle régulièrement.']];
 function tutSheet(){if(S.tut===null)return '';const k=S.tut,t=TUT[k];return `<div class="sheet"><div role="dialog" aria-label="Tutoriel" style="text-align:center"><div style="font-size:54px">${t[0]}</div><h2 style="margin:6px 0">${t[1]}</h2><p style="font-size:16px">${t[2]}</p><div class="sub">${k+1} / ${TUT.length}</div><button class="btn" style="margin-top:10px" data-tn>${k>=TUT.length-1?'C\'est parti !':'Suivant →'}</button>${k<TUT.length-1?'<button class="btn alt" style="margin-top:8px" data-tx>Passer</button>':''}</div></div>`}
 let SND='1';try{SND=localStorage.getItem('fb_snd')||'1'}catch(e){}
 let AC=null;const ac=()=>{if(SND==='0')return null;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}},VOL=()=>SND==='2'?.45:.2;
@@ -2912,7 +2970,7 @@ function dbShareDraw(g,FT){try{const ev=dbEval(),n=ev.balls.filter(b=>b.lit).len
  ev.balls.forEach((b,i)=>dbCanvasOrb(g,x0+r+i*(2*r+gap),262,r,b.k,b.lit));
  g.textAlign='right';g.textBaseline='alphabetic';g.fillStyle='#A89C9C';g.font='400 23px '+FT;g.fillText(n+' / 7 Dragon Balls · '+rk.name,1020,314);g.textAlign='left'}catch(e){}}
 function dbShareLine(){try{const ev=dbEval(),n=ev.balls.filter(b=>b.lit).length;return n?'\n🐉 '+n+' / 7 Dragon Balls · rang '+dbRank(ev.st.d).name:''}catch(e){return ''}}
-function menuSheet(){return S.menu?`<div class="sheet" data-close><div role="dialog" class="menu"><h2 style="margin-top:0">Que veux-tu faire ?</h2><button class="btn alt" data-go="find"><span>🔎</span>Rechercher une carte</button><button class="btn alt" data-go="bind"><span>📒</span>Mes classeurs</button><button class="btn alt" data-go="soon"><span>🗓️</span>Prochaines séries</button><button class="btn alt" data-go="print"><span>🖨️</span>Liste à imprimer</button><button class="btn alt" data-go="budget"><span>💰</span>Budget</button><button class="btn alt" data-go="trade"><span>💶</span>Carnet de ventes</button><button class="btn alt" data-go="swap"><span>⚖️</span>Calculateur d’échange</button><button class="btn alt" data-go="comm"><span>👥</span>Communauté${cmBdg()}</button><button class="btn alt" data-go="luck"><span>🎲</span>Mode hasard</button><button class="btn alt" data-go="dball"><span>🐉</span>Dragon Balls</button><button class="btn alt" data-share><span>📤</span>Partager ma collection</button></div></div>`:''}
+function menuSheet(){return S.menu?mnSheet():''}
 function cfSheet(){return S.cf?`<div class="sheet" data-close><div role="dialog"><p style="font-size:16px">${S.cf.msg}</p><button class="btn" data-cfy>${S.cf.yes||'Oui'}</button><div style="height:8px"></div>${S.cf.alt?`<button class="btn alt" data-cfx>${S.cf.alt}</button><div style="height:8px"></div>`:''}<button class="btn alt" data-cfn>${S.cf.no||'Annuler'}</button></div></div>`:''}
 const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
 const greet=()=>{const h=new Date().getHours(),g=h>=5&&h<12?'Bonjour':h<18&&h>=12?'Bon après-midi':h>=18&&h<23?'Bonsoir':'Encore debout ?',N=cards.filter(c=>c.ext===S.ext),o=N.filter(c=>c.own>0).length,p=pct(o,N.length),k=Math.floor(Date.now()/864e5)%3,t=(X.act[today()]||{}).c||0;
@@ -3081,7 +3139,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 oct. 2026 · 7';
+const BUILD='12 oct. 2026 · 8';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
@@ -3251,7 +3309,7 @@ if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scroll
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch()}
 function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
-$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="Rechercher ou classeur"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
+$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
 const fq=$('#fq');if(fq){fq.oninput=e=>{S.fq=e.target.value;const p=e.target.selectionStart;render();const n=$('#fq');n.focus();n.setSelectionRange(p,p)}}

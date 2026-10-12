@@ -988,6 +988,23 @@ a.set{color:var(--tx);text-decoration:none}
 .chc .btn:disabled{opacity:.4;box-shadow:none}
 .chn{text-align:right;color:var(--mu);font-size:11.5px;margin-top:-2px}.chn:empty{display:none}
 body.chfocus nav{display:none}body.chfocus .chc{bottom:8px}
+/* ===== 89 · Tournoi de la semaine ===== */
+.cmact.tone{grid-template-columns:minmax(0,1fr)}
+.cmh .sub b[data-tcd],.cmst b.tcd{color:var(--tx);font-weight:700}
+.tser{display:flex;align-items:center;gap:14px;margin:12px 0 2px}
+.tser img{flex:none;width:auto;height:76px;max-width:104px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.tser>div{min-width:0}.tser b{font-size:17px;line-height:1.25;overflow-wrap:anywhere}.tser small{display:block;color:var(--mu);font-size:12.5px;margin-top:4px;line-height:1.35}
+.tpts{margin:6px 0 0;color:var(--mu);font-size:12.5px;line-height:1.5}
+.tcard .btn{width:100%}
+.tfil{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}.tfil .chip{min-height:40px;padding:0 14px}
+.tlr{cursor:default}.tlr .trk{flex:none;width:30px;text-align:center;font-weight:800;font-size:17px;color:var(--mu)}
+.tlr.tme{border-color:var(--ac)}.tlr.tme .vnin b{color:var(--tx)}
+.tlr .vnin b small{font-weight:500;color:var(--mu)}
+.tlr .vnin small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tsc{flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;color:var(--mu)}.tsc b{font-size:18px;color:var(--tx)}.tsc small{font-size:11px}
+.tdots{text-align:center;color:var(--mu);line-height:1;letter-spacing:4px}
+.tnv{margin-top:6px}
+.tdone{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:12px}.tbig{font:400 30px/1.1 "Bowlby One",Rubik,sans-serif;color:var(--tx)}
 /* ===== Menu « + » : Que veux-tu faire ? ===== */
 .mnu{padding-top:18px}
 .mnu h2{margin:0 0 4px}
@@ -1028,7 +1045,7 @@ const saveV=()=>{try{localStorage.setItem('fb_virt',JSON.stringify(VIRT));localS
 let BIND=[];try{BIND=JSON.parse(localStorage.getItem('fb_binders')||'[]')||[]}catch(e){}
 const saveB=()=>{try{localStorage.setItem('fb_binders',JSON.stringify(BIND));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
 const SEALT=[['booster','Booster','1 paquet'],['display','Display','24 boosters'],['case','Case de display','12 displays']];
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp)});
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour)});
 let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v)X=mkX(v)}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -1479,7 +1496,7 @@ function ppFind(){return `<section class="panel cmc"><div class="cmh"><b>🔎 Ch
 COMM.push({o:30,h:ppHub},{o:40,h:cmFriends},{o:50,h:ppFind});
 function commV(){frEnsure();ppRecent();const lg=!!SBS;
   return header()+`<h2>👥 Communauté</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
-   +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et leur écrire. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
+   +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et jouer au tournoi. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
    +COMM.slice().sort((a,b)=>a.o-b.o).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
 
 /* ---------- page d'un profil ---------- */
@@ -1829,6 +1846,215 @@ setInterval(()=>{
   else if(now-MS.t>=MSI.u)msPoll()},1000);
 setTimeout(()=>{if(SBS)msPoll()},3500);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SBS){MS.t=0;CH.t=0}});
+/* ===== 89 · Tournoi de la semaine ===== */
+/* Chaque semaine (du lundi 00h au dimanche 23h59, heure de Paris), tous les joueurs ouvrent un display virtuel de la même série.
+   Le tirage de chacun est fixé d'avance par la semaine et par son compte : recharger l'appli ne change rien et on ne peut pas recommencer.
+   Le score (points des cartes, comme au duel) est publié une seule fois dans la table « tournoi » (tournoi.sql). Chaque appli recalcule le tirage des
+   autres joueurs : un score qui ne correspond pas à leur tirage n'apparaît pas au classement. Rien d'autre n'est publié (ni collection, ni prix). */
+const TOS=['FB01','FB02','FB03','FB04','FB05','FB06','FB07','FB08','FB09','FB10','FB11'];      /* la série de la semaine tourne dans cet ordre (liste fixe : tout le monde calcule la même) */
+/* état gardé avec le compte (X.tour) : semaine, série, boosters déjà ouverts (24 chiffres), score final, publié ou non, et à qui il appartient */
+function tourNorm(v){v=v&&typeof v==='object'&&!Array.isArray(v)?v:{};const n=Math.floor(+v.s);
+  return{w:/^\d{4}-W\d{2}$/.test(v.w)?v.w:'',x:/^FB\d{2}$/.test(v.x)?v.x:'',st:/^[01]{24}$/.test(v.st)?v.st:'000000000000000000000000',s:n>0&&n<=1500?n:0,pub:v.pub===1?1:0,u:typeof v.u==='string'&&v.u.length<=40?v.u.toLowerCase():''}}
+
+/* ---------- la semaine : heure de Paris et semaines ISO, comme le serveur (jamais l'heure de l'appareil seule) ---------- */
+let TFMT=null;
+function tParis(ms){
+  try{if(!TFMT)TFMT=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'});
+    const o={};TFMT.formatToParts(new Date(ms)).forEach(p=>{if(p.type!=='literal')o[p.type]=+p.value});
+    if(o.year>1999&&o.month>0&&o.day>0)return{y:o.year,m:o.month,d:o.day,h:o.hour%24,mi:o.minute,s:o.second}}catch(e){}
+  const d=new Date(ms);return{y:d.getFullYear(),m:d.getMonth()+1,d:d.getDate(),h:d.getHours(),mi:d.getMinutes(),s:d.getSeconds()}}
+const tWall=ms=>{const p=tParis(ms);return Date.UTC(p.y,p.m-1,p.d,p.h,p.mi,p.s)};                   /* l'heure affichée à Paris, écrite comme si c'était de l'UTC */
+const tFromWall=w=>{let t=w;for(let i=0;i<3;i++)t=w-(tWall(t)-t);return t};                       /* et l'inverse : le vrai instant */
+function tKeyOfWall(w){const t=new Date(w);t.setUTCHours(0,0,0,0);t.setUTCDate(t.getUTCDate()-(t.getUTCDay()+6)%7+3);                /* le jeudi de la semaine donne l'année et le numéro ISO */
+  const y=t.getUTCFullYear(),n=Math.floor((t.getTime()-Date.UTC(y,0,1))/6048e5)+1;return y+'-W'+(n<10?'0':'')+n}
+const tWeekKey=ms=>tKeyOfWall(tWall(ms));
+function tMonWall(k){const m=/^(\d{4})-W(\d{2})$/.exec(k);if(!m)return NaN;const j4=new Date(Date.UTC(+m[1],0,4));return j4.getTime()-((j4.getUTCDay()+6)%7)*864e5+(+m[2]-1)*6048e5}
+const tEnd=k=>tFromWall(tMonWall(k)+6048e5),tPrev=k=>tKeyOfWall(tMonWall(k)-864e5),tNext=k=>tKeyOfWall(tMonWall(k)+6048e5),
+  tSer=k=>{const i=Math.round((tMonWall(k)/864e5-4)/7),n=TOS.length;return TOS[((i%n)+n)%n]};
+
+/* ---------- le tirage du joueur : toujours le même pour une semaine, une série et un compte ---------- */
+function tRng(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
+  h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);let a=(h^h>>>16)>>>0;
+  return()=>{a=a+1831565813|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+let TDC={},TBY=null;
+function tScoreIds(ids){if(!TBY)TBY=new Map(cards.map(c=>[c.id,c]));let s=0,b=0,bi='';for(const id of ids){const c=TBY.get(id);if(!c)continue;const p=cscore(c);s+=p;if(p>b){b=p;bi=id}}return{s,b,bi}}
+function tDrawC(w,x,uid){const k=(w+'|'+x+'|'+uid).toLowerCase();if(TDC[k])return TDC[k];
+  const r0=Math.random,e0=S.ext;let ids=[];Math.random=tRng(k);S.ext=x;                          /* même tirage que le Mode hasard (mêmes taux), mais avec un hasard « fixé » */
+  try{ids=boxDraw().ids}finally{Math.random=r0;S.ext=e0}
+  return TDC[k]=Object.assign({ids},tScoreIds(ids))}
+
+/* ---------- état de l'écran ---------- */
+const tNew=u=>({uid:u||'',sw:'',swT:0,swB:false,swE:'',swN:0,lb:null,lbK:'',lbT:0,lbB:false,lbE:'',pv:null,pvK:'',pvT:0,fil:'all',pubB:false,pubE:'',pubT:false});
+let TO=tNew('');
+const tMe=()=>String(SBS&&SBS.uid||'').toLowerCase(),
+  tMine=()=>{const T=X.tour;return T&&T.w&&SBS&&T.u===tMe()?T:null},
+  tDone=T=>!!(T&&T.s&&T.st.indexOf('0')<0),
+  tOpened=T=>T?T.st.split('').filter(c=>c==='1').length:0,
+  tCur=()=>{const n=Date.now();return TO.sw&&(n-TO.swT<36e5||n<tEnd(TO.sw))?TO.sw:tWeekKey(n)},     /* la semaine du serveur quand on la connaît */
+  tLeft=()=>Math.max(0,tEnd(tCur())-Date.now()),
+  tSerName=x=>{const e=EXTS.find(y=>y[0]===x);return e?e[1]:x},
+  tOrd=n=>n===1?'1er':n+'e',
+  tName=uid=>uid===tMe()?(SBS.pseudo||''):((FR.list||[]).find(x=>x.uid===uid)||{}).name||'';
+const tFriendIds=()=>{const s=new Set([tMe()]);(FR.list||[]).forEach(x=>{if(x.st==='accepted'&&msUuid(x.uid))s.add(x.uid.toLowerCase())});return[...s]};
+function tRedraw(){
+  if(S.tab==='tour'){if(S.op&&S.op.tour){const e=$('#to-pub');if(e)e.innerHTML=tPubHTML()}else render()}      /* pendant l'ouverture : on ne touche qu'à la ligne « publié » */
+  else if(S.tab==='comm')tCardDraw()}
+
+/* ---------- serveur : semaine en cours, classement ---------- */
+async function tSync(force){
+  if(!SBS)return;if(TO.uid!==SBS.uid)TO=tNew(SBS.uid);
+  if(TO.swB)return;const n=Date.now();
+  if(!force&&TO.swT&&n-TO.swT<(TO.swE==='nosrv'?6e5:TO.swE?8e3:3e5))return;
+  TO.swB=true;const u=SBS.uid;let w='',err='';
+  try{const r=await frApi('/rest/v1/rpc/tournoi_semaine');w=typeof r==='string'?r:''}catch(e){err=e&&e.status===404?'nosrv':'net'}
+  TO.swB=false;TO.swT=Date.now();if(!SBS||SBS.uid!==u)return;
+  if(/^\d{4}-W\d{2}$/.test(w)){if(TO.sw!==w){TO.lb=null;TO.pv=null;TO.pvK=''}TO.swN=w===TO.sw&&Date.now()>=tEnd(w)?TO.swN+1:0;TO.sw=w;TO.swE=''}else TO.swE=err||'net';
+  tLbLoad(true);tPrevLoad();tRedraw()}
+/* lignes du classement : rien n'est cru sur parole (identifiant, score borné) et le score doit être celui du tirage de ce joueur */
+function tRows(rows,w,fr){
+  const x=tSer(w),me=tMe(),out=[],hid=[];let tot=0,i=0;
+  for(const r of Array.isArray(rows)?rows:[]){
+    if(!r||typeof r!=='object'||!msUuid(r.user_id))continue;
+    const uid=r.user_id.toLowerCase(),s=Math.floor(+r.score);if(!(s>=0&&s<=1500))continue;
+    i++;const rk=fr?i:(Math.floor(+r.rang)||i);tot=Math.max(tot,Math.floor(+r.total)||0);
+    const ex=tDrawC(w,x,uid);if(ex.s!==s){hid.push(rk);continue}
+    const c=TBY.get(ex.bi),nm=(typeof r.pseudo==='string'&&r.pseudo.trim()?r.pseudo.trim().slice(0,40):tName(uid))||'Joueur';
+    out.push({uid,name:nm,s,b:ex.b,bc:c?c.name+' · '+c.rar+(c.ver!=='Normal'?' Alt Art':''):'',rk,mine:uid===me})}
+  out.forEach(r=>{r.rk-=hid.filter(h=>h<r.rk).length});
+  return{rows:out,hid:hid.length,tot:fr?out.length:Math.max(out.length,tot-hid.length)}}
+async function tLbLoad(force){
+  if(!SBS||TO.lbB||TO.swE==='nosrv')return;
+  const w=tCur(),fil=TO.fil,key=w+'|'+fil;
+  if(!force&&TO.lbK===key&&(TO.lb||TO.lbE)&&Date.now()-TO.lbT<(TO.lbE?8e3:25e3))return;
+  if(fil==='fr'&&!FR.loaded){TO.lbK=key;TO.lb=null;return}                                          /* la liste d'amis arrive : elle relancera le chargement */
+  if(TO.lbK!==key)TO.lb=null;
+  TO.lbB=true;TO.lbK=key;const u=SBS.uid;let rows=null,err='';
+  try{rows=await frApi(fil==='fr'?'/rest/v1/tournoi?select=user_id,score,created_at&week=eq.'+encodeURIComponent(w)+'&user_id=in.('+tFriendIds().join(',')+')&order=score.desc,created_at.asc&limit=100'
+    :'/rest/v1/rpc/tournoi_classement?sem='+encodeURIComponent(w)+'&n=30')}catch(e){err=e&&e.status===404?'nosrv':'net'}
+  TO.lbB=false;TO.lbT=Date.now();if(!SBS||SBS.uid!==u||TO.lbK!==key||TO.fil!==fil)return;
+  if(err){TO.lbE=err;if(err==='nosrv')TO.swE='nosrv'}else{TO.lbE='';TO.lb=tRows(rows,w,fil==='fr')}
+  tRedraw()}
+async function tPrevLoad(){
+  if(!SBS||TO.swE==='nosrv')return;const w=tPrev(tCur());
+  if(TO.pvK===w&&Date.now()-TO.pvT<3e5)return;
+  TO.pvK=w;TO.pvT=Date.now();const u=SBS.uid;let rows=null;
+  try{rows=await frApi('/rest/v1/rpc/tournoi_classement?sem='+encodeURIComponent(w)+'&n=3')}catch(e){return}
+  if(!SBS||SBS.uid!==u||TO.pvK!==w)return;
+  TO.pv={w,rows:tRows(rows,w,false).rows.filter(r=>r.rk<=3)};tRedraw()}
+
+/* ---------- affichage ---------- */
+const tMedal=r=>r===1?'🥇':r===2?'🥈':r===3?'🥉':String(r);
+const tRowH=r=>`<div class="vnsg tlr${r.mine?' tme':''}" role="group" aria-label="${tOrd(r.rk)}, ${esc(r.name)}, ${r.s} points"><span class="trk" aria-hidden="true">${tMedal(r.rk)}</span>${cmAv(r.name)}<span class="vnin"><b>${esc(r.name)}${r.mine?' <small>(toi)</small>':''}</b><small>${r.bc?'⭐ '+esc(r.bc):'&nbsp;'}</small></span><span class="tsc"><b>${cmNum(r.s)}</b><small>pts</small></span></div>`;
+function tTotText(){const n=TO.lb&&TO.fil==='all'?TO.lb.tot:0;return n?n+' joueur'+(n>1?'s':''):''}
+function tLbHTML(){
+  if(TO.swE==='nosrv'||TO.lbE==='nosrv')return '<div class="sub">Le tournoi n’est pas encore activé sur le serveur.</div>';
+  if(TO.fil==='fr'&&!FR.loaded)return '<div class="sub">Chargement…</div>';
+  if(TO.lb===null)return TO.lbE?'<div class="sub">Classement indisponible pour le moment.</div><button type="button" class="chip" data-tsync>Réessayer</button>':'<div class="sub">Chargement…</div>';
+  const R=TO.lb,top=R.rows.slice(0,20),mine=R.rows.find(r=>r.mine);let h=top.map(tRowH).join('');
+  if(mine&&top.indexOf(mine)<0)h+='<div class="tdots" aria-hidden="true">⋯</div>'+tRowH(mine);
+  if(!h)h=`<div class="sub">${TO.fil==='fr'?'Aucun de tes amis n’a encore joué cette semaine.':'Personne n’a encore publié son score cette semaine. Sois le premier !'}</div>`;
+  if(R.hid)h+=`<div class="sub tnv">${R.hid} score${R.hid>1?'s':''} non vérifié${R.hid>1?'s':''} masqué${R.hid>1?'s':''}</div>`;
+  return h}
+function tPubHTML(){const T=tMine();if(!T||!T.s)return '';
+  if(T.pub)return '<p class="cmst">✅ Score publié au classement.</p>';
+  if(TO.pubB)return '<p class="cmst">Publication…</p>';
+  const btn='<button type="button" class="btn" style="margin-top:10px" data-tpub>Publier mon score</button>';
+  if(TO.pubE==='week')return '<p class="cmst">⚠️ Ce tournoi est terminé : ton score n’a pas pu être publié à temps.</p>';
+  if(TO.pubE==='pseudo')return '<p class="cmst">⚠️ Choisis d’abord ton pseudo (Réglages → Compte), puis publie ton score.</p>'+btn;
+  if(TO.pubE==='nosrv')return '<p class="cmst">⚠️ Le tournoi n’est pas encore activé sur le serveur : tournoi.sql doit être exécuté une fois dans Supabase.</p>'+btn;
+  return '<p class="cmst">⏳ Score pas encore publié'+(TO.pubE==='net'?' (connexion indisponible)':'')+'.</p>'+btn}
+function tMyRank(){const R=TO.lb;if(!R||TO.fil!=='all'||TO.lbK.split('|')[0]!==tCur())return '';const m=R.rows.find(r=>r.mine);return m?tOrd(m.rk)+(R.tot>1?' sur '+R.tot:''):''}
+function tActHTML(){
+  const w=tCur(),T=tMine(),m=T&&T.w===w?T:null,n=tOpened(m);
+  if(TO.swE==='nosrv'&&!m)return '<p class="cmst">Le tournoi n’est pas encore activé sur le serveur : tournoi.sql doit être exécuté une fois dans Supabase.</p>';
+  if(!SBS.pseudo)return '<p class="cmst">Choisis d’abord ton pseudo pour apparaître au classement.</p><button type="button" class="btn" data-ppacc style="margin-top:12px">Choisir mon pseudo</button>';
+  if(tDone(m)){const r=tMyRank();return `<div class="tdone"><div class="tbig">${cmNum(m.s)} pts</div>${r?`<div class="sub">${r}</div>`:''}</div><div id="to-pub">${tPubHTML()}</div><button type="button" class="btn alt" style="margin-top:10px" data-tgo>👀 Revoir mon display</button>`}
+  if(!TO.sw&&!m)return TO.swE?'<p class="cmst">⏳ Hors connexion : impossible de démarrer le tournoi pour l’instant.</p><button type="button" class="btn alt" data-tsync style="margin-top:12px">Réessayer</button>':'<button type="button" class="btn" disabled style="margin-top:12px">Connexion…</button>';
+  return `<button type="button" class="btn" data-tgo style="margin-top:12px">${n?'▶ Reprendre mon display ('+n+' / 24 boosters ouverts)':'🏟️ Ouvrir mon display du tournoi'}</button>`}
+function tMain(){
+  const w=tCur(),x=tSer(w),pv=TO.pv&&TO.pv.rows.length?TO.pv:null;
+  return `<section class="panel cmc tcard"><div class="cmh"><b>Semaine ${+w.slice(6)}</b><span class="sub">fin dans <b data-tcd>${cdFmt(tLeft())}</b></span></div>
+<div class="tser">${pimg(DISPIMG[x],'Display '+x,'height:76px;width:auto;max-width:104px;object-fit:contain')}<div><b>${x} · ${esc(tSerName(x))}</b><small>La même série pour tout le monde · 24 boosters</small></div></div>
+${tDone(tMine())&&tMine().w===w?`<p class="cmst">Ton tirage de la semaine est fait. Prochaine série lundi à 00h : <b class="tcd">${tSer(tNext(w))} · ${esc(tSerName(tSer(tNext(w))))}</b>.</p>`:'<p class="cmst">Ouvre ton display de la semaine. Ton tirage est fixé d’avance : recharger l’appli ne change rien, et il n’y a qu’un essai. Plus tu as de points, plus tu montes.</p>'}
+<p class="tpts">Points : C 1 · UC 2 · R 3 · L 5 · SR 8 · SCR 20 · Alt Art +5<br>🔒 Seuls ton pseudo et ton score sont publiés, jamais ta collection.</p><div id="to-act">${tActHTML()}</div></section>
+<section class="panel cmc"><div class="cmh"><b>🏆 Classement</b><span class="sub" id="to-tot">${tTotText()}</span></div><div class="tfil" role="group" aria-label="Classement">${[['all','Tous les joueurs'],['fr','Mes amis']].map(([k,l])=>`<button type="button" class="chip" aria-pressed="${TO.fil===k}" data-tfil="${k}">${l}</button>`).join('')}</div><div class="cmls" id="to-lb">${tLbHTML()}</div></section>`
+  +(pv?`<section class="panel cmc"><div class="cmh"><b>Semaine dernière</b><span class="sub">Semaine ${+pv.w.slice(6)} · ${tSer(pv.w)}</span></div><div class="cmls">${pv.rows.map(tRowH).join('')}</div></section>`:'')}
+function tourV(){
+  frEnsure();
+  if(S.op&&S.op.tour)return tOpView();
+  const h=header()+'<button type="button" class="btn alt ppb" data-go="comm">← Communauté</button><h2 style="margin-top:6px">🏟️ Tournoi de la semaine</h2>';
+  if(!SBS)return h+'<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Le tournoi est réservé aux joueurs connectés à leur compte : ton score apparaît au classement de la semaine, face aux autres joueurs.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>';
+  if(TO.uid!==SBS.uid)TO=tNew(SBS.uid);
+  tSync();tLbLoad();tPrevLoad();
+  const T=tMine();if(tDone(T)&&T.w===tCur()&&!T.pub&&!TO.pubT&&!TO.pubB){TO.pubT=true;setTimeout(tPublish,0)}   /* un score pas encore publié (connexion coupée) est renvoyé à l'ouverture de l'écran */
+  return h+tMain()}
+/* l'ouverture du display : les mêmes écrans que le Mode hasard, avec « Tournoi » comme retour */
+const tOpView=()=>opView().replace(/← Mode hasard/g,'← Tournoi');
+function tourPanel(o){const r=o.res||tScoreIds(o.packs.flatMap(p=>p.ids)),c=TBY&&TBY.get(r.bi);
+  return `<div class="panel tres" style="margin-top:14px;text-align:center;border:2px solid var(--ac)"><div style="font-size:26px"><b>🏟️ ${cmNum(r.s)} points</b></div><div class="sub">${c?'Meilleure carte : '+esc(c.name)+' · '+c.rar+(c.ver!=='Normal'?' Alt Art':'')+' ('+r.b+' pts)':''}</div><div id="to-pub">${tPubHTML()}</div></div><button type="button" class="btn" style="margin-top:12px" data-oback>🏆 Voir le classement</button>`}
+
+/* ---------- jouer ---------- */
+function tOp(){
+  const T=X.tour,ids=tDrawC(T.w,T.x,tMe()).ids,packs=[];
+  for(let i=0;i<ids.length;i+=6)packs.push({ids:ids.slice(i,i+6),st:0,rev:[0,0,0,0,0,0].map(()=>false),nw:[]});
+  packs.forEach((p,i)=>{if(T.st[i]==='1'){p.st=1;p.i=6;p.rev=p.rev.map(()=>true);p.nw=p.ids.map(()=>false)}});     /* déjà ouverts : on ne les compte jamais deux fois */
+  const o={ext:T.x,kind:'box',packs,disp:null,cur:null,opened:T.st.indexOf('1')>=0,dop:{},paid:true,tour:{w:T.w}};
+  if(packs.every(p=>p.st)){o.res=tScoreIds(packs.flatMap(p=>p.ids));if(T.s!==o.res.s){T.s=o.res.s;saveX()}}
+  return o}
+function tGo(){
+  if(!SBS){toast('Connecte-toi pour jouer');return}
+  if(!SBS.pseudo){toast('Choisis d’abord ton pseudo (Réglages → Compte)');return}
+  const w=tCur();let T=tMine();
+  if(!T||T.w!==w){
+    if(!TO.sw){toast('Connexion au serveur…');tSync(true);return}
+    X.tour=tourNorm({w,x:tSer(w),st:'000000000000000000000000',s:0,pub:0,u:tMe()});saveX();T=X.tour}
+  S.celeb=null;S.op=tOp();S.tab='tour';window.scrollTo(0,0);try{if(!tDone(T))play('open')}catch(e){}render()}
+/* appelée à chaque booster ouvert du tournoi : on retient où on en est, et au dernier on calcule le score et on le publie */
+function tourProgress(o){
+  const T=tMine();if(!T||T.w!==o.tour.w)return;
+  T.st=o.packs.map(p=>p.st?'1':'0').join('');
+  if(!o.res&&o.packs.every(p=>p.st)){o.res=tScoreIds(o.packs.flatMap(p=>p.ids));T.s=o.res.s;saveX();tPublish();return}
+  saveX()}
+async function tPublish(){
+  const T=tMine();if(!T||!T.s||T.pub||TO.pubB||!SBS)return;
+  TO.pubB=true;TO.pubE='';tRedraw();const w=T.w,s=T.s,u=SBS.uid;
+  try{await frApi('/rest/v1/tournoi',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({week:w,score:s})});T.pub=1;saveX();toast('🏆 Score publié au classement')}
+  catch(e){const m=(e&&e.message)||'';
+    if((e&&e.status===409)||/duplicate key/i.test(m)){T.pub=1;saveX()}                              /* déjà publié depuis un autre appareil */
+    else TO.pubE=e&&e.status===404?'nosrv':(e&&(e.status===403||/row-level security/i.test(m)))?(SBS&&SBS.pseudo?'week':'pseudo'):'net'}
+  TO.pubB=false;if(!SBS||SBS.uid!==u)return;
+  TO.lbT=0;tLbLoad(true);tRedraw()}
+function tFilter(f){f=f==='fr'?'fr':'all';if(TO.fil===f)return;TO.fil=f;TO.lb=null;TO.lbE='';if(f==='fr')frEnsure();render();tLbLoad(true)}
+
+/* ---------- carte dans l'écran Communauté ---------- */
+function tCardBody(){
+  if(!SBS)return '';
+  const w=tCur(),x=tSer(w),T=tMine(),m=T&&T.w===w?T:null,n=tOpened(m);let a;
+  if(TO.swE==='nosrv'&&!m)a='<p class="cmst">Le tournoi n’est pas encore activé sur le serveur : tournoi.sql doit être exécuté une fois dans Supabase.</p>';
+  else if(tDone(m)){const r=tMyRank();a=`<p class="cmst">Ton score : <b>${cmNum(m.s)} pts</b>${r?' · '+r:''}</p><div class="cmact tone"><button type="button" class="btn alt" data-go="tour">🏆 Classement</button></div>`}
+  else a=`<div class="cmact tone"><button type="button" class="btn" data-go="tour">${n?'▶ Reprendre mon display ('+n+' / 24)':'🏟️ Jouer'}</button></div>`;
+  return `<div class="cmh"><b>🏟️ Tournoi de la semaine</b></div><p class="cmst">Semaine ${+w.slice(6)} · ${x} ${esc(tSerName(x))}<br>Fin dans <b class="tcd" data-tcd>${cdFmt(tLeft())}</b> · même display pour tout le monde</p>${a}`}
+function tCardDraw(){const c=$('#to-card');if(c&&S.tab==='comm')c.innerHTML=tCardBody()}
+function tCard(lg){return lg?`<section class="panel cmc" id="to-card">${tCardBody()}</section>`:''}
+COMM.push({o:25,h:tCard});
+{const _c=commV;commV=function(){if(SBS){if(TO.uid!==SBS.uid)TO=tNew(SBS.uid);tSync();tLbLoad()}return _c.apply(this,arguments)}}
+{const _o=sbLogout;sbLogout=async function(){const r=await _o.apply(this,arguments);if(!SBS){TO=tNew('');TDC={};if(S.op&&S.op.tour)S.op=null}return r}}
+CMFRD.push(()=>{if(S.tab==='tour'&&TO.fil==='fr'&&!(S.op&&S.op.tour))tLbLoad(true)});
+
+/* ---------- événements ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('[data-tgo],[data-tpub],[data-tfil],[data-tsync]');if(!b)return;
+  const d=b.dataset;
+  if(d.tgo!==undefined)tGo();
+  else if(d.tpub!==undefined)tPublish();
+  else if(d.tfil!==undefined)tFilter(d.tfil);
+  else if(d.tsync!==undefined){toast('Connexion…');tSync(true)}});
+/* décompte en direct ; à la fin de la semaine, on redemande la nouvelle semaine au serveur (et si l'heure de l'appareil est fausse et que le serveur dit toujours « même semaine », on espace les demandes) */
+function tWeekTick(){
+  if(document.hidden||!SBS)return;
+  document.querySelectorAll('[data-tcd]').forEach(e=>{const t=cdFmt(tLeft());if(e.textContent!==t)e.textContent=t});
+  if(TO.sw&&Date.now()>=tEnd(TO.sw)&&Date.now()-TO.swT>(TO.swN>5?6e4:5e3)&&(S.tab==='tour'||S.tab==='comm'))tSync(true)}
+setInterval(tWeekTick,1000);
 /* ===== Menu « + » : « Que veux-tu faire ? » — des rubriques, des tuiles à 2 colonnes ===== */
 /* [icône, texte, attribut du bouton, style (pri = mis en avant), clé spéciale] */
 const MNG=[
@@ -1851,7 +2077,7 @@ const MNG=[
   ['🔔','Alertes de prix','data-mn="al"','','al']]],
  ['Amis et partage',[
   ['👥','Communauté','data-go="comm"','','cm'],
-  
+  ['🏟️','Tournoi de la semaine','data-go="tour"'],
   ['🪪','Mon profil public','data-mn="me"'],
   ['📤','Partager ma collection','data-share'],
   ['🖨️','Liste à imprimer','data-go="print"']]]];
@@ -2387,7 +2613,7 @@ ${virtVal(e)}<div class="row" style="margin-top:10px"><button class="chip" aria-
 const OPK={C:1,UC:1,R:1};
 function packBest(ids){let best=0,e='✔';for(const id of ids){const c=cards.find(x=>x.id===id),alt=c.ver!=='Normal';let v=0,m='✔';if(c.rar==='SCR'){v=5;m='🌈'}else if(alt&&(c.rar==='SR'||c.rar==='L')){v=4;m='💎'}else if(alt){v=3;m='💎'}else if(c.rar==='SR'){v=2;m='⭐'}else if(c.rar==='L'){v=1;m='✔'}if(v>best){best=v;e=m}}return e}
 function newOp(k,paid){const ext=S.ext;let ids;if(k==='pack')ids=luckDraw().ids;else if(k==='box')ids=boxDraw().ids;else ids=caseDraw().ids;const packs=[];for(let i=0;i<ids.length;i+=6)packs.push({ids:ids.slice(i,i+6),st:0,rev:[0,0,0,0,0,0].map(()=>false),nw:[]});return {ext,kind:k,packs,disp:null,cur:k==='pack'?0:null,opened:k==='pack',dop:{},paid:!!paid}}
-function openPackNow(i,all){const o=S.op,pk=o.packs[i];if(pk.st)return;if(!all)play('tear');const wd=vdone(o.ext);pk.nw=pk.ids.map((id,j)=>!(VIRT.q[id]>0)&&pk.ids.indexOf(id)===j);pk.ids.forEach(id=>{VIRT.q[id]=(VIRT.q[id]||0)+1});VIRT.b++;pk.st=1;bump('b',1);pk.i=all?pk.ids.length:0;if(all)pk.rev=pk.rev.map(()=>true);saveV();opKeep(o);if(!wd&&vdone(o.ext)){S.celeb=o.ext;toast('🏆 Série '+o.ext+' complétée !')}if(o.duel&&!o.res&&o.packs.every(x=>x.st)){duelFinish(o);if(o.kind!=='pack')setTimeout(()=>play(o.res.res),400)}}
+function openPackNow(i,all){const o=S.op,pk=o.packs[i];if(pk.st)return;if(!all)play('tear');const wd=vdone(o.ext);pk.nw=pk.ids.map((id,j)=>!(VIRT.q[id]>0)&&pk.ids.indexOf(id)===j);pk.ids.forEach(id=>{VIRT.q[id]=(VIRT.q[id]||0)+1});VIRT.b++;pk.st=1;bump('b',1);pk.i=all?pk.ids.length:0;if(all)pk.rev=pk.rev.map(()=>true);saveV();opKeep(o);if(!wd&&vdone(o.ext)){S.celeb=o.ext;toast('🏆 Série '+o.ext+' complétée !')}if(o.tour)tourProgress(o);if(o.duel&&!o.res&&o.packs.every(x=>x.st)){duelFinish(o);if(o.kind!=='pack')setTimeout(()=>play(o.res.res),400)}}
 function opSummary(o){const ids=[],nw=[];let n=0;o.packs.forEach(pk=>{if(pk.st){n++;ids.push(...pk.ids);nw.push(...pk.nw)}});return n?boxView({ext:o.ext,ids,nw,n:o.kind==='case'?12:1,pk:n}):''}
 function packTile(o,i){const pk=o.packs[i],W=S.wave;
 if(pk.st){const best=packBest(pk.ids);
@@ -2402,7 +2628,7 @@ if(j>=n){const nwn=pk.nw.filter(Boolean).length;return (S.celeb===E?celeb(E):'')
 const id=pk.ids[j],c=cards.find(x=>x.id===id),sh=pk.rev[j],hot=c.rar==='SCR'||c.rar==='SR'||c.ver!=='Normal',lvl=c.rar==='SCR'?2:hot?1:0,left=n-1-j;
 return `<div class="dots">${pk.ids.map((x,k)=>`<i class="${k<j||(k===j&&sh)?'on':''} ${k===j?'cur':''}"></i>`).join('')}</div>
 <div class="stwrap ${sh?'rv':''}"><button class="stage3" ${sh?'data-nx':`data-lr="${j}"`} aria-label="${sh?'Carte suivante':'Retourner la carte'}"><div class="pile p${left}"><i class="pc cbk"></i><i class="pc cbk"></i></div><div class="cfw ${sh?'':'in'}"><div class="cfx ${sh?'rev':''}"><div class="cface cfback">${cardBack()}</div><div class="cface cfront ${lvl===2?'fxscr':lvl?'fxhot':''}"><div class="tilt" data-rare="${hot?1:0}">${art({...c,own:VIRT.q[id]||0})}</div>${pk.nw[j]?'<span class="nw" style="font-size:13px">NOUVELLE</span>':''}</div></div></div><div class="mt0 meta">Touche pour retourner</div><div class="mt1 meta"><b>${c.name}</b><br><span>${id}${c.rar?' · '+c.rar:''}</span></div></button><div class="sub"><span class="h0">Carte ${j+1} / ${n}</span><span class="h1">${j<n-1?'Touche la carte pour passer à la suivante':'Touche la carte pour voir le résumé'}</span></div></div><div style="text-align:center"><button class="chip" data-lall>⏭ Tout révéler</button></div>`}
-function opView(){const o=S.op,E=o.ext,nm=EXTS.find(x=>x[0]===E)[1];let h=header()+`<h2>${o.duel?'⚔️ Duel · ':'🎲 '}${o.kind==='case'?'Case':o.kind==='box'?'Display':'Booster'} ${E} · ${nm}</h2>`;
+function opView(){const o=S.op,E=o.ext,nm=EXTS.find(x=>x[0]===E)[1];let h=header()+`<h2>${o.duel?'⚔️ Duel · ':o.tour?'🏟️ Tournoi · ':'🎲 '}${o.kind==='case'?'Case':o.kind==='box'?'Display':'Booster'} ${E} · ${nm}</h2>`;
 if(o.cur!==null){const pk=o.packs[o.cur],i=o.cur;
 h+=`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-pback>← ${o.kind==='pack'?'Mode hasard':'Retour aux boosters'}</button>`;
 if(!pk.st){h+=pkHTML(o,i,E)}
@@ -2415,7 +2641,7 @@ const cs0=closedState(o);if(cs0)return h+introView(o,cs0);
 if(o.kind==='case'&&o.disp===null){h+=`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-oback>← Mode hasard</button><div class="panel">Choisis un display à ouvrir (12 par case).</div><div class="grid" style="margin-top:10px">${Array.from({length:12},(_,k)=>{const sl=o.packs.slice(k*24,k*24+24),n=sl.filter(x=>x.st).length;return `<button class="card" data-dgo="${k}" style="width:100%"><div class="art${dwv(k)}" style="background:none;border-color:transparent;${n===24?'opacity:.55':''}${dwd(k)}">${pimg(DISPIMG[o.ext],'Display')}${n===24?'<em>✅ terminé</em>':''}</div><div class="meta">Display ${k+1}<br><span>${n} / 24 ouverts</span></div></button>`}).join('')}</div><button class="btn" style="margin-top:12px" data-pall="all">⚡ Ouvrir tous les displays</button>`;return h+(o.packs.every(x=>x.st)?(o.duel?duelPanel(o)+dlBtn(o):cdAfter('case',false,'🔁 Ouvrir une autre case '+E)):'')+opSummary(o)}
 const k=o.kind==='case'?o.disp:0,lo=k*24;
 h+=`<button class="btn alt" style="margin-bottom:8px;text-align:left" ${o.kind==='case'?'data-dback>← Retour à la case':'data-oback>← Mode hasard'}</button><div class="panel">${o.kind==='case'?'Display '+(k+1)+' · ':''}${o.packs.slice(lo,lo+24).filter(x=>x.st).length} / 24 boosters ouverts<div class="sub">Touche un booster pour l'ouvrir et révéler ses cartes une par une.</div></div><div class="grid" style="margin-top:10px">${Array.from({length:24},(_,j)=>packTile(o,lo+j)).join('')}</div><button class="btn" style="margin-top:12px" data-pall="${k}">⚡ Ouvrir tous les boosters du display</button>`;
-return h+(o.kind==='box'&&o.packs.every(x=>x.st)?(o.duel?duelPanel(o)+dlBtn(o):cdAfter('box',false,'🔁 Ouvrir un autre display '+E)):'')+(S.celeb===E?celeb(E):'')+opSummary(o)}
+return h+(o.kind==='box'&&o.packs.every(x=>x.st)?(o.duel?duelPanel(o)+dlBtn(o):o.tour?tourPanel(o):cdAfter('box',false,'🔁 Ouvrir un autre display '+E)):'')+(S.celeb===E?celeb(E):'')+opSummary(o)}
 function luck(){if(S.hzv)return virtView();if(S.op)return opView();if(S.dl)return duelView();if(S.shop)return shopView();
 return header()+`<h2>🎲 Mode hasard</h2><div class="panel">Ouvre des boosters virtuels de 6 cartes (comme un paquet japonais). Les cartes vont uniquement dans ta collection virtuelle, jamais dans ta vraie collection. <div class="sub">Taux estimés d'après des observations de la communauté (Bandai ne les publie pas).</div><div class="sub" style="margin-top:6px">⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h). Un duel compte comme une ouverture ; la boutique 🛒 n'a pas d'attente.</div></div>${serBar('margin:10px 0;text-align:left',S.ext)}${cdBtn('pack',true)}${cdBtn('box')}${cdBtn('case')}<button class="btn" style="margin-top:8px" data-dl>⚔️ Duel de boosters</button><button class="btn" style="margin-top:8px" data-shop>🛒 Boutique virtuelle (${VIRT.pts||0} pts)</button><button class="btn alt" style="margin-top:8px" data-vopen>📚 Collection virtuelle (${Object.keys(VIRT.q).length} cartes différentes)</button>`+(S.celeb===S.ext?celeb(S.ext):'')}
 const cid=id=>id.replace(/_ALT(\d?)/,(m,n)=>' Alt'+(n||''));
@@ -3139,7 +3365,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 oct. 2026 · 8';
+const BUILD='12 oct. 2026 · 9';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
@@ -3308,7 +3534,7 @@ if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=s
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch()}
-function renderCore(){serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
+function renderCore(){if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}

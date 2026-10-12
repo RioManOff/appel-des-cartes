@@ -1162,10 +1162,15 @@ button+.sub,button+small,.btn+.sub,.btn+p{margin-top:14px}
 .cs-gm{display:flex;gap:2px;padding:3px;border-radius:13px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .cs-gm button{border:0;background:none;color:#fff;font:600 13px/1 inherit;font-family:inherit;padding:9px 10px;border-radius:10px;min-height:36px}
 .cs-gm button[aria-pressed="true"]{background:#fff;color:#111}
+.mn-cm{margin-top:10px}.mn-cm .mn-b{position:relative}
 .ppsn .bar,.hmr .ppsn .bar{height:6px;padding:0;border:0;transform:none;border-radius:4px;background:var(--ln);margin-top:6px;overflow:hidden}
 .ppsn .bar i{display:block;height:100%;border-radius:4px;background:var(--c,var(--ac))}
 button.ppsr{width:100%;background:none;border-left:0;border-right:0;border-bottom:0;color:var(--tx);text-align:left;font:inherit;cursor:pointer}
 button.ppsr:first-child{border-top:0}
+.cm-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0 4px}
+.cm-tabs button{position:relative;font:inherit;font-weight:700;font-size:14px;color:var(--mu);background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px;padding:12px 4px;min-height:44px}
+.cm-tabs button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold,var(--ac));box-shadow:inset 0 -3px 0 var(--gold,var(--ac))}
+.cm-tabs .cmbd{position:absolute;top:-6px;right:-2px}
 </style>
 </head>
 <body>
@@ -1636,10 +1641,11 @@ function ppHub(lg){if(!lg)return '';
 <div class="cmact">${on?`<button type="button" class="btn alt" data-ppview>👁 Voir mon profil</button><button type="button" class="btn alt" data-ppshare>🔗 Partager</button>`:`<button type="button" class="btn" data-ppon="1"${ok?'':' disabled'}>Activer mon profil</button>${ok?`<button type="button" class="btn alt" data-ppview>👁 Aperçu</button>`:`<button type="button" class="btn alt" data-ppacc>Choisir mon pseudo</button>`}`}</div></section>`}
 function ppFind(){return `<section class="panel cmc"><div class="cmh"><b>🔎 Chercher un joueur</b></div><input id="pp-q" class="cmq" type="search" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Pseudo" aria-label="Chercher un joueur par son pseudo" value="${esc(CM.q)}"><div class="cmls" id="pp-l">${ppListHTML()}</div></section>`}
 COMM.push({o:30,h:ppHub},{o:40,h:cmFriends},{o:50,h:ppFind});
+function cmTabs(){const t=S.cmt||'msg',b=(()=>{try{return cmBdg()}catch(e){return ''}})();return `<div class="cm-tabs" role="tablist"><button type="button" data-cmt="msg" aria-pressed="${t==='msg'}">💬 Messages${b}</button><button type="button" data-cmt="prof" aria-pressed="${t==='prof'}">🪪 Profils</button><button type="button" data-cmt="tour" aria-pressed="${t==='tour'}">🏟️ Tournoi</button></div>`}
 function commV(){frEnsure();ppRecent();const lg=!!SBS;
   return header()+`<h2>👥 Communauté</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
    +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et jouer au tournoi. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
-   +COMM.slice().sort((a,b)=>a.o-b.o).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
+   +cmTabs()+COMM.slice().sort((a,b)=>a.o-b.o).filter(s=>({msg:[20,40],prof:[30,50],tour:[25]}[S.cmt||'msg']||[]).includes(s.o)).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
 
 /* ---------- page d'un profil ---------- */
 function ppOpen(name){name=String(name||'').trim();if(!name){S.tab='set';render();return}
@@ -2745,7 +2751,7 @@ function mnBig(t,i){return `<button type="button" class="mn-b${t[3]?' '+t[3]:''}
 function mnSheet(){let i=0;
  if(S.mnmore){
   return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Plus d’actions"><div class="mn-top"><button type="button" class="mn-back" data-mnmore="0" aria-label="Retour">←</button><h2>Plus d’actions</h2></div>${MNG.map(g=>{const b=g[1].filter(x=>!MN6X.includes(x[1])).map(x=>mnTile(x,i++)).join('');return b?`<section class="mn-s"><h3 class="mn-h">${g[0]}</h3><div class="mn-g">${b}</div></section>`:''}).join('')}</div></div>`}
- return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Que veux-tu faire ?"><h2 style="margin-top:0">Que veux-tu faire ?</h2><div class="mn-big">${MN6.map(x=>mnBig(x,i++)).join('')}</div><button type="button" class="mn-more" data-mnmore="1">Plus…</button></div></div>`}
+ return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Que veux-tu faire ?"><h2 style="margin-top:0">Que veux-tu faire ?</h2><div class="mn-big">${MN6.map(x=>mnBig(x,i++)).join('')}</div><div class="mn-big mn-cm"><button type="button" class="mn-b" data-cmt="msg" style="--i:6"><i aria-hidden="true">💬</i><span>Messages</span>${(()=>{try{return cmBdg()}catch(e){return ''}})()}</button><button type="button" class="mn-b" data-cmt="prof" style="--i:7"><i aria-hidden="true">🪪</i><span>Profils publics</span></button></div><button type="button" class="mn-more" data-mnmore="1">Plus…</button></div></div>`}
 document.addEventListener('click',e=>{const m=e.target.closest&&e.target.closest('[data-mnmore]');if(m){e.stopPropagation();S.mnmore=m.dataset.mnmore==='1';render();const d=document.querySelector('.mnu');if(d)d.scrollTop=0;return}
  if(e.target.closest&&e.target.closest('nav [data-menu]'))S.mnmore=false},true);
 /* Balayage gauche/droite = série suivante/précédente (là où la barre de séries est affichée) */
@@ -2793,6 +2799,7 @@ document.addEventListener('click',ev=>{if(S.tab!=='luck'||!HZM()||S.op||S.hzv)re
 /* choix du jeu dans l'onglet Scanner */
 const scGameBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" data-scg="fw" aria-pressed="${X.game!=='ms'}">Fusion World</button><button class="chip" data-scg="ms" aria-pressed="${X.game==='ms'}">Masters</button></div>`;
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-scg]');if(!b)return;e.stopPropagation();const v=b.dataset.scg==='ms'?'ms':'fw';if(X.game!==v){X.game=v;saveX();S.sc='';render()}},true);
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-cmt]');if(!t)return;e.stopPropagation();e.preventDefault();S.cmt=t.dataset.cmt;if(S.tab!=='comm'){S.menu=false;S.mnmore=false;S.tab='comm';S.sel=null;S.vsh=false;window.scrollTo(0,0)}render()},true);
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3703,10 +3710,10 @@ function trashV(){const ic={binder:'📒',sale:'💶',exp:'💸',buy:'🧾'};ret
 const SITE='https://riomanoff.github.io/appel-des-cartes/';
 let SHN='';try{SHN=localStorage.getItem('fb_shname')||''}catch(e){}
 function shareStats(){
- const per=EXTS.map(([e,nm])=>{const T=cards.filter(c=>c.ext===e);return {e,nm,o:T.filter(c=>c.own>0).length,n:T.length}}),A=cards.filter(c=>c.ver!=='Normal');
- return {per,nAll:cards.length,nOwn:cards.filter(c=>c.own>0).length,copies:cards.reduce((a,c)=>a+(c.own||0),0),full:per.filter(x=>x.n>0&&x.o===x.n).length,aOwn:A.filter(c=>c.own>0).length,aAll:A.length}}
+ const MSG=X.game==='ms';if(MSG)msBindInit();const EX=MSG?MS_SETS.map(t=>[t.id,t.n]):EXTS,CA=MSG?MS_ALL:cards;const per=EX.map(([e,nm])=>{const T=CA.filter(c=>c.ext===e);return {e,nm,o:T.filter(c=>c.own>0).length,n:T.length}}),A=CA.filter(c=>c.ver!=='Normal');
+ return {MSG,nser:EX.length,per,nAll:CA.length,nOwn:CA.filter(c=>c.own>0).length,copies:CA.reduce((a,c)=>a+(c.own||0),0),full:per.filter(x=>x.n>0&&x.o===x.n).length,aOwn:A.filter(c=>c.own>0).length,aAll:A.length}}
 function shareText(){const s=shareStats(),who=SHN.trim();
- return (who?'Collection de '+who+' · ':'')+'Dragon Ball Super Card Game Fusion World (cartes japonaises) : '+s.nOwn+' / '+s.nAll+' cartes différentes ('+pct(s.nOwn,s.nAll)+' %), '+s.copies+' exemplaire'+(s.copies>1?'s':'')+(s.full?', '+s.full+' série'+(s.full>1?'s':'')+' complète'+(s.full>1?'s':''):'')+'.'+dbShareLine()+'\nJe la suis avec L’Appel des Cartes : '+SITE}
+ return (who?'Collection de '+who+' · ':'')+(s.MSG?'Dragon Ball Super Card Game Masters (cartes françaises) : ':'Dragon Ball Super Card Game Fusion World (cartes japonaises) : ')+s.nOwn+' / '+s.nAll+' cartes différentes ('+pct(s.nOwn,s.nAll)+' %), '+s.copies+' exemplaire'+(s.copies>1?'s':'')+(s.full?', '+s.full+' série'+(s.full>1?'s':'')+' complète'+(s.full>1?'s':''):'')+'.'+(s.MSG?'':dbShareLine())+'\nJe la suis avec L’Appel des Cartes : '+SITE}
 function shareDraw(){
  const s=shareStats(),W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
  const FD='Big Shoulders Display,"Poppins","Arial Black",Impact,sans-serif',FT='Barlow,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif',p=pct(s.nOwn,s.nAll);
@@ -3719,8 +3726,8 @@ function shareDraw(){
  g.fillStyle='#c4161c';g.beginPath();for(let k=0;k<10;k++){const r=k%2?13:31,a=-Math.PI/2+k*Math.PI/5;g.lineTo(140+r*Math.cos(a),152+r*Math.sin(a))}g.closePath();g.fill();
  g.textAlign='left';g.textBaseline='alphabetic';
  g.fillStyle='#fff';g.font='400 56px '+FD;g.fillText("L'Appel des Cartes",240,142);
- g.fillStyle='#A89C9C';g.font='400 26px '+FT;g.fillText('Dragon Ball Super Card Game · Fusion World',240,186);g.fillText('Cartes japonaises · FB01 à FB'+EXTS[EXTS.length-1][0].slice(2),240,222);
- const who=SHN.trim();g.fillStyle='#FFB23A';g.font='600 32px '+FT;g.fillText(fit(who?'Collection de '+who:'Ma collection',680),60,282);dbShareDraw(g,FT);
+ g.fillStyle='#A89C9C';g.font='400 26px '+FT;g.fillText(s.MSG?'Dragon Ball Super Card Game · Masters':'Dragon Ball Super Card Game · Fusion World',240,186);g.fillText(s.MSG?'Cartes françaises · '+s.per.map(x=>x.e).join(' · '):'Cartes japonaises · FB01 à FB'+EXTS[EXTS.length-1][0].slice(2),240,222);
+ const who=SHN.trim();g.fillStyle='#FFB23A';g.font='600 32px '+FT;g.fillText(fit(who?'Collection de '+who:'Ma collection',680),60,282);if(!s.MSG)dbShareDraw(g,FT);
  /* total */
  g.fillStyle='#fff';g.font='400 150px '+FD;const nTxt=String(s.nOwn);g.fillText(nTxt,60,478);const nw=g.measureText(nTxt).width;
  g.fillStyle='#A89C9C';g.font='400 46px '+FT;g.fillText('/ '+s.nAll,60+nw+20,478);g.font='400 28px '+FT;g.fillText('cartes différentes',64,524);
@@ -3728,10 +3735,10 @@ function shareDraw(){
  rr(60,556,960,28,14);g.fillStyle='#2A1A1C';g.fill();
  if(p>0){const bw=Math.max(28,960*p/100),gr=g.createLinearGradient(60,0,60+bw,0);gr.addColorStop(0,'#f0830f');gr.addColorStop(1,'#ffc233');rr(60,556,bw,28,14);g.fillStyle=gr;g.fill()}
  /* trois chiffres */
- const bx=[[String(s.copies),s.copies>1?'exemplaires':'exemplaire'],[s.full+' / '+EXTS.length,'séries complètes'],[s.aOwn+' / '+s.aAll,'Alternative Art']],bw3=306;
+ const bx=[[String(s.copies),s.copies>1?'exemplaires':'exemplaire'],[s.full+' / '+s.nser,'séries complètes'],[s.aOwn+' / '+s.aAll,'Alternative Art']],bw3=306;
  bx.forEach(([v,t],i)=>{const x=60+i*(bw3+21);rr(x,626,bw3,104,18);g.fillStyle='rgba(255,255,255,.06)';g.fill();g.strokeStyle='rgba(255,255,255,.10)';g.lineWidth=2;g.stroke();g.fillStyle='#fff';g.font='400 42px '+FD;g.fillText(fit(v,bw3-40),x+22,682);g.fillStyle='#A89C9C';g.font='400 22px '+FT;g.fillText(t,x+22,714)});
  /* séries */
- s.per.forEach((x,i)=>{const cy=790+i*42+21,col=SERCOL[x.e]||'#E50914',pp=pct(x.o,x.n);
+ s.per.forEach((x,i)=>{const cy=790+i*(s.MSG?84:42)+21,col=s.MSG?'rgb('+MS_COL[x.e]+')':(SERCOL[x.e]||'#E50914'),pp=pct(x.o,x.n);
   rr(60,cy-14,8,28,4);g.fillStyle=col;g.fill();
   g.textAlign='left';g.fillStyle='#fff';g.font='600 25px '+FT;g.fillText(x.e,84,cy+9);
   g.fillStyle='#A89C9C';g.font='400 23px '+FT;g.fillText(fit(x.nm,300),170,cy+8);

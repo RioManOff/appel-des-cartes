@@ -1106,7 +1106,7 @@ const saveV=()=>{try{localStorage.setItem('fb_virt',JSON.stringify(VIRT));localS
 let BIND=[];try{BIND=JSON.parse(localStorage.getItem('fb_binders')||'[]')||[]}catch(e){}
 const saveB=()=>{try{localStorage.setItem('fb_binders',JSON.stringify(BIND));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
 const SEALT=[['booster','Booster','1 paquet'],['display','Display','24 boosters'],['case','Case de display','12 displays']];
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),game:v.game==='ms'?'ms':'fw'});
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:v.exp||[],bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw'});
 let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v)X=mkX(v)}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -2487,11 +2487,20 @@ const msCur=()=>MS_SETS.find(s=>s.id===S.mss)||MS_SETS[0],msFind=id=>{for(const 
 function msSetOf(c){return MS_SETS.find(s=>s.c.includes(c))||MS_SETS[0]}
 function msArt(c){const q=msOwn(c[0]),im=PH[c[0]]||MS_CI[c[0]];return `<div class="art r-${msLead(c)?'L':'U'} ${q?'':'miss'}">${im?`<img class="cimg" src="${im}" alt="${esc(c[1])}" draggable="false">`:p3(msNum(c[0]))}${msIsSpr(c)?`<em>${msKind(c)}</em>`:''}${q>1?`<span class="qty">×${q}</span>`:''}</div>`}
 function msTile(c){return `<div class="tile"><button class="card" data-msopen="${c[0]}" aria-label="${c[0]}" style="width:100%">${msArt(c)}<div class="meta">${esc(msShort(c))}<br><span>${c[0]}</span></div></button><button class="adj m" data-ms="dec" data-id="${c[0]}" aria-label="Retirer une carte">−</button><button class="adj p" data-ms="inc" data-id="${c[0]}" aria-label="Ajouter une carte">+</button></div>`}
-function msSheet(){const c=S.msel&&msFind(S.msel);if(!c)return'';const q=msOwn(c[0]);
- return `<div class="sheet" data-msclose><div role="dialog" aria-label="${c[0]}"><div class="detail">${msArt(c)}<div><h2 style="margin-top:0">${esc(c[1].replace(' // ',' ⇄ '))}</h2>${c[0]}<br><span class="sub">Masters · ${msSetOf(c).id} ${esc(msSetOf(c).n)} · Rareté : ${c[2]}${msLead(c)?' · Leader':''}</span></div></div>
- <div style="display:flex;gap:12px;align-items:center"><div style="flex:1"><div>Possédée</div><div class="stepper"><button data-ms="dec" data-id="${c[0]}" aria-label="Retirer">➖</button><b>${q}</b><button data-ms="inc" data-id="${c[0]}" aria-label="Ajouter">➕</button></div></div></div>
- <div class="row" style="margin-top:12px"><label class="btn alt" style="margin:0;cursor:pointer">📷 ${PH[c[0]]?'Changer la photo':'Photo de ma carte'}<input type="file" accept="image/*" hidden data-msph="${c[0]}"></label>${PH[c[0]]?`<button class="btn alt" style="margin:0" data-msphdel="${c[0]}">Retirer la photo</button>`:''}</div>
- <button class="btn" style="margin-top:14px" data-msclose>Fermer</button></div></div>`}
+const msdG=id=>(X.msd&&X.msd[id])||{};
+function msdS(id,k,v){if(!X.msd)X.msd={};const o=X.msd[id]||(X.msd[id]={});if(v===''||v==null||v===0)delete o[k];else o[k]=v;if(!Object.keys(o).length)delete X.msd[id];saveX()}
+function msdNorm(v){const o={};if(v&&typeof v==='object')for(const k in v){if(!/^BT\d{1,2}-\d{3}(-SPR|-SLR|-GDR)?$/.test(k))continue;const r=v[k];if(!r||typeof r!=='object')continue;const e={},w=Math.floor(+r.want);if(w>=1)e.want=Math.min(99,w);const p=String(r.price==null?'':r.price).replace(',','.').slice(0,10);if(/^\d+(\.\d{1,2})?$/.test(p)&&+p>0)e.price=p;if(['Mint','Near Mint','Excellent','Bon','Joué','Abîmé'].includes(r.cond))e.cond=r.cond;if(typeof r.note==='string'&&r.note.trim())e.note=r.note.slice(0,200);if(Object.keys(e).length)o[k]=e}return o}
+function msSheet(){const c=S.msel&&msFind(S.msel);if(!c)return'';const id=c[0],q=msOwn(id),d=msdG(id),set=msSetOf(c),px=nb(d.price);
+ const st=(a,t,v)=>`<div>${t}</div><div class="stepper"><button data-${a}="dec" data-id="${id}" aria-label="Retirer">➖</button><b>${v}</b><button data-${a}="inc" data-id="${id}" aria-label="Ajouter">➕</button></div>`;
+ const qb=[['fav','⭐','Favori',X.fav],['sell','💱','À échanger',X.sell],['upg','🔧','À remplacer',X.upg]].map(([k,e,t,m])=>`<button class="qb ${m&&m[id]?'on':''}" data-${k}="${id}" aria-label="${t}">${e}<small>${t}</small></button>`).join('');
+ const bs=BIND.length?BIND.map(b=>`<button class="chip" aria-pressed="${b.cards.includes(id)}" data-msbsx="${b.id}">${b.ic||'📒'} ${esc(b.name)}${bkTag(b,id)}</button>`).join(''):'<span class="sub">Aucun classeur : crées-en un depuis le menu ＋.</span>';
+ return `<div class="sheet" data-msclose><div role="dialog" aria-label="${id}"><div class="detail">${msArt(c)}<div><h2 style="margin-top:0">${esc(c[1].replace(' // ',' ⇄ '))}</h2>${id}<br><span class="sub">Masters · ${set.id} ${esc(set.n)} · Rareté : ${c[2]}${msLead(c)?' · Leader':''}${msIsSpr(c)?' · Version spéciale':''}</span>${px?`<br><span class="sub">💶 Ton prix : <b>${eur(px)}</b></span>`:''}</div></div>
+ <div style="display:flex;gap:12px;align-items:center"><div style="flex:1">${st('ms','Possédée',q)}${st('msw','Recherchée',d.want||0)}</div><div class="qa">${qb}</div></div>
+ <div class="sub">📒 Classeurs</div><div class="row">${bs}</div>
+ <div class="fld"><div><label>État</label><select data-msd="cond"><option value="">—</option>${['Mint','Near Mint','Excellent','Bon','Joué','Abîmé'].map(v=>`<option ${d.cond===v?'selected':''}>${v}</option>`).join('')}</select></div><div><label>Prix indicatif (€)</label><input data-msd="price" inputmode="decimal" placeholder="ex. 1,50" value="${esc(d.price?String(d.price).replace('.',','):'')}"></div><div class="w sub" style="margin-top:-4px">Pas de prix automatique pour Masters : note le tien (Cardmarket, vente…).</div><div class="w"><label>Notes personnelles</label><input data-msd="note" placeholder="ex. acheté en booster, coin abîmé" value="${esc(d.note||'')}"></div></div>
+ <div class="row" style="margin-top:4px"><label class="btn alt" style="margin:0;cursor:pointer">📷 ${PH[id]?'Changer la photo':'Photo de ma carte'}<input type="file" accept="image/*" hidden data-msph="${id}"></label>${PH[id]?`<button class="btn alt" style="margin:0" data-msphdel="${id}">Retirer la photo</button>`:''}</div>
+ <a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-top:10px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(id.replace(/-(SPR|SLR|GDR)$/,''))}&language=2">💶 Voir le prix sur Cardmarket</a>
+ <button class="btn" style="margin-top:10px" data-msclose>Fermer</button></div></div>`}
 const MS_COL={BT01:'255,140,40',BT22:'226,48,48',BT31:'40,175,185'},MS_SEAL=[['booster','Booster','1 paquet','pk'],['display','Display','24 boosters','box'],['case','Case de display','12 displays','']];
 const msAr=d=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 function msStat(set){const b=set.c.filter(c=>!msIsSpr(c)),o=b.filter(c=>msOwn(c[0])>0).length;return{o,n:b.length,p:b.length?Math.round(100*o/b.length):0}}
@@ -2552,6 +2561,43 @@ document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest
 const SETP={compte:['👤','Compte et profil'],data:['💾','Mes données'],aff:['🎨','Affichage'],son:['🔊','Sons et vibrations'],scn:['📷','Scanner'],prix:['💶','Prix des cartes'],aide:['🧭','Aide et infos']};
 document.addEventListener('click',e=>{const n=e.target.closest&&e.target.closest('#nav [data-go="set"]');if(n&&S.setp){S.setp=''}
  const b=e.target.closest&&e.target.closest('[data-setp]');if(b){e.stopPropagation();S.setp=b.dataset.setp||'';S.tab='set';window.scrollTo(0,0);render()}},true);
+/* ===== Masters : cartes complètes (fiche, recherchées, doublons, stats, classeurs, scanner par codes) ===== */
+const MS_ALL=[];
+function msBindInit(){if(MS_ALL.length)return;
+ MS_SETS.forEach(s=>{const L=s.c.map(c=>({c,k:msNum(c[0])*10+(msIsSpr(c)?1:0)})).sort((a,b)=>a.k-b.k);
+  L.forEach(({c})=>{const id=c[0],o={id,ext:s.id,n:msNum(id),name:msShort(c),full:c[1].replace(' // ',' ⇄ '),type:msLead(c)?'Leader':'Battle',col:'',rar:c[2],ver:msIsSpr(c)?'ALT':'Normal',ms:1};
+   Object.defineProperties(o,{own:{get(){return msOwn(id)},set(v){msSet(id,v)},enumerable:true},want:{get(){return msdG(id).want||0},set(v){msdS(id,'want',v)},enumerable:true},price:{get(){return msdG(id).price||''},enumerable:true},cond:{get(){return msdG(id).cond||''},enumerable:true},note:{get(){return msdG(id).note||''},enumerable:true}});
+   MS_ALL.push(o);BKC[id]=o;BKO[id]=1e6+MS_ALL.length})})}
+const msAllCards=()=>cards.concat(MS_ALL);
+const msExtIds=()=>EXTS.map(x=>x[0]).concat(MS_SETS.map(s=>s.id));
+const msSetName=id=>{const s=MS_SETS.find(x=>x.id===id);return s?s.n:''};
+const msById=id=>MS_ALL.find(c=>c.id===id);
+function msOpenCard(id){const c=msFind(id);if(!c)return;X.game='ms';saveX();S.mss=msSetOf(c).id;S.msm='cards';S.msq='';S.mso='';S.msv='';S.msel=id;S.tab='coll';S.menu=false;window.scrollTo(0,0);render()}
+/* ----- recherchées / doublons / stats ----- */
+function msWantV(){const l=MS_ALL.filter(c=>c.want>c.own);if(!l.length)return'';const tot=l.reduce((a,c)=>a+(c.want-c.own)*(nb(c.price)||0),0);
+ return `<h2>🐉 Masters</h2>${tot>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(tot)}</b><div class="sub">Avec les prix que tu as saisis</div></div>`:''}`+l.map(c=>`<button class="panel ext" data-msgo="${c.id}"><b>${c.id}</b> ${esc(c.full)}<span class="n">${c.own} / ${c.want}</span><div class="sub">il en manque ${c.want-c.own}${c.price?' · '+eur(nb(c.price))+' pièce':''}</div></button>`).join('')}
+function msDupV(){const l=MS_ALL.filter(c=>c.own>3);if(!l.length)return'';const ex=l.reduce((a,c)=>a+c.own-3,0);
+ return `<h2>🐉 Masters</h2><div class="panel"><b>${ex}</b> exemplaire${ex>1?'s':''} en trop sur <b>${l.length}</b> carte${l.length>1?'s':''}<div class="sub">Au-delà de 3 exemplaires.</div></div>`+l.map(c=>`<button class="panel ext" data-msgo="${c.id}" style="margin-top:10px"><b>${c.id}</b> ${esc(c.full)}<span class="n">×${c.own}</span><div class="sub">${c.own-3} en trop · ${c.rar}${c.price?' · '+eur(nb(c.price))+' pièce':''}</div></button>`).join('')}
+function msStatsV(){const own=MS_ALL.filter(c=>c.own>0),copies=own.reduce((a,c)=>a+c.own,0),val=own.reduce((a,c)=>a+c.own*(nb(c.price)||0),0),sl=msSealCount().n,wn=MS_ALL.filter(c=>c.want>c.own).length;
+ const rows=MS_SETS.map(s=>{const st=msStat(s),sp=s.c.filter(msIsSpr),os=sp.filter(c=>msOwn(c[0])>0).length;return `<div class="panel" style="margin-top:8px"><b>${s.id}</b> ${esc(s.n)}<div class="bar"><i style="width:${st.p}%"></i></div><div class="sub"><b>${st.o}</b> / ${st.n} cartes · ${st.p} %${sp.length?' · spéciales '+os+' / '+sp.length:''}</div></div>`}).join('');
+ return `<h2>🐉 Masters</h2><div class="panel"><div class="kv"><span>Cartes différentes</span><b>${own.length}</b></div><div class="kv"><span>Exemplaires</span><b>${copies}</b></div><div class="kv"><span>Produits scellés</span><b>${sl}</b></div><div class="kv"><span>Recherchées</span><b>${wn}</b></div>${val>0?`<div class="kv"><span>Valeur (tes prix)</span><b>${eur(val)}</b></div>`:''}</div>${rows}`}
+function want(){return wantFW()+msWantV()}
+function dups(){return dupsFW()+msDupV()}
+function stats(){return statsFW()+msStatsV()}
+/* ----- scanner : codes Masters (bt22-9, bt1-5, bt31-12x2, bt22-9spr) ----- */
+function msTok(t){const m=/^bt0*(\d{1,2})-0*(\d{1,3})(spr|slr|gdr|a|alt)?(?:x(\d+))?$/i.exec(t);if(!m)return false;
+ const nn=String(m[2]).padStart(3,'0'),base=[('BT'+m[1])+'-'+nn,('BT'+m[1].padStart(2,'0'))+'-'+nn].find(x=>MS_ALL.some(c=>c.id===x||c.id.startsWith(x+'-')));if(!base)return false;let id=base;
+ if(m[3]){const k=m[3].toUpperCase();id=/^A/.test(k)?(MS_ALL.find(c=>c.id.startsWith(base+'-'))||{}).id:base+'-'+k}
+ const c=id&&msFind(id);if(!c)return false;msSet(id,msOwn(id)+(m[4]?Math.max(1,+m[4]):1));return true}
+/* ----- événements ----- */
+document.addEventListener('click',e=>{
+ const g=e.target.closest&&e.target.closest('[data-msgo]');if(g){e.stopPropagation();msOpenCard(g.dataset.msgo);return}
+ if(S.tab!=='coll'||X.game!=='ms')return;
+ const w=e.target.closest&&e.target.closest('[data-msw]');if(w){e.stopPropagation();const id=w.dataset.id,n=(msdG(id).want||0)+(w.dataset.msw==='inc'?1:-1);msdS(id,'want',Math.max(0,Math.min(99,n)));const y=window.scrollY;render();window.scrollTo(0,y);return}
+ const b=e.target.closest&&e.target.closest('[data-msbsx]');if(b){e.stopPropagation();const bk=BIND.find(x=>x.id===b.dataset.msbsx);if(bk&&S.msel)bkToggle(bk,S.msel);render()}},true);
+document.addEventListener('change',e=>{const t=e.target;if(!(t&&t.dataset&&t.dataset.msd&&S.msel))return;const k=t.dataset.msd;let v=String(t.value||'').trim();
+ if(k==='price'){v=v.replace(',','.');if(v&&!(/^\d+(\.\d{1,2})?$/.test(v)&&+v>0)){toast('Prix invalide');t.value='';v=''}}
+ if(k==='note')v=v.slice(0,200);msdS(S.msel,k,v)});
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -2628,7 +2674,7 @@ async function phReplaceAll(o){PH={...(o||{})};try{const d=await phDB(),st=d.tra
 function addPhoto(f,id){if(!f||!id)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const M=520,k=Math.min(1,M/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);phSet(id,cv.toDataURL('image/jpeg',.82)).then(()=>{toast('Photo enregistrée ✓');render()})};im.onerror=()=>toast('Image non lisible');im.src=rd.result};rd.readAsDataURL(f)}
 const CARDIMG={};
 const IMGP=new Promise(res=>{let n=0;const T=EXTS.length;EXTS.forEach(([e])=>{const sc=document.createElement('script');sc.src='cards-'+e+'.js';sc.async=true;const d=()=>{window.__ld=[++n,T,e];window.__spu&&window.__spu();if(n===T){res();try{render()}catch(_){}}};sc.onload=sc.onerror=d;document.head.appendChild(sc)})});;
-function art(c){return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}" >${CARDIMG[c.id]?`<img class="cimg" src="${CARDIMG[c.id]}" alt="${esc(c.name||c.id)}" draggable="false">`:p3(c.n)}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
+function art(c){return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}" >${CARDIMG[c.id]||MS_CI[c.id]?`<img class="cimg" src="${CARDIMG[c.id]||MS_CI[c.id]}" alt="${esc(c.name||c.id)}" draggable="false">`:p3(c.n)}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
 function cardBtn(c,pr){return `<div class="tile"><button class="card" data-n="${c.id}" aria-label="${c.id}" style="width:100%">${art(c)}<div class="meta">${c.name||'<span>Nom à compléter</span>'}<br><span>${c.id}</span>${pr===true&&pxv(c)?`<br><b class="pxt">${eur(pxv(c))}</b>`:''}</div></button>${X.fav[c.id]?'<span class="mk">⭐</span>':''}${X.sell[c.id]?'<span class="mk s">💱</span>':''}${X.upg[c.id]?'<span class="mk u">🔧</span>':''}<button class="adj m" data-cq="${c.id}" data-cd="-1" aria-label="Retirer une carte">−</button><button class="adj p" data-cq="${c.id}" data-cd="1" aria-label="Ajouter une carte">+</button></div>`}
 const header=()=>`<header><div><h1>🐉 <span class="ttl">L'Appel des Cartes</span></h1><div class="sub">${S.tab==='coll'||S.tab==='scan'?S.ext+' · '+EXTS.find(x=>x[0]===S.ext)[1]:'FB01 → FB11'}</div></div></header>`;
 function sealed(){const e=S.ext,tot=SEALT.reduce((a,t)=>a+sl(e,t[0]).own,0);
@@ -2658,7 +2704,7 @@ ${s.own>0?`<button class="vnsellbtn" data-vnsells="${e}|${t[0]}">💶 Vendre ce 
 const modeBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${S.mode==='cards'}" data-mode="cards">🃏 Cartes</button><button class="chip" aria-pressed="${S.mode==='sealed'}" data-mode="sealed">📦 Scellé (booster, display, case)</button></div>`;
 /* ===== Classeurs v2 : emplacements, pages, glisser-déposer ===== */
 const BK_IC=['📒','📕','📗','📘','📙','🔥','⭐','🐉','💎','👑','⚡','🎴'],BK_PGS=[4,9,12],bkCols=n=>n===4?2:3;
-const BKC={},BKO={};cards.forEach((c,i)=>{BKC[c.id]=c;BKO[c.id]=i});
+const BKC={},BKO={};cards.forEach((c,i)=>{BKC[c.id]=c;BKO[c.id]=i});msBindInit();
 let BKP={};try{BKP=JSON.parse(localStorage.getItem('fb_bkp')||'{}')||{}}catch(e){}
 const bkSaveP=()=>{try{localStorage.setItem('fb_bkp',JSON.stringify(BKP))}catch(e){}};
 S.b2={org:false,sel:null,hl:null,dir:0,sh:'',finding:false,find:'',hist:[],new:null,pk:[],q:'',x:[],own:'',ver:'',rar:[],lim:60,tgt:null};
@@ -2713,11 +2759,11 @@ function bkToggle(b,id){const k=b.cards.indexOf(id);if(k>=0){b.cards.splice(k,1)
 const bkPageEmpty=(b,p)=>{const PG=bkPG(b);for(let j=0;j<PG;j++)if(BKC[b.cards[p*PG+j]])return false;return true};
 /* --- règles (séries, raretés) : sert à proposer les nouvelles cartes du catalogue --- */
 function bkRuleIds(r){
- let l=cards.filter(c=>(!r.ext||!r.ext.length||r.ext.includes(c.ext))&&(!r.rar||!r.rar.length||r.rar.includes(c.rar)));
+ let l=msAllCards().filter(c=>(!r.ext||!r.ext.length||r.ext.includes(c.ext))&&(!r.rar||!r.rar.length||r.rar.includes(c.rar)));
  const alt=r.alt||'after';
  if(alt==='none')l=l.filter(c=>c.ver==='Normal');
  else if(alt==='only')l=l.filter(c=>c.ver!=='Normal');
- else if(alt==='end'){const o=[];EXTS.forEach(([e])=>{const L=l.filter(c=>c.ext===e);o.push(...L.filter(c=>c.ver==='Normal'),...L.filter(c=>c.ver!=='Normal'))});l=o}
+ else if(alt==='end'){const o=[];msExtIds().forEach(e=>{const L=l.filter(c=>c.ext===e);o.push(...L.filter(c=>c.ver==='Normal'),...L.filter(c=>c.ver!=='Normal'))});l=o}
  return l.map(c=>c.id)}
 const bkUpdIds=b=>{if(!b.rule)return [];const have=new Set(b.cards),sk=new Set(b.skip||[]);return bkRuleIds(b.rule).filter(id=>!have.has(id)&&!sk.has(id))};
 /* --- création par modèle --- */
@@ -2728,10 +2774,10 @@ function bkNewIds(n){
   case 'set':return bkRuleIds({ext:n.sx,alt:n.alt});
   case 'rare':return bkRuleIds({ext:n.sx,rar:n.rar,alt:n.alt});
   case 'own':return bkRuleIds({ext:n.sx,alt:'after'}).filter(id=>n.own==='y'?BKC[id].own>0:BKC[id].own<=0);
-  case 'fav':return cards.filter(c=>X.fav[c.id]).map(c=>c.id);
-  case 'dbl':return cards.filter(c=>c.own>1||X.sell[c.id]).map(c=>c.id);
+  case 'fav':return msAllCards().filter(c=>X.fav[c.id]).map(c=>c.id);
+  case 'dbl':return msAllCards().filter(c=>c.own>1||X.sell[c.id]).map(c=>c.id);
   default:return []}}
-function bkSerName(sx,short){if(sx.length===1)return short?sx[0]:sx[0]+' · '+EXTS.find(x=>x[0]===sx[0])[1];if(!sx.length)return 'toutes les séries';return sx.length<=3?sx.join(' + '):sx.length+' séries'}
+function bkSerName(sx,short){if(sx.length===1)return short?sx[0]:sx[0]+' · '+(EXTS.find(x=>x[0]===sx[0])||[0,msSetName(sx[0])])[1];if(!sx.length)return 'toutes les séries';return sx.length<=3?sx.join(' + '):sx.length+' séries'}
 function bkAutoName(n){
  switch(n.kind){
   case 'set':return n.sx.length?bkSerName(n.sx):'Toutes les séries';
@@ -2746,11 +2792,11 @@ function bkCreate(){
  const b={id:bkId(),name:((n.name||'').trim()||bkAutoName(n)).slice(0,40),cards:ids.slice(),pg:n.pg,ic:bkAutoIcon(n),v:2,t:Date.now()};
  const col=bkAutoCol(n);if(col)b.col=col;
  if(n.kind==='set')b.rule={ext:n.sx.slice(),alt:n.alt};else if(n.kind==='rare')b.rule={ext:n.sx.slice(),rar:n.rar.slice(),alt:n.alt};
- const cv=ids.find(id=>CARDIMG[id]);if(cv)b.cov=cv;
+ const cv=ids.find(id=>CARDIMG[id]||MS_CI[id]);if(cv)b.cov=cv;
  BIND.unshift(b);saveB();S.bsel=b.id;S.bpg=0;S.bpick=false;S.b2.new=null;S.b2.org=false;S.b2.sel=null;S.b2.sh='';S.b2.finding=false;
  toast('Classeur créé ✓'+(ids.length?' · '+bkPlural(ids.length,'carte'):''));return true}
 /* ===================== VUES ===================== */
-function bkArt(c){const im=CARDIMG[c.id];
+function bkArt(c){const im=CARDIMG[c.id]||MS_CI[c.id];
  return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}">${im?`<img class="cimg" src="${im}" alt="" draggable="false"><small>${p3(c.n)}</small>`:`<span class="bk-num">${p3(c.n)}</span><span class="bk-nm2">${esc(c.name||'')}</span>`}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
 function bkSlot(b,i,hl){
  const id=b.cards[i],c=id?BKC[id]:null,sel=S.b2.sel===i,org=S.b2.org;
@@ -2762,7 +2808,7 @@ function bkPageHTML(b,pg,dir,hl){
  for(let j=0;j<PG;j++)s+=bkSlot(b,base+j,hl===base+j);
  return `<div class="bk-pw${dir?' bk-t'+(dir>0?'n':'p'):''}" data-pw><div class="bk-page${S.b2.org?' bk-org':''}" style="--bc:${b.col||'var(--ac)'}"><span class="bk-holes" aria-hidden="true"><i></i><i></i><i></i></span><span class="bk-rings" aria-hidden="true"><i></i><i></i><i></i></span><div class="bk-grid" style="--cols:${cols}">${s}</div></div></div>`}
 function bkCover(b){
- const m=bkMeta(b),c=(b.cov&&BKC[b.cov])||BKC[b.cards.find(id=>BKC[id]&&CARDIMG[id])],col=b.col||'var(--ac)',p=pct(m.own,m.n);
+ const m=bkMeta(b),c=(b.cov&&BKC[b.cov])||BKC[b.cards.find(id=>BKC[id]&&(CARDIMG[id]||MS_CI[id]))],col=b.col||'var(--ac)',p=pct(m.own,m.n);
  return `<button class="bk-cover" data-b2="open" data-b2p="${b.id}" style="--bc:${col}" aria-label="${esc(b.name)} : ${m.own} sur ${m.n} cartes, ${m.np} pages"><span class="bk-spine" aria-hidden="true"><i></i><i></i><i></i></span><span class="bk-face"><span class="bk-ic" aria-hidden="true">${b.ic||'📒'}</span><span class="bk-win" aria-hidden="true">${c?`<span class="bk-cc">${art({...c,own:1})}</span>`:`<span class="bk-noc">${b.ic||'📒'}</span>`}</span><b class="bk-nm">${esc(b.name)}</b><span class="bk-st">${m.own} / ${m.n} · ${p} %</span><span class="bk-cb"><i style="width:${p}%"></i></span></span></button>`}
 function bkShelf(){
  return header()+`<h2>Mes classeurs</h2><button class="btn" data-b2="new">＋ Nouveau classeur</button>`
@@ -2771,7 +2817,7 @@ function bkShelf(){
 const bkMini=n=>`<span class="bk-mini" style="--c:${bkCols(n)}" aria-hidden="true">${'<u></u>'.repeat(n)}</span>`;
 function bkNewView(){
  const n=S.b2.new,ids=bkNewIds(n),PG=n.pg,pages=Math.max(1,Math.ceil(ids.length/PG)),k=n.kind;
- const sx=`<label class="sub">Séries (aucune cochée = toutes)</label><div class="row">${EXTS.map(([e])=>bkChip(`data-b2="newsx" data-b2p="${e}"`,e,n.sx.includes(e))).join('')}</div>`;
+ const sx=`<label class="sub">Séries (aucune cochée = toutes)</label><div class="row">${msExtIds().map(e=>bkChip(`data-b2="newsx" data-b2p="${e}"`,e,n.sx.includes(e))).join('')}</div>`;
  const alt=`<label class="sub">Alternative Art</label><div class="row">${[['after','Après la carte'],['end','À la fin de la série'],['none','Sans Alt Art'],['only','Alt Art seulement']].map(([a,t])=>bkChip(`data-b2="newalt" data-b2p="${a}"`,t,n.alt===a)).join('')}</div>`;
  const opts=k==='set'?sx+alt:k==='own'?`<label class="sub">Quelles cartes ?</label><div class="row">${[['y','Possédées'],['n','Manquantes']].map(([a,t])=>bkChip(`data-b2="newown" data-b2p="${a}"`,t,n.own===a)).join('')}</div>`+sx:k==='rare'?`<label class="sub">Raretés</label><div class="row">${RAR.map(r=>bkChip(`data-b2="newrar" data-b2p="${r}"`,r,n.rar.includes(r))).join('')}</div>`+sx+alt:'';
  return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-b2="newx">← Mes classeurs</button><h2 style="margin-top:0">Nouveau classeur</h2>
@@ -2796,7 +2842,7 @@ function bkSelBar(b){
  const T=(a,ic,t)=>`<button class="bk-tool sm" data-b2="${a}"><span aria-hidden="true">${ic}</span>${t}</button>`;
  return `<div class="bk-bar" role="group" aria-label="Actions sur l’emplacement sélectionné"><div class="bk-bi">${c?`<span class="vnth sm">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${c.id} · ${bkPos(b,i)} — touche l’emplacement où la mettre</small></span>`:`<span class="vnin"><b>Emplacement vide</b><small>${bkPos(b,i)} — touche une carte pour la placer ici</small></span>`}<button class="chip" data-b2="selx" aria-label="Désélectionner">✕</button></div><div class="bk-tools" style="margin:8px 0 0">${c?T('selfiche','📄','Fiche')+T('selclear','🕳️','Vider')+T('selrem','➖','Retirer')+T('selins','⬅️','Insérer'):T('selfill','＋','Choisir')+T('seldel','➖','Supprimer')+T('selins','⬅️','Insérer')}</div></div>`}
 function bkSetSheet(b,m){
- const PG=m.PG,pg=S.bpg||0,empty=bkPageEmpty(b,pg),cov=b.cards.filter(id=>BKC[id]&&CARDIMG[id]);
+ const PG=m.PG,pg=S.bpg||0,empty=bkPageEmpty(b,pg),cov=b.cards.filter(id=>BKC[id]&&(CARDIMG[id]||MS_CI[id]));
  return `<div class="sheet" data-b2="shbd"><div role="dialog" aria-label="Réglages du classeur"><h2 style="margin-top:0">${b.ic||'📒'} Réglages du classeur</h2>
  <label class="sub" for="b2-nm">Nom</label><input class="bk-inp" id="b2-nm" data-b2in="name" value="${esc(b.name)}" maxlength="40" autocomplete="off">
  <label class="sub">Emplacements par page</label><div class="row">${BK_PGS.map(n=>bkChip(`data-b2="pg" data-b2p="${n}"`,bkMini(n)+' '+n,PG===n,'bk-lay')).join('')}</div>
@@ -2832,7 +2878,7 @@ function bkView(b){
  +(S.b2.org&&S.b2.sel!=null?bkSelBar(b):'')+bkNav(b,pg,np)+bkSheets(b,m)}
 /* --- sélecteur de cartes --- */
 function bkPickList(){const P=S.b2,q=P.q.trim().toLowerCase();
- return cards.filter(c=>(!P.x.length||P.x.includes(c.ext))&&(!P.rar.length||P.rar.includes(c.rar))&&(P.own===''||(P.own==='y'?c.own>0:c.own<=0))&&(P.ver===''||(P.ver==='n'?c.ver==='Normal':c.ver!=='Normal'))&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)))}
+ return msAllCards().filter(c=>(!P.x.length||P.x.includes(c.ext))&&(!P.rar.length||P.rar.includes(c.rar))&&(P.own===''||(P.own==='y'?c.own>0:c.own<=0))&&(P.ver===''||(P.ver==='n'?c.ver==='Normal':c.ver!=='Normal'))&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)))}
 function bkPkTiles(b){
  const l=bkPickList(),P=S.b2,inB=new Set(b.cards),sel=new Set(P.pk),shown=l.slice(0,P.lim);
  return {html:shown.map(c=>{const inb=inB.has(c.id),on=sel.has(c.id);
@@ -2847,7 +2893,7 @@ function bkPickView(b){
  return header()+`<button class="btn alt" style="margin-bottom:8px;text-align:left" data-b2="pkdone">← Retour au classeur « ${esc(b.name)} »</button>`
  +`<div class="panel bk-pki"><b>Ajouter des cartes</b><div class="sub">${P.tgt!=null?'Les cartes choisies prennent les emplacements vides à partir de l’emplacement '+(P.tgt+1)+' (page '+(Math.floor(P.tgt/PG)+1)+').':'Les cartes choisies sont ajoutées à la suite du classeur, dans l’ordre des numéros.'}</div></div>`
  +`<div style="height:10px"></div><input type="search" id="b2-q" data-b2in="q" placeholder="🔎 Nom ou numéro (ex. 035)" value="${esc(P.q)}" aria-label="Rechercher une carte" autocomplete="off">`
- +`<div class="row"><button class="chip" aria-pressed="${!P.x.length}" data-b2="pksx" data-b2p="">Toutes les séries</button>${EXTS.map(([e])=>bkChip(`data-b2="pksx" data-b2p="${e}"`,e,P.x.includes(e))).join('')}</div>`
+ +`<div class="row"><button class="chip" aria-pressed="${!P.x.length}" data-b2="pksx" data-b2p="">Toutes les séries</button>${msExtIds().map(e=>bkChip(`data-b2="pksx" data-b2p="${e}"`,e,P.x.includes(e))).join('')}</div>`
  +`<div class="row">${[['','Toutes'],['y','Possédées'],['n','Manquantes']].map(([k,t])=>bkChip(`data-b2="pkown" data-b2p="${k}"`,t,P.own===k)).join('')}${[['','Normal + Alt'],['n','Normal'],['a','Alt Art']].map(([k,t])=>bkChip(`data-b2="pkver" data-b2p="${k}"`,t,P.ver===k)).join('')}</div>`
  +`<div class="row">${RAR.map(r=>bkChip(`data-b2="pkrar" data-b2p="${r}"`,r,P.rar.includes(r))).join('')}</div>`
  +`<div class="bk-pkb"><span class="sub" id="b2-cnt">${bkPlural(R.total,'carte')} · ${R.addable} à ajouter</span><span class="bk-pkc"><button class="chip" data-b2="pkall">☑ Tout cocher</button><button class="chip" data-b2="pknone">Décocher</button></span></div>`
@@ -3030,7 +3076,7 @@ document.addEventListener('pointerup',bkEnd,true);document.addEventListener('poi
 addEventListener('blur',()=>{if(BKD.st)bkReset()});document.addEventListener('visibilitychange',()=>{if(document.hidden&&BKD.st)bkReset()});
 function find(){const q=S.fq.toLowerCase().trim(),l=q?cards.filter(c=>(c.name+' '+c.id+' '+c.n+' '+c.rar+' '+c.ver).toLowerCase().includes(q)):[];
 return header()+`<h2>Rechercher une carte</h2><input type="search" id="fq" placeholder="🔎 Nom ou numéro dans toutes les séries" value="${esc(S.fq)}" aria-label="Rechercher">`+(q?`<div class="sub" style="margin-top:8px">${l.length} carte${l.length>1?'s':''}${l.length>120?' · affichage des 120 premières, précise ta recherche':''}</div><div class="grid gc">${l.slice(0,120).map(cardBtn).join('')}</div>`:'<p class="sub">Tape un nom (Vegeta), un numéro (035), une rareté (SR) ou « Alternative ».</p>')}
-function dups(){const l=cards.filter(c=>c.own>3).sort((a,b)=>a.id<b.id?-1:1),ex=l.reduce((a,c)=>a+c.own-3,0),dv=l.reduce((a,c)=>a+(c.own-3)*pxv(c),0);
+function dupsFW(){const l=cards.filter(c=>c.own>3).sort((a,b)=>a.id<b.id?-1:1),ex=l.reduce((a,c)=>a+c.own-3,0),dv=l.reduce((a,c)=>a+(c.own-3)*pxv(c),0);
 return header()+`<h2>Doublons</h2><div class="panel"><b>${ex}</b> exemplaire${ex>1?'s':''} en trop sur <b>${l.length}</b> carte${l.length>1?'s':''}<div class="sub">Au-delà de 3 exemplaires (le maximum utile en jeu), pour échanger ou vendre.</div>${dv>0?`<div class="sub">💶 Valeur des exemplaires en trop : ≈ <b>${eur(dv)}</b></div>`:''}</div><button class="btn alt" data-go="swap" style="margin-top:10px">⚖️ Préparer un échange</button>`+(l.map(c=>`<button class="panel ext" data-n="${c.id}" style="margin-top:10px"><b>${c.id}</b> ${c.name}${c.ver!=='Normal'?' · Alt Art':''}<span class="n">×${c.own}</span><div class="sub">${c.own-3} en trop${c.rar?' · '+c.rar:''}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}</div></button>`).join('')||'<p class="sub">Aucune carte en plus de 3 exemplaires pour le moment.</p>')}
 function luckDraw(F){F=F||{};const pool=cards.filter(c=>c.ext===S.ext),out=[];
 const pk=(rar,alt)=>{let l=pool.filter(c=>(alt?c.ver!=='Normal':c.ver==='Normal')&&c.rar===rar);if(!l.length)l=pool.filter(c=>c.ver==='Normal'&&c.rar===rar);if(!l.length)l=pool.filter(c=>c.ver==='Normal');return l[Math.floor(Math.random()*l.length)].id};
@@ -3688,14 +3734,14 @@ return header()+`${serBar('margin-bottom:8px;text-align:left',S.ext)}${modeBar()
 const S_INP='width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center';
 const smBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${!S.burst}" data-sm="0">🔎 Recherche</button><button class="chip" aria-pressed="${S.burst}" data-sm="1">⚡ Rafale</button></div>`;
 function burstAdd(){const s=S.sc.replace(/(fb\s*0?\d+)\s*[-_.]?\s*(?=\d)/gi,'$1-'),toks=s.split(/[\s,;]+/).filter(Boolean),ok=[],ko=[];
-toks.forEach(t=>{const m=t.match(/^(?:fb0?(\d+)-)?0*(\d+)(a|alt)?(?:x(\d+))?$/i);if(!m){ko.push(t);return}
+toks.forEach(t=>{if(msTok(t)){ok.push(t);return}const m=t.match(/^(?:fb0?(\d+)-)?0*(\d+)(a|alt)?(?:x(\d+))?$/i);if(!m){ko.push(t);return}
 const ex=m[1]?'FB'+m[1].padStart(2,'0'):S.ext,n=+m[2],alt=m[3]?true:S.balt,q=m[4]?Math.max(1,+m[4]):1,id=ex+'-'+String(n).padStart(3,'0')+(alt?'_ALT':''),c=cards.find(x=>x.id===id);if(!c){ko.push(t);return}
 c.own+=q;bump('c',q);for(let k=0;k<q;k++)S.last.unshift(id);ok.push(id)});
 if(!toks.length)return;if(ok.length){S.sc=ko.join(' ');save();toast(ok.length+' ajoutée'+(ok.length>1?'s':'')+' ✓'+(ko.length?' · introuvable : '+ko.join(', '):''))}else toast('Introuvable : '+ko.join(', '));
 render();const i=$('#sc');if(i)i.focus()}
 function burstView(){const last=S.last.slice(0,8).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
 return header()+`<h2>Scanner</h2>${smBar()}${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row" style="margin-bottom:8px"><button class="chip" aria-pressed="${!S.balt}" data-ba="0">Normal</button><button class="chip" aria-pressed="${S.balt}" data-ba="1">Alternative Art</button></div>
-<div class="panel"><div class="sub" style="margin-bottom:8px">Tape les codes puis Entrée, par exemple <b>fb01-34 fb02-56</b> : chaque carte est ajoutée (+1). Sans série, c'est la série choisie ci-dessus. Ajoute <b>a</b> pour une Alt Art (fb01-34a) ou <b>x2</b> pour deux exemplaires (fb01-34x2).</div><input id="sc" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="off" placeholder="ex. fb01-34 fb02-56" value="${S.sc.replace(/"/g,'')}" style="${S_INP}"><button class="btn" style="margin-top:8px" data-bgo>➕ Ajouter</button></div>
+<div class="panel"><div class="sub" style="margin-bottom:8px">Tape les codes puis Entrée, par exemple <b>fb01-34 fb02-56</b> : chaque carte est ajoutée (+1). Sans série, c'est la série choisie ci-dessus. Ajoute <b>a</b> pour une Alt Art (fb01-34a) ou <b>x2</b> pour deux exemplaires (fb01-34x2). Pour Masters : <b>bt22-9</b>, <b>bt31-12</b>, <b>bt1-5x2</b> (ajoute spr, slr ou gdr pour une version spéciale).</div><input id="sc" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="off" placeholder="ex. fb01-34 fb02-56" value="${S.sc.replace(/"/g,'')}" style="${S_INP}"><button class="btn" style="margin-top:8px" data-bgo>➕ Ajouter</button></div>
 ${last.length?`<h2>Ajoutées à l'instant</h2><button class="btn alt" style="margin-bottom:8px" data-undo>↩️ Annuler la dernière (${last[0].id})</button><div class="grid">`+last.map(cardBtn).join('')+'</div>':''}`}
 function scanCov(){const s=new Set();cards.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});return [...s].sort().join(', ')||'aucune pour le moment'}
 function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
@@ -3705,7 +3751,7 @@ return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bot
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
-function want(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0)+sw.reduce((a,x)=>a+Math.max(0,x.s.want-x.s.own)*sealPx(x.e,x.t[0]),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">${sw.length?'Cartes et scellés manquants':'Cartes manquantes'} × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}${sealPx(x.e,x.t[0])?' · '+eur(sealPx(x.e,x.t[0]))+' pièce':''}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}${alTag(c)}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
+function wantFW(){const l=cards.filter(c=>c.want>0),sw=sealAll().filter(x=>x.s.want>0),wc=l.reduce((a,c)=>a+Math.max(0,c.want-c.own)*pxv(c),0)+sw.reduce((a,x)=>a+Math.max(0,x.s.want-x.s.own)*sealPx(x.e,x.t[0]),0);return header()+'<h2>Cartes recherchées</h2>'+(wc>0?`<div class="panel">💶 À acheter : ≈ <b>${eur(wc)}</b><div class="sub">${sw.length?'Cartes et scellés manquants':'Cartes manquantes'} × prix (le tien, sinon Cardmarket)</div></div>`:'')+(sw.length?'<h2>📦 Scellé recherché</h2>'+sw.map(x=>`<button class="panel ext" data-sn="${x.t[0]}" data-sx="${x.e}"><b>${x.t[1]}</b> ${x.e} · ${x.nm}<span class="n">${x.s.own} / ${x.s.want}</span><div class="sub">il en manque ${Math.max(0,x.s.want-x.s.own)}${sealPx(x.e,x.t[0])?' · '+eur(sealPx(x.e,x.t[0]))+' pièce':''}</div></button>`).join('')+'<h2>🃏 Cartes</h2>':'')+(l.map(c=>`<button class="panel ext" data-n="${c.id}"><b>${c.id}</b> ${c.name}<span class="n">${c.own} / ${c.want}</span><div class="sub">${c.ver} · il en manque ${Math.max(0,c.want-c.own)}${pxv(c)?' · '+eur(pxv(c))+' pièce':''}${alTag(c)}</div></button>`).join('')||'<p class="sub">Aucune carte recherchée. Ouvre une fiche et règle « Recherchée ».</p>')}
 /* ===== Stats : relevé du scouter (boule de cristal, rang, séries qui se chargent) ===== */
 let apT0=Date.now();/* instant d'arrivée sur l'écran : la boule se remplit à ce moment-là, une seule fois */
 const apIc={
@@ -3773,7 +3819,7 @@ function apDetail(){
   byT=['Leader','Battle','Extra'].map(t=>{const T=cards.filter(c=>c.ver==='Normal'&&c.type===t);return bar(t,T.filter(c=>c.own>0).length,T.length)}).join('');
  return `<h2>Par type</h2>${byT}<h2>Par rareté (cartes numérotées, toutes séries)</h2>${byR}`}
 
-function stats(){
+function statsFW(){
  const sa=sealAll(),sealN=sa.reduce((a,x)=>a+x.s.own,0)+msSealCount().n,sealU=sa.filter(x=>x.s.own>0).length+msSealCount().u,sealV=sa.reduce((a,x)=>a+x.s.own*sealPx(x.e,x.t[0]),0),
   cardV=cards.reduce((a,c)=>a+c.own*pxv(c),0),val=cardV+sealV,eV=eur(val),
   copies=cards.reduce((a,c)=>a+c.own,0),uniq=cards.filter(c=>c.own>0).length,all=cards.length,
@@ -3824,7 +3870,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 oct. 2026 · 12';
+const BUILD='12 oct. 2026 · 13';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
@@ -3863,7 +3909,7 @@ const dat=sg('💾','Mes données','Elles restent sur ton appareil, sauf si tu t
 <div class="sgl" style="margin-top:14px">Rappel de sauvegarde</div>${seg([['0','Jamais'],['1','1 sem.'],['2','2 sem.'],['4','4 sem.']],REM,'rem','Rappel de sauvegarde')}
 <div class="panel sxl" style="margin-top:12px">${lrow('data-go="trash"','🗑️','Corbeille',X.trash.length+' ›')}</div>`);
 /* aide */
-const own=cards.filter(c=>c.own>0).length,tot=cards.reduce((a,c)=>a+c.own,0),imgs=Object.keys(CARDIMG).length;
+const own=cards.filter(c=>c.own>0).length,tot=cards.reduce((a,c)=>a+c.own,0),imgs=Object.keys(CARDIMG).filter(k=>!k.startsWith('BT')).length;
 const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
 <div class="panel" style="margin-top:12px">${kv('Cartes différentes possédées',own+' / '+cards.length)}${kv('Exemplaires au total',tot)}${kv('Images de cartes',imgs+' / '+cards.length)}${kv('Version',BUILD)}</div>`);
 const sp=S.setp&&SETP[S.setp]?S.setp:'';

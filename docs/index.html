@@ -1717,7 +1717,7 @@ document.addEventListener('click',e=>{
   else if(d.ppsw!==undefined)ppPrep();
   else if(d.ppretry!==undefined)ppOpen(PP.name);
   else if(d.ppmore!==undefined){PP.more[d.ppmore]=true;render()}
-  else if(d.ppacc!==undefined||d.cmlogin!==undefined){S.tab='set';S.sacc=true;S.sel=null;S.menu=false;window.scrollTo(0,0);render()}});
+  else if(d.ppacc!==undefined||d.cmlogin!==undefined){S.tab='set';S.sacc=true;S.setp='compte';S.sel=null;S.menu=false;window.scrollTo(0,0);render()}});
 /* recherche : on affiche la liste sur place, sans redessiner l'écran (le clavier reste ouvert) */
 document.addEventListener('input',e=>{const t=e.target;if(!t||t.id!=='pp-q'||S.tab!=='comm')return;
   CM.q=t.value;clearTimeout(CM.t);const q=CM.q.trim();
@@ -4089,7 +4089,7 @@ const srow=(lead,t,sub,btn)=>`<div class="stl">${lead}<div class="stx"><b>${t}</
 const status=`<div class="panel stc">${on?srow(`<span class="stb" aria-hidden="true">${lg?esc((SBS.pseudo||SBS.email||'?').slice(0,1).toUpperCase()):'👤'}</span>`,lg?esc(SBS.pseudo||'Compte connecté'):'Mode local',lg?(SBAUTO?'Synchronisation automatique activée':'Synchronisation en pause'):'Ta collection reste sur cet appareil.',lg?'':`<button class="chip" data-sacc>${S.sacc?'Fermer':'Se connecter'}</button>`):''}${srow(`<span class="sdt ${bkc}" aria-hidden="true"></span>`,'Sauvegarde',bkt,`<button class="chip" data-act="export">Exporter</button>`)}</div>`;
 /* compte (formulaire seulement si demandé) */
 let accS='';
-if(on&&(lg||S.sacc)){const h=sbPanel().replace('<div class="panel" style="margin-bottom:10px">👤 Compte','<div class="panel sbp">');accS=sg('👤','Compte',lg?'Pseudo, synchronisation et amis':'Retrouve ta collection sur tous tes appareils',h)}
+if(on&&(lg||S.sacc||S.setp==='compte')){const h=sbPanel().replace('<div class="panel" style="margin-bottom:10px">👤 Compte','<div class="panel sbp">');accS=sg('👤','Compte',lg?'Pseudo, synchronisation et amis':'Retrouve ta collection sur tous tes appareils',h)}
 /* prix */
 const nPx=cards.reduce((n,c)=>n+(MKT[c.id]?1:0),0),prx=sg('💶','Prix des cartes','Estimation avec Cardmarket',trow('Prix Cardmarket','Quand tu n’as pas saisi de prix sur une carte ou un scellé, l’appli utilise le prix Cardmarket pour estimer la valeur de ta collection (scellés : édition japonaise). Ton prix saisi reste prioritaire.',!!MKON,'mkt')+kv('Prix du',MKDF)+kv('Cartes avec un prix',nPx.toLocaleString('fr-FR')+' sur '+cards.length.toLocaleString('fr-FR'))+kv('Scellés avec un prix',Object.keys(MKS).length+' sur '+EXTS.length*3)+'<div class="sub" style="margin-top:8px">Tendance Cardmarket (édition non anglaise pour FB01 à FB05). '+(PXST==='net'?'Les prix se mettent à jour tout seuls chaque nuit. ':'Prix intégrés à l’appli : la mise à jour automatique n’est pas active. ')+'Les séries trop récentes n’ont pas encore de prix.</div>');
 /* affichage */
@@ -4384,7 +4384,7 @@ else if(d.share!==undefined){S.menu=false;shareOpen()}
 else if(d.sharesend!==undefined){shareSend();return}
 else if(d.sharedl!==undefined){shareDl();return}
 else if(d.sharecopy!==undefined){copyText(shareText()).then(ok=>toast(ok?'Texte copié ✓':'Copie impossible ici'));return}
-else if(d.sacc!==undefined){S.sacc=!S.sacc}
+else if(d.sacc!==undefined){S.sacc=!S.sacc;if(S.sacc)S.setp='compte'}
 else if(d.vib!==undefined){VIB=d.vib==='1'?1:0;try{localStorage.setItem('fb_vib',String(VIB))}catch(e){}applyVib();if(VIB){try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}}
 else if(d.mot!==undefined){MOT=d.mot==='1'?'low':'full';try{localStorage.setItem('fb_mot',MOT)}catch(e){}applyMotion()}
 else if(d.gcs!==undefined){GCS=d.gcs;try{localStorage.setItem('fb_gcs',GCS)}catch(e){}applyGcs()}

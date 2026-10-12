@@ -1140,6 +1140,25 @@ nav .mid i{top:-28px;width:60px;height:60px;border-radius:0;background:var(--gol
 .sheet>div{border-radius:0;background:var(--bg);border-top:4px solid var(--gold);box-shadow:0 -6px 0 var(--ac)}
 .sheet>div::before{background:var(--gold);width:60px;height:4px;border-radius:0}
 .tr{border-bottom:1px solid var(--ln)}
+/* audit des écrans */
+[hidden]{display:none!important}
+nav button{font-size:10px}
+nav button[aria-current="page"]{transform:skewX(-5deg)}
+nav button[aria-current="page"]>*{transform:skewX(5deg)}
+.row:has(>.chip){flex-wrap:wrap}
+button+.sub,button+small,.btn+.sub,.btn+p{margin-top:14px}
+.mn-big{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.mnu .mn-b{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;width:100%;min-height:92px;margin:0;padding:12px 12px 11px;border:1px solid var(--ln);border-radius:18px;background:var(--sf);color:var(--tx);text-align:left;cursor:pointer}
+.mnu .mn-b>i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;font-size:22px;font-style:normal;line-height:1;background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.mnu .mn-b>span{display:block;font-size:15px;line-height:1.2;font-weight:700}
+.mnu .mn-b.pri{border-color:var(--ac);background:var(--ac);color:var(--on,#fff)}
+.mnu .mn-b.pri>i{background:rgba(255,255,255,.22)}
+.mnu .mn-b:active{transform:scale(.98)}
+.mnu .mn-more{display:block;width:100%;margin:12px 0 2px;padding:13px;border:1px dashed var(--ln);border-radius:16px;background:transparent;color:var(--mu);font-size:15px;font-weight:600}
+.mnu .mn-top{display:flex;align-items:center;gap:10px}
+.mnu .mn-top h2{flex:1;min-width:0;margin:0}
+.mnu .mn-back{flex:none;width:42px;max-width:42px;height:42px;padding:0;margin:0;border-radius:50%;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:20px}
+.sheet.in .mn-b{animation:mnin .26s cubic-bezier(.2,.9,.25,1) backwards;animation-delay:calc(var(--i)*30ms + 30ms)}
 </style>
 </head>
 <body>
@@ -2202,7 +2221,7 @@ function mnTile(t,i){const ic=t[0],tx=t[1],at=t[2],cl=t[3],k=t[4];let bd='';
   if(k==='cm')bd=cmBdg();
   else if(k==='al'){if(!MKON)return '';const n=alList().length;if(n)bd=`<b class="cmbd" aria-label="${n} carte${n>1?'s':''} sous ton seuil">${n}</b>`}
   return `<button type="button" class="mn-t${cl?' '+cl:''}" ${at} style="--i:${i}"><i aria-hidden="true">${ic}</i><span>${tx}</span>${bd}</button>`}
-function mnSheet(){let i=0;
+function mnSheetOld(){let i=0;
   return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Que veux-tu faire ?"><h2 style="margin-top:0">Que veux-tu faire ?</h2>${MNG.map(g=>{const b=g[1].map(x=>mnTile(x,i++)).join('');return b?`<section class="mn-s"><h3 class="mn-h">${g[0]}</h3><div class="mn-g">${b}</div></section>`:''}).join('')}</div></div>`}
 /* le scanner s'ouvre par son propre écouteur : on referme juste le menu derrière lui */
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.mnu [data-cam]');if(t){S.menu=false;setTimeout(render,0)}},true);
@@ -2578,7 +2597,7 @@ const msSealQ=set=>MS_SEAL.map(t=>msOwn(set.id+'-'+t[0]));
 const msThumb=id=>MS_IMG[id]&&MS_IMG[id].pk?`<span class="sr-th" style="background:#0000 url(${MS_IMG[id].pk}) 50%/contain no-repeat;box-shadow:none"></span>`:'<span class="sr-th"></span>';
 function msBar(set){const i=MS_SETS.indexOf(set),n=MS_SETS.length,pv=MS_SETS[(i+n-1)%n].id,nx=MS_SETS[(i+1)%n].id,st=msStat(set),sl=S.msm==='sealed',q=msSealQ(set),tot=q.reduce((a,b)=>a+b,0);
  return `<div class="sr-bar" style="--c:rgb(${MS_COL[set.id]||'229,9,20'});--cr:${MS_COL[set.id]||'229,9,20'};--w:${st.p}%"><button type="button" class="sr-arr" data-msset="${pv}" aria-label="Série précédente">${msAr('M15 5l-7 7 7 7')}</button><button type="button" class="sr-cur" data-mspick aria-haspopup="dialog" aria-label="Choisir la série. Actuellement ${set.id} ${esc(set.n)}">${msThumb(set.id)}<span class="sr-tx"><span class="sr-n"><b>${set.id}</b>${esc(set.n)}</span>${sl?`<span class="sr-st">${MS_SEAL.map((t,k)=>`<span${q[k]?'':' class="z"'}>${{booster:'🎴',display:'📦',case:'🗃️'}[t[0]]} ${q[k]}</span>`).join('')}</span>`:`<span class="sr-ln"><i></i></span><span class="sr-st"><b>${st.o}</b> / ${st.n} · ${st.p} %</span>`}</span></button><button type="button" class="sr-arr" data-msset="${nx}" aria-label="Série suivante">${msAr('M9 5l7 7-7 7')}</button></div>`}
-const msModes=()=>`<div class="row" style="margin-bottom:10px"><button type="button" class="chip" aria-pressed="${S.msm!=='sealed'}" data-msmode="cards">🃏 Cartes</button><button type="button" class="chip" aria-pressed="${S.msm==='sealed'}" data-msmode="sealed">📦 Scellé (booster, display, case)</button></div>`;
+const msModes=()=>`<div class="row" style="margin-bottom:10px"><button type="button" class="chip" aria-pressed="${S.msm!=='sealed'}" data-msmode="cards">🃏 Cartes</button><button type="button" class="chip" aria-pressed="${S.msm==='sealed'}" data-msmode="sealed">📦 Scellés</button></div>`;
 function msSealTile(set,t){const id=set.id+'-'+t[0],q=msOwn(id),art=t[3]?msImg(set.id,t[3],'mssi'):'<span class="mssc">🗃️</span>';
  return `<div class="tile"><button type="button" class="card" aria-label="${t[1]}" style="width:100%"><div class="art r-U ${q?'':'miss'}">${art}${q>1?`<span class="qty">×${q}</span>`:''}</div><div class="meta">${t[1]}<br><span>${t[2]}</span>${msCm(id)?`<br><b class="pxt">${eur(msCm(id))}</b>`:''}</div></button><button class="adj m" data-ms="dec" data-id="${id}" aria-label="Retirer">−</button><button class="adj p" data-ms="inc" data-id="${id}" aria-label="Ajouter">+</button></div>`}
 function msSealV(set){const tot=msSealQ(set).reduce((a,b)=>a+b,0);
@@ -2711,6 +2730,40 @@ function luck(){mhImgs();if(S.op&&mhIs(S.op.ext)&&S.tab==='luck')S.hzm=true;
 document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-hzg],[data-hzx]');if(!b||S.tab!=='luck')return;ev.stopPropagation();
  if(b.dataset.hzg!==undefined){S.hzm=b.dataset.hzg==='ms';if(S.hzm&&!S.hxm)S.hxm=MS_SETS[0].id}else{S.hzm=true;S.hxm=b.dataset.hzx}
  S.celeb=null;render()},true);
+/* Menu « + » court : 6 actions en grand, le reste derrière « Plus… » */
+const MN6=[['📷','Scanner une carte','data-cam','pri'],['⚡','Saisir en rafale','data-hburst'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
+const MN6X=['Scanner une carte','Saisir en rafale','Chercher une carte','Mes classeurs','Ouvrir des boosters','Mes scellés'];
+function mnBig(t,i){return `<button type="button" class="mn-b${t[3]?' '+t[3]:''}" ${t[2]} style="--i:${i}"><i aria-hidden="true">${t[0]}</i><span>${t[1]}</span></button>`}
+function mnSheet(){let i=0;
+ if(S.mnmore){
+  return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Plus d’actions"><div class="mn-top"><button type="button" class="mn-back" data-mnmore="0" aria-label="Retour">←</button><h2>Plus d’actions</h2></div>${MNG.map(g=>{const b=g[1].filter(x=>!MN6X.includes(x[1])).map(x=>mnTile(x,i++)).join('');return b?`<section class="mn-s"><h3 class="mn-h">${g[0]}</h3><div class="mn-g">${b}</div></section>`:''}).join('')}</div></div>`}
+ return `<div class="sheet" data-close><div role="dialog" class="menu mnu" aria-label="Que veux-tu faire ?"><h2 style="margin-top:0">Que veux-tu faire ?</h2><div class="mn-big">${MN6.map(x=>mnBig(x,i++)).join('')}</div><button type="button" class="mn-more" data-mnmore="1">Plus…</button></div></div>`}
+document.addEventListener('click',e=>{const m=e.target.closest&&e.target.closest('[data-mnmore]');if(m){e.stopPropagation();S.mnmore=m.dataset.mnmore==='1';render();const d=document.querySelector('.mnu');if(d)d.scrollTop=0;return}
+ if(e.target.closest&&e.target.closest('nav [data-menu]'))S.mnmore=false},true);
+/* Balayage gauche/droite = série suivante/précédente (là où la barre de séries est affichée) */
+(()=>{let t0=null;
+ const hs=el=>{for(;el&&el!==document.body;el=el.parentElement){const o=getComputedStyle(el).overflowX;if((o==='auto'||o==='scroll')&&el.scrollWidth>el.clientWidth+4)return true;if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'||el.tagName==='CANVAS'||el.tagName==='VIDEO')return true}return false};
+ document.addEventListener('touchstart',e=>{t0=null;if(e.touches.length!==1||document.querySelector('.sheet')||hs(e.target))return;const p=e.touches[0];t0={x:p.clientX,y:p.clientY,t:Date.now()}},{passive:true});
+ document.addEventListener('touchend',e=>{if(!t0)return;const p=e.changedTouches[0],dx=p.clientX-t0.x,dy=p.clientY-t0.y,dt=Date.now()-t0.t;t0=null;
+  if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.6||dt>700)return;
+  const a=document.querySelectorAll('.sr-bar .sr-arr');if(a.length<2)return;
+  (dx<0?a[a.length-1]:a[0]).click();try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}},{passive:true});
+})();
+/* Prix Masters : fichier prix_ms.json mis à jour chaque nuit (les prix intégrés servent de secours) */
+let MSPD='',MSPT=0;
+function msPxApply(j){try{
+ if(!j||j.v!==1||typeof j.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(j.date)||!j.t||typeof j.t!=='object')return false;
+ const t=j.t,a=j.a&&typeof j.a==='object'?j.a:{},ks=Object.keys(t);
+ if(ks.length<300||!ks.every(k=>typeof t[k]==='number'&&t[k]>0&&t[k]<1e6))return false;
+ for(const k of Object.keys(a)){const r=a[k];if(!Array.isArray(r)||r.length!==3||!r.every(x=>typeof x==='number'&&x>=0&&x<1e6))return false}
+ Object.assign(MSP,t);Object.assign(MSA,a);MSPD=j.date;return true}catch(e){return false}}
+function msPxCache(){try{const c=localStorage.getItem('fb_prixms');if(c)msPxApply(JSON.parse(c))}catch(e){}}
+async function msPxLoad(){MSPT=Date.now();try{
+ const r=await fetch('prix_ms.json',{cache:'no-store'});if(!r.ok)return;
+ const txt=await r.text();if(!msPxApply(JSON.parse(txt)))return;
+ try{localStorage.setItem('fb_prixms',txt)}catch(e){}
+ if(X.game==='ms'&&!pxQuiet())render()}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-MSPT>3*36e5)msPxLoad()});
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -2814,7 +2867,7 @@ ${st('own','Possédé')}${st('want','Recherché')}
 ${sealCmBlock(e,t[0])}${sealBuys(e,t)}<div class="fld"><div class="w"><label>Prix payé / indicatif (€)</label><input data-sp="${t[0]}" inputmode="decimal" placeholder="${sealPh(e,t[0])}" value="${esc(s.price)}"></div>${sealHint(e,t[0],s)}</div>
 ${s.own>0?`<button class="vnsellbtn" data-vnsells="${e}|${t[0]}">💶 Vendre ce produit</button>`:''}<a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(EXTS.find(x=>x[0]===e)[1]+' '+t[1].replace(' de display',''))}&language=7">💶 Voir le prix sur Cardmarket</a>
 <button class="btn" data-close>Fermer</button></div></div>`}
-const modeBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${S.mode==='cards'}" data-mode="cards">🃏 Cartes</button><button class="chip" aria-pressed="${S.mode==='sealed'}" data-mode="sealed">📦 Scellé (booster, display, case)</button></div>`;
+const modeBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" aria-pressed="${S.mode==='cards'}" data-mode="cards">🃏 Cartes</button><button class="chip" aria-pressed="${S.mode==='sealed'}" data-mode="sealed">📦 Scellés</button></div>`;
 /* ===== Classeurs v2 : emplacements, pages, glisser-déposer ===== */
 const BK_IC=['📒','📕','📗','📘','📙','🔥','⭐','🐉','💎','👑','⚡','🎴'],BK_PGS=[4,9,12],bkCols=n=>n===4?2:3;
 const BKC={},BKO={};cards.forEach((c,i)=>{BKC[c.id]=c;BKO[c.id]=i});msBindInit();
@@ -3360,7 +3413,7 @@ const TUT=[
 ['🗂️','Ta collection','Touche la barre de série pour voir toutes les séries, ou utilise les flèches ‹ › pour passer à la voisine. Les filtres (Possédées, Manquantes, Normal, Alt Art, raretés) et le tri t\'aident à t\'y retrouver. Touche une carte pour ouvrir sa fiche, − et + changent sa quantité.'],
 ['🃏','La fiche d\'une carte','Tu y règles la quantité possédée et recherchée, et tu peux la marquer ⭐ favorite, 💱 à échanger ou 🔧 à remplacer. Le bouton Agrandir l\'affiche en grand. Tu vois aussi son prix Cardmarket avec la courbe, et tu peux la vendre avec « Vendre cette carte ».'],
 ['📦','Les produits scellés','L\'onglet « Scellé » de chaque série suit tes boosters, displays et cases, avec leur prix. Leur valeur est comptée dans ta collection.'],
-['💶','Prix et valeur','Les prix viennent de Cardmarket (la tendance). « Valeur de ta série » te dit combien vaut ce que tu as et ce qu\'il te manque. Tu peux aussi fixer ton propre prix sur la fiche. Les prix Fusion World se mettent à jour, ceux de Masters sont un relevé à un instant donné.'],
+['💶','Prix et valeur','Les prix viennent de Cardmarket (la tendance). « Valeur de ta série » te dit combien vaut ce que tu as et ce qu\'il te manque. Tu peux aussi fixer ton propre prix sur la fiche. Les prix Fusion World se mettent à jour, ceux de Masters aussi, chaque nuit.'],
 ['📷','Ajouter vite','Le scanner reconnaît une carte, la Rafale te laisse taper plusieurs codes d\'un coup (fb01-34 fb02-56 pour Fusion World, bt22-9 bt1-5x2 pour Masters, avec spr, slr ou gdr pour une version spéciale), et la recherche trouve une carte par son nom ou son numéro.'],
 ['＋','Le bouton du milieu','Il ouvre « Que veux-tu faire ? » : ajouter des cartes, ranger ta collection (classeurs, scellés, recherchées, doublons, Dragon Balls), gérer ton argent (budget, ventes, échanges, alertes de prix) et retrouver tes amis.'],
 ['📒','Les classeurs','Range tes cartes comme dans un vrai classeur : des pages, des emplacements, et en grisé celles qu\'il te manque. Maintiens une carte appuyée puis glisse-la pour la déplacer, ou touche un emplacement vide pour la ranger.'],
@@ -3999,7 +4052,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 oct. 2026 · 16';
+const BUILD='12 oct. 2026 · 18';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
@@ -4043,7 +4096,7 @@ const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut
 <div class="panel" style="margin-top:12px">${kv('Cartes différentes possédées',own+' / '+cards.length)}${kv('Exemplaires au total',tot)}${kv('Images de cartes',imgs+' / '+cards.length)}${kv('Version',BUILD)}</div>`);
 const sp=S.setp&&SETP[S.setp]?S.setp:'';
 const g=(a,ic,t,r)=>lrow('data-setp="'+a+'"',ic,t,(r?esc(r)+' ':'')+'›');
-if(sp){const body={compte:accS+ppSet(sg,trow),data:dat,aff:disp,son:snd,scn:scn,prix:prx,aide:help}[sp];
+if(sp){const body={compte:(accS+ppSet(sg,trow)).trim()||'<div class="panel">Le compte n\u2019est pas disponible pour le moment (pas de connexion). Ta collection reste enregistrée sur cet appareil.</div>',data:dat,aff:disp,son:snd,scn:scn,prix:prx,aide:help}[sp];
  return header()+`<div class="setbk"><button class="chip" data-setp="">‹ Réglages</button></div><h2>${SETP[sp][0]} ${SETP[sp][1]}</h2><div class="${['compte'].includes(sp)?'':'setone'}">${body}</div>`}
 const thn={dark:'Sombre',light:'Clair',auto:'Automatique'}[TH]||'',snn=['Coupés','Discrets','Normaux'][+SND]||'',bks=LASTEXP?'Exporté '+agoFr(LASTEXP):has?'À sauvegarder':'Vide';
 return header()+`<h2>Réglages</h2>${status}`
@@ -4169,7 +4222,7 @@ function initTilt(){if(RM)return;document.querySelectorAll('.tilt').forEach(el=>
 if(!TILTON&&window.DeviceOrientationEvent){TILTON=true;window.addEventListener('deviceorientation',e=>{const el=document.querySelector('.tilt');if(!el||e.gamma==null||el.matches(':active'))return;setTilt(el,clamp01(.5+Math.max(-30,Math.min(30,e.gamma))/60),clamp01(.5+Math.max(-30,Math.min(30,(e.beta||0)-40))/60))})}}
 const askTilt=()=>{try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{})}catch(e){}};
 let LAST={sk:'',vk:''};
-const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh,!!S.alsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
+const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.mnmore,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh,!!S.alsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
 let RESTORE=false;const SCRM={};
 function render(){const y=window.scrollY,sd=document.querySelector('.sheet>div'),st=sd?sd.scrollTop:0,sk=sheetKey(),vk=viewKey(),sameS=sk===LAST.sk,sameV=vk===LAST.vk;
 if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCore();LAST={sk,vk};
@@ -4432,7 +4485,7 @@ function sphBlob(f){return new Promise((res,rej)=>{const r=new FileReader();r.on
 async function sphUp(f,id){if(!f||!id)return;if(!SBS){toast('Connecte-toi dans Réglages pour ajouter une photo');return}toast('Envoi de la photo…');try{const b=await sphBlob(f),t=await sbTok(),r=await fetch(SBC.url+'/storage/v1/object/card-photos/'+encodeURIComponent(id)+'.jpg',{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'true'},body:b});if(!r.ok){toast(r.status===400||r.status===403?'Cette carte a déjà une photo d\'un autre utilisateur':'Envoi impossible');return}SPH[id]=sphUrl(id,Date.now());try{localStorage.setItem('fb_sph',JSON.stringify(SPH))}catch(e){}toast('Photo ajoutée, tout le monde la voit ✓');render()}catch(e){toast('Envoi impossible')}}
 async function sphDel(id){if(!SBS||!id)return;try{const t=await sbTok(),r=await fetch(SBC.url+'/storage/v1/object/card-photos/'+encodeURIComponent(id)+'.jpg',{method:'DELETE',headers:{apikey:SBC.key,Authorization:'Bearer '+t}});if(!r.ok){toast('Tu ne peux retirer que tes propres photos');return}await sphLoad();delete SPH[id];render();toast('Photo retirée')}catch(e){toast('Retrait impossible')}}
 if(sbOn()){sphLoad();addEventListener('focus',()=>sphLoad())}
-phLoad();pxCache();render();pxNet();
+phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
 /* ===== Scanner 2 : caméra + reconnaissance par l'illustration + lecture du numéro ===== */

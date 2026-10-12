@@ -1159,6 +1159,13 @@ button+.sub,button+small,.btn+.sub,.btn+p{margin-top:14px}
 .mnu .mn-top h2{flex:1;min-width:0;margin:0}
 .mnu .mn-back{flex:none;width:42px;max-width:42px;height:42px;padding:0;margin:0;border-radius:50%;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:20px}
 .sheet.in .mn-b{animation:mnin .26s cubic-bezier(.2,.9,.25,1) backwards;animation-delay:calc(var(--i)*30ms + 30ms)}
+.cs-gm{display:flex;gap:2px;padding:3px;border-radius:13px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.cs-gm button{border:0;background:none;color:#fff;font:600 13px/1 inherit;font-family:inherit;padding:9px 10px;border-radius:10px;min-height:36px}
+.cs-gm button[aria-pressed="true"]{background:#fff;color:#111}
+.ppsn .bar,.hmr .ppsn .bar{height:6px;padding:0;border:0;transform:none;border-radius:4px;background:var(--ln);margin-top:6px;overflow:hidden}
+.ppsn .bar i{display:block;height:100%;border-radius:4px;background:var(--c,var(--ac))}
+button.ppsr{width:100%;background:none;border-left:0;border-right:0;border-bottom:0;color:var(--tx);text-align:left;font:inherit;cursor:pointer}
+button.ppsr:first-child{border-top:0}
 </style>
 </head>
 <body>
@@ -2783,6 +2790,9 @@ document.addEventListener('click',ev=>{if(S.tab!=='luck'||!HZM()||S.op||S.hzv)re
  else if(d.shsell!==undefined){let g=0,n=0;HMA().forEach(c=>{const q=VIRT.q[c.id]||0;if(q>1){g+=(q-1)*mPts(c);n+=q-1;VIRT.q[c.id]=1}});VIRT.pts=(VIRT.pts||0)+g;saveV();toast(n?n+' doublons vendus : +'+g+' pts':'Aucun doublon')}
  else if(d.shbuy){const n=+d.shbuy,cost=n===1?BPRICE:DPRICE;if((VIRT.pts||0)<cost){toast('Pas assez de points');return}VIRT.pts-=cost;saveV();S.shop=false;S.celeb=null;S.op=newOp(n===1?'pack':'box',true)}
  window.scrollTo(0,0);render()},true);
+/* choix du jeu dans l'onglet Scanner */
+const scGameBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" data-scg="fw" aria-pressed="${X.game!=='ms'}">Fusion World</button><button class="chip" data-scg="ms" aria-pressed="${X.game==='ms'}">Masters</button></div>`;
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-scg]');if(!b)return;e.stopPropagation();const v=b.dataset.scg==='ms'?'ms':'fw';if(X.game!==v){X.game=v;saveX();S.sc='';render()}},true);
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -2861,7 +2871,7 @@ const CARDIMG={};for(const k in MS_CI)CARDIMG[k]=MS_CI[k];
 const IMGP=new Promise(res=>{let n=0;const T=EXTS.length;EXTS.forEach(([e])=>{const sc=document.createElement('script');sc.src='cards-'+e+'.js';sc.async=true;const d=()=>{window.__ld=[++n,T,e];window.__spu&&window.__spu();if(n===T){res();try{render()}catch(_){}}};sc.onload=sc.onerror=d;document.head.appendChild(sc)})});;
 function art(c){return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}" >${CARDIMG[c.id]||MS_CI[c.id]?`<img class="cimg" src="${CARDIMG[c.id]||MS_CI[c.id]}" alt="${esc(c.name||c.id)}" draggable="false">`:p3(c.n)}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
 function cardBtn(c,pr){return `<div class="tile"><button class="card" data-n="${c.id}" aria-label="${c.id}" style="width:100%">${art(c)}<div class="meta">${c.name||'<span>Nom à compléter</span>'}<br><span>${c.id}</span>${pr===true&&pxv(c)?`<br><b class="pxt">${eur(pxv(c))}</b>`:''}</div></button>${X.fav[c.id]?'<span class="mk">⭐</span>':''}${X.sell[c.id]?'<span class="mk s">💱</span>':''}${X.upg[c.id]?'<span class="mk u">🔧</span>':''}<button class="adj m" data-cq="${c.id}" data-cd="-1" aria-label="Retirer une carte">−</button><button class="adj p" data-cq="${c.id}" data-cd="1" aria-label="Ajouter une carte">+</button></div>`}
-const header=()=>`<header><div><h1>🐉 <span class="ttl">L'Appel des Cartes</span></h1><div class="sub">${S.tab==='coll'||S.tab==='scan'?S.ext+' · '+EXTS.find(x=>x[0]===S.ext)[1]:'FB01 → FB11'}</div></div></header>`;
+const header=()=>`<header><div><h1>🐉 <span class="ttl">L'Appel des Cartes</span></h1><div class="sub">${X.game==='ms'&&S.tab==='scan'?'Masters · '+MS_SETS[0].id+' → '+MS_SETS[MS_SETS.length-1].id:S.tab==='coll'||S.tab==='scan'?S.ext+' · '+EXTS.find(x=>x[0]===S.ext)[1]:'FB01 → FB11'}</div></div></header>`;
 function sealed(){const e=S.ext,tot=SEALT.reduce((a,t)=>a+sl(e,t[0]).own,0);
 return header()+`${serBar('margin-bottom:8px;text-align:left',e)}${modeBar()}<div class="panel">Produits scellés de la série : <b>${tot}</b> possédé${tot>1?'s':''} non ouvert${tot>1?'s':''} · investi : <b>${eur(X.buys.filter(b=>b.ext===e).reduce((a,b)=>a+b.q*nb(b.p),0))}</b>${sealVal(e)>0?` · valeur : <b>${eur(sealVal(e))}</b>`:''}</div><div class="grid">${SEALT.map(t=>sealTile(e,t)).join('')}</div><p class="sub">Touche un produit pour régler les quantités.</p>`}
 const num=v=>parseFloat(String(v||'').replace(',','.'))||0;
@@ -3674,7 +3684,7 @@ function hmNews(){const A=[...NEWS,...X.soon.map(x=>({n:x.n,d:x.d,t:x.t}))],up=A
 function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0)+1;if(c.own>0)own[c.ext]=(own[c.ext]||0)+1});
  const nAll=cards.length,nOwn=cards.filter(c=>c.own>0).length,copies=cards.reduce((a,c)=>a+c.own,0),value=cards.reduce((a,c)=>a+c.own*pxv(c),0),H=hmHand(),
  TL=[['find','🔎','Recherche'],['luck','🎲','Boosters'],['bind','📒','Classeurs'],['#sealed','📦','Scellé'],['trade','💶','Ventes'],['budget','💰','Budget'],['print','🖨️','Liste'],['soon','🗓️','Sorties']],
- ser=EXTS.map(([e,nm])=>{const o=own[e]||0,n=tot[e]||0,p=pct(o,n);return `<button class="hmr" data-hext="${e}" style="--c:${SERCOL[e]}"><span class="hmcode">${e}</span><span><span class="hmnm">${esc(nm)}</span><span class="hmbar"><i style="width:${p}%"></i></span></span><span class="hmpc"><b>${p===100?'✓':p+'%'}</b><small>${o}/${n}</small></span></button>`}).join('');
+ ser=EXTS.map(([e,nm])=>{const o=own[e]||0,n=tot[e]||0,p=pct(o,n);return `<button class="ppsr" data-hext="${e}" style="--c:${SERCOL[e]}"><b class="ppsc" style="color:${SERCOL[e]||'var(--tx)'}">${e}</b><span class="ppsn">${esc(nm)}<span class="bar"><i style="width:${p}%"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></button>`}).join('');
  return header()+remBanner()+alBanner()+greet()+hmFan(H)
  +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
  +`<div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>`
@@ -3941,14 +3951,14 @@ c.own+=q;bump('c',q);for(let k=0;k<q;k++)S.last.unshift(id);ok.push(id)});
 if(!toks.length)return;if(ok.length){S.sc=ko.join(' ');save();toast(ok.length+' ajoutée'+(ok.length>1?'s':'')+' ✓'+(ko.length?' · introuvable : '+ko.join(', '):''))}else toast('Introuvable : '+ko.join(', '));
 render();const i=$('#sc');if(i)i.focus()}
 function burstView(){const last=S.last.slice(0,8).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${smBar()}${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row" style="margin-bottom:8px"><button class="chip" aria-pressed="${!S.balt}" data-ba="0">Normal</button><button class="chip" aria-pressed="${S.balt}" data-ba="1">Alternative Art</button></div>
+return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row" style="margin-bottom:8px"><button class="chip" aria-pressed="${!S.balt}" data-ba="0">Normal</button><button class="chip" aria-pressed="${S.balt}" data-ba="1">Alternative Art</button></div>
 <div class="panel"><div class="sub" style="margin-bottom:8px">Tape les codes puis Entrée, par exemple <b>fb01-34 fb02-56</b> : chaque carte est ajoutée (+1). Sans série, c'est la série choisie ci-dessus. Ajoute <b>a</b> pour une Alt Art (fb01-34a) ou <b>x2</b> pour deux exemplaires (fb01-34x2). Pour Masters : <b>bt22-9</b>, <b>bt31-12</b>, <b>bt1-5x2</b> (ajoute spr, slr ou gdr pour une version spéciale).</div><input id="sc" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="off" placeholder="ex. fb01-34 fb02-56" value="${S.sc.replace(/"/g,'')}" style="${S_INP}"><button class="btn" style="margin-top:8px" data-bgo>➕ Ajouter</button></div>
 ${last.length?`<h2>Ajoutées à l'instant</h2><button class="btn alt" style="margin-bottom:8px" data-undo>↩️ Annuler la dernière (${last[0].id})</button><div class="grid">`+last.map(cardBtn).join('')+'</div>':''}`}
-function scanCov(){const s=new Set();cards.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});msBindInit();MS_ALL.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});return [...s].sort().join(', ')||'aucune pour le moment'}
+function scanCov(){const s=new Set();if(X.game!=='ms')cards.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});else{msBindInit();MS_ALL.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)})}return [...s].sort().join(', ')||'aucune pour le moment'}
 function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
 function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=(/bt/i.test(S.sc)||(X.game==='ms'&&!mm))?msScanFind(S.sc):n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none">${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
+return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none">${X.game==='ms'?'':serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>${X.game==='ms'?'Saisis le numéro lu en bas de la carte (toutes les séries Masters), ou précise la série : BT31-035':'Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035'}</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="${X.game==='ms'?'ex. 035 ou BT31-035':'ex. 035 ou FB01-035'}" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
@@ -4852,7 +4862,7 @@ function wlev(a,b){const m=a.length,n=b.length;let p=new Array(n+1),q=new Array(
 /* texte brut -> {id,d} : le numéro de la liste le plus proche (d = coût d'erreur). null si ambigu ou trop loin. */
 function ocrParse(t,prior){t=String(t||'').toUpperCase().replace(/[^A-Z0-9\-]/g,' ');
  const toks=t.split(/\s+/).filter(x=>x.length>=4);if(!toks.length)return null;
- const L=baseIds(),wins=new Set();for(const k of toks){wins.add(k);if(k.length>9)for(let i=0;i+8<=k.length;i++){wins.add(k.slice(i,i+8));wins.add(k.slice(i,i+7))}}
+ const L=baseIds().filter(id=>/^BT/.test(id)===(X.game==='ms')),wins=new Set();for(const k of toks){wins.add(k);if(k.length>9)for(let i=0;i+8<=k.length;i++){wins.add(k.slice(i,i+8));wins.add(k.slice(i,i+7))}}
  let best=9,bid=null,second=9;
  for(const w of wins){if(w.length<5||w.length>10)continue;for(const id of L){let d=wlev(w,id);if(prior&&id.startsWith(prior))d-=.25;
   if(d<best){if(id!==bid)second=best;best=d;bid=id}else if(id!==bid&&d<second)second=d}}
@@ -4973,11 +4983,11 @@ function mediaEl(kind){ // 'cam' -> <video>, 'photo' -> <img>
  if(old){old.srcObject=null;old.remove()}ov.insertBefore(el,ov.firstChild);vid=el;return el}
 async function open(opts){
  if(ov)return;opts=opts||{};ensureCss();Eng.urgent=true;Eng.start();
- Object.assign(st,{mode:'live',sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',manMsg:null,stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,qs:null,busy:false,auto:!!pref('auto',false),serie:S.ext||'FB01',photoMode:!!opts.bitmap,unkR:[],unkT:0,ctx:null,learned:null});
+ Object.assign(st,{mode:'live',sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',manMsg:null,stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,qs:null,busy:false,auto:!!pref('auto',false),serie:X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01'),photoMode:!!opts.bitmap,unkR:[],unkT:0,ctx:null,learned:null});
  ov=document.createElement('div');ov.className='cs'+(opts.bitmap?' cs_ph':'');ov.setAttribute('role','dialog');ov.setAttribute('aria-label','Scanner de cartes');
  ov.innerHTML='<svg class="cs-q" id="cs-q"><polygon id="cs-poly" points="" style="display:none"/></svg>'
   +'<div class="cs-g" id="cs-g"><i></i><i></i><i></i><i></i></div>'
-  +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span>Scanner</span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
+  +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span class="cs-gm" role="group" aria-label="Choisir le jeu"><button data-a="game" data-g="fw" aria-pressed="'+(X.game!=='ms')+'">Fusion World</button><button data-a="game" data-g="ms" aria-pressed="'+(X.game==='ms')+'">Masters</button></span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
   +'<button class="cs-ib" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique">⚡<span style="font-size:12px">Auto</span></button><button class="cs-ib" id="cs-torch" data-a="torch" aria-label="Lampe" style="display:none">🔦</button></div>'
   +'<div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
   +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
@@ -5081,6 +5091,8 @@ function decideVisual(){const r=st.ring;if(!r.length)return null;const last=r[r.
 function rearm(){st.chg=0;st.otherN=0;st.ring=[];st.ocrAcc={};st.trackSince=0;st.lock=null;st.pick=null;
  if(st.mode!=='man'&&st.mode!=='tray'){st.mode='live';panel()}setClass('');hint('Place la carte dans le cadre')}
 
+/* seules les cartes du jeu choisi comptent (les autres sont écartées avant la décision) */
+{const _an=Eng.analyse;Eng.analyse=async function(){const r=await _an.apply(this,arguments);try{if(r&&r.top&&r.top.length){const ms=X.game==='ms',f=r.top.filter(x=>/^BT/.test(x.id)===ms);if(f.length!==r.top.length){const t0=r.top[0],sd=r.top.length>1&&(r.z-r.z2)>1e-6?(t0.s-r.top[1].s)/(r.z-r.z2):0,z0=r.z;r.top=f;if(f.length){r.margin=f[1]?f[0].s-f[1].s:f[0].s;r.z=sd?z0-(t0.s-f[0].s)/sd:0;r.z2=sd&&f[1]?r.z-(f[0].s-f[1].s)/sd:0}else{r.margin=0;r.z=0;r.z2=0}}}}catch(e){}return r}}
 /* ---------- lecture du numéro en arrière-plan (cartes sans illustration connue) ---------- */
 async function maybeOCR(res,m){
  if(ocrBusy||ocrFail||photo||st.mode!=='live')return;const now=NOW();
@@ -5151,7 +5163,7 @@ function unkHTML(){return'<button class="cs-x" data-a="skip" aria-label="Fermer"
  +'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
 function candsHTML(){const an=st.lastAn&&st.lastAn.res,l=(an&&an.top||[]).slice(0,6);
  return'<button class="cs-x" data-a="skip" aria-label="Fermer">✕</button><div class="cs-h">Autres possibilités</div>'+(l.length?'<div class="cs-cands">'+candBtns(l)+'</div>':'')+'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
-function manHTML(){const ex=EXTS.concat(MS_SETS.map(s=>[s.id])).map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
+function manHTML(){if(/^BT/.test(st.serie)!==(X.game==='ms'))st.serie=X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01');const ex=(X.game==='ms'?MS_SETS.map(s=>[s.id]):EXTS).map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
  const dg=['1','2','3','4','5','6','7','8','9','0'].map(d=>'<button class="cs-k" data-a="dig" data-d="'+d+'">'+d+'</button>').join('');
  return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Saisir le numéro</div><div id="cs-mmsg"></div><div class="cs-chips" id="cs-chips">'+ex+'</div><div class="cs-in"><span id="cs-ser">'+st.serie+'-</span><b id="cs-numv"></b><button class="cs-bs" data-a="del" aria-label="Effacer le dernier chiffre">⌫</button></div><div class="cs-kp">'+dg+'</div><div class="cs-list" id="cs-mres"></div>'}
 function manUpdate(){if(!ov)return;const nv=$q('#cs-numv'),sr=$q('#cs-ser'),el=$q('#cs-mres'),mm=$q('#cs-mmsg');if(!nv||!el)return;
@@ -5173,9 +5185,11 @@ function panel(){if(!ov)return;const p=$q('#cs-panel');if(!p)return;let h='';
  if(st.mode==='man')manUpdate();
  for(const b of ov.querySelectorAll('.cs-bb')){if(b.dataset.a==='man')b.setAttribute('aria-pressed',String(st.mode==='man'));if(b.dataset.a==='tray')b.setAttribute('aria-pressed',String(st.mode==='tray'))}
  if(st.photoMode){const b=$q('#cs-shotb');if(b){b.dataset.a='cam';b.innerHTML='<span>📷</span>Caméra'}}else{const b=$q('#cs-shotb');if(b&&b.dataset.a==='cam'){b.dataset.a='shot';b.innerHTML='<span>📸</span>Photo'}}}
+function scSetGame(g){const v=g==='ms'?'ms':'fw';if(X.game===v)return;X.game=v;saveX();st.ocrAcc={};st.lock=null;st.pick=null;st.cands=[];st.ring=[];st.manQ='';st.manMsg=null;st.stick=null;st.free=true;st.serie=v==='ms'?MS_SETS[0].id:(S.ext||'FB01');if(st.mode!=='man'&&st.mode!=='tray')st.mode='live';for(const b of ov.querySelectorAll('[data-a=game]'))b.setAttribute('aria-pressed',String(b.dataset.g===v));panel();setClass('');hint('Place la carte dans le cadre');toast(v==='ms'?'Scanner : Masters':'Scanner : Fusion World')}
 function leaveOverlayPanel(){st.mode='live';st.ring=[];st.lock=null;st.pick=null;st.free=false;panel();setClass('');hint(photo?'':'Retire la carte puis place la suivante')}
 function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
  if(a==='close')close();
+ else if(a==='game'){scSetGame(t.dataset.g)}
  else if(a==='auto'){st.auto=!st.auto;setPref('auto',st.auto);t.setAttribute('aria-pressed',String(st.auto));toast(st.auto?'Ajout auto : j’ajoute les nouvelles cartes, et je te demande pour celles que tu as déjà':'Ajout auto désactivé')}
  else if(a==='torch'){const on=!t.dataset.on;t.dataset.on=on?'1':'';t.setAttribute('aria-pressed',String(!!on));try{track.applyConstraints({advanced:[{torch:!!on}]})}catch(_){}}
  else if(a==='shot'){const i=$q('#cs-file');if(i)i.click()}

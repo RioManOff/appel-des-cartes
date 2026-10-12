@@ -2074,6 +2074,7 @@ const MNG=[
   ['💰','Budget','data-go="budget"'],
   ['💶','Carnet de ventes','data-go="trade"'],
   ['⚖️','Calculateur d’échange','data-go="swap"'],
+  ['🔍','Vérifier une annonce','data-vr'],
   ['🔔','Alertes de prix','data-mn="al"','','al']]],
  ['Amis et partage',[
   ['👥','Communauté','data-go="comm"','','cm'],
@@ -2094,6 +2095,305 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
   if(k==='al'){S.menu=false;S.alnew=[];S.alsh=true;render()}
   else if(k==='me'){if(SBS&&SBS.pseudo)ppOpen(SBS.pseudo);else{S.menu=false;S.tab='comm';S.sel=null;S.vsh=false;window.scrollTo(0,0);render()}}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.menu&&!e.defaultPrevented){S.menu=false;render()}});
+/* ===== Vérifier une annonce : rapport avant achat à partir des photos du vendeur (tout est calculé dans le téléphone) ===== */
+(()=>{
+const AR_ASP=1.397,GW=300,GH=419;
+function arBlur(g,w,h){const t=new Uint8Array(w*h),o=new Uint8Array(w*h);
+ for(let y=0;y<h;y++){const r=y*w;for(let x=0;x<w;x++){const a=x?g[r+x-1]:g[r+x],c=x<w-1?g[r+x+1]:g[r+x];t[r+x]=(a+g[r+x]+c)/3}}
+ for(let y=0;y<h;y++){const r=y*w,u=y?r-w:r,d=y<h-1?r+w:r;for(let x=0;x<w;x++)o[r+x]=(t[u+x]+t[r+x]+t[d+x])/3}return o}
+function arGrad(b,w,h){const M=new Uint8Array(w*h),hist=new Uint32Array(256);let n=0;
+ for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x;
+  const gx=(b[i-w+1]+2*b[i+1]+b[i+w+1])-(b[i-w-1]+2*b[i-1]+b[i+w-1]),gy=(b[i+w-1]+2*b[i+w]+b[i+w+1])-(b[i-w-1]+2*b[i-w]+b[i-w+1]);
+  let m=(Math.abs(gx)+Math.abs(gy))>>2;if(m>255)m=255;M[i]=m;hist[m]++;n++}
+ return{M,hist,n}}
+/* contours = les pixels les plus « tranchants » (frac = part des pixels gardés) ; on essaie plusieurs seuils car une table à motifs noie vite le contour de la carte */
+function arEdges(G,frac,w,h){const E=new Uint8Array(w*h);let acc=0,t=255;const want=G.n*frac;for(;t>0;t--){acc+=G.hist[t];if(acc>=want)break}
+ t=Math.max(18,t);const M=G.M;for(let i=0;i<w*h;i++)E[i]=M[i]>=t?1:0;return E}
+function arDilate(E,w,h){const T=new Uint8Array(w*h),D=new Uint8Array(w*h);
+ for(let y=0;y<h;y++){const r=y*w;for(let x=0;x<w;x++)T[r+x]=E[r+x]||(x&&E[r+x-1])||(x<w-1&&E[r+x+1])?1:0}
+ for(let y=0;y<h;y++){const r=y*w;for(let x=0;x<w;x++)D[r+x]=T[r+x]||(y&&T[r-w+x])||(y<h-1&&T[r+w+x])?1:0}return D}
+function arArea(p){let s=0;for(let i=0;i<4;i++){const a=p[i],b=p[(i+1)%4];s+=a[0]*b[1]-b[0]*a[1]}return s/2}
+function arLen(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1])}
+/* part des points d'un côté qui tombent sur un contour */
+/* enveloppe convexe d'un composant (à partir des extrêmes de chaque ligne), puis le quadrilatère de plus grande aire inscrit dedans : ses sommets sont les coins de la carte, quelle que soit son orientation */
+function arHull(pts){pts.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr_=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]),lo=[],up=[];
+ for(const p of pts){while(lo.length>1&&cr_(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)}
+ for(let i=pts.length-1;i>=0;i--){const p=pts[i];while(up.length>1&&cr_(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}
+ lo.pop();up.pop();return lo.concat(up)}
+function arSimp(h,tol){if(h.length<=4)return h;let best=h;for(let t=tol;t<12;t*=1.6){let o=h.slice(),ch=true;
+  while(ch&&o.length>4){ch=false;let mi=-1,md=1e9;for(let i=0;i<o.length;i++){const a=o[(i+o.length-1)%o.length],b=o[i],c=o[(i+1)%o.length],L=arLen(a,c)||1,d=Math.abs((c[0]-a[0])*(a[1]-b[1])-(a[0]-b[0])*(c[1]-a[1]))/L;if(d<md){md=d;mi=i}}
+   if(md<t){o.splice(mi,1);ch=true}}
+  best=o;if(o.length<=44)break}return best}
+function arQuadOf(h){const m=h.length;if(m<4)return null;let ba=0,bq=null;
+ const tri=(a,b,c)=>((b[0]-a[0])*(c[1]-a[1])-(c[0]-a[0])*(b[1]-a[1]))/2;
+ for(let i=0;i<m;i++)for(let k=i+2;k<m;k++){let j0=-1,ja=0,l0=-1,la=0;
+  for(let j=i+1;j<k;j++){const a=tri(h[i],h[j],h[k]);if(Math.abs(a)>Math.abs(ja)){ja=a;j0=j}}
+  for(let l=k+1;l<m+i;l++){const a=tri(h[i],h[l%m],h[k]);if(Math.abs(a)>Math.abs(la)){la=a;l0=l%m}}
+  if(j0<0||l0<0||ja*la>0)continue;const ar=Math.abs(ja)+Math.abs(la);if(ar>ba){ba=ar;bq=[h[i],h[j0],h[k],h[l0]]}}
+ if(!bq)return null;if(arArea(bq)<0)bq=[bq[0],bq[3],bq[2],bq[1]];return bq}
+function arCover(D,w,h,a,b){const L=arLen(a,b),n=Math.max(8,Math.min(40,L|0));let hit=0,tot=0;
+ for(let k=0;k<n;k++){const t=.08+.84*k/(n-1),x=Math.round(a[0]+(b[0]-a[0])*t),y=Math.round(a[1]+(b[1]-a[1])*t);tot++;
+  if(x>=0&&y>=0&&x<w&&y<h&&D[y*w+x])hit++}return hit/tot}
+/* droite ajustée sur les vrais points de contour proches du côté (moindres carrés orthogonaux) */
+function arFit(E,w,h,a,b,rad){const L=arLen(a,b),nx=-(b[1]-a[1])/L,ny=(b[0]-a[0])/L;let n=0,sx=0,sy=0;const pts=[];
+ for(let s=L*.08;s<=L*.92;s+=1){const cx=a[0]+(b[0]-a[0])*s/L,cy=a[1]+(b[1]-a[1])*s/L;
+  for(let d=-rad;d<=rad;d++){const x=Math.round(cx+nx*d),y=Math.round(cy+ny*d);if(x>0&&y>0&&x<w-1&&y<h-1&&E[y*w+x]){pts.push(x,y);sx+=x;sy+=y;n++}}}
+ if(n<10)return null;const mx=sx/n,my=sy/n;let xx=0,xy=0,yy=0;
+ for(let i=0;i<pts.length;i+=2){const dx=pts[i]-mx,dy=pts[i+1]-my;xx+=dx*dx;xy+=dx*dy;yy+=dy*dy}
+ const th=.5*Math.atan2(2*xy,xx-yy);return{m:[mx,my],d:[Math.cos(th),Math.sin(th)]}}
+function arInter(l1,l2){const c=l1.d[0]*l2.d[1]-l1.d[1]*l2.d[0];if(Math.abs(c)<.25)return null;
+ const ex=l2.m[0]-l1.m[0],ey=l2.m[1]-l1.m[1],t=(ex*l2.d[1]-ey*l2.d[0])/c;return[l1.m[0]+l1.d[0]*t,l1.m[1]+l1.d[1]*t]}
+function arRefine(E,w,h,q){const ls=[];for(let i=0;i<4;i++)ls.push(arFit(E,w,h,q[i],q[(i+1)%4],3));
+ const o=q.map(p=>p.slice());
+ for(let i=0;i<4;i++){const l1=ls[(i+3)%4],l2=ls[i];if(!l1||!l2)continue;const p=arInter(l1,l2);if(p&&arLen(p,q[i])<7)o[i]=p}return o}
+/* renvoie [haut-gauche, haut-droite, bas-droite, bas-gauche] dans le repère de l'image d'analyse, le côté 0→1 étant le côté COURT de la carte */
+function arDetect(rgba,w,h){
+ const n=w*h,g=new Uint8Array(n);for(let i=0,j=0;i<n;i++,j+=4)g[i]=(rgba[j]*77+rgba[j+1]*150+rgba[j+2]*29)>>8;
+ const G=arGrad(arBlur(g,w,h),w,h),lab=new Uint8Array(n),stack=new Int32Array(n),rmn=new Int16Array(h),rmx=new Int16Array(h);
+ let best=null,bs=0,bE=null;
+ for(const frac of[.035,.07,.12]){
+  const E=arEdges(G,frac,w,h),D=arDilate(E,w,h),comps=[];lab.fill(0);
+  for(let s=0;s<n;s++){if(!D[s]||lab[s])continue;
+   let sp=0,cnt=0,x0=w,y0=h,x1=0,y1=0;rmn.fill(32767);rmx.fill(-1);stack[sp++]=s;lab[s]=1;
+   while(sp){const i=stack[--sp],x=i%w,y=(i-x)/w;cnt++;
+    if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;if(x<rmn[y])rmn[y]=x;if(x>rmx[y])rmx[y]=x;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;const j=yy*w+xx;if(D[j]&&!lab[j]){lab[j]=1;stack[sp++]=j}}}
+   const ba=(x1-x0+1)*(y1-y0+1);if(cnt>=30&&ba>=n*.012){const pts=[];for(let y=y0;y<=y1;y++)if(rmx[y]>=0){pts.push([rmn[y],y]);if(rmx[y]!==rmn[y])pts.push([rmx[y],y])}comps.push({ba,pts})}}
+  comps.sort((a,b)=>b.ba-a.ba);
+  for(const c of comps.slice(0,6)){const q0=arQuadOf(arSimp(arHull(c.pts),1.1));if(!q0)continue;const ar=Math.abs(arArea(q0));if(ar<n*.009)continue;let q=q0;const a0=arLen(q[0],q[1]),b0=arLen(q[1],q[2]);if(a0>b0)q=[q[1],q[2],q[3],q[0]];
+   const a=arLen(q[0],q[1]),b=arLen(q[1],q[2]),cc=arLen(q[2],q[3]),d=arLen(q[3],q[0]),sh=Math.min((a+cc)/2,(b+d)/2),lo=Math.max((a+cc)/2,(b+d)/2);
+   if(sh<7)continue;const r=lo/sh;if(r<1.12||r>1.85)continue;
+   let mn=1,sm=0;for(let i=0;i<4;i++){const v=arCover(D,w,h,q[i],q[(i+1)%4]);if(v<mn)mn=v;sm+=v}
+   if(mn<.5||sm/4<.68)continue;
+   const sc=ar*mn*mn*(1-Math.min(.5,Math.abs(r-1.4)));if(sc>bs){bs=sc;best=q;bE=E}}}
+ if(!best)return null;
+ let q=arRefine(bE,w,h,best);
+ for(const p of q)if(p[0]<-2||p[1]<-2||p[0]>w+2||p[1]>h+2)return null;
+ const a=arLen(q[0],q[1]),b=arLen(q[1],q[2]);
+ if(a>b)q=[q[1],q[2],q[3],q[0]];            // paysage : on tourne pour que le côté 0→1 soit le côté court
+ return q}
+
+/* =================== géométrie : homographie et pose =================== */
+function arSolve(M,v){const n=8;for(let i=0;i<n;i++){let p=i;for(let r=i+1;r<n;r++)if(Math.abs(M[r][i])>Math.abs(M[p][i]))p=r;
+  if(Math.abs(M[p][i])<1e-12)return null;[M[i],M[p]]=[M[p],M[i]];[v[i],v[p]]=[v[p],v[i]];
+  for(let r=i+1;r<n;r++){const f=M[r][i]/M[i][i];if(!f)continue;for(let c=i;c<n;c++)M[r][c]-=f*M[i][c];v[r]-=f*v[i]}}
+ const x=new Array(n);for(let i=n-1;i>=0;i--){let s=v[i];for(let c=i+1;c<n;c++)s-=M[i][c]*x[c];x[i]=s/M[i][i]}return x}
+/* carte (0,0)-(1,ASP) -> quadrilatère en pixels vidéo */
+function arHomog(q){const src=[[0,0],[1,0],[1,AR_ASP],[0,AR_ASP]],M=[],v=[];
+ for(let i=0;i<4;i++){const[X,Y]=src[i],[x,y]=q[i];M.push([X,Y,1,0,0,0,-x*X,-x*Y]);v.push(x);M.push([0,0,0,X,Y,1,-y*X,-y*Y]);v.push(y)}
+ const h=arSolve(M,v);return h?[h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7],1]:null}
+const cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],nv=a=>Math.hypot(a[0],a[1],a[2]);
+function arPose(q,vw,vh){const H=arHomog(q);if(!H)return null;const f=.82*Math.max(vw,vh),cx=vw/2,cy=vh/2;
+ let m1=[(H[0]-cx*H[6])/f,(H[3]-cy*H[6])/f,H[6]],m2=[(H[1]-cx*H[7])/f,(H[4]-cy*H[7])/f,H[7]],m3=[(H[2]-cx*H[8])/f,(H[5]-cy*H[8])/f,H[8]];
+ if(m3[2]<0){m1=m1.map(x=>-x);m2=m2.map(x=>-x);m3=m3.map(x=>-x)}
+ const s=(nv(m1)+nv(m2))/2;if(!(s>1e-9))return null;
+ const l1=nv(m1),r1=m1.map(x=>x/l1),d=r1[0]*m2[0]+r1[1]*m2[1]+r1[2]*m2[2],p2=[m2[0]-d*r1[0],m2[1]-d*r1[1],m2[2]-d*r1[2]],l2=nv(p2),r2=p2.map(x=>x/l2),r3=cr(r1,r2);
+ return{r1,r2,r3,t:m3.map(x=>x/s),f,cx,cy,H}}
+/* point de l'espace carte (X,Y, hauteur Z au-dessus de la carte) -> écran en pixels CSS ; [x, y, pixels par largeur de carte] */
+function pr(P,X,Y,Z){const H=P.H,w=H[6]*X+H[7]*Y+1,bx=(H[0]*X+H[1]*Y+H[2])/w,by=(H[3]*X+H[4]*Y+H[5])/w;   // dans le plan de la carte : l'homographie exacte
+ const q=(Zz)=>{const x=X*P.r1[0]+Y*P.r2[0]-Zz*P.r3[0]+P.t[0],y=X*P.r1[1]+Y*P.r2[1]-Zz*P.r3[1]+P.t[1],z=Math.max(.05,X*P.r1[2]+Y*P.r2[2]-Zz*P.r3[2]+P.t[2]),k=P.f/z;return[x*k+P.cx,y*k+P.cy,k]};
+ const a=q(Z);let ox=0,oy=0;if(Z){const b=q(0);ox=a[0]-b[0];oy=a[1]-b[1]}                 // la hauteur vient de la pose estimée
+ return[(bx+ox)*P.sk+P.ox,(by+oy)*P.sk+P.oy,a[2]*P.sk]}
+
+
+const V={open:false,ph:[],card:null,ov:null,busy:0,seq:0};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const med=a=>{const b=a.slice().sort((x,y)=>x-y);return b.length?b[b.length>>1]:0};
+const $v=s=>V.ov&&V.ov.querySelector(s);
+
+/* ---------- analyse d'une photo ---------- */
+const MG=14,WW=GW+2*MG,WH=GH+2*MG;
+/* la carte redressée, avec une marge de 14 px de table autour pour repérer le vrai bord */
+function vrWarp(cv,Hm){const W=cv.width,H=cv.height,d=cv.getContext('2d').getImageData(0,0,W,H).data,L=new Float32Array(W*H),M=new Uint8Array(W*H);
+ for(let i=0,j=0;i<W*H;i++,j+=4){L[i]=d[j]*.299+d[j+1]*.587+d[j+2]*.114;M[i]=Math.min(d[j],d[j+1],d[j+2])}
+ const g=new Float32Array(WW*WH),gl=new Uint8Array(WW*WH);
+ for(let j=0;j<WH;j++)for(let i=0;i<WW;i++){const X=(i+.5-MG)/GW,Y=(j+.5-MG)/GH*AR_ASP,w=Hm[6]*X+Hm[7]*Y+1,sx=(Hm[0]*X+Hm[1]*Y+Hm[2])/w-.5,sy=(Hm[3]*X+Hm[4]*Y+Hm[5])/w-.5;
+  let x0=Math.floor(sx),y0=Math.floor(sy);const fx=sx-x0,fy=sy-y0;if(x0<0)x0=0;if(y0<0)y0=0;if(x0>W-2)x0=W-2;if(y0>H-2)y0=H-2;const k=y0*W+x0;
+  g[j*WW+i]=L[k]*(1-fx)*(1-fy)+L[k+1]*fx*(1-fy)+L[k+W]*(1-fx)*fy+L[k+W+1]*fx*fy;gl[j*WW+i]=Math.min(M[k],M[k+1],M[k+W],M[k+W+1])>243?1:0}
+ return{g,gl}}
+function vrLap(g,w,h){let s=0,s2=0,n=0;for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x,v=4*g[i]-g[i-1]-g[i+1]-g[i-w]-g[i+w];s+=v;s2+=v*v;n++}const m=s/n;return s2/n-m*m}
+function vrBox(g,w,h,r){const o=new Float32Array(w*h),t=new Float32Array(w*h);
+ for(let y=0;y<h;y++){let s=0;const q=y*w;for(let x=-r;x<=r;x++)s+=g[q+Math.min(w-1,Math.max(0,x))];for(let x=0;x<w;x++){t[q+x]=s/(2*r+1);s+=g[q+Math.min(w-1,x+r+1)]-g[q+Math.max(0,x-r)]}}
+ for(let x=0;x<w;x++){let s=0;for(let y=-r;y<=r;y++)s+=t[Math.min(h-1,Math.max(0,y))*w+x];for(let y=0;y<h;y++){o[y*w+x]=s/(2*r+1);s+=t[Math.min(h-1,y+r+1)*w+x]-t[Math.max(0,y-r)*w+x]}}return o}
+/* un côté : position du vrai bord de la carte, couleur de la bordure, largeur de la bordure (jusqu'au premier changement net) */
+function vrSide(g,side){const N=MG+100,m=[];
+ for(let k=0;k<N;k++){let s=0,n=0;
+  if(side==='L'||side==='R'){const x=side==='L'?k:WW-1-k;for(let y=Math.round(WH*.3);y<WH*.7;y++){s+=g[y*WW+x];n++}}
+  else{const y=side==='T'?k:WH-1-k;for(let x=Math.round(WW*.3);x<WW*.7;x++){s+=g[y*WW+x];n++}}
+  m.push(s/n)}
+ let e=MG,bd=0;for(let k=MG-9;k<=MG+9;k++){const d=Math.abs(m[k+1]-m[k-1]);if(d>bd){bd=d;e=k}}
+ if(bd<14)e=MG;
+ const base=med(m.slice(e+4,e+9));let w=null;
+ for(let k=e+9;k<N-1;k++)if(Math.abs(m[k]-base)>24&&Math.abs(m[k+1]-base)>24){w=k-e;break}
+ return{e,base,w,shift:e-MG}}
+function vrAnalyse(p){const cv=p.cv,W=cv.width,H=cv.height,r={found:false,f:[]};
+ const sc=512/Math.max(W,H),aw=Math.round(W*sc),ah=Math.round(H*sc),c=document.createElement('canvas');c.width=aw;c.height=ah;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(cv,0,0,aw,ah);
+ const id=x.getImageData(0,0,aw,ah);let q=null;try{q=arDetect(id.data,aw,ah)}catch(_){}
+ if(!q)return r;
+ q=q.map(pt=>[pt[0]/sc,pt[1]/sc]);r.found=true;r.quad=q;
+ const cw=(arLen(q[0],q[1])+arLen(q[2],q[3]))/2;r.cardPx=Math.round(cw);
+ /* coins hors de l'image = zone non photographiée */
+ const mg=Math.max(3,Math.min(W,H)*.012);r.cut=q.map(pt=>pt[0]<mg||pt[1]<mg||pt[0]>W-mg||pt[1]>H-mg);
+ /* position de chaque coin dans la photo */
+ const cx=q.reduce((a,b)=>a+b[0],0)/4,cy=q.reduce((a,b)=>a+b[1],0)/4;r.pos=q.map(pt=>(pt[1]<cy?'haut':'bas')+'-'+(pt[0]<cx?'gauche':'droit'));
+ /* de face ? côtés opposés de même longueur */
+ const a1=arLen(q[0],q[1]),a2=arLen(q[2],q[3]),b1=arLen(q[1],q[2]),b2=arLen(q[3],q[0]);r.skew=Math.max(Math.abs(a1-a2)/Math.max(a1,a2),Math.abs(b1-b2)/Math.max(b1,b2));r.frontal=r.skew<.1;
+ const Hm=arHomog(q);if(!Hm){r.found=false;return r}
+ const{g,gl}=vrWarp(cv,Hm);
+ const inner=new Float32Array(GW*GH);for(let j=0;j<GH;j++)for(let i=0;i<GW;i++)inner[j*GW+i]=g[(j+MG)*WW+i+MG];
+ r.sharp=vrLap(inner,GW,GH);r.blur=r.sharp<45||r.cardPx<260;
+ let gn=0;for(let j=MG;j<MG+GH;j++)for(let i=MG;i<MG+GW;i++)gn+=gl[j*WW+i];r.glare=gn/(GW*GH);
+ const S={L:vrSide(g,'L'),R:vrSide(g,'R'),T:vrSide(g,'T'),B:vrSide(g,'B')};
+ /* bords : traces claires/sombres dans les 3 px qui suivent le vrai bord (par rapport à la couleur de la bordure) */
+ const edgeFrac=side=>{let n=0,t=0;const e=S[side].e,base=S[side].base;
+  if(side==='L'||side==='R'){for(let y=MG+Math.round(GH*.1);y<MG+GH*.9;y++)for(let d=2;d<=4;d++){const xx=side==='L'?e+d:WW-1-(e+d);t++;if(Math.abs(g[y*WW+xx]-base)>42)n++}}
+  else{for(let xx=MG+Math.round(GW*.14);xx<MG+GW*.86;xx++)for(let d=2;d<=4;d++){const y=side==='T'?e+d:WH-1-(e+d);t++;if(Math.abs(g[y*WW+xx]-base)>42)n++}}return n/t};
+ r.edge={};for(const s of'LRTB')r.edge[s]=Math.round(edgeFrac(s)*100)/100;
+ /* coins : les 4 coins devraient se ressembler (les coins arrondis laissent toujours un peu de table) ; on signale celui qui s'écarte */
+ const cb=(sx,sy,eh,ev,bs)=>{let n=0,t=0;for(let j=2;j<20;j++)for(let i=2;i<20;i++){if(i>11&&j>11)continue;const xx=sx>0?eh+i:WW-1-(eh+i),yy=sy>0?ev+j:WH-1-(ev+j);t++;if(Math.abs(g[yy*WW+xx]-bs)>48)n++}return n/t};
+ const cf=[cb(1,1,S.L.e,S.T.e,(S.L.base+S.T.base)/2),cb(-1,1,S.R.e,S.T.e,(S.R.base+S.T.base)/2),cb(-1,-1,S.R.e,S.B.e,(S.R.base+S.B.base)/2),cb(1,-1,S.L.e,S.B.e,(S.L.base+S.B.base)/2)];
+ const mc=Math.min(...cf);r.corRaw=cf.map(v=>Math.round(v*100)/100);r.cor={tl:cf[0]-mc,tr:cf[1]-mc,br:cf[2]-mc,bl:cf[3]-mc};r.inner=inner;
+ return r}
+
+
+/* ---------- centrage : comparaison avec l'image de référence de la carte choisie (les cartes sont en pleine illustration, pas de bordure à mesurer) ---------- */
+const REF=new Map();
+function vrRefGray(card){if(!card||typeof CARDIMG==='undefined'||!CARDIMG[card.id])return Promise.resolve(null);if(REF.has(card.id))return REF.get(card.id);
+ const pr=new Promise(ok=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas');c.width=GW;c.height=GH;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(im,0,0,GW,GH);const d=x.getImageData(0,0,GW,GH).data,g=new Float32Array(GW*GH);for(let i=0,j=0;i<g.length;i++,j+=4)g[i]=d[j]*.299+d[j+1]*.587+d[j+2]*.114;ok(g)}catch(_){ok(null)}};im.onerror=()=>ok(null);im.src=CARDIMG[card.id]});REF.set(card.id,pr);return pr}
+function vrHalf(g){const w=GW>>1,h=GH>>1,o=new Float32Array(w*h);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=2*y*GW+2*x;o[y*w+x]=(g[i]+g[i+1]+g[i+GW]+g[i+GW+1])/4}return o}
+function vrNcc(a,b,w,h,dx,dy,st){let n=0,sa=0,sb=0,saa=0,sbb=0,sab=0;const x0=Math.max(0,dx),x1=Math.min(w,w+dx),y0=Math.max(0,dy),y1=Math.min(h,h+dy);
+ for(let y=y0;y<y1;y+=st)for(let x=x0;x<x1;x+=st){const u=a[y*w+x],v=b[(y-dy)*w+(x-dx)];n++;sa+=u;sb+=v;saa+=u*u;sbb+=v*v;sab+=u*v}
+ if(n<50)return -1;const ca=saa-sa*sa/n,cb=sbb-sb*sb/n;return ca>1&&cb>1?(sab-sa*sb/n)/Math.sqrt(ca*cb):-1}
+/* décalage (dx,dy) en pixels de carte redressée (300 px de large) tel que photo(x,y) ≈ ref(x-dx,y-dy) */
+function vrAlign(photo,ref){const a=vrHalf(photo),b=vrHalf(ref),w=GW>>1,h=GH>>1;let best=-2,bx=0,by=0;
+ for(let dy=-8;dy<=8;dy++)for(let dx=-8;dx<=8;dx++){const v=vrNcc(a,b,w,h,dx,dy,1);if(v>best){best=v;bx=dx;by=dy}}
+ let fx=bx*2,fy=by*2,fb=-2;for(let dy=by*2-2;dy<=by*2+2;dy++)for(let dx=bx*2-2;dx<=bx*2+2;dx++){const v=vrNcc(photo,ref,GW,GH,dx,dy,2);if(v>fb){fb=v;fx=dx;fy=dy}}
+ return{dx:fx,dy:fy,ncc:Math.round(fb*100)/100}}
+async function vrRefresh(){const ref=await vrRefGray(V.card);for(const p of V.ph){if(!p.res||!p.res.found||!p.res.inner)continue;
+  if(p.res.blur||!p.res.frontal||p.res.cut.some(Boolean)){p.res.ref=null;continue}
+  if(!ref){p.res.ref=null;continue}try{p.res.ref=vrAlign(p.res.inner,ref)}catch(_){p.res.ref=null}await new Promise(r=>setTimeout(r,0))}
+ vrDraw()}
+
+/* ---------- synthèse : ce qui est vu, ce qui ne peut pas être jugé, les questions ---------- */
+const POS={'haut-gauche':'en haut à gauche','haut-droit':'en haut à droite','bas-gauche':'en bas à gauche','bas-droit':'en bas à droite'};
+const SIDE={L:'gauche',R:'droit',T:'du haut',B:'du bas'};
+function vrReport(){
+ const ph=V.ph.filter(p=>p.res),faces=ph.filter(p=>p.kind==='face'),good=faces.filter(p=>p.res.found);
+ const R={seen:[],unk:[],q:[],verdict:'unk',n:ph.length};
+ const add=(lvl,t)=>R[lvl==='warn'?'seen':'unk'].push(t);
+ if(!ph.length)return R;
+ if(!faces.length)add('unk','Aucune photo marquée « Face » : je ne peux rien juger sur la carte.');
+ faces.forEach((p,i)=>{const r=p.res,n='Photo '+(V.ph.indexOf(p)+1);
+  if(!r.found){add('unk',n+' : je ne retrouve pas le contour de la carte (fond chargé, carte coupée ou trop petite). Rien n’est jugeable sur cette photo.');return}
+  if(r.blur)add('unk',n+' : image '+(r.cardPx<260?'trop petite':'floue')+' pour juger les coins, les bords et la surface.');
+  if(r.glare>.04)add('unk',n+' : un reflet couvre environ '+Math.round(r.glare*100)+' % de la carte ; ce qu’il cache (rayures, traces) est invisible.');
+  const cut=r.cut.map((c,k)=>c?POS[r.pos[k]]:null).filter(Boolean);
+  if(cut.length)add('unk',n+' : coin '+cut.join(', ')+' coupé ou collé au bord de la photo, impossible à juger.');
+  if(!r.frontal)add('unk',n+' : carte prise en biais ; la mesure du centrage n’est pas fiable.');
+  /* signalements : seulement si la photo est assez nette pour que ce soit crédible */
+  if(!r.blur){
+   const ks=['tl','tr','br','bl'];
+   ks.forEach((k,i)=>{if(r.cor[k]>.3){add('warn',n+' : le coin '+POS[r.pos[i]]+' (sur la photo) montre des traces claires ou irrégulières, possible usure ou coin abîmé.');p.flag=1}});
+   for(const s of'LRTB')if(r.edge[s]>.45){add('warn',n+' : le bord '+SIDE[s]+' montre des traces sur la tranche visible (blanchiment ou éclats possibles).')}
+   if(r.ref){const mmx=Math.round(Math.abs(r.ref.dx)*63/GW*10)/10,mmy=Math.round(Math.abs(r.ref.dy)*88/GH*10)/10;
+    if(r.ref.ncc<.35)add('warn',n+' : la photo ne ressemble pas à la carte choisie : mauvaise carte, autre version (Alternative Art) ou photo trop abîmée ? À confirmer avec le vendeur.');
+    else{if(mmx>=1.5)add('warn',n+' : centrage : l’illustration paraît décalée d’environ '+mmx+' mm vers la '+(r.ref.dx>0?'droite':'gauche')+' (mesure indicative, ± 0,6 mm).');
+     if(mmy>=1.5)add('warn',n+' : centrage : l’illustration paraît décalée d’environ '+mmy+' mm vers le '+(r.ref.dy>0?'bas':'haut')+' (mesure indicative, ± 0,6 mm).');
+     if(mmx<1.5&&mmy<1.5)R.centerOk=1}}
+   else if(!r.blur&&r.frontal&&!r.cut.some(Boolean))add('unk',n+' : centrage non mesuré'+(V.card?' (pas d’image de référence pour cette carte).':' : choisis la carte (bouton « Quelle carte ? ») pour le mesurer.'))}
+  });
+ /* zones jamais photographiées */
+ if(!ph.some(p=>p.kind==='dos'))add('unk','Dos de la carte : aucune photo.');
+ if(!ph.some(p=>p.kind==='tranche'))add('unk','Tranches (épaisseur, blanchiment sur les côtés) : aucune photo.');
+ const full=good.filter(p=>!p.res.blur&&!p.res.cut.some(Boolean));
+ if(good.length&&!full.length)add('unk','Aucune photo de face où les 4 coins sont à la fois visibles et nets.');
+ add('unk','Surface sous lumière rasante : une photo à plat ne montre pas les rayures fines ni les traces de doigts.');
+ /* questions */
+ const q=R.q;const dos=ph.some(p=>p.kind==='dos'),tr=ph.some(p=>p.kind==='tranche');
+ if(!dos)q.push('Peux-tu photographier le dos de la carte en entier ?');
+ if(!tr)q.push('Peux-tu montrer les tranches (les quatre côtés) en gros plan ?');
+ if(good.some(p=>p.res.blur)||!good.length)q.push('Peux-tu refaire la photo de face, plus nette et plus près, sans flash ?');
+ if(good.some(p=>p.res.glare>.04))q.push('Un reflet cache une partie de la carte : peux-tu la photographier sous un autre angle ?');
+ if(good.some(p=>p.res.cut.some(Boolean)))q.push('Peux-tu envoyer une photo où la carte entière est visible, coins compris ?');
+ if(R.seen.some(t=>/coin/.test(t)))q.push('Les coins de la carte sont-ils nets ? Peux-tu les prendre en photo de très près ?');
+ if(R.seen.some(t=>/bord|tranche/.test(t)))q.push('Y a-t-il du blanchiment ou des éclats sur les bords ? Peux-tu les photographier de près ?');
+ if(R.seen.some(t=>/marques|rayures/.test(t)))q.push('Vois-tu des rayures ou des marques sur la carte ? Peux-tu envoyer une photo de la zone ?');
+ if(R.seen.some(t=>/centrage : /.test(t)))q.push('Le centrage paraît décalé sur les photos : peux-tu photographier la carte bien à plat et de face pour confirmer ?');
+ q.push('Y a-t-il des rayures ou des traces visibles quand tu inclines la carte à la lumière ? Peux-tu en faire une photo sous lumière rasante ?');
+ q.push('La carte est-elle sortie de sa pochette sur les photos ? Si non, peux-tu la sortir pour la photographier ?');
+ if(!V.card)q.push('Peux-tu confirmer le numéro exact de la carte et la série (édition japonaise) ?');
+ q.push('Comment l’envoies-tu (suivi, protection rigide) ? Acceptes-tu un retour si l’état est différent des photos ?');
+ R.verdict=!faces.length||!good.length||(good.every(p=>p.res.blur))?'unk':R.seen.length?'warn':'none';
+ return R}
+
+/* ---------- interface ---------- */
+function vrLoad(file){return new Promise((ok,ko)=>{const done=(src,w,h)=>{const s=Math.min(1,1100/Math.max(w,h)),cv=document.createElement('canvas');cv.width=Math.round(w*s);cv.height=Math.round(h*s);cv.getContext('2d',{willReadFrequently:true}).drawImage(src,0,0,cv.width,cv.height);ok(cv)};
+ if(window.createImageBitmap){createImageBitmap(file,{imageOrientation:'from-image'}).then(b=>{done(b,b.width,b.height);try{b.close()}catch(_){}}).catch(()=>fb())}else fb();
+ function fb(){const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{done(im,im.naturalWidth,im.naturalHeight);URL.revokeObjectURL(u)};im.onerror=()=>{URL.revokeObjectURL(u);ko(new Error('img'))};im.src=u}})}
+async function vrAdd(files){const list=[...files].filter(f=>/^image\//.test(f.type)||/\.(jpe?g|png|webp|heic)$/i.test(f.name)).slice(0,Math.max(0,10-V.ph.length));
+ if(!list.length){vrToast(V.ph.length>=10?'10 photos maximum':'Choisis des images');return}
+ V.busy++;vrDraw();
+ for(const f of list){try{const cv=await vrLoad(f),p={id:++V.seq,name:f.name,cv,kind:V.ph.some(x=>x.kind==='face')?'autre':'face',res:null};V.ph.push(p);await new Promise(r=>setTimeout(r,20));try{p.res=vrAnalyse(p)}catch(e){p.res={found:false,f:[],err:1}}vrDraw()}catch(_){vrToast('Une photo n’a pas pu être lue')}}
+ V.busy--;vrDraw();vrRefresh()}
+function vrToast(m){const t=$v('.vr-ts');if(!t)return;t.textContent=m;t.classList.add('on');clearTimeout(vrToast.t);vrToast.t=setTimeout(()=>t.classList.remove('on'),2200)}
+function vrThumb(p,cvEl){const W=300,s=W/p.cv.width;cvEl.width=W;cvEl.height=Math.round(p.cv.height*s);const c=cvEl.getContext('2d');c.drawImage(p.cv,0,0,cvEl.width,cvEl.height);
+ const r=p.res;if(r&&r.found){c.lineWidth=2.5;c.strokeStyle='#34e08a';c.beginPath();r.quad.forEach((q,i)=>i?c.lineTo(q[0]*s,q[1]*s):c.moveTo(q[0]*s,q[1]*s));c.closePath();c.stroke();
+  const ks=['tl','tr','br','bl'];
+  /* les coins signalés : on les repère dans la photo (le coin « tl » de la carte = sommet 0 du contour, etc.) */
+  r.quad.forEach((q,i)=>{if(r.cor&&r.cor[ks[i]]>.3&&!r.blur){c.strokeStyle='#ff6a3d';c.lineWidth=3;c.beginPath();c.arc(q[0]*s,q[1]*s,13,0,6.3);c.stroke()}})}}
+const KIND={face:'Face',dos:'Dos',tranche:'Tranche',autre:'Autre'};
+function vrHtml(){const R=vrReport(),done=V.ph.filter(p=>p.res).length;
+ const photos=V.ph.map((p,i)=>{const r=p.res;const st=!r?'Analyse…':r.found?(r.blur?'Contour trouvé, mais image trop floue ou petite':'Contour de la carte trouvé'):'Contour de la carte non trouvé';
+  return `<div class="vr-p" data-pid="${p.id}"><canvas class="vr-c" aria-label="Photo ${i+1}"></canvas><div class="vr-pb"><b>Photo ${i+1}</b><small>${st}</small>
+  <div class="vr-k" role="group" aria-label="Contenu de la photo ${i+1}">${Object.keys(KIND).map(k=>`<button type="button" data-vr-kind="${k}" aria-pressed="${p.kind===k}">${KIND[k]}</button>`).join('')}</div>
+  <button type="button" class="vr-x" data-vr-del aria-label="Retirer la photo ${i+1}">Retirer</button></div></div>`}).join('');
+ const li=a=>a.map(t=>`<li>${esc(t)}</li>`).join('');
+ const ver={unk:['Impossible de conclure','Les photos ne permettent pas de juger l’état de la carte.','unk'],warn:['À vérifier avant d’acheter','Des points visibles méritent une question au vendeur.','warn'],none:['Rien de visible sur ces photos','Cela ne prouve pas que la carte est parfaite : voir les zones non vérifiables.','none']}[R.verdict];
+ const rep=done?`<section class="vr-s vr-v" data-v="${ver[2]}"><h3>${ver[0]}</h3><p>${ver[1]}</p></section>
+  <section class="vr-s"><h3>Ce que je vois</h3>${R.seen.length?`<ul>${li(R.seen)}</ul>`:'<p class="vr-m">Aucun défaut net repéré sur les photos exploitables.</p>'}</section>
+  <section class="vr-s"><h3>Impossible à vérifier</h3><ul>${li(R.unk)}</ul></section>
+  <section class="vr-s"><h3>Questions à poser au vendeur</h3><ol>${li(R.q)}</ol><div class="vr-act"><button type="button" class="btn" data-vr-copy>Copier les questions</button><button type="button" class="btn alt" data-vr-share>Partager</button></div></section>
+  <p class="vr-warn"><b>Ce n’est pas une expertise.</b> Je ne peux pas certifier l’état réel d’une carte à partir de photos : je signale seulement ce qui se voit et je dis clairement ce qui ne se voit pas. Une photo nette, de face, sans reflet, reste la meilleure preuve.</p>`:'';
+ return `<div class="vr-top"><button type="button" class="vr-b" data-vr-back aria-label="Retour">←</button><h2>Vérifier une annonce</h2></div>
+ <div class="vr-body"><p class="vr-m">Ajoute les photos de l’annonce. Elles restent dans ton téléphone : rien n’est envoyé.</p>
+ <div class="vr-card"><button type="button" class="btn" data-vr-pick>📷 Ajouter des photos</button><button type="button" class="vr-b2" data-vr-cardpick>${V.card?esc(V.card.name)+' · '+esc(V.card.id):'🃏 Quelle carte ? (facultatif)'}</button></div>
+ ${V.busy?'<p class="vr-m" role="status">Analyse en cours…</p>':''}${photos?`<div class="vr-ps">${photos}</div>`:'<div class="vr-empty"><b>Aucune photo pour l’instant</b><span>Ajoute la face, le dos, les coins et les tranches si le vendeur les a photographiés.</span></div>'}${rep}</div>
+ <input type="file" accept="image/*" multiple hidden data-vr-file><div class="vr-ts" role="status"></div>
+ <div class="vr-pk" hidden><h3>Quelle carte est annoncée ?</h3><input type="search" inputmode="search" autocomplete="off" placeholder="Nom ou numéro (Goku, FB01-001…)" aria-label="Rechercher une carte"><div class="vr-rs"></div><button type="button" class="btn alt" data-vr-pkclose>Fermer</button></div>`}
+function vrDraw(){if(!V.ov)return;const sc=V.ov.querySelector('.vr-body'),top=sc?sc.scrollTop:0,pk=$v('.vr-pk'),pkOpen=pk&&!pk.hidden,pv=pkOpen?pk.querySelector('input').value:'';
+ V.ov.innerHTML=vrHtml();const nb=V.ov.querySelector('.vr-body');if(nb)nb.scrollTop=top;
+ V.ov.querySelectorAll('.vr-p').forEach(el=>{const p=V.ph.find(x=>x.id===+el.dataset.pid);if(p)vrThumb(p,el.querySelector('canvas'))});
+ if(pkOpen){const n=$v('.vr-pk');n.hidden=false;n.querySelector('input').value=pv;vrResults(pv)}}
+function vrResults(q){const box=$v('.vr-rs');if(!box)return;const n=norm(q).trim();const l=[];
+ if(typeof cards!=='undefined'&&n.length>=2)for(const c of cards){if(c.ver&&c.ver!=='Normal')continue;if(norm(c.name).includes(n)||norm(c.id).includes(n)){l.push(c);if(l.length>=10)break}}
+ box.innerHTML=(n.length<2?'<p class="vr-m">Tape au moins 2 lettres.</p>':l.length?l.map(c=>`<button type="button" data-vr-card="${esc(c.id)}"><b>${esc(c.name)}</b><small>${esc(c.id)} · ${esc(c.type)}</small></button>`).join(''):'<p class="vr-m">Aucune carte trouvée.</p>')+(V.card?'<button type="button" data-vr-card="">Retirer la carte</button>':'')}
+function vrText(){const R=vrReport();return 'Bonjour, je suis intéressé par la carte'+(V.card?' « '+V.card.name+' » ('+V.card.id+')':'')+'. Quelques questions avant d’acheter :\n'+R.q.map((q,i)=>(i+1)+'. '+q).join('\n')+'\nMerci !'}
+async function vrCopy(){const t=vrText();try{await navigator.clipboard.writeText(t);vrToast('Questions copiées')}catch(_){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(__){}a.remove();vrToast(ok?'Questions copiées':'Copie impossible')}}
+async function vrShare(){const t=vrText();if(navigator.share){try{await navigator.share({text:t});return}catch(e){if(e&&e.name==='AbortError')return}}vrCopy()}
+function vrClick(e){const b=e.target.closest('button');if(!b)return;
+ if(b.hasAttribute('data-vr-back'))vrClose();
+ else if(b.hasAttribute('data-vr-pick')){const f=$v('[data-vr-file]');if(f)f.click()}
+ else if(b.hasAttribute('data-vr-del')){const id=+b.closest('.vr-p').dataset.pid;V.ph=V.ph.filter(p=>p.id!==id);vrDraw()}
+ else if(b.dataset.vrKind){const id=+b.closest('.vr-p').dataset.pid,p=V.ph.find(x=>x.id===id);if(p){p.kind=b.dataset.vrKind;vrDraw()}}
+ else if(b.hasAttribute('data-vr-copy'))vrCopy();else if(b.hasAttribute('data-vr-share'))vrShare();
+ else if(b.hasAttribute('data-vr-cardpick')){const p=$v('.vr-pk');p.hidden=false;const i=p.querySelector('input');i.value='';vrResults('');setTimeout(()=>{try{i.focus()}catch(_){}},60)}
+ else if(b.hasAttribute('data-vr-pkclose')){$v('.vr-pk').hidden=true}
+ else if(b.hasAttribute('data-vr-card')){const id=b.dataset.vrCard;V.card=id&&typeof cards!=='undefined'?cards.find(c=>c.id===id)||null:null;$v('.vr-pk').hidden=true;vrDraw();vrRefresh()}}
+function vrOpen(){if(V.open)return;V.open=true;V.ph=[];V.card=null;V.busy=0;
+ if(!document.getElementById('vr-css')){const s=document.createElement('style');s.id='vr-css';s.textContent=VRCSS;document.head.appendChild(s)}
+ const ov=document.createElement('div');ov.className='vr';ov.setAttribute('role','dialog');ov.setAttribute('aria-label','Vérifier une annonce');V.ov=ov;document.body.appendChild(ov);
+ ov.addEventListener('click',vrClick);ov.addEventListener('change',e=>{if(e.target.matches('[data-vr-file]')){const f=e.target.files;vrAdd(f);e.target.value=''}});
+ ov.addEventListener('input',e=>{if(e.target.closest('.vr-pk'))vrResults(e.target.value)});
+ try{history.pushState({vr:1},'')}catch(_){}vrDraw()}
+function vrClose(fromPop){if(!V.open)return;V.open=false;if(V.ov)V.ov.remove();V.ov=null;V.ph=[];
+ if(!fromPop){try{if(history.state&&history.state.vr)history.back()}catch(_){}}if(typeof render==='function')render()}
+const VRCSS=".vr{position:fixed;inset:0;z-index:99998;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;font-family:Rubik,system-ui,sans-serif}\n.vr-top{flex:none;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 8px;border-bottom:1px solid var(--ln)}\n.vr-top h2{margin:0;font-size:19px}\n.vr-b{flex:none;width:44px;height:44px;border-radius:22px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:20px}\n.vr-body{flex:1;overflow:auto;padding:12px 14px calc(30px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}\n.vr-m{margin:0;color:var(--mu);font-size:13.5px}\n.vr-card{display:flex;flex-direction:column;gap:8px}\n.vr-b2{min-height:46px;border-radius:14px;border:1px dashed var(--ln);background:transparent;color:var(--tx);font:500 14px Rubik,system-ui,sans-serif;padding:8px 12px}\n.vr-empty{display:flex;flex-direction:column;gap:4px;padding:18px;border:1px dashed var(--ln);border-radius:16px;text-align:center}\n.vr-empty span{color:var(--mu);font-size:13.5px}\n.vr-ps{display:flex;flex-direction:column;gap:10px}\n.vr-p{display:flex;gap:10px;padding:8px;border:1px solid var(--ln);border-radius:16px;background:var(--sf)}\n.vr-c{flex:none;width:112px;height:auto;max-height:150px;object-fit:contain;border-radius:10px;background:#000;align-self:flex-start}\n.vr-pb{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}\n.vr-pb small{color:var(--mu);font-size:12.5px;line-height:1.3}\n.vr-k{display:flex;flex-wrap:wrap;gap:6px}\n.vr-k button{min-height:36px;padding:0 11px;border-radius:18px;border:1px solid var(--ln);background:transparent;color:var(--tx);font:500 13px Rubik,system-ui,sans-serif}\n.vr-k button[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:#fff}\n.vr-x{align-self:flex-start;min-height:34px;padding:0 4px;border:0;background:transparent;color:var(--mu);font:500 13px Rubik,system-ui,sans-serif;text-decoration:underline}\n.vr-s{padding:14px;border:1px solid var(--ln);border-radius:16px;background:var(--sf)}\n.vr-s h3{margin:0 0 8px;font-size:16px}\n.vr-s ul,.vr-s ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.4}\n.vr-s p{margin:0}\n.vr-v p{color:var(--mu);font-size:14px}\n.vr-v[data-v=warn]{border-color:#e9892b;border-width:2px}\n.vr-v[data-v=unk]{border-color:var(--mu);border-width:2px}\n.vr-v[data-v=none]{border-color:var(--ok);border-width:2px}\n.vr-act{display:flex;gap:8px;margin-top:12px}\n.vr-act .btn{flex:1;margin:0}\n.vr-warn{margin:0;font-size:13px;color:var(--mu);line-height:1.45}\n.vr-ts{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}\n.vr-ts.on{opacity:1}\n.vr-pk{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 14px) 14px 14px;z-index:3}\n.vr-pk[hidden]{display:none}\n.vr-pk h3{margin:0;font-size:17px}\n.vr-pk input{height:48px;border-radius:14px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:500 16px Rubik,system-ui,sans-serif;padding:0 14px}\n.vr-rs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px}\n.vr-rs button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--ln);border-radius:12px;background:var(--sf);color:var(--tx);padding:10px 12px;font:inherit;text-align:left}\n.vr-rs button small{color:var(--mu);font-size:12px}\n";
+addEventListener('popstate',()=>{if(V.open)vrClose(true)});
+document.addEventListener('keydown',e=>{if(V.open&&e.key==='Escape'){const p=$v('.vr-pk');if(p&&!p.hidden)p.hidden=true;else vrClose()}});
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.mnu [data-vr]');if(!t)return;S.menu=false;render();vrOpen()});
+window.vrOpen=vrOpen;window.vrAnalyse=vrAnalyse;window.vrDebug=()=>({open:V.open,n:V.ph.length,ph:V.ph.map(p=>({kind:p.kind,res:p.res&&{found:p.res.found,blur:p.res.blur,glare:p.res.glare,cx:p.res.cx,cy:p.res.cy,cut:p.res.cut,frontal:p.res.frontal,cor:p.res.cor,edge:p.res.edge,mark:p.res.mark,sharp:p.res.sharp,cardPx:p.res.cardPx,ref:p.res.ref}})),report:vrReport()});
+})();
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3365,7 +3665,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 oct. 2026 · 9';
+const BUILD='12 oct. 2026 · 10';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;

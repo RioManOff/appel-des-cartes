@@ -2764,6 +2764,10 @@ async function msPxLoad(){MSPT=Date.now();try{
  try{localStorage.setItem('fb_prixms',txt)}catch(e){}
  if(X.game==='ms'&&!pxQuiet())render()}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-MSPT>3*36e5)msPxLoad()});
+/* scanner : recherche d'une carte Masters par « BT31-035 » ou par son numéro */
+function msScanFind(q){msBindInit();const b=String(q).match(/bt\s*0?(\d+)[-\s]*0*(\d+)?/i);let ext='',n;
+ if(b){ext='BT'+b[1].padStart(2,'0');n=b[2]?+b[2]:0}else n=parseInt(String(q).replace(/\D/g,''),10)||0;
+ return n>=1?MS_ALL.filter(c=>(!ext||c.ext===ext)&&c.n===n):[]}
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3927,7 +3931,7 @@ return header()+`<h2>Scanner</h2>${smBar()}${serBar('margin-bottom:8px;text-alig
 ${last.length?`<h2>Ajoutées à l'instant</h2><button class="btn alt" style="margin-bottom:8px" data-undo>↩️ Annuler la dernière (${last[0].id})</button><div class="grid">`+last.map(cardBtn).join('')+'</div>':''}`}
 function scanCov(){const s=new Set();cards.forEach(c=>{if(CARDIMG[c.id])s.add(c.ext)});return [...s].sort().join(', ')||'aucune pour le moment'}
 function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
-function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
+function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=(/bt/i.test(S.sc)||(X.game==='ms'&&!mm))?msScanFind(S.sc):n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
 return header()+`<h2>Scanner</h2>${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none">${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="ex. 035 ou FB01-035" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
@@ -4396,7 +4400,7 @@ else if(d.mkt!==undefined){MKON=d.mkt==='1'?1:0;try{localStorage.setItem('fb_mkt
 else if(d.f){if(d.f==='ext'||d.f==='scx')S[d.f]=d.v;else S[d.f]=S[d.f]===d.v?'':d.v}
 else if(d.n){S.sel=d.n}
 else if(d.q||d.w){const c=cards.find(x=>x.id===S.sel),k=d.q?'own':'want';if(d.q&&+d.q>0)bump('c',1);c[k]=Math.max(0,c[k]+(+(d.q||d.w)));save()}
-else if(d.add){const c=cards.find(x=>x.id===d.add);bump('c',1);c.own++;S.last.unshift(d.add);S.sc='';save();toast(c.name+' ajoutée ✓');render();const i=$('#sc');if(i)i.focus();return}
+else if(d.add){const c=cards.find(x=>x.id===d.add)||(msBindInit(),MS_ALL.find(x=>x.id===d.add));bump('c',1);c.own++;S.last.unshift(d.add);S.sc='';save();toast(c.name+' ajoutée ✓');render();const i=$('#sc');if(i)i.focus();return}
 else if(d.act){if(d.act==='upd'){if(!navigator.onLine){toast('Pas de connexion : mise à jour impossible')}else{toast('Mise à jour…');(async()=>{try{const r=await navigator.serviceWorker.getRegistrations();for(const x of r)await x.unregister();for(const k of await caches.keys())await caches.delete(k)}catch(e){}location.reload()})()}}else if(d.act==='export'){exportFile()}else if(d.act==='theme'){const h=document.documentElement;h.dataset.theme=h.dataset.theme==='light'?'dark':'light'}else toast('Fonction disponible dans la vraie appli')}
 render()});
 document.addEventListener('change',e=>{if(e.target.id==='phs'){sphUp(e.target.files[0],S.sel);e.target.value='';return}if(e.target.dataset.bcov!==undefined){const b=BIND.find(x=>x.id===S.bsel);if(b){b.cov=e.target.value;saveB();render()}return}if(e.target.dataset.bname!==undefined){const b=BIND.find(x=>x.id===S.bsel);const n=e.target.value.trim();if(b&&n){b.name=n;saveB();render()}return}if(e.target.id==='phin'){addPhoto(e.target.files[0],S.sel);e.target.value='';return}if(e.target.id==='bud'){X.bud=nb(e.target.value);saveX();render();return}if(e.target.id==='imp'){importFile(e.target.files[0]);return}if(e.target.dataset.sp){sl(S.ext,e.target.dataset.sp).price=e.target.value;saveSeal();render();return}if(e.target.id==='cc'){applyColor(e.target.value);render();return}const k=e.target.dataset.e;if(!k)return;const c=cards.find(x=>x.id===S.sel);if(!c)return;c[k]=e.target.value;save();render()});
@@ -4809,9 +4813,9 @@ IMGP.then(()=>setTimeout(()=>{try{Eng.start()}catch(_){}},1500));
 const clampn=(v,a,b)=>v<a?a:v>b?b:v,NOW=()=>performance.now(),dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 let ov=null,vid=null,stream=null,track=null,caps={},alive=false,photo=null,photoUrl=null,svgQ=null,gEl=null,tmr=0,ocrW=null,ocrFail=false,ocrBusy=false,kbOn=false;
 const $q=(s,r)=>(r||ov).querySelector(s);
-let CIDM=null;const cardOf=id=>{if(!CIDM||CIDM.size!==cards.length)CIDM=new Map(cards.map(c=>[c.id,c]));return CIDM.get(id)};
-const variantsOf=id=>cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'));
-const baseOf=id=>String(id).replace(/_ALT\d*$/,'');
+let CIDM=null;const msN_=id=>String(id).replace(/^BT0(\d)-/,'BT$1-');const cardOf=id=>{if(!CIDM||CIDM.size!==cards.length)CIDM=new Map(cards.map(c=>[c.id,c]));const f=CIDM.get(id);if(f)return f;if(!/^BT\d/.test(id))return undefined;msBindInit();return MS_ALL.find(c=>c.id===msN_(id))};
+const variantsOf=id=>/^BT\d/.test(id)?(msBindInit(),MS_ALL.filter(c=>c.id===msN_(id)||c.id.startsWith(msN_(id)+'-'))):cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'));
+const baseOf=id=>msN_(String(id).replace(/_ALT\d*$/,'').replace(/^(BT\d+-\d+)-[A-Z]+$/,'$1'));
 const pref=(k,d)=>{try{const v=localStorage.getItem('fb_sc_'+k);return v===null?d:JSON.parse(v)}catch(_){return d}};
 const setPref=(k,v)=>{try{localStorage.setItem('fb_sc_'+k,JSON.stringify(v))}catch(_){}};
 const verLabel=c=>c.ver==='Normal'?'Normal':'Alt Art'+(c.id.endsWith('ALT2')?' 2':'');
@@ -4826,7 +4830,7 @@ async function getOcr(){if(ocrW)return ocrW;await loadTJS();
  const mk=async o=>{const w=await Tesseract.createWorker('eng',1,o);await w.setParameters({tessedit_char_whitelist:'FB0123456789-',user_defined_dpi:'300'});return w};
  try{ocrW=await mk({})}catch(e1){ocrW=await mk({langPath:'https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int'})}
  return ocrW}
-let BASEIDS=null;const baseIds=()=>{if(!BASEIDS||BASEIDS.n!==cards.length){const s=new Set();cards.forEach(c=>s.add(c.ext+'-'+String(c.n).padStart(3,'0')));BASEIDS={n:cards.length,l:[...s]}}return BASEIDS.l};
+let BASEIDS=null;const baseIds=()=>{if(!BASEIDS||BASEIDS.n!==cards.length){const s=new Set();cards.forEach(c=>s.add(c.ext+'-'+String(c.n).padStart(3,'0')));msBindInit();MS_ALL.forEach(c=>s.add(c.ext+'-'+String(c.n).padStart(3,'0')));BASEIDS={n:cards.length,l:[...s]}}return BASEIDS.l};
 const CONF={'B8':.3,'8B':.3,'08':.5,'80':.5,'06':.6,'60':.6,'38':.5,'83':.5,'56':.5,'65':.5,'68':.5,'86':.5,'59':.7,'95':.7,'17':.6,'71':.6,'27':.7,'72':.7,'49':.7,'94':.7,'0B':.5,'B0':.5,'3B':.6,'B3':.6,'1I':.2,'I1':.2};
 function wlev(a,b){const m=a.length,n=b.length;let p=new Array(n+1),q=new Array(n+1);for(let j=0;j<=n;j++)p[j]=j;
  for(let i=1;i<=m;i++){q[0]=i;for(let j=1;j<=n;j++){const x=a[i-1],y=b[j-1],c=x===y?0:(CONF[x+y]||1);q[j]=Math.min(p[j]+1,q[j-1]+1,p[j-1]+c)}[p,q]=[q,p]}return p[n]}
@@ -5132,7 +5136,7 @@ function unkHTML(){return'<button class="cs-x" data-a="skip" aria-label="Fermer"
  +'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
 function candsHTML(){const an=st.lastAn&&st.lastAn.res,l=(an&&an.top||[]).slice(0,6);
  return'<button class="cs-x" data-a="skip" aria-label="Fermer">✕</button><div class="cs-h">Autres possibilités</div>'+(l.length?'<div class="cs-cands">'+candBtns(l)+'</div>':'')+'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
-function manHTML(){const ex=EXTS.map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
+function manHTML(){const ex=EXTS.concat(MS_SETS.map(s=>[s.id])).map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
  const dg=['1','2','3','4','5','6','7','8','9','0'].map(d=>'<button class="cs-k" data-a="dig" data-d="'+d+'">'+d+'</button>').join('');
  return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Saisir le numéro</div><div id="cs-mmsg"></div><div class="cs-chips" id="cs-chips">'+ex+'</div><div class="cs-in"><span id="cs-ser">'+st.serie+'-</span><b id="cs-numv"></b><button class="cs-bs" data-a="del" aria-label="Effacer le dernier chiffre">⌫</button></div><div class="cs-kp">'+dg+'</div><div class="cs-list" id="cs-mres"></div>'}
 function manUpdate(){if(!ov)return;const nv=$q('#cs-numv'),sr=$q('#cs-ser'),el=$q('#cs-mres'),mm=$q('#cs-mmsg');if(!nv||!el)return;
@@ -5141,7 +5145,7 @@ function manUpdate(){if(!ov)return;const nv=$q('#cs-numv'),sr=$q('#cs-ser'),el=$
  if(mm){const e=st.manMsg&&cardOf(st.manMsg.id);mm.innerHTML=e?'<div class="cs-flashmsg"><span>✓ '+nmOf(e)+' · ×'+e.own+(st.learned===e.id?' · 🧠 mémorisée':'')+'</span><button data-a="again" aria-label="Ajouter un exemplaire de plus">+1</button><button data-a="undo">Annuler</button></div>':''}
  const n=parseInt(st.manQ,10)||0;
  if(!n){el.innerHTML='<div class="cs-sub">Tape les chiffres du numéro (ex. 35). La série se choisit au-dessus.</div>';return}
- const l=cards.filter(c=>c.ext===st.serie&&c.n===n);
+ msBindInit();const l=cards.concat(MS_ALL).filter(c=>c.ext===st.serie&&c.n===n);
  el.innerHTML=l.length?l.map(v=>'<div class="cs-row"><div class="cs-th">'+art(v)+'</div><div><div class="nm">'+nmOf(v)+'</div><div class="sb">'+esc(v.id)+' · '+esc(verLabel(v))+(v.rar?' · '+esc(v.rar):'')+' · ×'+v.own+'</div></div><button data-a="addman" data-id="'+v.id+'">+1</button></div>').join(''):'<div class="cs-sub">Aucune carte '+st.serie+'-'+String(n).padStart(3,'0')+' dans la liste.</div>'}
 function manKey(d){if(st.manQ.length>=3)st.manQ='';st.manQ+=d;st.manMsg=null;manUpdate()}
 function manDel(){st.manQ=st.manQ.slice(0,-1);manUpdate()}

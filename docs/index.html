@@ -3023,7 +3023,7 @@ function summary(){const s=S0;s.ph='summing';s.busy=true;btns('');hint('');top('
  const nwn=s.cards.filter(c=>c.nw).length,best=s.cards.slice().sort((a,b)=>b.lvl-a.lvl)[0];
  setTimeout(()=>{if(!S0||S0.dead)return;s.ph='summary';s.busy=false;s.flash=.3;play('nice');
   const e=ov.querySelector('.b3sum');e.hidden=false;e.innerHTML=`<b>${nwn}</b> nouvelle${nwn>1?'s':''} carte${nwn>1?'s':''} sur ${n}${best&&best.lvl?` · ${best.lvl===2?'🌈':'💎'} ${esc(best.c.name||best.id)}`:''}`;
-  btns('<button type="button" class="b3b" data-b3="done">Terminer</button>');const cb=ov.querySelector('.b3btns');cb.classList.add('sum')},700+n*50)}
+  btns('<button type="button" class="b3b" data-b3="done">'+esc(s.cfg.nextLabel||'Terminer')+'</button>');const cb=ov.querySelector('.b3btns');cb.classList.add('sum')},700+n*50)}
 function close(silent){if(!S0)return;const s=S0;s.dead=true;cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('deviceorientation',gyro);try{const ex=G.getExtension('WEBGL_lose_context');ex&&ex.loseContext()}catch(e){}
  const cfg=s.cfg;ov.remove();ov=null;cv=null;G=null;S0=null;document.documentElement.classList.remove('b3on');if(!silent&&cfg.done)cfg.done()}
 return{open,close,state:()=>S0,_t:{tearDone,flip,next,summary,act}}})();
@@ -3033,7 +3033,8 @@ function b3Auto(){try{const o=S.op,i=o&&o.cur,pk=o&&i!=null&&o.packs[i];if(windo
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-b3off]');if(!b)return;e.stopPropagation();e.preventDefault();X.b3off=!X.b3off;saveX();render()},true);
 function open3d(i){const o=S.op,pk=o&&o.packs[i];if(!pk||pk.st)return;const E=o.ext;let rgb=[255,150,40];try{const m=(MS_COL[E]||'').split(',').map(Number);if(m.length===3&&!m.some(isNaN))rgb=m;else{const hx=(SERCOL[E]||'#ff9628').replace('#','');rgb=[0,2,4].map(k=>parseInt(hx.substr(k,2),16))}}catch(e){}
  const nw=pk.ids.map((id,j)=>!(VIRT.q[id]>0)&&pk.ids.indexOf(id)===j);
- B3D.open({ext:E,ids:pk.ids,nw,rgb,onTear(){if(!pk.st)openPackNow(i,false)},done(){if(pk.st){pk.i=pk.ids.length;pk.rev=pk.rev.map(()=>true)}render()}})}
+ const multi=o.kind!=='pack',lo=Math.floor(i/24)*24,nxt=()=>{const L=o.packs.slice(lo,lo+24).map((x,j)=>[x,lo+j]).filter(([x,j])=>!x.st&&j!==i);const a=L.find(([x,j])=>j>i)||L[0];return a?a[1]:null};
+ B3D.open({ext:E,ids:pk.ids,nw,rgb,nextLabel:multi?(nxt()===null?'Terminer':'Booster suivant ▶ ('+(o.packs.slice(lo,lo+24).filter(x=>x.st).length+2)+' / 24)'):'Terminer',onTear(){if(!pk.st)openPackNow(i,false)},done(){if(pk.st){pk.i=pk.ids.length;pk.rev=pk.rev.map(()=>true);if(multi&&S.op===o&&o.cur===i)o.cur=nxt()}render()}})}
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3552,7 +3553,7 @@ ${virtVal(e)}<div class="row" style="margin-top:10px"><button class="chip" aria-
 <button class="btn alt" style="margin-top:14px" data-vreset>🗑️ Réinitialiser la collection virtuelle</button>`}
 const OPK={C:1,UC:1,R:1};
 function packBest(ids){let best=0,e='✔';for(const id of ids){const c=HC(id),alt=c.ver!=='Normal';let v=0,m='✔';if(c.rar==='SCR'||c.rar==='GDR'){v=5;m='🌈'}else if(alt&&(c.rar==='SR'||c.rar==='L')){v=4;m='💎'}else if(alt){v=3;m='💎'}else if(c.rar==='SR'){v=2;m='⭐'}else if(c.rar==='L'){v=1;m='✔'}if(v>best){best=v;e=m}}return e}
-function newOp(k,paid){const ext=HX(),NP=mhIs(ext)?MH_N:6;let ids;if(k==='pack')ids=luckDraw().ids;else if(k==='box')ids=boxDraw().ids;else ids=caseDraw().ids;const packs=[];for(let i=0;i<ids.length;i+=NP)packs.push({ids:ids.slice(i,i+NP),st:0,rev:ids.slice(i,i+NP).map(()=>false),nw:[]});return {ext,kind:k,packs,disp:null,cur:k==='pack'?0:null,opened:k==='pack',dop:{},paid:!!paid}}
+function newOp(k,paid){const ext=HX(),NP=mhIs(ext)?MH_N:6;let ids;if(k==='pack')ids=luckDraw().ids;else if(k==='box')ids=boxDraw().ids;else ids=caseDraw().ids;const packs=[];for(let i=0;i<ids.length;i+=NP)packs.push({ids:ids.slice(i,i+NP),st:0,rev:ids.slice(i,i+NP).map(()=>false),nw:[]});return {ext,kind:k,packs,disp:null,cur:k==='pack'||k==='box'?0:null,opened:k==='pack'||k==='box',dop:{},paid:!!paid}}
 function openPackNow(i,all){const o=S.op,pk=o.packs[i];if(pk.st)return;if(!all)play('tear');const wd=vdone(o.ext);pk.nw=pk.ids.map((id,j)=>!(VIRT.q[id]>0)&&pk.ids.indexOf(id)===j);pk.ids.forEach(id=>{VIRT.q[id]=(VIRT.q[id]||0)+1});if(mhIs(o.ext)){VIRT.bs=VIRT.bs||{};VIRT.bs[o.ext]=(VIRT.bs[o.ext]||0)+1}else VIRT.b++;pk.st=1;bump('b',1);pk.i=all?pk.ids.length:0;if(all)pk.rev=pk.rev.map(()=>true);saveV();opKeep(o);if(!wd&&vdone(o.ext)){S.celeb=o.ext;toast('🏆 Série '+o.ext+' complétée !')}if(o.tour)tourProgress(o);if(o.duel&&!o.res&&o.packs.every(x=>x.st)){duelFinish(o);if(o.kind!=='pack')setTimeout(()=>play(o.res.res),400)}}
 function opSummary(o){const ids=[],nw=[];let n=0;o.packs.forEach(pk=>{if(pk.st){n++;ids.push(...pk.ids);nw.push(...pk.nw)}});return n?boxView({ext:o.ext,ids,nw,n:o.kind==='case'?12:1,pk:n}):''}
 function packTile(o,i){const pk=o.packs[i],W=S.wave;
@@ -4544,7 +4545,7 @@ else if(d.vown!==undefined){S.hzo=!S.hzo}
 else if(d.vreset!==undefined){S.cf={msg:'Réinitialiser la collection virtuelle ? Ta vraie collection n\'est pas touchée.',act:'resetv'}}
 else if(d.oi!==undefined){const p=cdPend(d.oi);if(p){S.celeb=null;S.op=p;window.scrollTo(0,0)}else if(cdTake(d.oi)){play('open');S.celeb=null;S.op=newOp(d.oi);opKeep(S.op);window.scrollTo(0,0)}}else if(d.oresume!==undefined){const p=cdPend(d.oresume);if(p){S.dl=false;S.shop=false;S.hzv=false;S.celeb=null;S.op=p;window.scrollTo(0,0)}}else if(d.cdlock!==undefined){toast('⏳ '+CDI[d.cdlock].nx+' dans '+cdFmt(cdLeft(d.cdlock)))}else if(d.oshop!==undefined){opLeave();S.dl=false;S.shop=true;window.scrollTo(0,0)}
 else if(d.oback!==undefined){if(S.op&&S.op.duel)S.dl=true;opLeave();window.scrollTo(0,0)}
-else if(d.dgo!==undefined){S.op.disp=+d.dgo;window.scrollTo(0,0)}
+else if(d.dgo!==undefined){const o=S.op,k=+d.dgo,lo=k*24;o.dop=o.dop||{};o.dop[k]=true;o.disp=k;const n=o.packs.slice(lo,lo+24).findIndex(x=>!x.st);o.cur=n<0?null:lo+n;window.scrollTo(0,0)}
 else if(d.dback!==undefined){S.op.disp=null;window.scrollTo(0,0)}
 else if(d.pgo!==undefined){S.op.cur=+d.pgo;window.scrollTo(0,0)}
 else if(d.pback!==undefined){if(S.op.kind==='pack'){if(S.op.duel)S.dl=true;opLeave()}else S.op.cur=null;window.scrollTo(0,0)}

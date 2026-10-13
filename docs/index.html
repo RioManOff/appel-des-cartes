@@ -1171,6 +1171,9 @@ button.ppsr:first-child{border-top:0}
 .cm-tabs button{position:relative;font:inherit;font-weight:700;font-size:14px;color:var(--mu);background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px;padding:12px 4px;min-height:44px}
 .cm-tabs button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold,var(--ac));box-shadow:inset 0 -3px 0 var(--gold,var(--ac))}
 .cm-tabs .cmbd{position:absolute;top:-6px;right:-2px}
+.shg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 12px}
+.shg button{font:inherit;font-weight:700;font-size:14px;color:var(--mu);background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px;padding:11px 4px;min-height:44px}
+.shg button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold,var(--ac));box-shadow:inset 0 -3px 0 var(--gold,var(--ac))}
 </style>
 </head>
 <body>
@@ -1380,7 +1383,7 @@ function swNorm(o){const r={g:[],r:[],cg:'',cr:''};if(!o||typeof o!=='object')re
   return r}
 const swS=()=>{if(!SW){try{SW=swNorm(JSON.parse(localStorage.getItem('fb_sw')||'null'))}catch(e){SW=swNorm(null)}}return SW},
   swSave=()=>{try{localStorage.setItem('fb_sw',JSON.stringify(swS()))}catch(e){}},
-  swCard=id=>cards.find(c=>c.id===id),swC=v=>Math.round(v*100),swE=c=>eur(c/100).replace(' €','\u00a0€'),
+  swCard=id=>cards.find(c=>c.id===id)||(/^BT/.test(id)?(msBindInit(),MS_ALL.find(c=>c.id===id)):undefined),swC=v=>Math.round(v*100),swE=c=>eur(c/100).replace(' €','\u00a0€'),
   swTag=c=>c.id.replace(/_ALT\d?/,'')+(c.rar?' · '+c.rar:'')+(c.ver!=='Normal'?' · Alt Art'+(/_ALT2$/.test(c.id)?' 2':''):''),
   swClean=v=>String(v).replace(/[^\d.,]/g,'').slice(0,9),
   swCnt=k=>{const n=swS()[k].reduce((a,l)=>a+l.q,0);return n?n+' carte'+(n>1?'s':''):'aucune carte'};
@@ -1534,7 +1537,7 @@ function ppData(){
   if(X.pp.tr){
     d.sell=tradeData().prop.sort((a,b)=>srt(a.c,b.c)).slice(0,60).map(x=>[x.c.id,Math.min(99,x.q)]);
     d.want=cards.filter(c=>c.want>c.own).sort(srt).slice(0,60).map(c=>[c.id,Math.min(99,c.want-c.own)])}
-  try{msBindInit();const mo=MS_ALL.filter(c=>c.own>0);d.ms={u:mo.length,n:mo.reduce((a,c)=>a+c.own,0),a:mo.filter(c=>c.ver!=='Normal').length,ex:MS_SETS.map(t=>[t.id,MS_ALL.filter(c=>c.ext===t.id&&c.own>0).length])}}catch(e){}
+  try{msBindInit();const mo=MS_ALL.filter(c=>c.own>0);d.ms={u:mo.length,n:mo.reduce((a,c)=>a+c.own,0),a:mo.filter(c=>c.ver!=='Normal').length,ex:MS_SETS.map(t=>[t.id,MS_ALL.filter(c=>c.ext===t.id&&c.own>0).length])};if(X.pp.tr){d.sell=(d.sell||[]).concat(msProp().sort(srt2).slice(0,60).map(x=>[x.c.id,Math.min(99,x.q)]));d.want=(d.want||[]).concat(MS_ALL.filter(c=>c.want>c.own).slice(0,60).map(c=>[c.id,Math.min(99,c.want-c.own)]))}}catch(e){}
   return d}
 /* ce que je reçois : on ne fait confiance à rien (n'importe qui peut écrire n'importe quoi dans sa propre ligne) */
 function ppClean(d){
@@ -1544,7 +1547,7 @@ function ppClean(d){
   if(Array.isArray(d.ex))for(const x of d.ex.slice(0,40)){if(!Array.isArray(x)||typeof x[0]!=='string'||seen.has(x[0])||!exn[x[0]]||!EXTS.some(y=>y[0]===x[0]))continue;seen.add(x[0]);r.ex.push([x[0],N(x[1],exn[x[0]])])}
   const ids=(a,max,pair)=>{if(!Array.isArray(a))return null;const out=[],s=new Set();
     for(const x of a){if(out.length>=max)break;const id=pair?(Array.isArray(x)?x[0]:null):x;if(typeof id!=='string'||s.has(id)||!swCard(id))continue;s.add(id);out.push(pair?[id,Math.max(1,N(x[1],99))]:id)}return out};
-  r.vit=ids(d.vit,12,false);r.sell=ids(d.sell,60,true);r.want=ids(d.want,60,true);
+  r.vit=ids(d.vit,12,false);r.sell=ids(d.sell,120,true);r.want=ids(d.want,120,true);
   try{if(d.ms&&typeof d.ms==='object'&&Array.isArray(d.ms.ex)){msBindInit();const mt=d.ms.t||d.ms,tot=MS_ALL.length,sn=new Map(MS_SETS.map(t=>[t.id,t.c.length])),mx=[],sd=new Set();for(const x of d.ms.ex.slice(0,20)){if(!Array.isArray(x)||!sn.has(x[0])||sd.has(x[0]))continue;sd.add(x[0]);mx.push([x[0],N(x[1],sn.get(x[0]))])}r.ms={u:N(d.ms.u,tot),n:N(d.ms.n,99999),a:N(d.ms.a,tot),ex:mx}}}catch(e){}
   return r}
 /* ---------- publication (compte connecté) ---------- */
@@ -1656,7 +1659,7 @@ function ppOpen(name){name=String(name||'').trim();if(!name){S.tab='set';render(
   ppFetchOne(name).then(r=>{if(n!==PP.n)return;PP.row=r;PP.err=r?'':'none'}).catch(e=>{if(n!==PP.n)return;PP.err=e.status===404?'nosrv':'net'}).then(()=>{if(n!==PP.n)return;PP.busy=false;if(S.tab==='prof')render()})}
 /* échanges possibles entre ma collection et la sienne */
 function ppMatch(P){
-  const sm=new Map(tradeData().prop.map(x=>[x.c.id,x.q])),give=[],get=[];
+  const sm=new Map(tradeData().prop.concat(msProp()).map(x=>[x.c.id,x.q])),give=[],get=[];
   for(const [id,m] of (P.want||[])){const q=sm.get(id);if(q)give.push([id,Math.min(q,m)])}
   for(const [id,q] of (P.sell||[])){const c=swCard(id);if(c&&c.want>c.own)get.push([id,Math.min(q,c.want-c.own)])}
   return{give,get}}
@@ -1691,7 +1694,7 @@ function ppBody(name,P,t,mine){
     return `<div class="ppsr"><b class="ppsc" style="color:${SERCOL[e]||'var(--tx)'}">${e}</b><span class="ppsn">${esc(nm)}<span class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${o}" aria-label="${e}"><i style="width:${p}%;background:${SERCOL[e]||'var(--ac)'}"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></div>`}).join('')}</section>`;
   if(P.ms){msBindInit();const mem=new Map(P.ms.ex);h+=`<section class="panel cmc ppms"><div class="cmh"><b>Masters · séries</b><span class="sub">${cmNum(P.ms.u)} / ${cmNum(MS_ALL.length)} cartes · ${cmNum(P.ms.n)} ex.</span></div>${MS_SETS.map(t=>{const o=mem.get(t.id)||0,n=t.c.length,p=pct(o,n),col='rgb('+(MS_COL[t.id]||'229,9,20')+')';return `<div class="ppsr"><b class="ppsc" style="color:${col}">${t.id}</b><span class="ppsn">${esc(t.n)}<span class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${o}" aria-label="${t.id}"><i style="width:${p}%;background:${col}"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></div>`}).join('')}</section>`}
   if(P.vit&&P.vit.length)h+=`<section class="panel cmc"><div class="cmh"><b>⭐ Vitrine</b><span class="sub">${P.vit.length} carte${P.vit.length>1?'s':''}</span></div><div class="swstr" style="margin-top:10px">${P.vit.map(id=>{const c=swCard(id);return c?`<button type="button" class="swq" data-n="${esc(id)}"><span class="vnth">${art({...c,own:1})}</span><b>${esc(c.name||c.id)}</b><small>${esc(c.id.replace(/_ALT\d?/,''))}</small></button>`:''}).join('')}</div></section>`;
-  const sellMine=new Set(tradeData().prop.map(x=>x.c.id));
+  const sellMine=new Set(tradeData().prop.concat(msProp()).map(x=>x.c.id));
   h+=ppListSec('sell','🔁 À échanger',P.sell,c=>!mine&&c.want>c.own?'tu la cherches':'');
   h+=ppListSec('want','🔎 Il cherche',P.want,c=>!mine&&sellMine.has(c.id)?'tu peux la donner':'');
   return h}
@@ -2803,6 +2806,9 @@ document.addEventListener('click',ev=>{if(S.tab!=='luck'||!HZM()||S.op||S.hzv)re
 const scGameBar=()=>`<div class="row" style="margin-bottom:10px"><button class="chip" data-scg="fw" aria-pressed="${X.game!=='ms'}">Fusion World</button><button class="chip" data-scg="ms" aria-pressed="${X.game==='ms'}">Masters</button></div>`;
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-scg]');if(!b)return;e.stopPropagation();const v=b.dataset.scg==='ms'?'ms':'fw';if(X.game!==v){X.game=v;saveX();S.sc='';render()}},true);
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-cmt]');if(!t)return;e.stopPropagation();e.preventDefault();S.cmt=t.dataset.cmt;if(S.tab!=='comm'){S.menu=false;S.mnmore=false;S.tab='comm';S.sel=null;S.vsh=false;window.scrollTo(0,0)}render()},true);
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-shg]');if(!t||!S.shr)return;e.stopPropagation();e.preventDefault();S.shr.g=t.dataset.shg==='ms'?'ms':'fw';S.shr.url=shareDraw();render()},true);
+function msProp(){try{msBindInit();return MS_ALL.filter(c=>c.own>3).map(c=>({c,q:c.own-3}))}catch(e){return []}}
+const srt2=(a,b)=>a.c.id<b.c.id?-1:1;
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
@@ -3713,10 +3719,10 @@ function trashV(){const ic={binder:'📒',sale:'💶',exp:'💸',buy:'🧾'};ret
 const SITE='https://riomanoff.github.io/appel-des-cartes/';
 let SHN='';try{SHN=localStorage.getItem('fb_shname')||''}catch(e){}
 function shareStats(){
- const MSG=X.game==='ms';if(MSG)msBindInit();const EX=MSG?MS_SETS.map(t=>[t.id,t.n]):EXTS,CA=MSG?MS_ALL:cards;const per=EX.map(([e,nm])=>{const T=CA.filter(c=>c.ext===e);return {e,nm,o:T.filter(c=>c.own>0).length,n:T.length}}),A=CA.filter(c=>c.ver!=='Normal');
+ const MSG=((S.shr&&S.shr.g)||X.game)==='ms';if(MSG)msBindInit();const EX=MSG?MS_SETS.map(t=>[t.id,t.n]):EXTS,CA=MSG?MS_ALL:cards;const per=EX.map(([e,nm])=>{const T=CA.filter(c=>c.ext===e);return {e,nm,o:T.filter(c=>c.own>0).length,n:T.length}}),A=CA.filter(c=>c.ver!=='Normal');
  return {MSG,nser:EX.length,per,nAll:CA.length,nOwn:CA.filter(c=>c.own>0).length,copies:CA.reduce((a,c)=>a+(c.own||0),0),full:per.filter(x=>x.n>0&&x.o===x.n).length,aOwn:A.filter(c=>c.own>0).length,aAll:A.length}}
 function shareText(){const s=shareStats(),who=SHN.trim();
- return (who?'Collection de '+who+' · ':'')+(s.MSG?'Dragon Ball Super Card Game Masters (cartes françaises) : ':'Dragon Ball Super Card Game Fusion World (cartes japonaises) : ')+s.nOwn+' / '+s.nAll+' cartes différentes ('+pct(s.nOwn,s.nAll)+' %), '+s.copies+' exemplaire'+(s.copies>1?'s':'')+(s.full?', '+s.full+' série'+(s.full>1?'s':'')+' complète'+(s.full>1?'s':''):'')+'.'+(s.MSG?'':dbShareLine())+'\nJe la suis avec L’Appel des Cartes : '+SITE}
+ return (who?'Collection de '+who+' · ':'')+(s.MSG?'Dragon Ball Super Card Game Masters (cartes françaises) : ':'Dragon Ball Super Card Game Fusion World (cartes japonaises) : ')+s.nOwn+' / '+s.nAll+' cartes différentes ('+pct(s.nOwn,s.nAll)+' %), '+s.copies+' exemplaire'+(s.copies>1?'s':'')+(s.full?', '+s.full+' série'+(s.full>1?'s':'')+' complète'+(s.full>1?'s':''):'')+'.'+dbShareLine()+'\nJe la suis avec L’Appel des Cartes : '+SITE}
 function shareDraw(){
  const s=shareStats(),W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
  const FD='Big Shoulders Display,"Poppins","Arial Black",Impact,sans-serif',FT='Barlow,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif',p=pct(s.nOwn,s.nAll);
@@ -3730,7 +3736,7 @@ function shareDraw(){
  g.textAlign='left';g.textBaseline='alphabetic';
  g.fillStyle='#fff';g.font='400 56px '+FD;g.fillText("L'Appel des Cartes",240,142);
  g.fillStyle='#A89C9C';g.font='400 26px '+FT;g.fillText(s.MSG?'Dragon Ball Super Card Game · Masters':'Dragon Ball Super Card Game · Fusion World',240,186);g.fillText(s.MSG?'Cartes françaises · '+s.per.map(x=>x.e).join(' · '):'Cartes japonaises · FB01 à FB'+EXTS[EXTS.length-1][0].slice(2),240,222);
- const who=SHN.trim();g.fillStyle='#FFB23A';g.font='600 32px '+FT;g.fillText(fit(who?'Collection de '+who:'Ma collection',680),60,282);if(!s.MSG)dbShareDraw(g,FT);
+ const who=SHN.trim();g.fillStyle='#FFB23A';g.font='600 32px '+FT;g.fillText(fit(who?'Collection de '+who:'Ma collection',680),60,282);dbShareDraw(g,FT);
  /* total */
  g.fillStyle='#fff';g.font='400 150px '+FD;const nTxt=String(s.nOwn);g.fillText(nTxt,60,478);const nw=g.measureText(nTxt).width;
  g.fillStyle='#A89C9C';g.font='400 46px '+FT;g.fillText('/ '+s.nAll,60+nw+20,478);g.font='400 28px '+FT;g.fillText('cartes différentes',64,524);
@@ -3754,10 +3760,10 @@ function shareDraw(){
  g.textAlign='left';g.fillStyle='#FFB23A';g.font='600 27px '+FT;g.fillText(SITE.replace('https://','').replace(/\/$/,''),60,1316);
  g.textAlign='right';g.fillStyle='#A89C9C';g.font='400 24px '+FT;g.fillText(new Date().toLocaleDateString('fr-FR'),1020,1316);
  return cv.toDataURL('image/png')}
-function shareOpen(){S.shr={url:shareDraw()};
+function shareOpen(){S.shr={g:X.game==='ms'?'ms':'fw'};S.shr.url=shareDraw();
  try{if(document.fonts&&document.fonts.load){Promise.race([document.fonts.load('40px Big Shoulders Display'),new Promise(r=>setTimeout(r,900))]).then(()=>{if(!S.shr)return;const u=shareDraw();if(u!==S.shr.url){S.shr.url=u;const im=document.getElementById('shimg');if(im)im.src=u}}).catch(()=>{})}}catch(e){}}
 function shareSheet(){const s=S.shr;if(!s)return '';
- return `<div class="sheet" data-close><div role="dialog" aria-label="Partager ma collection"><h2 style="margin-top:0">📤 Partager ma collection</h2><img id="shimg" class="shimg" src="${s.url}" alt="Aperçu de l’image à partager">
+ return `<div class="sheet" data-close><div role="dialog" aria-label="Partager ma collection"><h2 style="margin-top:0">📤 Partager ma collection</h2><div class="shg" role="group" aria-label="Jeu à partager"><button type="button" data-shg="fw" aria-pressed="${s.g!=='ms'}">Fusion World</button><button type="button" data-shg="ms" aria-pressed="${s.g==='ms'}">Masters</button></div><img id="shimg" class="shimg" src="${s.url}" alt="Aperçu de l’image à partager">
 <label class="sub" for="shn" style="display:block;margin:12px 0 4px">Nom affiché sur l’image (facultatif)</label><input id="shn" class="shin" maxlength="24" autocomplete="nickname" placeholder="ex. RioMan0ff" value="${esc(SHN)}">
 <button class="btn" data-sharesend style="margin-top:12px">📤 Partager l’image</button><div class="sx2" style="margin-top:8px"><button class="btn alt" data-sharedl>💾 Enregistrer</button><button class="btn alt" data-sharecopy>📋 Copier le texte</button></div><button class="btn alt" data-close style="margin-top:8px">Fermer</button></div></div>`}
 function shareFile(){const b=S.shr.url.split(',')[1],bin=atob(b),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new File([u],'ma-collection-appel-des-cartes.png',{type:'image/png'})}

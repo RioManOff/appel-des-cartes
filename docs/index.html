@@ -1228,6 +1228,13 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .cs-t{bottom:0}
 .cs{padding:5px 5px 8px}
 .cs-t{bottom:auto;top:22px;right:4px}
+.hmgw{position:relative}
+.onl{position:absolute;top:6px;right:0;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font:600 13px/1 Barlow,system-ui,sans-serif;color:var(--tx);background:color-mix(in srgb,var(--ac) 14%,transparent);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent)}
+.onl[hidden]{display:none}
+.onl i{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:onlp 2.2s infinite}
+@keyframes onlp{70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+@media (prefers-reduced-motion:reduce){.onl i{animation:none}}
+.hmgw .hmgs{max-width:calc(100% - 118px)}
 </style>
 </head>
 <body>
@@ -2885,6 +2892,27 @@ function csPages(list,fn,own){
     o+=`<section class="cs-pg"><div class="cs-pt"><span>PAGE ${i/9+1}${ok?'<i>✓</i>':''}</span></div><div class="grid gc cs-g">${pg.map(fn).join('')}</div></section>`}
   return o}
 document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest('.cs-h');if(!h)return;const b=h.parentNode.querySelector('.cs-a button.card');if(b)b.click()});
+/* ===== Personnes en ligne (Supabase Realtime, présence anonyme) ===== */
+const ONL={ws:null,keys:new Set(),ok:false,me:'p'+Math.random().toString(36).slice(2,10),n:0,hb:0,rt:0,tries:0,topic:'realtime:site-online'};
+function onlTxt(){return ONL.ok?`<i aria-hidden="true"></i>${ONL.keys.size} en ligne`:''}
+function onlDraw(){document.querySelectorAll('[data-onl]').forEach(e=>{const t=onlTxt();e.innerHTML=t;e.hidden=!t;e.setAttribute('aria-label',ONL.ok?ONL.keys.size+' personne'+(ONL.keys.size>1?'s':'')+' en ligne sur le site':'')})}
+function onlSend(o){try{if(ONL.ws&&ONL.ws.readyState===1)ONL.ws.send(JSON.stringify(o))}catch(e){}}
+function onlStop(){clearInterval(ONL.hb);clearTimeout(ONL.rt);const w=ONL.ws;ONL.ws=null;ONL.ok=false;ONL.keys=new Set();if(w){w.onclose=w.onerror=w.onmessage=null;try{w.close()}catch(e){}}onlDraw()}
+function onlStart(){
+ if(!window.WebSocket||!sbOn()||ONL.ws||document.hidden)return;
+ let w;try{w=new WebSocket(SBC.url.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SBC.key)+'&vsn=1.0.0')}catch(e){return}
+ ONL.ws=w;
+ w.onopen=()=>{ONL.n=1;onlSend({topic:ONL.topic,event:'phx_join',ref:String(++ONL.n),join_ref:'1',payload:{config:{broadcast:{ack:false,self:false},presence:{key:ONL.me},private:false},access_token:SBC.key}});
+  ONL.hb=setInterval(()=>onlSend({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++ONL.n)}),25000)};
+ w.onmessage=ev=>{let m;try{m=JSON.parse(ev.data)}catch(e){return}
+  if(m.topic!==ONL.topic)return;
+  if(m.event==='phx_reply'&&m.payload&&m.payload.status==='ok'&&String(m.ref)==='2'){ONL.tries=0;onlSend({topic:ONL.topic,event:'presence',ref:String(++ONL.n),payload:{type:'presence',event:'track',payload:{t:Date.now()}}})}
+  else if(m.event==='presence_state'){ONL.keys=new Set(Object.keys(m.payload||{}));ONL.keys.add(ONL.me);ONL.ok=true;onlDraw()}
+  else if(m.event==='presence_diff'){const p=m.payload||{};Object.keys(p.joins||{}).forEach(k=>ONL.keys.add(k));Object.keys(p.leaves||{}).forEach(k=>{if(k!==ONL.me)ONL.keys.delete(k)});ONL.keys.add(ONL.me);ONL.ok=true;onlDraw()}
+  else if(m.event==='phx_error'||m.event==='phx_close'){w.close()}};
+ w.onclose=w.onerror=()=>{if(ONL.ws!==w)return;onlStop();if(!document.hidden){ONL.tries++;ONL.rt=setTimeout(onlStart,Math.min(60000,3000*Math.pow(2,Math.min(ONL.tries,5))))}}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)onlStop();else onlStart()});
+setTimeout(onlStart,1200);
 /* ===== 🌀 Ouverture de booster en vraie 3D (WebGL maison, sans bibliothèque) ===== */
 const B3D=(()=>{
 const VS=`attribute vec3 aP;attribute vec3 aN;attribute vec2 aT;uniform mat4 uVP;uniform mat4 uM;varying vec2 vUv;varying vec3 vN;varying vec3 vW;
@@ -4320,7 +4348,7 @@ function cfSheet(){return S.cf?`<div class="sheet" data-close><div role="dialog"
 const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
 const greet=()=>{const h=new Date().getHours(),g=h>=5&&h<12?'Bonjour':h<18&&h>=12?'Bon après-midi':h>=18&&h<23?'Bonsoir':'Encore debout ?',N=cards.filter(c=>c.ext===S.ext),o=N.filter(c=>c.own>0).length,p=pct(o,N.length),k=Math.floor(Date.now()/864e5)%3,t=(X.act[today()]||{}).c||0;
  const m=p===0?['Ta série '+S.ext+' attend ses premières cartes.','Une carte à la fois : tout commence ici.','Prêt à lancer la chasse à la série '+S.ext+' ?'][k]:p<25?['Beau début sur '+S.ext+' : '+o+' cartes déjà !','Ça se remplit : '+o+' / '+N.length+' sur '+S.ext+'.','Continue, '+S.ext+' commence à prendre forme.'][k]:p<50?['Presque la moitié de '+S.ext+' ! Plus que '+(N.length-o)+' cartes.','Tu avances bien sur '+S.ext+' : '+p+' %.','Plus de '+p+' % de '+S.ext+', ça roule.'][k]:p<75?['Plus de la moitié de '+S.ext+' est à toi !','Le plus dur est fait sur '+S.ext+' : '+p+' %.','Tu as passé la moitié de '+S.ext+', bravo.'][k]:p<100?['Il ne te manque que '+(N.length-o)+' carte'+(N.length-o>1?'s':'')+' pour finir '+S.ext+' !','Dernière ligne droite sur '+S.ext+' : '+p+' %.','Tu y es presque : plus que '+(N.length-o)+' pour '+S.ext+'.'][k]:'Série '+S.ext+' complète, félicitations ! 🏆';
- return `<div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div>`};
+ return `<div class="hmgw"><div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div><span class="onl" data-onl role="status"${onlTxt()?'':' hidden'}>${onlTxt()}</span></div>`};
 const homePanel=()=>{const t=X.act[today()]||{c:0,b:0},v=cards.filter(c=>c.ext===S.ext).reduce((a,c)=>a+c.own*pxv(c),0),vt=cards.reduce((a,c)=>a+c.own*pxv(c),0);return `<div class="panel" style="margin-bottom:10px">${greet()}<div class="sub">Valeur ${S.ext} : <b>${eur(v)}</b> · toutes séries : <b>${eur(vt)}</b> ${MKON?'(Cardmarket + tes prix)':'(selon tes prix)'}</div></div>`};
 /* ===== Tri de la collection ===== */
 const CSORTS=[['num','Numéro',1],['name','Nom',1],['copies','Exemplaires',-1],['recent','Récentes',-1],['price','Prix',-1]],CSORTL={num:'numéro',name:'nom',copies:'exemplaires',recent:'ajout récent',price:'prix'};

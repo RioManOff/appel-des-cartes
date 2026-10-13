@@ -1174,6 +1174,7 @@ button.ppsr:first-child{border-top:0}
 .shg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 12px}
 .shg button{font:inherit;font-weight:700;font-size:14px;color:var(--mu);background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px;padding:11px 4px;min-height:44px}
 .shg button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold,var(--ac));box-shadow:inset 0 -3px 0 var(--gold,var(--ac))}
+nav button{position:relative}nav .cmbd{position:absolute;top:2px;left:calc(50% + 6px);right:auto}
 </style>
 </head>
 <body>
@@ -2873,7 +2874,7 @@ let curCol='';function serTheme(e){const h=(goldOn()?'#F5B400':ACFIX)||SERCOL[e]
 serTheme('FB01');
 const EXTS=[['FB01','Awakened Pulse'],['FB02','Blazing Aura'],['FB03','Raging Roar'],['FB04','Ultra Limit'],['FB05','New Adventure'],['FB06','Rivals Clash'],['FB07',"Wish for Shenron"],['FB08',"Saiyan's Pride"],['FB09',"Dual Evolution"],['FB10',"Cross Force"],['FB11',"Brightness of Hope"]],S={dl:false,shop:false,tut:HELP?null:0,zoom:false,sx:'',pr:'missing',pal:false,fx:'',bpg:0,bre:false,timg:null,hzv:false,hzo:false,hz:null,burst:false,balt:false,menu:false,fq:'',bsel:null,bpick:false,bq:'',bx:'',bnew:'',cf:null,cfd:null,mode:'cards',ssel:null,pick:false,ext:'FB01',sc:'',last:[],tab:START,q:'',own:'',ver:'',col:'',rar:'',sel:null};
 const $=s=>document.querySelector(s),pct=(a,b)=>b?Math.round(a/b*100):0;
-const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['scan','📷','Scanner'],['mid'],['bind','📒','Classeurs'],['stats','📊','Stats'],['set','⚙️','Réglages']];
+const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['scan','📷','Scanner'],['mid'],['comm','👥','Amis'],['stats','📊','Stats'],['set','⚙️','Réglages']];
 const nrm=(e)=>cards.filter(c=>c.ver==='Normal'&&(!e||c.ext===e)),alt=(e)=>cards.filter(c=>c.ver!=='Normal'&&(!e||c.ext===e));
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
 let PH={},ARTMODE='';
@@ -3705,9 +3706,9 @@ function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0
  +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
  +`<div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>`
  +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
- +dbHomeCard()
- +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
  +`<div class="hmhrow"><h2 class="hmh">📚 Mes séries</h2><button class="chip" data-share>📤 Partager</button></div><div class="panel hmser">${ser}</div>`
+ +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
+ +dbHomeCard()
  +`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney()
  +hmNews()
  +`<div class="hmsoc"><h2 class="hmh" style="margin-top:0">Retrouve RioMan0ff</h2><div class="hmlinks"><a class="hml" href="https://www.whatnot.com/user/rioman0ff" target="_blank" rel="noopener noreferrer" aria-label="Profil Whatnot de RioMan0ff (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">📺</span><span><b>Whatnot</b><small>RioMan0ff</small></span></a><a class="hml" href="https://www.instagram.com/rioman___/" target="_blank" rel="noopener noreferrer" aria-label="Profil Instagram rioman___ (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">📸</span><span><b>Instagram</b><small>rioman___</small></span></a><a class="hml hmd" href="${DISC}" target="_blank" rel="noopener noreferrer" aria-label="Discord : une idée ou un bug ? (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">💬</span><span><b>Discord</b><small>Une idée, un bug ? Viens en parler</small></span></a></div></div>`}
@@ -4276,7 +4277,7 @@ if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scroll
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch()}
 function renderCore(){if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
-$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${S.tab===t[0]?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}</button>`).join('');
+$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
 const fq=$('#fq');if(fq){fq.oninput=e=>{S.fq=e.target.value;const p=e.target.selectionStart;render();const n=$('#fq');n.focus();n.setSelectionRange(p,p)}}

@@ -5581,15 +5581,15 @@ function mediaEl(kind){ // 'cam' -> <video>, 'photo' -> <img>
  if(old){old.srcObject=null;old.remove()}ov.insertBefore(el,ov.firstChild);vid=el;return el}
 async function open(opts){
  if(ov)return;opts=opts||{};ensureCss();Eng.urgent=true;Eng.start();
- Object.assign(st,{mode:'live',sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',manMsg:null,stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,qs:null,busy:false,auto:!!pref('auto',false),serie:X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01'),photoMode:!!opts.bitmap,unkR:[],unkT:0,ctx:null,learned:null});
+ Object.assign(st,{video:null,mode:'live',sess:[],ring:[],lock:null,pick:null,thumb:null,lastAn:null,cands:[],manQ:'',manMsg:null,stick:null,free:true,goneSince:0,trackSince:0,chg:0,otherN:0,ocrAcc:{},ocrVar:0,ocrAt:0,qs:null,busy:false,auto:!!pref('auto',false),serie:X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01'),photoMode:!!opts.bitmap,unkR:[],unkT:0,ctx:null,learned:null});
  ov=document.createElement('div');ov.className='cs'+(opts.bitmap?' cs_ph':'');ov.setAttribute('role','dialog');ov.setAttribute('aria-label','Scanner de cartes');
  ov.innerHTML='<svg class="cs-qd" id="cs-q"><polygon id="cs-poly" points="" style="display:none"/></svg>'
   +'<div class="cs-g" id="cs-g"><i></i><i></i><i></i><i></i></div>'
   +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span class="cs-gm" role="group" aria-label="Choisir le jeu"><button data-a="game" data-g="fw" aria-pressed="'+(X.game!=='ms')+'">Fusion World</button><button data-a="game" data-g="ms" aria-pressed="'+(X.game==='ms')+'">Masters</button></span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
   +'<button class="cs-ib" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique">⚡<span style="font-size:12px">Auto</span></button><button class="cs-ib" id="cs-torch" data-a="torch" aria-label="Lampe" style="display:none">🔦</button></div>'
   +'<div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
-  +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
-  +'<input type="file" id="cs-file" accept="image/*" capture="environment" hidden><input type="file" id="cs-gal" accept="image/*" hidden>';
+  +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-a="vid"><span>🎞️</span>Vidéo</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
+  +'<input type="file" id="cs-file" accept="image/*" capture="environment" hidden><input type="file" id="cs-gal" accept="image/*" hidden><input type="file" id="cs-vid" accept="video/*" hidden>';
  document.body.appendChild(ov);alive=true;gEl=$q('#cs-g');svgQ=$q('#cs-poly');mediaEl(opts.bitmap?'photo':'cam');
  ov.addEventListener('click',e=>{e.stopPropagation();onClick(e)});ov.addEventListener('change',onFileChange);addEventListener('resize',placeHint);
  try{history.pushState({cs:1},'')}catch(_){}
@@ -5720,6 +5720,7 @@ function learnTab(){const el=document.getElementById('sc-learn');if(el&&window.s
 
 /* ---------- résultat ---------- */
 function setLock(id,src,score,th){
+ if(st.video&&st.video.seen.has(id)){st.stick=id;st.free=false;st.ring=[];hint('Déjà ajoutée dans cette vidéo');return}
  const vs=variantsOf(baseOf(id));let pick=null;
  if(src==='ocr'&&vs.length>1){pick=vs;const an=st.lastAn&&st.lastAn.res;if(an&&an.top){const hit=an.top.find(x=>vs.some(v=>v.id===x.id)&&x.s>=.3);if(hit){id=hit.id;pick=null}}}
  const c=cardOf(id)||vs[0];if(!c)return;
@@ -5728,16 +5729,16 @@ function setLock(id,src,score,th){
  try{navigator.vibrate&&navigator.vibrate(35)}catch(_){}try{play('reveal')}catch(_){}
  setClass('ok');hint('');
  if(st.auto&&src==='img'&&!pick){
-  if(c.own>0&&SCQ){st.lock.ask=true;st.mode='res';setClass('mid');try{navigator.vibrate&&navigator.vibrate([35,70,35])}catch(_){}panel();return}
+  if(c.own>0&&SCQ&&!st.video){st.lock.ask=true;st.mode='res';setClass('mid');try{navigator.vibrate&&navigator.vibrate([35,70,35])}catch(_){}panel();return}
   doAdd(c.id,1);return}
  st.mode='res';panel()}
 function showUnknown(res){if(st.mode==='unk'||st.mode!=='live')return;st.mode='unk';st.cands=(res.z||0)>=4.3?(res.top||[]).filter(x=>x.s>=.3).slice(0,3):[];setClass('bad');hint('');panel()}
-function doAdd(id,q,keep){const c=cardOf(id);if(!c)return;learnFrom(id);bump('c',q);c.own+=q;for(let i=0;i<q;i++)S.last.unshift(id);save();
+function doAdd(id,q,keep){const c=cardOf(id);if(!c)return;if(st.video){st.video.seen.add(id);st.video.n+=q}learnFrom(id);bump('c',q);c.own+=q;for(let i=0;i<q;i++)S.last.unshift(id);save();
  st.sess.push({id,q,t:Date.now()});try{play('nice')}catch(_){}flash();
  if(keep){st.manMsg={id};if(st.mode==='man')manUpdate()}
  else{st.mode='added';st.stick=id;st.free=false;if(!st.lock)st.lock={id,src:'man'};setClass('ok');panel()}
  countUI()}
-function undoLast(){const e=st.sess.pop();if(!e)return;if(st.learned===e.id){st.learned=null;Eng.unlearn(e.id).then(learnTab).catch(()=>{})}const c=cardOf(e.id);if(c){c.own=Math.max(0,c.own-e.q);for(let i=0;i<e.q;i++){const k=S.last.indexOf(e.id);if(k>=0)S.last.splice(k,1)}save()}
+function undoLast(){const e=st.sess.pop();if(!e)return;if(st.video){st.video.seen.delete(e.id);st.video.n=Math.max(0,st.video.n-e.q)}if(st.learned===e.id){st.learned=null;Eng.unlearn(e.id).then(learnTab).catch(()=>{})}const c=cardOf(e.id);if(c){c.own=Math.max(0,c.own-e.q);for(let i=0;i<e.q;i++){const k=S.last.indexOf(e.id);if(k>=0)S.last.splice(k,1)}save()}
  st.manMsg=null;if(st.mode==='added'){st.mode='live';st.lock=null;st.ring=[];st.free=false;setClass('');hint('Retire la carte puis place la suivante')}
  panel();countUI();toast('Annulé')}
 function countUI(){if(!ov)return;const n=st.sess.reduce((a,e)=>a+e.q,0),b=$q('#cs-n');if(b)b.textContent=n+' ajoutée'+(n>1?'s':'')}
@@ -5783,7 +5784,7 @@ function panel(){if(!ov)return;const p=$q('#cs-panel');if(!p)return;let h='';
  p.innerHTML=h?'<div class="cs-card">'+h+'</div>':'';ov.classList.toggle('cs_ask',st.mode==='res'&&!!(st.lock&&st.lock.ask));
  if(st.mode==='man')manUpdate();
  for(const b of ov.querySelectorAll('.cs-bb')){if(b.dataset.a==='man')b.setAttribute('aria-pressed',String(st.mode==='man'));if(b.dataset.a==='tray')b.setAttribute('aria-pressed',String(st.mode==='tray'))}
- if(st.photoMode){const b=$q('#cs-shotb');if(b){b.dataset.a='cam';b.innerHTML='<span>📷</span>Caméra'}}else{const b=$q('#cs-shotb');if(b&&b.dataset.a==='cam'){b.dataset.a='shot';b.innerHTML='<span>📸</span>Photo'}}}
+ if(st.photoMode||st.video){const b=$q('#cs-shotb');if(b){b.dataset.a='cam';b.innerHTML='<span>📷</span>Caméra'}}else{const b=$q('#cs-shotb');if(b&&b.dataset.a==='cam'){b.dataset.a='shot';b.innerHTML='<span>📸</span>Photo'}}}
 function scSetGame(g){const v=g==='ms'?'ms':'fw';if(X.game===v)return;X.game=v;saveX();st.ocrAcc={};st.lock=null;st.pick=null;st.cands=[];st.ring=[];st.manQ='';st.manMsg=null;st.stick=null;st.free=true;st.serie=v==='ms'?MS_SETS[0].id:(S.ext||'FB01');if(st.mode!=='man'&&st.mode!=='tray')st.mode='live';for(const b of ov.querySelectorAll('[data-a=game]'))b.setAttribute('aria-pressed',String(b.dataset.g===v));panel();setClass('');hint('Place la carte dans le cadre');toast(v==='ms'?'Scanner : Masters':'Scanner : Fusion World')}
 function leaveOverlayPanel(){st.mode='live';st.ring=[];st.lock=null;st.pick=null;st.free=false;panel();setClass('');hint(photo?'':'Retire la carte puis place la suivante')}
 function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
@@ -5793,6 +5794,7 @@ function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.
  else if(a==='torch'){const on=!t.dataset.on;t.dataset.on=on?'1':'';t.setAttribute('aria-pressed',String(!!on));try{track.applyConstraints({advanced:[{torch:!!on}]})}catch(_){}}
  else if(a==='shot'){const i=$q('#cs-file');if(i)i.click()}
  else if(a==='gal'){const i=$q('#cs-gal');if(i)i.click()}
+ else if(a==='vid'){const i=$q('#cs-vid');if(i)i.click()}
  else if(a==='cam')useCamera();
  else if(a==='man'){if(st.mode==='man')leaveOverlayPanel();else{snapCtx();st.mode='man';st.manQ='';st.manMsg=null;panel()}}
  else if(a==='tray'){if(st.mode==='tray')leaveOverlayPanel();else{st.mode='tray';panel()}}
@@ -5809,7 +5811,18 @@ function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.
  else if(a==='notit'||a==='more'){if(a==='notit'&&st.lock&&st.lock.src==='learn'){const id=st.lock.id;Eng.unlearn(id).then(learnTab).catch(()=>{});toast('Compris : je l’oublie')}st.mode='cands';panel()}
  else if(a==='cand'){const c=cardOf(t.dataset.id);if(c){st.lock={id:c.id,src:'man'};st.pick=null;st.stick=c.id;st.free=false;st.mode='res';panel()}}
  else if(a==='rm'){const id=t.dataset.id,k=st.sess.map(x=>x.id).lastIndexOf(id),c=cardOf(id);if(k>=0&&c){const e0=st.sess[k];e0.q--;c.own=Math.max(0,c.own-1);const j=S.last.indexOf(id);if(j>=0)S.last.splice(j,1);if(e0.q<=0)st.sess.splice(k,1);save();countUI();panel()}}}
-function onFileChange(e){const i=e.target;if(i&&(i.id==='cs-file'||i.id==='cs-gal')){const f=i.files&&i.files[0];i.value='';fromFile(f)}}
+function onFileChange(e){const i=e.target;if(i&&i.id==='cs-vid'){const f=i.files&&i.files[0];i.value='';fromVideo(f);return}if(i&&(i.id==='cs-file'||i.id==='cs-gal')){const f=i.files&&i.files[0];i.value='';fromFile(f)}}
+/* ---------- vidéo : on lit un film de tes cartes, chaque carte n'est ajoutée qu'une seule fois ---------- */
+async function fromVideo(f){if(!f||!ov)return;let url;try{url=URL.createObjectURL(f)}catch(_){toast('Vidéo illisible');return}
+ clearTimeout(tmr);stopCamera();photo=null;if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
+ let a0=st.auto;if(st.video){a0=st.video.auto0;try{URL.revokeObjectURL(st.video.url)}catch(_){}}
+ st.photoMode=false;ov.classList.remove('cs_ph');drawPts(null);
+ Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{},unkR:[],cands:[],auto:true,video:{seen:new Set(),n:0,url,auto0:a0}});
+ const el=mediaEl('cam');el.src=url;el.muted=true;el.loop=false;
+ el.onended=()=>{if(st.video&&vid===el){const n=st.video.n;hint('Vidéo terminée : '+n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''));toast('🎞️ Vidéo terminée : '+n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''))}};
+ panel();setClass('');placeHint();hint('Lecture de la vidéo…');
+ try{await el.play()}catch(_){toast('Lecture de la vidéo impossible');return}
+ loop()}
 
 /* ---------- photo ---------- */
 async function fromFile(f){if(!f)return;let bmp;
@@ -5821,7 +5834,7 @@ function showPhoto(bmp,url){if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch
  const el=mediaEl('photo');if(url)el.src=url;else{const c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height;c.getContext('2d').drawImage(bmp,0,0);el.src=c.toDataURL('image/jpeg',.85)}
  Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,thumb:null,cands:[],stick:null,free:true,ocrAcc:{},unkR:[],ctx:null});drawPts(null);setClass('');panel();
  hint('Analyse de la photo…');photoRun()}
-function useCamera(){if(!ov)return;photo=null;if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
+function useCamera(){if(!ov)return;photo=null;if(st.video){st.auto=st.video.auto0;try{URL.revokeObjectURL(st.video.url)}catch(_){}st.video=null}if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
  st.photoMode=false;ov.classList.remove('cs_ph');drawPts(null);Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{}});panel();setClass('');
  mediaEl('cam');placeHint();hint('Démarrage de la caméra…');
  startCamera().then(()=>{if(!alive||photo)return;hint('Place la carte dans le cadre');loop()}).catch(e=>{hint('Caméra indisponible : utilise « Photo » ou saisis le numéro.');setClass('bad')})}

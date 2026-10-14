@@ -1251,6 +1251,17 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .dvb.good{background:#14532d;border-color:#3ddc84;color:#fff}.dvb.bad{background:#7f1d1d;border-color:#ff5a5a;color:#fff}.dvb.dim{opacity:.45}
 .dvr{display:flex;flex-direction:column;align-items:center;gap:8px;margin:12px 0 90px}
 @media (prefers-reduced-motion:reduce){.dvi{transition:none}}
+/* chat général */
+.gc .gcl{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 2px 8px;margin-top:6px}
+.gcm{align-self:flex-start;max-width:88%;background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:7px 11px}
+.gcm.me{align-self:flex-end;border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,var(--sf))}
+.gch{display:flex;align-items:center;gap:8px;font-size:12px}
+.gcp{background:none;border:0;padding:0;color:var(--ac);font:inherit;font-weight:700;cursor:pointer}
+.gct{opacity:.6}.gcx{margin-left:auto;background:none;border:0;color:inherit;opacity:.55;font-size:13px;padding:2px 4px;cursor:pointer}
+.gcb{margin-top:2px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px}
+.gcf{display:flex;gap:8px;align-items:flex-end;margin-top:6px}
+.gcf textarea{flex:1;min-width:0;resize:none;padding:11px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:16px;max-height:110px}
+.gcf .btn{margin:0;width:auto;padding:11px 16px}
 </style>
 </head>
 <body>
@@ -1723,11 +1734,11 @@ function ppHub(lg){if(!lg)return '';
 <div class="cmact">${on?`<button type="button" class="btn alt" data-ppview>👁 Voir mon profil</button><button type="button" class="btn alt" data-ppshare>🔗 Partager</button>`:`<button type="button" class="btn" data-ppon="1"${ok?'':' disabled'}>Activer mon profil</button>${ok?`<button type="button" class="btn alt" data-ppview>👁 Aperçu</button>`:`<button type="button" class="btn alt" data-ppacc>Choisir mon pseudo</button>`}`}</div></section>`}
 function ppFind(){return `<section class="panel cmc"><div class="cmh"><b>🔎 Chercher un joueur</b></div><input id="pp-q" class="cmq" type="search" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Pseudo" aria-label="Chercher un joueur par son pseudo" value="${esc(CM.q)}"><div class="cmls" id="pp-l">${ppListHTML()}</div></section>`}
 COMM.push({o:30,h:ppHub},{o:40,h:cmFriends},{o:50,h:ppFind});
-function cmTabs(){const t=S.cmt||'msg',b=(()=>{try{return cmBdg()}catch(e){return ''}})();return `<div class="cm-tabs" role="tablist"><button type="button" data-cmt="msg" aria-pressed="${t==='msg'}">💬 Messages${b}</button><button type="button" data-cmt="prof" aria-pressed="${t==='prof'}">🪪 Profils</button><button type="button" data-cmt="tour" aria-pressed="${t==='tour'}">🏟️ Tournoi</button></div>`}
+function cmTabs(){const t=S.cmt||'msg',b=(()=>{try{return cmBdg()}catch(e){return ''}})();return `<div class="cm-tabs" role="tablist"><button type="button" data-cmt="msg" aria-pressed="${t==='msg'}">💬 Messages${b}</button><button type="button" data-cmt="prof" aria-pressed="${t==='prof'}">🪪 Profils</button><button type="button" data-cmt="tour" aria-pressed="${t==='tour'}">🏟️ Tournoi</button><button type="button" data-cmt="gen" aria-pressed="${t==='gen'}">🌍 Général</button></div>`}
 function commV(){frEnsure();ppRecent();const lg=!!SBS;
   return header()+`<h2>👥 Communauté</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
    +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et jouer au tournoi. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
-   +cmTabs()+COMM.slice().sort((a,b)=>a.o-b.o).filter(s=>({msg:[20,40],prof:[30,50],tour:[25]}[S.cmt||'msg']||[]).includes(s.o)).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
+   +cmTabs()+COMM.slice().sort((a,b)=>a.o-b.o).filter(s=>({msg:[15,20,40],prof:[30,50],tour:[25],gen:[60]}[S.cmt||'msg']||[]).includes(s.o)).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
 
 /* ---------- page d'un profil ---------- */
 function ppOpen(name){name=String(name||'').trim();if(!name){S.tab='set';render();return}
@@ -1879,7 +1890,7 @@ async function msPoll(force){
   for(const r of rows){const id=r?Math.floor(+r.id):0,s=r&&msUuid(r.sender)?r.sender.toLowerCase():'';if(!(id>0)||!s||s===open)continue;un[s]=(un[s]||0)+1;if(id>mx){mx=id;from=s}}
   MS.unread=un;msSum();
   let prev=MS.seen;if(prev===null){prev=0;try{prev=+(localStorage.getItem('fb_msn')||0)||0}catch(e){}}
-  if(mx>prev){const multi=Object.keys(un).length>1;(multi?Promise.resolve(''):msWho(from)).then(nm=>toast('💬 '+(multi?'Nouveaux messages':'Nouveau message'+(nm?' de '+nm:''))))}
+  if(mx>prev){const multi=Object.keys(un).length>1;(multi?Promise.resolve(''):msWho(from)).then(nm=>{toast('💬 '+(multi?'Nouveaux messages':'Nouveau message'+(nm?' de '+nm:'')));pnNotify(nm,multi)})}
   const seen=Math.max(mx,prev);if(seen!==prev){try{localStorage.setItem('fb_msn',String(seen))}catch(e){}}MS.seen=seen;
   const fresh=mx>MS.mx;MS.mx=mx;
   msRefresh();if(fresh&&S.tab==='comm')msInbox(true)}
@@ -3278,6 +3289,107 @@ function open3d(i){const o=S.op,pk=o&&o.packs[i];if(!pk||pk.st)return;const E=o.
  const nw=pk.ids.map((id,j)=>!(VIRT.q[id]>0)&&pk.ids.indexOf(id)===j);
  const multi=o.kind!=='pack',lo=Math.floor(i/24)*24,nxt=()=>{const L=o.packs.slice(lo,lo+24).map((x,j)=>[x,lo+j]).filter(([x,j])=>!x.st&&j!==i);const a=L.find(([x,j])=>j>i)||L[0];return a?a[1]:null};
  B3D.open({ext:E,ids:pk.ids,nw,rgb,onAll:multi?()=>{if(S.op!==o)return;const pv=o.kind==='case'?String(o.disp):'0';o.cur=null;const b=document.createElement('button');b.dataset.pall=pv;document.body.appendChild(b);b.click();b.remove()}:null,nextLabel:multi?'Retour aux boosters':'Terminer',onTear(){if(!pk.st)openPackNow(i,false)},done(){if(pk.st){pk.i=pk.ids.length;pk.rev=pk.rev.map(()=>true);if(multi&&S.op===o&&o.cur===i)o.cur=null}render()}})}
+/* ===== Chat général : tous les membres connectés, une seule salle (chat.sql) ===== */
+const GC={msgs:[],ok:null,busy:false,sending:false,draft:'',admin:false,t:0,uid:'',sig:'',n:0};
+const gcTime=s=>{const d=new Date(s);if(isNaN(d))return '';const n=new Date(),h=d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});return d.toDateString()===n.toDateString()?h:d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+' '+h};
+function gcRows(rows){const o=[];for(const r of Array.isArray(rows)?rows:[]){const id=Math.floor(+(r&&r.id));if(!(id>0)||typeof r.body!=='string'||!msUuid(r.user_id))continue;o.push({id,uid:r.user_id.toLowerCase(),pseudo:String(r.pseudo||'?').slice(0,20),body:msTxt(r.body).slice(0,300),t:r.created_at})}return o.sort((a,b)=>a.id-b.id)}
+function gcListHTML(){
+ if(GC.ok==='nosrv')return '<p class="sub">Le chat général n’est pas encore activé sur le serveur (il faut coller chat.sql dans Supabase).</p>';
+ if(GC.ok===null&&!GC.msgs.length)return '<p class="sub">Chargement…</p>';
+ if(!GC.msgs.length)return '<p class="sub">Aucun message pour l’instant. Écris le premier !</p>';
+ const me=msMe();
+ return GC.msgs.map(m=>{const mine=m.uid===me;return `<div class="gcm${mine?' me':''}"><div class="gch"><button type="button" class="gcp" data-gcp="${esc(m.pseudo)}">${esc(m.pseudo)}</button><span class="gct">${esc(gcTime(m.t))}</span>${mine||GC.admin?`<button type="button" class="gcx" data-gcdel="${m.id}" aria-label="Supprimer ce message">✕</button>`:''}</div><div class="gcb">${esc(m.body)}</div></div>`}).join('')}
+function gcCard(lg){
+ if(!lg)return `<section class="panel cmc"><b>🌍 Chat général</b><p class="cmst">Discute avec tous les membres de l’appli. Il faut un compte pour lire et écrire.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`;
+ if(!SBS.pseudo)return `<section class="panel cmc"><b>🌍 Chat général</b><p class="cmst">Choisis d’abord ton pseudo : c’est lui que les autres verront à côté de tes messages.</p><button type="button" class="btn" data-ppacc style="margin-top:12px">Choisir mon pseudo</button></section>`;
+ return `<section class="panel cmc gc"><div class="cmh"><b>🌍 Chat général</b><span class="sub">tous les membres</span></div><div id="gc-list" class="gcl" aria-live="polite">${gcListHTML()}</div><div class="gcf"><textarea id="gc-in" rows="1" maxlength="300" placeholder="Écris un message…" aria-label="Message">${esc(GC.draft)}</textarea><button type="button" class="btn" data-gcsend>Envoyer</button></div><p class="cmst" style="margin-top:8px">Sois respectueux : ton pseudo est visible de tous. Tu peux supprimer tes messages avec ✕.</p></section>`}
+function gcDraw(stick){const l=document.getElementById('gc-list');if(!l)return;const near=l.scrollHeight-l.scrollTop-l.clientHeight<60;l.innerHTML=gcListHTML();if(stick||near)l.scrollTop=l.scrollHeight}
+async function gcPoll(force){
+ if(!SBS||!SBS.pseudo)return;if(GC.busy){GC.again=true;return}if(GC.uid!==SBS.uid){GC.uid=SBS.uid;GC.msgs=[];GC.ok=null;GC.sig=''}
+ if(GC.ok==='nosrv'&&!force&&Date.now()-GC.t<3e5)return;
+ GC.busy=true;GC.t=Date.now();const u=SBS.uid;
+ try{const rows=await frApi('/rest/v1/gchat?select=id,user_id,pseudo,body,created_at&order=id.desc&limit=60');if(!SBS||SBS.uid!==u)return;const m=gcRows(rows),sig=m.map(x=>x.id).join(',');GC.ok=true;if(sig!==GC.sig){const first=!GC.sig;GC.sig=sig;GC.msgs=m;gcDraw(first)}else if(GC.ok===true&&!document.getElementById('gc-list'))GC.msgs=m}
+ catch(e){if(e&&e.status===404)GC.ok='nosrv';else if(GC.ok===null)GC.ok=false;gcDraw()}
+ GC.busy=false;if(GC.n++===0)gcAdm();if(GC.again){GC.again=false;gcPoll(true)}}
+async function gcAdm(){try{const r=await frApi('/rest/v1/rpc/chat_admin',{method:'POST',body:'{}'});GC.admin=r===true;if(GC.admin)gcDraw()}catch(e){}}
+async function gcSend(){
+ const i=document.getElementById('gc-in');if(!i||GC.sending||!SBS)return;const b=msTrim(msTxt(i.value));if(!b)return;
+ GC.sending=true;try{await frApi('/rest/v1/gchat',{method:'POST',body:JSON.stringify({body:b})});i.value='';GC.draft='';GC.sig='';await gcPoll(true);gcDraw(true)}
+ catch(e){toast(/Trop de messages|Attends/i.test(e.message||'')?e.message:'Envoi impossible : vérifie ta connexion.')}
+ GC.sending=false}
+async function gcDel(id){try{await frApi('/rest/v1/gchat?id=eq.'+id,{method:'DELETE'});GC.msgs=GC.msgs.filter(m=>m.id!==id);GC.sig=GC.msgs.map(x=>x.id).join(',');gcDraw()}catch(e){toast('Suppression impossible.')}}
+setTimeout(()=>{COMM.push({o:60,h:gcCard})},0);
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-gcsend],[data-gcdel],[data-gcp]');if(!t)return;
+ if(t.dataset.gcsend!==undefined)gcSend();else if(t.dataset.gcdel)gcDel(+t.dataset.gcdel);else if(t.dataset.gcp)ppOpen(t.dataset.gcp)});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='gc-in')GC.draft=e.target.value});
+document.addEventListener('keydown',e=>{if(e.target&&e.target.id==='gc-in'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();gcSend()}});
+/* temps réel : Supabase prévient dès qu'un message est ajouté ou supprimé (alter publication dans chat.sql) ; sans ça, on interroge toutes les 4 s */
+const GCW={w:null,ok:false,hb:0,rt:0,tries:0,exp:0};
+const gcOn=()=>!document.hidden&&S.tab==='comm'&&S.cmt==='gen'&&!!SBS&&!!SBS.pseudo;
+function gcWsClose(){const w=GCW.w;GCW.w=null;GCW.ok=false;clearInterval(GCW.hb);clearTimeout(GCW.exp);if(w){w.onclose=null;try{w.close()}catch(e){}}}
+async function gcWsOpen(){
+ if(GCW.w||!gcOn())return;let tok;try{tok=await sbTok()}catch(e){return}
+ if(GCW.w||!gcOn())return;let w;try{w=new WebSocket(SBC.url.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SBC.key)+'&vsn=1.0.0')}catch(e){return}
+ GCW.w=w;const send=o=>{try{if(w.readyState===1)w.send(JSON.stringify(o))}catch(e){}};
+ w.onopen=()=>{send({topic:'realtime:gchat',event:'phx_join',ref:'1',join_ref:'1',payload:{config:{broadcast:{ack:false,self:false},presence:{key:''},postgres_changes:[{event:'*',schema:'public',table:'gchat'}],private:false},access_token:tok}});
+  let n=1;GCW.hb=setInterval(()=>send({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++n+1)}),25000);
+  GCW.exp=setTimeout(()=>{if(GCW.w===w){gcWsClose();gcWsOpen()}},50*60*1000)};   /* le jeton dure 1 h : on se reconnecte avant */
+ w.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(_){return}if(!m||m.topic!=='realtime:gchat')return;
+  if(m.event==='phx_reply'&&m.ref==='1'){if(m.payload&&m.payload.status==='ok'){GCW.ok=true;GCW.tries=0;gcPoll(true)}else{GCW.ok=false}}
+  else if(m.event==='postgres_changes')gcPoll(true)};
+ w.onclose=()=>{if(GCW.w!==w)return;gcWsClose();const d=Math.min(30000,2000*Math.pow(2,GCW.tries++));clearTimeout(GCW.rt);GCW.rt=setTimeout(gcWsOpen,d)}}
+setInterval(()=>{
+ if(!gcOn()){if(GCW.w)gcWsClose();return}
+ if(!GCW.w)gcWsOpen();
+ if(GCW.ok&&Date.now()-GC.t<30000)return;      /* temps réel en marche : simple vérification toutes les 30 s */
+ gcPoll()},4000);
+document.addEventListener('visibilitychange',()=>{if(gcOn()){gcPoll(true);gcWsOpen()}});
+{const _c=commV;commV=function(){const r=_c.apply(this,arguments);if(S.cmt==='gen'&&SBS&&SBS.pseudo){setTimeout(()=>{gcPoll(true);const l=document.getElementById('gc-list');if(l)l.scrollTop=l.scrollHeight},30)}return r}}
+/* ===== Notifications des messages privés : temps réel (table messages) + vibration + notification du téléphone ===== */
+const PN={ws:null,ok:false,hb:0,rt:0,tries:0,exp:0,uid:'',id:0};
+const pnCap=()=>{try{const C=window.Capacitor;if(!C||!C.isNativePlatform||!C.isNativePlatform())return null;return C.registerPlugin?C.registerPlugin('LocalNotifications'):(C.Plugins&&C.Plugins.LocalNotifications)||null}catch(e){return null}};
+const pnState=()=>{if(pnCap())return PN.cap||'default';return typeof Notification==='undefined'?'none':Notification.permission};
+async function pnAsk(){
+ const c=pnCap();
+ try{if(c){const r=await c.requestPermissions();PN.cap=r&&r.display==='granted'?'granted':'denied'}
+  else if(typeof Notification!=='undefined'){await Notification.requestPermission()}}catch(e){}
+ const s=pnState();toast(s==='granted'?'🔔 Notifications activées':s==='denied'?'Notifications refusées : autorise-les dans les réglages du téléphone.':'Notifications indisponibles sur cet appareil.');
+ if(S.tab==='comm')render()}
+async function pnNotify(nm,multi){
+ try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch(e){}
+ if(!document.hidden||pnState()!=='granted')return;           /* appli ouverte : le message en haut suffit */
+ const title=multi?'Nouveaux messages':'Nouveau message'+(nm?' de '+nm:''),body='Ouvre l’appli pour le lire.';
+ try{const c=pnCap();
+  if(c){await c.schedule({notifications:[{id:1+(++PN.id%2e6),title,body,schedule:{at:new Date(Date.now()+300)}}]});return}
+  const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+  if(reg&&reg.showNotification){await reg.showNotification(title,{body,tag:'adc-msg',icon:'icon-192.png',badge:'icon-192.png',renotify:true,vibrate:[120,60,120]});return}
+  const n=new Notification(title,{body,tag:'adc-msg',icon:'icon-192.png'});n.onclick=()=>{try{window.focus();n.close()}catch(e){}}
+ }catch(e){}}
+function pnCard(lg){
+ if(!lg)return '';const s=pnState();if(s==='granted'||s==='none')return '';
+ if(s==='denied')return '<section class="panel cmc"><div class="cmh"><b>🔔 Notifications</b></div><p class="cmst">Elles sont bloquées. Pour les recevoir, autorise-les pour L’Appel des Cartes dans les réglages du téléphone.</p></section>';
+ return '<section class="panel cmc"><div class="cmh"><b>🔔 Notifications</b></div><p class="cmst">Reçois une alerte à chaque nouveau message privé, même quand l’appli est en arrière-plan.</p><button type="button" class="btn" data-pnask>Activer les notifications</button></section>'}
+setTimeout(()=>{COMM.push({o:15,h:pnCard})},0);
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[data-pnask]'))pnAsk()});
+/* temps réel : Supabase prévient dès qu'un message t'est envoyé (messages_rt.sql) ; sinon la vérification toutes les 45 s continue */
+function pnClose(){const w=PN.ws;PN.ws=null;PN.ok=false;clearInterval(PN.hb);clearTimeout(PN.exp);if(w){w.onclose=null;try{w.close()}catch(e){}}}
+async function pnOpen(){
+ if(PN.ws||!SBS||document.hidden)return;const u=SBS.uid;let tok;try{tok=await sbTok()}catch(e){return}
+ if(PN.ws||!SBS||SBS.uid!==u||document.hidden)return;let w;try{w=new WebSocket(SBC.url.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SBC.key)+'&vsn=1.0.0')}catch(e){return}
+ PN.ws=w;PN.uid=u;const send=o=>{try{if(w.readyState===1)w.send(JSON.stringify(o))}catch(e){}};
+ w.onopen=()=>{send({topic:'realtime:msgs',event:'phx_join',ref:'1',join_ref:'1',payload:{config:{broadcast:{ack:false,self:false},presence:{key:''},postgres_changes:[{event:'INSERT',schema:'public',table:'messages',filter:'recipient=eq.'+u}],private:false},access_token:tok}});
+  let n=1;PN.hb=setInterval(()=>send({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++n+1)}),25000);
+  PN.exp=setTimeout(()=>{if(PN.ws===w){pnClose();pnOpen()}},50*60*1000)};
+ w.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(_){return}if(!m||m.topic!=='realtime:msgs')return;
+  if(m.event==='phx_reply'&&m.ref==='1'){PN.ok=!!(m.payload&&m.payload.status==='ok');if(PN.ok)PN.tries=0}
+  else if(m.event==='postgres_changes'){pnPoll(0)}};
+ w.onclose=()=>{if(PN.ws!==w)return;pnClose();const d=Math.min(30000,2000*Math.pow(2,PN.tries++));clearTimeout(PN.rt);PN.rt=setTimeout(pnOpen,d)}}
+function pnPoll(k){if(!SBS)return;if(MS.busy&&k<5){setTimeout(()=>pnPoll(k+1),800);return}msPoll(true)}
+setInterval(()=>{
+ if(!SBS||document.hidden||MS.ok==='nosrv'){if(PN.ws)pnClose();return}
+ if(PN.ws&&PN.uid!==SBS.uid)pnClose();
+ if(!PN.ws)pnOpen()},5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SBS){msPoll(true);pnOpen()}});
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};

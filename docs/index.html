@@ -5598,12 +5598,13 @@ async function open(opts){
  hint('Démarrage de la caméra…');
  try{await startCamera();if(!alive)return;hint('Place la carte dans le cadre');loop()}
  catch(e){if(!alive)return;const n=e&&e.name||'';hint(n==='NotAllowedError'||n==='SecurityError'?'Caméra refusée : autorise-la dans les réglages, ou utilise « Photo » / « Galerie ».':'Caméra indisponible'+(n?' ('+n+')':'')+' : utilise « Photo », « Galerie » ou saisis le numéro.');setClass('bad')}}
-async function startCamera(){
- const ladder=[{video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false},{video:{facingMode:{ideal:'environment'}},audio:false},{video:true,audio:false}];
+async function startCamera(lv){
+ lv=lv||0;const ladder=[{video:{facingMode:{ideal:'environment'}},audio:false},{video:true,audio:false},{video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false}].slice(lv);
  let err=null,s=null;for(const c of ladder){try{s=await navigator.mediaDevices.getUserMedia(c);break}catch(e){err=e;if(e&&(e.name==='NotAllowedError'||e.name==='SecurityError'))break}}
  if(!s)throw err||new Error('cam');
  if(!alive||photo){s.getTracks().forEach(t=>t.stop());return}
  stream=s;vid.srcObject=stream;await vid.play().catch(()=>{});track=stream.getVideoTracks()[0];
+ if(!lv){setTimeout(()=>{try{if(!alive||!vid||vid.readyState<2||!vid.videoWidth)return;const w=96,hh=Math.max(8,Math.round(96*vid.videoHeight/vid.videoWidth)),c=document.createElement('canvas');c.width=w;c.height=hh;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(vid,0,0,w,hh);const L=x.getImageData(0,0,w/2,hh).data,R=x.getImageData(w/2,0,w/2,hh).data,m=a=>{let t=0;for(let i=0;i<a.length;i+=4)t+=a[i]+a[i+1]+a[i+2];return t/(a.length/4*3)};if(m(L)<4&&m(R)>25){stopCamera();vid.srcObject=null;startCamera(1).then(()=>{if(alive)hint('Place la carte dans le cadre')}).catch(()=>{})}}catch(_){}},1800)}
  try{caps=track.getCapabilities?track.getCapabilities():{}}catch(_){caps={}}
  try{if(caps.focusMode&&caps.focusMode.includes('continuous'))await track.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch(_){}
  const tb=$q('#cs-torch');if(tb&&caps.torch)tb.style.display='flex'}

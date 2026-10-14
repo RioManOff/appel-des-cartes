@@ -17,6 +17,12 @@ jobs:
           java-version: 17
       - run: npm install
       - run: npx cap add android
+      - name: Autoriser l'appareil photo (sinon le scanner ne marche pas dans l'APK)
+        run: |
+          F=android/app/src/main/AndroidManifest.xml
+          sed -i 's#<application#<uses-permission android:name="android.permission.CAMERA" />\n    <uses-feature android:name="android.hardware.camera" android:required="false" />\n    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />\n    <application#' "$F"
+          grep -c "permission.CAMERA" "$F"
+          sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.VIBRATE" />\n    <application#' "$F"
       - run: npx cap sync android
       - name: Mettre le logo de l'appli (icône et écran de lancement)
         continue-on-error: true

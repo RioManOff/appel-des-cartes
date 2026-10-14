@@ -1265,6 +1265,18 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 /* scanner : recadrage de la vidéo */
 .cs-vc{display:none;position:absolute;right:12px;top:calc(66px + env(safe-area-inset-top,0px));flex-direction:column;gap:8px;z-index:6}
 .cs.cs_vd .cs-vc{display:flex}
+
+.gcb{display:none;position:fixed;right:14px;bottom:90px;width:54px;height:54px;border-radius:50%;border:2px solid var(--ki,#e8b000);background:var(--ac,#e8b000);color:#000;font-size:26px;align-items:center;justify-content:center;z-index:7;box-shadow:0 4px 14px rgba(0,0,0,.5);padding:0;cursor:pointer}.gcb:active{transform:scale(.94)}
+.amh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}.amh h2{margin:0}.amsb{flex:none}
+.amlist{margin-top:6px}.amr{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--ln)}
+.amo{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 2px;background:none;border:0;color:var(--tx);text-align:left;font:inherit;cursor:pointer}
+.amo .stb{width:46px;height:46px;font-size:19px;flex:none}.amo .vnin{flex:1;min-width:0}.amo .vnin b{display:block;font-size:16px}
+.amo .amsp{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mu);font-size:13.5px;margin-top:2px}
+.amn .amo .vnin b,.amn .amo .amsp{color:var(--tx);font-weight:700}
+.amp{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:16px;cursor:pointer}
+.amq2{display:flex;align-items:center;gap:8px;padding:6px 0}.amv{padding:26px 8px;text-align:center}.amv b{display:block;font-size:17px;margin-bottom:6px}.amv p{margin:0;color:var(--mu);font-size:14px;line-height:1.45}
+.amtl{margin-top:18px}
+.amo .mst{flex:none!important;min-width:44px;width:auto}
 </style>
 </head>
 <body>
@@ -1737,9 +1749,9 @@ function ppHub(lg){if(!lg)return '';
 <div class="cmact">${on?`<button type="button" class="btn alt" data-ppview>👁 Voir mon profil</button><button type="button" class="btn alt" data-ppshare>🔗 Partager</button>`:`<button type="button" class="btn" data-ppon="1"${ok?'':' disabled'}>Activer mon profil</button>${ok?`<button type="button" class="btn alt" data-ppview>👁 Aperçu</button>`:`<button type="button" class="btn alt" data-ppacc>Choisir mon pseudo</button>`}`}</div></section>`}
 function ppFind(){return `<section class="panel cmc"><div class="cmh"><b>🔎 Chercher un joueur</b></div><input id="pp-q" class="cmq" type="search" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Pseudo" aria-label="Chercher un joueur par son pseudo" value="${esc(CM.q)}"><div class="cmls" id="pp-l">${ppListHTML()}</div></section>`}
 COMM.push({o:30,h:ppHub},{o:40,h:cmFriends},{o:50,h:ppFind});
-function cmTabs(){const t=S.cmt||'msg',b=(()=>{try{return cmBdg()}catch(e){return ''}})();return `<div class="cm-tabs" role="tablist"><button type="button" data-cmt="msg" aria-pressed="${t==='msg'}">💬 Messages${b}</button><button type="button" data-cmt="prof" aria-pressed="${t==='prof'}">🪪 Profils</button><button type="button" data-cmt="tour" aria-pressed="${t==='tour'}">🏟️ Tournoi</button><button type="button" data-cmt="gen" aria-pressed="${t==='gen'}">🌍 Général</button></div>`}
+function cmTabs(){const t=S.cmt||'msg',b=(()=>{try{return cmBdg()}catch(e){return ''}})();return `<div class="cm-tabs" role="tablist"><button type="button" data-cmt="msg" aria-pressed="${t==='msg'}">💬 Messages${b}</button><button type="button" data-cmt="prof" aria-pressed="${t==='prof'}">🪪 Profils</button><button type="button" data-cmt="tour" aria-pressed="${t==='tour'}">🏟️ Tournoi</button></div>`}
 function commV(){frEnsure();ppRecent();const lg=!!SBS;
-  return header()+`<h2>👥 Communauté</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
+  return header()+`<h2>👥 Amis</h2><p class="cmi">Retrouve d’autres collectionneurs, montre ta progression et prépare des échanges.</p>`
    +(lg?'':`<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Avec un compte, tu peux publier ton profil, ajouter des amis et jouer au tournoi. Chercher un profil est possible sans compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`)
    +cmTabs()+COMM.slice().sort((a,b)=>a.o-b.o).filter(s=>({msg:[15,20,40],prof:[30,50],tour:[25],gen:[60]}[S.cmt||'msg']||[]).includes(s.o)).map(s=>{try{return s.h(lg)}catch(e){return ''}}).join('')}
 
@@ -1791,7 +1803,7 @@ function ppBody(name,P,t,mine){
   return h}
 function ppView(){
   frEnsure();
-  let h=header()+`<button type="button" class="btn alt ppb" data-go="comm">← Communauté</button>`;
+  let h=header()+`<button type="button" class="btn alt ppb" data-go="comm">← Amis</button>`;
   const me=cmMe(PP.name);
   if(me){const P=ppClean(ppData()),on=X.pp.on;
     return h+`<section class="panel cmc ppme"><b>${on?'Voilà ton profil public':'Ton profil est privé'}</b><p class="cmst pp-st">${esc(ppStatText())}</p><p class="cmst">${on?'C’est ce que voient les autres joueurs.':'Voilà ce que les autres verraient si tu l’activais.'}</p><div class="cmact">${on?`<button type="button" class="btn" data-ppshare>🔗 Partager</button><button type="button" class="btn alt" data-go="set">Réglages</button>`:`<button type="button" class="btn" data-ppon="1">Activer mon profil</button><button type="button" class="btn alt" data-go="set">Réglages</button>`}</div></section>`+ppBody(PP.name,P,on&&PPS.t?PPS.t:Date.now(),true)}
@@ -1964,10 +1976,10 @@ function chListHTML(){
   return h}
 function chatV(){
   frEnsure();
-  const h=header()+'<button type="button" class="btn alt ppb" data-go="comm">← Communauté</button>';
+  const h=header()+'<button type="button" class="btn alt ppb" data-go="comm">← Amis</button>';
   if(!SBS)return h+'<section class="panel cmc ppx"><b>Connecte-toi pour discuter</b><p class="cmst">Les messages sont réservés aux amis connectés à leur compte.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter</button></section>';
   if(!FR.loaded)return h+'<div class="panel cmc"><div class="sub">Chargement…</div></div>';
-  if(!CH.uid)return h+'<section class="panel cmc ppx"><b>Aucune discussion ouverte</b><p class="cmst">Choisis un ami dans Communauté pour lui écrire.</p></section>';
+  if(!CH.uid)return h+'<section class="panel cmc ppx"><b>Aucune discussion ouverte</b><p class="cmst">Choisis un ami dans Amis pour lui écrire.</p></section>';
   const f=chFriend();
   if(!f)return h+'<section class="panel cmc ppx"><b>Vous n’êtes plus amis</b><p class="cmst">Tu ne peux écrire qu’à tes amis.</p></section>';
   if(MS.ok==='nosrv'||CH.err==='nosrv')return h+'<section class="panel cmc ppx"><b>Messagerie non activée</b><p class="cmst">La messagerie n’est pas encore activée sur le serveur.</p></section>';
@@ -2227,7 +2239,7 @@ ${tDone(tMine())&&tMine().w===w?`<p class="cmst">Ton tirage de la semaine est fa
 function tourV(){
   frEnsure();
   if(S.op&&S.op.tour)return tOpView();
-  const h=header()+'<button type="button" class="btn alt ppb" data-go="comm">← Communauté</button><h2 style="margin-top:6px">🏟️ Tournoi de la semaine</h2>';
+  const h=header()+'<button type="button" class="btn alt ppb" data-go="comm">← Amis</button><h2 style="margin-top:6px">🏟️ Tournoi de la semaine</h2>';
   if(!SBS)return h+'<section class="panel cmc"><b>Connecte-toi pour participer</b><p class="cmst">Le tournoi est réservé aux joueurs connectés à leur compte : ton score apparaît au classement de la semaine, face aux autres joueurs.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>';
   if(TO.uid!==SBS.uid)TO=tNew(SBS.uid);
   tSync();tLbLoad();tPrevLoad();
@@ -2323,7 +2335,6 @@ const MNG=[
   ['🔍','Vérifier une annonce','data-vr'],
   ['🔔','Alertes de prix','data-mn="al"','','al']]],
  ['Amis et partage',[
-  ['👥','Communauté','data-go="comm"','','cm'],
   ['🏟️','Tournoi de la semaine','data-go="tour"'],
   ['🪪','Mon profil public','data-mn="me"'],
   ['📤','Partager ma collection','data-share'],
@@ -3348,6 +3359,11 @@ setInterval(()=>{
  gcPoll()},4000);
 document.addEventListener('visibilitychange',()=>{if(gcOn()){gcPoll(true);gcWsOpen()}});
 {const _c=commV;commV=function(){const r=_c.apply(this,arguments);if(S.cmt==='gen'&&SBS&&SBS.pseudo){setTimeout(()=>{gcPoll(true);const l=document.getElementById('gc-list');if(l)l.scrollTop=l.scrollHeight},30)}return r}}
+
+/* bulle « Général » : visible partout tant que la barre du bas est là */
+{const b=document.createElement('button');b.type='button';b.className='gcb';b.setAttribute('data-cmt','gen');b.setAttribute('aria-label','Chat général');b.textContent='💬';(document.body||document.documentElement).appendChild(b);
+const upd=()=>{const n=document.querySelector('nav');const on=!!n&&!(S.tab==='comm'&&S.cmt==='gen')&&!document.querySelector('.cs,.sheet');b.style.display=on?'flex':'none';if(n)b.style.bottom=(n.offsetHeight+14)+'px'};
+const _r=render;render=function(){const r=_r.apply(this,arguments);try{upd()}catch(e){}return r};try{upd()}catch(e){}setInterval(()=>{try{upd()}catch(e){}},1500)}
 /* ===== Notifications des messages privés : temps réel (table messages) + vibration + notification du téléphone ===== */
 const PN={ws:null,ok:false,hb:0,rt:0,tries:0,exp:0,uid:'',id:0};
 const pnCap=()=>{try{const C=window.Capacitor;if(!C||!C.isNativePlatform||!C.isNativePlatform())return null;return C.registerPlugin?C.registerPlugin('LocalNotifications'):(C.Plugins&&C.Plugins.LocalNotifications)||null}catch(e){return null}};
@@ -3393,6 +3409,36 @@ setInterval(()=>{
  if(PN.ws&&PN.uid!==SBS.uid)pnClose();
  if(!PN.ws)pnOpen()},5000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SBS){msPoll(true);pnOpen()}});
+/* ===== Onglet Amis refait : une seule page style messagerie ===== */
+/* liste de tous les amis (dernier message, heure, non lus), demandes en haut, recherche sur demande, profil et tournoi en bas */
+cmFrBody=function(){
+  if(!SBS||!FR.loaded||!FR.ok)return '';
+  const rec=(FR.list||[]).filter(x=>x.st==='pending'&&!x.mine);
+  return rec.length?`<div class="cmsl">Demandes d’amis</div>`+rec.map(x=>`<div class="amq2"><button type="button" class="cmfo" data-ppo="${esc(x.name)}">${cmAv(x.name)}<span class="vnin"><b>${esc(x.name)}</b><small>veut devenir ton ami</small></span></button><button type="button" class="chip" data-fracc="${x.id}">✅ Accepter</button><button type="button" class="chip" data-frdel="${x.id}" aria-label="Refuser">✖</button></div>`).join(''):''};
+msHubBody=function(){
+  if(!SBS)return '';
+  if(!FR.loaded)return '<div class="sub">Chargement…</div>';
+  if(!FR.ok)return `<div class="sub">${esc(FR.msg||'Amis indisponibles pour le moment')}</div>`;
+  const L=FR.list||[],fr=L.filter(x=>x.st==='accepted'),sent=L.filter(x=>x.st==='pending'&&x.mine),inb=MS.inbox||{},ns=MS.ok==='nosrv';
+  const rows=fr.map(f=>({f,l:inb[f.uid]||null,n:(MS.unread||{})[f.uid]||0})).sort((a,b)=>(b.l?b.l.t:0)-(a.l?a.l.t:0)||cmLow(a.f.name).localeCompare(cmLow(b.f.name)));
+  let h='';
+  if(!fr.length)h+=`<div class="amv"><b>Pas encore d’amis</b><p>Touche « Chercher » pour trouver un joueur par son pseudo, puis ajoute-le depuis son profil.</p></div>`;
+  else h+=rows.map(({f,l,n})=>`<div class="amr${n?' amn':''}"><button type="button" class="amo" ${ns?'data-ppo':'data-chat'}="${esc(ns?f.name:f.uid)}">${cmAv(f.name)}<span class="vnin"><b>${esc(f.name)}</b><small class="amsp">${l?esc((l.mine?'Toi : ':'')+l.body.replace(/\s+/g,' ').slice(0,70)):(ns?'Voir son profil':'Dis bonjour 👋')}</small></span><span class="mst">${l?`<small>${msAgo(l.t)}</small>`:''}${n?`<b class="cmbd" aria-label="${n} non lu${n>1?'s':''}">${n>99?'99+':n}</b>`:''}</span></button><button type="button" class="amp" data-ppo="${esc(f.name)}" aria-label="Profil de ${esc(f.name)}">👤</button></div>`).join('');
+  if(sent.length)h+=`<div class="cmsl">En attente de réponse</div>`+sent.map(x=>`<div class="amq2"><button type="button" class="cmfo" data-ppo="${esc(x.name)}">${cmAv(x.name)}<span class="vnin"><b>${esc(x.name)}</b><small>demande envoyée</small></span></button><button type="button" class="chip" data-frdel="${x.id}">Annuler</button></div>`).join('');
+  return h};
+{const _c=commV;commV=function(){
+  try{_c.apply(this,arguments)}catch(e){}            /* garde les chargements (amis, messages, profils) des anciennes couches */
+  const lg=!!SBS,gen=S.cmt==='gen';
+  if(gen)return header()+`<button type="button" class="btn alt ppb" data-cmt="msg">← Amis</button>`+(()=>{try{return gcCard(lg)}catch(e){return ''}})();
+  if(!lg)return header()+`<div class="amh"><h2>👥 Amis</h2></div><section class="panel cmc"><b>Connecte-toi pour avoir des amis</b><p class="cmst">Avec un compte, tu peux ajouter des amis, leur écrire et jouer au tournoi.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`;
+  S.cmt='msg';
+  let pn='';try{pn=pnCard(lg)}catch(e){}
+  return header()+`<div class="amh"><h2>👥 Amis</h2><button type="button" class="chip amsb" data-amq aria-pressed="${!!CM.open}">${CM.open?'✖ Fermer':'🔎 Chercher'}</button></div>`
+   +(CM.open?ppFind():'')
+   +`<div id="cm-fr">${cmFrBody()}</div><div class="amlist" id="ms-hub">${msHubBody()}</div>`
+   +`<div class="hmgrid amtl"><button type="button" class="hmt" data-amme><span>🪪</span>Mon profil</button><button type="button" class="hmt" data-go="tour"><span>🏟️</span>Tournoi</button></div>`+pn}}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-amq]');if(t){e.preventDefault();CM.open=!CM.open;render();if(CM.open)setTimeout(()=>{const q=$('#pp-q');if(q)q.focus()},60);return}
+  const m=e.target.closest&&e.target.closest('[data-amme]');if(m){e.preventDefault();if(SBS&&SBS.pseudo)ppOpen(SBS.pseudo);else toast('Choisis d’abord ton pseudo dans Réglages')}});
 const bump=(k,n)=>{const t=today(),a=X.act[t]||(X.act[t]={c:0,b:0});a[k]=(a[k]||0)+n;try{localStorage.setItem('fb_x',JSON.stringify(X))}catch(e){}};
 let REM='2',LASTEXP=0,SNZ=0,HELP=false;try{REM=localStorage.getItem('fb_rem')||'2';LASTEXP=+localStorage.getItem('fb_lastexp')||0;SNZ=+localStorage.getItem('fb_snz')||0;HELP=!!localStorage.getItem('fb_help')}catch(e){}
 const saveX=()=>{try{localStorage.setItem('fb_x',JSON.stringify(X));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};

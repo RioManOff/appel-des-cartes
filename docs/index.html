@@ -1262,6 +1262,9 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .gcf{display:flex;gap:8px;align-items:flex-end;margin-top:6px}
 .gcf textarea{flex:1;min-width:0;resize:none;padding:11px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:16px;max-height:110px}
 .gcf .btn{margin:0;width:auto;padding:11px 16px}
+/* scanner : recadrage de la vidéo */
+.cs-vc{display:none;position:absolute;right:12px;top:calc(66px + env(safe-area-inset-top,0px));flex-direction:column;gap:8px;z-index:6}
+.cs.cs_vd .cs-vc{display:flex}
 </style>
 </head>
 <body>
@@ -5587,11 +5590,11 @@ async function open(opts){
   +'<div class="cs-g" id="cs-g"><i></i><i></i><i></i><i></i></div>'
   +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span class="cs-gm" role="group" aria-label="Choisir le jeu"><button data-a="game" data-g="fw" aria-pressed="'+(X.game!=='ms')+'">Fusion World</button><button data-a="game" data-g="ms" aria-pressed="'+(X.game==='ms')+'">Masters</button></span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
   +'<button class="cs-ib" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique">⚡<span style="font-size:12px">Auto</span></button><button class="cs-ib" id="cs-torch" data-a="torch" aria-label="Lampe" style="display:none">🔦</button></div>'
-  +'<div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
+  +'<div class="cs-vc" id="cs-vc"><button class="cs-ib" data-a="vpp" aria-label="Pause ou lecture">⏯</button><button class="cs-ib" data-a="vrs" aria-label="Tout afficher">⤢</button></div><div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
   +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-a="vid"><span>🎞️</span>Vidéo</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
   +'<input type="file" id="cs-file" accept="image/*" capture="environment" hidden><input type="file" id="cs-gal" accept="image/*" hidden><input type="file" id="cs-vid" accept="video/*" hidden>';
  document.body.appendChild(ov);alive=true;gEl=$q('#cs-g');svgQ=$q('#cs-poly');mediaEl(opts.bitmap?'photo':'cam');
- ov.addEventListener('click',e=>{e.stopPropagation();onClick(e)});ov.addEventListener('change',onFileChange);addEventListener('resize',placeHint);
+ ov.addEventListener('click',e=>{e.stopPropagation();onClick(e)});ov.addEventListener('change',onFileChange);vzBind();addEventListener('resize',placeHint);
  try{history.pushState({cs:1},'')}catch(_){}
  placeHint();engineUI();countUI();
  if(opts.bitmap){showPhoto(opts.bitmap,opts.url);return}
@@ -5795,6 +5798,8 @@ function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.
  else if(a==='shot'){const i=$q('#cs-file');if(i)i.click()}
  else if(a==='gal'){const i=$q('#cs-gal');if(i)i.click()}
  else if(a==='vid'){const i=$q('#cs-vid');if(i)i.click()}
+ else if(a==='vpp'){if(vid&&vid.pause){if(vid.paused)vid.play().catch(()=>{});else vid.pause()}}
+ else if(a==='vrs'){if(st.video){st.video.z={s:1,x:0,y:0};vzApply()}}
  else if(a==='cam')useCamera();
  else if(a==='man'){if(st.mode==='man')leaveOverlayPanel();else{snapCtx();st.mode='man';st.manQ='';st.manMsg=null;panel()}}
  else if(a==='tray'){if(st.mode==='tray')leaveOverlayPanel();else{st.mode='tray';panel()}}
@@ -5813,11 +5818,23 @@ function onClick(e){const t=e.target.closest('[data-a]');if(!t)return;const a=t.
  else if(a==='rm'){const id=t.dataset.id,k=st.sess.map(x=>x.id).lastIndexOf(id),c=cardOf(id);if(k>=0&&c){const e0=st.sess[k];e0.q--;c.own=Math.max(0,c.own-1);const j=S.last.indexOf(id);if(j>=0)S.last.splice(j,1);if(e0.q<=0)st.sess.splice(k,1);save();countUI();panel()}}}
 function onFileChange(e){const i=e.target;if(i&&i.id==='cs-vid'){const f=i.files&&i.files[0];i.value='';fromVideo(f);return}if(i&&(i.id==='cs-file'||i.id==='cs-gal')){const f=i.files&&i.files[0];i.value='';fromFile(f)}}
 /* ---------- vidéo : on lit un film de tes cartes, chaque carte n'est ajoutée qu'une seule fois ---------- */
+/* recadrage : pince = zoom, un doigt = déplacer, molette = zoom, double toucher = tout afficher */
+const VZ={p:new Map()};
+function vzApply(){if(!vid||!ov||!st.video)return;const z=st.video.z;z.s=Math.min(6,Math.max(1,z.s));const W=ov.clientWidth,H=ov.clientHeight,mx=(z.s-1)*W/2,my=(z.s-1)*H/2;z.x=Math.min(mx,Math.max(-mx,z.x));z.y=Math.min(my,Math.max(-my,z.y));vid.style.transform=z.s===1&&!z.x&&!z.y?'':'translate('+z.x+'px,'+z.y+'px) scale('+z.s+')'}
+function vzBind(){const o=ov;
+ const d=()=>{const a=[...VZ.p.values()];return a.length>1?Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y):0},base=()=>{const z=st.video.z;VZ.s0=z.s;VZ.x0=z.x;VZ.y0=z.y;VZ.d0=d();const a=[...VZ.p.values()][0];VZ.px=a.x;VZ.py=a.y};
+ o.addEventListener('pointerdown',e=>{if(!st.video||e.target.closest('button,.cs-card,.cs-top,.cs-bar,.cs-vc'))return;VZ.p.set(e.pointerId,{x:e.clientX,y:e.clientY});try{o.setPointerCapture(e.pointerId)}catch(_){}base()});
+ o.addEventListener('pointermove',e=>{if(!st.video||!VZ.p.has(e.pointerId))return;VZ.p.set(e.pointerId,{x:e.clientX,y:e.clientY});const z=st.video.z;
+  if(VZ.p.size>=2){if(VZ.d0>0)z.s=VZ.s0*d()/VZ.d0}else{z.x=VZ.x0+(e.clientX-VZ.px);z.y=VZ.y0+(e.clientY-VZ.py)}vzApply()});
+ const up=e=>{if(!VZ.p.has(e.pointerId))return;VZ.p.delete(e.pointerId);if(st.video&&VZ.p.size)base()};
+ o.addEventListener('pointerup',up);o.addEventListener('pointercancel',up);
+ o.addEventListener('wheel',e=>{if(!st.video)return;e.preventDefault();st.video.z.s*=e.deltaY<0?1.12:1/1.12;vzApply()},{passive:false});
+ o.addEventListener('dblclick',e=>{if(!st.video||e.target.closest('button,.cs-card,.cs-top,.cs-bar'))return;st.video.z={s:1,x:0,y:0};vzApply()})}
 async function fromVideo(f){if(!f||!ov)return;let url;try{url=URL.createObjectURL(f)}catch(_){toast('Vidéo illisible');return}
  clearTimeout(tmr);stopCamera();photo=null;if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
  let a0=st.auto;if(st.video){a0=st.video.auto0;try{URL.revokeObjectURL(st.video.url)}catch(_){}}
  st.photoMode=false;ov.classList.remove('cs_ph');drawPts(null);
- Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{},unkR:[],cands:[],auto:true,video:{seen:new Set(),n:0,url,auto0:a0}});
+ Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{},unkR:[],cands:[],auto:true,video:{seen:new Set(),n:0,url,auto0:a0,z:{s:1,x:0,y:0}}});VZ.p.clear();ov.classList.add('cs_vd');ov.style.touchAction='none';toast('Pince pour zoomer, glisse pour recadrer la vidéo');
  const el=mediaEl('cam');el.src=url;el.muted=true;el.loop=false;
  el.onended=()=>{if(st.video&&vid===el){const n=st.video.n;hint('Vidéo terminée : '+n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''));toast('🎞️ Vidéo terminée : '+n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''))}};
  panel();setClass('');placeHint();hint('Lecture de la vidéo…');
@@ -5834,7 +5851,7 @@ function showPhoto(bmp,url){if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch
  const el=mediaEl('photo');if(url)el.src=url;else{const c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height;c.getContext('2d').drawImage(bmp,0,0);el.src=c.toDataURL('image/jpeg',.85)}
  Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,thumb:null,cands:[],stick:null,free:true,ocrAcc:{},unkR:[],ctx:null});drawPts(null);setClass('');panel();
  hint('Analyse de la photo…');photoRun()}
-function useCamera(){if(!ov)return;photo=null;if(st.video){st.auto=st.video.auto0;try{URL.revokeObjectURL(st.video.url)}catch(_){}st.video=null}if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
+function useCamera(){if(!ov)return;photo=null;ov.classList.remove('cs_vd');ov.style.touchAction='';if(st.video){st.auto=st.video.auto0;try{URL.revokeObjectURL(st.video.url)}catch(_){}st.video=null}if(photoUrl){try{URL.revokeObjectURL(photoUrl)}catch(_){}photoUrl=null}
  st.photoMode=false;ov.classList.remove('cs_ph');drawPts(null);Object.assign(st,{mode:'live',ring:[],lock:null,pick:null,stick:null,free:true,goneSince:0,trackSince:0,ocrAcc:{}});panel();setClass('');
  mediaEl('cam');placeHint();hint('Démarrage de la caméra…');
  startCamera().then(()=>{if(!alive||photo)return;hint('Place la carte dans le cadre');loop()}).catch(e=>{hint('Caméra indisponible : utilise « Photo » ou saisis le numéro.');setClass('bad')})}

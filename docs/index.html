@@ -1266,7 +1266,7 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .cs-vc{display:none;position:absolute;right:12px;top:calc(66px + env(safe-area-inset-top,0px));flex-direction:column;gap:8px;z-index:6}
 .cs.cs_vd .cs-vc{display:flex}
 
-.gcb{display:none;position:fixed;right:14px;bottom:90px;width:54px;height:54px;border-radius:50%;border:2px solid var(--ki,#e8b000);background:var(--ac,#e8b000);color:#000;font-size:26px;align-items:center;justify-content:center;z-index:7;box-shadow:0 4px 14px rgba(0,0,0,.5);padding:0;cursor:pointer}.gcb:active{transform:scale(.94)}
+.gcfab{display:none;position:fixed;right:14px;bottom:90px;width:54px;height:54px;border-radius:50%;border:2px solid var(--ki,#e8b000);background:var(--ac,#e8b000);color:#000;font-size:26px;align-items:center;justify-content:center;z-index:7;box-shadow:0 4px 14px rgba(0,0,0,.5);padding:0;cursor:pointer}.gcb:active{transform:scale(.94)}
 .amh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}.amh h2{margin:0}.amsb{flex:none}
 .amlist{margin-top:6px}.amr{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--ln)}
 .amo{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 2px;background:none;border:0;color:var(--tx);text-align:left;font:inherit;cursor:pointer}
@@ -3367,7 +3367,7 @@ document.addEventListener('visibilitychange',()=>{if(gcOn()){gcPoll(true);gcWsOp
 {const _c=commV;commV=function(){const r=_c.apply(this,arguments);if(S.cmt==='gen'&&SBS&&SBS.pseudo){setTimeout(()=>{gcPoll(true);const l=document.getElementById('gc-list');if(l)l.scrollTop=l.scrollHeight},30)}return r}}
 
 /* bulle « Général » : visible partout tant que la barre du bas est là */
-{const b=document.createElement('button');b.type='button';b.className='gcb';b.setAttribute('data-cmt','gen');b.setAttribute('aria-label','Chat général');b.textContent='💬';(document.body||document.documentElement).appendChild(b);
+{const b=document.createElement('button');b.type='button';b.className='gcfab';b.setAttribute('data-cmt','gen');b.setAttribute('aria-label','Chat général');b.textContent='💬';(document.body||document.documentElement).appendChild(b);
 const upd=()=>{const n=document.querySelector('nav');const on=!!n&&!(S.tab==='comm'&&S.cmt==='gen')&&!document.querySelector('.cs,.sheet');b.style.display=on?'flex':'none';if(n)b.style.bottom=(n.offsetHeight+14)+'px'};
 const _r=render;render=function(){const r=_r.apply(this,arguments);try{upd()}catch(e){}return r};try{upd()}catch(e){}setInterval(()=>{try{upd()}catch(e){}},1500)}
 /* ===== Notifications des messages privés : temps réel (table messages) + vibration + notification du téléphone ===== */

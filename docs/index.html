@@ -1270,6 +1270,11 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .mysg .card,.mysg .art{background:none!important;border:0!important;box-shadow:none!important}.mysg .art::before,.mysg .art::after{display:none!important}
 .hmi img{display:block;width:34px;height:34px;object-fit:contain}
 .gb .gbo{grid-column:1/-1;flex-direction:row;min-height:44px;font-weight:600;font-size:14px}
+
+/* Collection : les boutons −/+ de chaque carte ne floutent plus le fond (163 cartes × 2 flous = écran noir ou gris sur beaucoup de téléphones) */
+.adj{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:rgba(0,0,0,.62)}
+/* l’animation d’entrée de page ne garde plus chaque bloc sur la carte graphique une fois finie */
+#app.enter>*:not(header):not(.sheet){animation-fill-mode:backwards}
 /* ===== Chat général v2 ===== */
 html.gcon,html.gcon body{overflow:hidden;overscroll-behavior:none}
 body.gcopen .sheet{z-index:40}

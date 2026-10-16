@@ -5313,7 +5313,7 @@ const vnQ=x=>Math.max(1,parseInt(x&&x.q)||1),vnNorm=t=>String(t||'').toLowerCase
 const vnReset=()=>{VN={k:VN.k||'c',e:VN.e||'',t:VN.t||'booster',id:'',c:'',a:'',p:'',q:1,w:'',d:'',r:true}};
 const vnRx=/^f?b?\s*0?(\d{1,2})\s*[-_. ]\s*(\d{1,3})\s*(alt|a)?\s*(\d)?$/;
 /* recherche : numéro (fb01-035, 01-35…) ou mots du nom (goku, épée…) */
-function vnFind(raw){const q=vnNorm(raw).trim();if(q.length<2)return [];
+function vnFindFW(raw){const q=vnNorm(raw).trim();if(q.length<2)return [];
  const m=q.match(vnRx),ext=m?'FB'+m[1].padStart(2,'0'):'',toks=q.split(/\s+/).filter(Boolean),out=[];
  for(const c of cards){let sc=0;
   if(m){if(c.ext!==ext)continue;if(c.n===parseInt(m[2],10))sc=10;else if(String(c.n).padStart(3,'0').startsWith(m[2]))sc=3;else continue}
@@ -5321,14 +5321,14 @@ function vnFind(raw){const q=vnNorm(raw).trim();if(q.length<2)return [];
    sc=nm.startsWith(q)?6:nm.split(/[\s'’\-:]+/).some(w=>w.startsWith(toks[0]))?4:1}
   if(c.own>0)sc+=5;if(c.ver==='Normal')sc+=.5;out.push([sc,c])}
  out.sort((x,y)=>y[0]-x[0]||(x[1].id<y[1].id?-1:1));return out.slice(0,8).map(x=>x[1])}
-function vnExact(raw){const m=vnNorm(raw).trim().match(vnRx);if(!m)return null;
+function vnExactFW(raw){const m=vnNorm(raw).trim().match(vnRx);if(!m)return null;
  const id='FB'+m[1].padStart(2,'0')+'-'+m[2].padStart(3,'0')+(m[3]?'_ALT'+(m[4]&&m[4]!=='1'?m[4]:''):'');return cards.find(c=>c.id===id)||null}
 const vnTag=c=>c.id+(c.rar?' · '+c.rar:'')+(c.ver!=='Normal'?' · Alt Art'+(c.id.endsWith('ALT2')?' 2':''):'');
 const vnSugHTML=l=>l.map(c=>`<button type="button" class="vnsg" data-vnpick="${c.id}"><span class="vnth">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${vnTag(c)}</small></span><span class="vnst ${c.own?'':'no'}">${c.own?'×'+c.own:'0'}</span></button>`).join('');
 function vnSelHTML(){const c=VN.id&&(cards.find(x=>x.id===VN.id)||MS_ALL.find(x=>x.id===VN.id));if(!c)return '';
  return `<span class="vnth big">${art({...c,own:1})}</span><span class="vnin"><b>${esc(c.name||c.id)}</b><small>${vnTag(c)}</small><small>En collection : <b>×${c.own}</b>${pxv(c)?' · prix '+(c.price?'indicatif '+esc(String(c.price)):'Cardmarket '+fmtP(cmP(c)))+' €':''}</small></span><button type="button" class="chip" data-vnclr aria-label="Changer de carte">✕</button>`}
 function vnPv(){return VN.k==='s'?vnPvS():vnPvC()}
-function vnPvS(){const q=VN.q,p=nb(VN.p),a=nb(VN.a),e=VN.e||S.ext,st=sl(e,VN.t),tv=p*q,ta=a*q,b=tv-ta,hasP=VN.p.trim()!=='',hasA=VN.a.trim()!=='',col=b>=0?'var(--ok)':'#ff5a5a';let h='';
+function vnPvS(){const q=VN.q,p=nb(VN.p),a=nb(VN.a),e=VN.e||S.ext,st=vnStk(e,VN.t),tv=p*q,ta=a*q,b=tv-ta,hasP=VN.p.trim()!=='',hasA=VN.a.trim()!=='',col=b>=0?'var(--ok)':'#ff5a5a';let h='';
  if(hasP||hasA){h+=`<div class="l"><span>Vente${q>1?' · '+q+' × '+eur(p):''}</span><b>${eur(tv)}</b></div><div class="l"><span>Achat${q>1?' · '+q+' × '+eur(a):''}</span><b>${hasA?'− '+eur(ta):'—'}</b></div><div class="l tt"><span><b>Bénéfice</b>${ta>0?' · '+(b>=0?'+':'−')+Math.abs(Math.round(b/ta*100))+' %':''}</span><span class="big2" style="color:${col}">${b>=0?'+':''}${eur(b)}</span></div>`}
  else h='<div class="sub">Indique le prix de vente : ton bénéfice s’affiche ici en direct.</div>';
  const m=[];if(st.own<=0)m.push('⚠️ Tu n’en as pas en stock de scellé.');else{if(q>st.own)m.push('⚠️ Tu n’en as que ×'+st.own+'.');if(VN.r)m.push('Stock : ×'+st.own+' → ×'+Math.max(0,st.own-q))}
@@ -5364,14 +5364,39 @@ document.addEventListener('change',e=>{if(!e.target)return;if(e.target.id==='vn-
 document.addEventListener('keydown',e=>{const t=e.target;if(e.key!=='Enter'||!t||!t.id||t.id.slice(0,3)!=='vn-')return;
  if(t.id==='vn-c'){const b=document.querySelector('#vn-sug .vnsg');if(b){e.preventDefault();b.click()}return}
  if(/^vn-[apwd]$/.test(t.id)){e.preventDefault();const g=$('#vn-go');if(g&&!g.disabled)g.click()}});
-const vnSealPick=()=>{const e=VN.e||S.ext;return `<div><label>Série<select class="fi" id="vn-e">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===e?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</select></label></div><div class="vnprod">${SEALT.map(t=>{const s=sl(e,t[0]);return `<button type="button" class="vnpd" aria-pressed="${VN.t===t[0]}" data-vnt="${t[0]}"><span class="vnth">${sealArt(e,t[0],{own:1,want:0},20)}</span><b>${t[1]}</b><small>${s.own?'×'+s.own+' en stock':'0 en stock'}</small></button>`}).join('')}</div>`};
+const vnSealPickFW=()=>{const e=VN.e||S.ext;return `<div><label>Série<select class="fi" id="vn-e">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===e?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</select></label></div><div class="vnprod">${SEALT.map(t=>{const s=sl(e,t[0]);return `<button type="button" class="vnpd" aria-pressed="${VN.t===t[0]}" data-vnt="${t[0]}"><span class="vnth">${sealArt(e,t[0],{own:1,want:0},20)}</span><b>${t[1]}</b><small>${s.own?'×'+s.own+' en stock':'0 en stock'}</small></button>`}).join('')}</div>`};
 function sealDup(SL,dep){const ids=new Set(dep.filter(x=>x.k==='buy').map(x=>x.id)),need={};SL.forEach(s=>{if(s.kind==='seal'&&nb(s.buy)>0){const k=s.se+'|'+s.st;need[k]=(need[k]||0)+vnQ(s)}});let d=0;X.buys.filter(b=>ids.has(b.id)).sort((a,b)=>a.d<b.d?-1:1).forEach(b=>{const k=b.ext+'|'+b.type,n=Math.min(need[k]||0,+b.q||0);if(n>0){d+=n*nb(b.p);need[k]-=n}});return d}
-function trade(){const SL=X.sales.filter(x=>!S.sx||x.ext===S.sx),tot=SL.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),buy=SL.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),
+/* ===== Carnet de ventes : Masters (cartes BT et scellés BT) en plus de Fusion World ===== */
+const vnIsMs=e=>/^BT\d{2}$/.test(e||'');
+const vnSerName=e=>vnIsMs(e)?((MS_SETS.find(s=>s.id===e)||{n:''}).n):((EXTS.find(x=>x[0]===e)||[0,''])[1]);
+function vnStk(e,t){return vnIsMs(e)?{own:msOwn(e+'-'+t)}:sl(e,t)}
+function vnStkDec(e,t,q){if(vnIsMs(e)){const k=e+'-'+t;msSet(k,msOwn(k)-Math.min(q,msOwn(k)))}else{const s=sl(e,t);s.own-=Math.min(q,s.own);saveSeal()}}
+function vnSArt(e,t,fs){if(!vnIsMs(e))return sealArt(e,t,{own:1,want:0},fs);
+ const k={booster:'pk',display:'box'}[t],im=k&&MS_IMG[e]&&MS_IMG[e][k];
+ return `<div class="art ${im?'':'r-U'}" style="font-size:${fs}px;${im?'background:none;border-color:transparent;':''}">${im?`<img src="${im}" alt="${t} ${e}" style="width:100%;height:100%;object-fit:contain">`:({booster:'🎴',display:'📦',case:'🗃️'}[t]||'📦')}</div>`}
+const vnSealPick=()=>{const e=VN.e||S.ext;
+ return `<div><label>Série<select class="fi" id="vn-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===e?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}"${x.id===e?' selected':''}>${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label></div><div class="vnprod">${SEALT.map(t=>{const s=vnStk(e,t[0]);return `<button type="button" class="vnpd" aria-pressed="${VN.t===t[0]}" data-vnt="${t[0]}"><span class="vnth">${vnSArt(e,t[0],20)}</span><b>${t[1]}</b><small>${s.own?'×'+s.own+' en stock':'0 en stock'}</small></button>`}).join('')}</div>`};
+/* recherche Masters : numéro (bt22-001, BT1 12, bt22-001 spr) ou mots du nom */
+const vnMsRx=/^bt\s*0?(\d{1,2})(?:\s*[-_. ]\s*(\d{1,3}))?\s*(spr|slr|gdr)?$/;
+function vnMsFind(raw){const q=vnNorm(raw).trim();if(q.length<2)return [];try{msBindInit()}catch(e){}
+ const m=q.match(vnMsRx),toks=q.split(/\s+/).filter(Boolean),out=[];
+ for(const c of MS_ALL){let sc=0;
+  if(m){if(c.ext!=='BT'+m[1].padStart(2,'0'))continue;if(m[3]&&!c.id.toLowerCase().endsWith('-'+m[3]))continue;
+   if(m[2]){if(c.n===parseInt(m[2],10))sc=10;else if(String(c.n).padStart(3,'0').startsWith(m[2]))sc=3;else continue}else sc=1}
+  else{const nm=vnNorm(c.name||''),hay=nm+' '+vnNorm(c.full||'')+' '+c.id.toLowerCase();if(!toks.every(t=>hay.includes(t)))continue;
+   sc=nm.startsWith(q)?6:nm.split(/[\s'’\-:]+/).some(w=>w.startsWith(toks[0]))?4:1}
+  if(c.own>0)sc+=5;if(c.ver==='Normal')sc+=.5;out.push([sc,c])}
+ out.sort((x,y)=>y[0]-x[0]||(x[1].id<y[1].id?-1:1));return out.slice(0,8).map(x=>x[1])}
+function vnFind(raw){const q=vnNorm(raw).trim();if(/^bt\s*\d/.test(q))return vnMsFind(raw);
+ const fw=vnFindFW(raw),ms=vnMsFind(raw),first=X.game==='ms'?ms:fw,second=X.game==='ms'?fw:ms;return first.concat(second).slice(0,8)}
+function vnExact(raw){const c=vnExactFW(raw);if(c)return c;const m=vnNorm(raw).trim().match(vnMsRx);if(!m||!m[2])return null;try{msBindInit()}catch(e){}
+ return MS_ALL.find(x=>x.ext==='BT'+m[1].padStart(2,'0')&&x.n===parseInt(m[2],10)&&(m[3]?x.id.toLowerCase().endsWith('-'+m[3]):x.ver==='Normal'))||null}
+function trade(){try{msBindInit()}catch(e){}const SL=X.sales.filter(x=>!S.sx||(S.sx==='MS'?/^BT/.test(x.ext||''):x.ext===S.sx)),tot=SL.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),buy=SL.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),
  dep=spendAll().filter(x=>S.sx?(x.k==='buy'&&(X.buys.find(b=>b.id===x.id)||{}).ext===S.sx):true),depT=Math.max(0,dep.reduce((a,x)=>a+x.a,0)-sealDup(SL,dep)),ben=tot-buy,real=ben-depT,pv=vnPv(),ncol=v=>v>=0?'var(--ok)':'#ff5a5a';
- const row=x=>{const q=vnQ(x),c=x.cid&&cards.find(k=>k.id===x.cid),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu;
-  return `<div class="vnr${x.id===VNNEW?' vnnew':''}">${c?`<span class="vnth sm">${art({...c,own:1})}</span>`:x.kind==='seal'?`<span class="vnth sm">${sealArt(x.se,x.st,{own:1,want:0},12)}</span>`:''}<span class="vnin"><b>${esc(x.card)}${q>1?` <span class="vnq">×${q}</span>`:''}</b><small>${fmtD(x.d)}${x.who?' → '+esc(x.who):''}${x.kind==='seal'?' · 📦 scellé':''}</small><small>${hasB?'achat '+eur(bu)+' · ':''}vente <b>${x.price?eur(pr):'—'}</b></small></span><span class="vnrr">${x.price&&hasB?`<b style="color:${ncol(pf)}">${pf>=0?'+':''}${eur(pf)}</b>`:''}<span><button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button><button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></span></div>`},
+ const row=x=>{const q=vnQ(x),c=x.cid&&(cards.find(k=>k.id===x.cid)||MS_ALL.find(k=>k.id===x.cid)),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu;
+  return `<div class="vnr${x.id===VNNEW?' vnnew':''}">${c?`<span class="vnth sm">${art({...c,own:1})}</span>`:x.kind==='seal'?`<span class="vnth sm">${vnSArt(x.se,x.st,12)}</span>`:''}<span class="vnin"><b>${esc(x.card)}${q>1?` <span class="vnq">×${q}</span>`:''}</b><small>${fmtD(x.d)}${x.who?' → '+esc(x.who):''}${x.kind==='seal'?' · 📦 scellé':''}</small><small>${hasB?'achat '+eur(bu)+' · ':''}vente <b>${x.price?eur(pr):'—'}</b></small></span><span class="vnrr">${x.price&&hasB?`<b style="color:${ncol(pf)}">${pf>=0?'+':''}${eur(pf)}</b>`:''}<span><button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button><button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></span></div>`},
  edit=x=>`<div class="panel vnf" style="margin-top:10px;border-left:6px solid var(--ac)"><b>✏️ Modifier la vente</b><label>Carte<input class="fi" id="se-c" value="${esc(x.card)}"></label><label>Acheteur<input class="fi" id="se-w" value="${esc(x.who||'')}"></label><div class="vnrow"><label>Prix d'achat (€ / ${x.kind==='seal'?'unité':'carte'})<input class="fi" id="se-a" inputmode="decimal" value="${esc(String(x.buy||''))}"></label><label>Prix de vente (€ / ${x.kind==='seal'?'unité':'carte'})<input class="fi" id="se-p" inputmode="decimal" value="${esc(String(x.price||''))}"></label></div><div class="vnrow"><label>Quantité<input class="fi" id="se-q" inputmode="numeric" value="${vnQ(x)}"></label><label>Date<input class="fi" id="se-d" type="date" value="${esc(String(x.d).slice(0,10))}"></label></div><button class="btn" data-ssave="${x.id}">✓ Enregistrer</button><button class="btn alt" data-scancel>Annuler</button></div>`;
- return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2><div class="row"><button class="chip" aria-pressed="${S.sx===''}" data-sxf="">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.sx===x[0]}" data-sxf="${x[0]}">${x[0]}</button>`).join('')}</div>
+ return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2><div class="row"><button class="chip" aria-pressed="${S.sx===''}" data-sxf="">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.sx===x[0]}" data-sxf="${x[0]}">${x[0]}</button>`).join('')}<button class="chip" aria-pressed="${S.sx==='MS'}" data-sxf="MS">Masters</button></div>
 <div class="panel vnf" style="margin-top:10px"><b>🆕 Nouvelle vente</b>
 <div class="row" style="margin:0"><button type="button" class="chip" aria-pressed="${VN.k!=='s'}" data-vnk="c">🃏 Carte</button><button type="button" class="chip" aria-pressed="${VN.k==='s'}" data-vnk="s">📦 Scellé</button></div>
 ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="search" placeholder="Cherche une carte : nom ou numéro (Goku, FB01-035)" value="${esc(VN.c)}" style="margin-top:0"><div id="vn-sug"></div></div>
@@ -5385,7 +5410,7 @@ ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" a
 ${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>➕ Ajouter une dépense</b><input class="fi" id="ex-l" placeholder="Pour quoi ? (ex. booster, sleeves, frais d'envoi)"><input class="fi" id="ex-a" inputmode="decimal" placeholder="Montant (€)"><button class="btn" style="margin-top:8px" data-exadd>Enregistrer la dépense</button>${dep.length?`<div style="margin-top:8px">${dep.slice(0,6).map(x=>`<div class="tr"><span>${fmtD(x.d)} · ${esc(x.l)}</span><span><b>${eur(x.a)}</b>${x.k==='exp'?` <button class="chip" data-exdel="${x.id}" aria-label="Supprimer">✕</button>`:''}</span></div>`).join('')}${dep.length>6?`<div class="sub">+ ${dep.length-6} autres (voir Budget)</div>`:''}</div>`:''}</div>
 <div class="panel" style="margin-top:10px"><b>${SL.length} vente${SL.length>1?'s':''}</b>
 <div class="vnkpi" style="margin-top:8px"><div><small>Ventes</small><b>${eur(tot)}</b></div><div><small>Achats</small><b>${eur(buy)}</b></div><div><small>Vrai bénéfice</small><b style="color:${ncol(real)}">${eur(real)}</b></div></div>
-<div class="tr"><span>Bénéfice avant dépenses</span><b style="color:${ncol(ben)}">${eur(ben)}</b></div><div class="tr"><span>Dépenses${S.sx?' ('+S.sx+', scellés)':' (boosters, sleeves…)'}</span><b>− ${eur(depT)}</b></div><div class="tr"><span><b>Vrai bénéfice</b></span><b style="font-size:1.15em;color:${ncol(real)}">${eur(real)}</b></div>
+<div class="tr"><span>Bénéfice avant dépenses</span><b style="color:${ncol(ben)}">${eur(ben)}</b></div><div class="tr"><span>Dépenses${S.sx?' ('+(S.sx==='MS'?'Masters':S.sx)+', scellés)':' (boosters, sleeves…)'}</span><b>− ${eur(depT)}</b></div><div class="tr"><span><b>Vrai bénéfice</b></span><b style="font-size:1.15em;color:${ncol(real)}">${eur(real)}</b></div>
 ${SL.map(x=>S.sed===x.id?edit(x):row(x)).join('')}</div>`}
 function zoomSheet(){const c=S.zoom&&(cards.find(x=>x.id===S.zoom)||MS_ALL.find(x=>x.id===S.zoom));if(!c)return '';const row=(a,b)=>b?`<div class="tr"><span>${a}</span><b>${esc(String(b))}</b></div>`:'';
 return `<div class="sheet" data-zx><div role="dialog" aria-label="Zoom" style="text-align:center"><div class="tilt" data-rare="${c.rar==='SCR'||c.rar==='SR'||c.ver!=='Normal'?1:0}" style="width:min(72vw,280px);margin:0 auto">${c.ms?msArt(msFind(c.id)):art(c)}</div><div class="sub" style="margin-top:6px">Touche et fais glisser le doigt sur la carte, ou incline ton téléphone.</div><h2 style="margin:12px 0 4px">${esc(c.name||'Nom à compléter')}</h2><div class="sub">${c.id} · ${c.ms?'Masters · '+msSetName(c.ext):EXTS.find(x=>x[0]===c.ext)[1]}</div><div style="text-align:left;margin-top:10px">${row('Type',c.type)}${row('Couleur',c.col)}${row('Rareté',c.rar)}${row('Version',c.ver)}${row('Possédée','×'+c.own)}${c.want?row('Recherchée','×'+c.want):''}${row('Prix indicatif',c.price?c.price+' €':'')}${row('État',c.cond)}${row('Notes',c.note)}</div><button class="btn" style="margin-top:12px" data-zx>Fermer</button></div></div>`}
@@ -6306,8 +6331,8 @@ else if(d.vnpick){vnSelect(d.vnpick);return}
 else if(d.vnclr!==undefined){vnClear();return}
 else if(d.vnq){VN.q=Math.max(1,Math.min(99,VN.q+(+d.vnq)));const n=$('#vn-qn');if(n)n.textContent=VN.q;vnCalc();return}
 else if(d.vnsell){const c=cards.find(x=>x.id===d.vnsell)||MS_ALL.find(x=>x.id===d.vnsell);if(c){S.msel=null;vnReset();VN.k='c';VN.id=c.id;VN.c=c.name||c.id;if(c.price||cmP(c))VN.p=String(c.price||fmtP(cmP(c)));S.sel=null;S.zoom=false;S.menu=false;S.tab='trade';window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}}
-else if(d.sadd!==undefined&&VN.k==='s'){const e=VN.e||S.ext,t=VN.t,tt=SEALT.find(x=>x[0]===t),nm=(EXTS.find(x=>x[0]===e)||[0,''])[1],pr=VN.p.trim(),q=VN.q,st=sl(e,t);
- if(VN.r&&st.own>0){st.own-=Math.min(q,st.own);saveSeal()}
+else if(d.sadd!==undefined&&VN.k==='s'){const e=VN.e||S.ext,t=VN.t,tt=SEALT.find(x=>x[0]===t),nm=vnSerName(e),pr=VN.p.trim(),q=VN.q,st=vnStk(e,t);
+ if(VN.r&&st.own>0){vnStkDec(e,t,q)}
  let dd=new Date().toISOString();if(VN.d&&VN.d!==today())dd=new Date(VN.d+'T12:00:00').toISOString();
  const id='s'+Date.now().toString(36);
  X.sales.unshift({id,d:dd,card:tt[1]+' '+e+' · '+nm,cid:'',kind:'seal',se:e,st:t,who:VN.w.trim(),price:pr,buy:VN.a.trim(),q,ext:e});saveX();VNNEW=id;setTimeout(()=>{VNNEW=''},2500);vnReset();

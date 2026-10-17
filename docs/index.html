@@ -1540,52 +1540,93 @@ const saveV=()=>{try{localStorage.setItem('fb_virt',JSON.stringify(VIRT));localS
 let BIND=[];try{BIND=JSON.parse(localStorage.getItem('fb_binders')||'[]')||[]}catch(e){}
 const saveB=()=>{try{localStorage.setItem('fb_binders',JSON.stringify(BIND));localStorage.setItem('fb_at',String(Date.now()))}catch(e){}};
 const SEALT=[['booster','Booster','1 paquet'],['display','Display','24 boosters'],['case','Case de display','12 displays']];
-/* ===== FIN-CALC:START — résultat de gestion, stock et trésorerie (fonctions pures, testées par tests/fin.test.js) =====
+/* ===== FIN-CALC:START — résultat de gestion, stock, trésorerie et contrôle de cohérence (fonctions pures, testées par tests/fin.test.js) =====
    Achats de stock  = X.buys (quantité + prix unitaire) : jamais déduits du résultat, ils restent « en stock » jusqu'à la vente.
    Coût des produits vendus = Σ (prix d'achat × quantité) des lignes de X.sales.
    Dépenses de fonctionnement = X.exp de type 'op' (défaut) : seules dépenses déduites du résultat.
-   Résultat de gestion = ventes − coût des produits vendus − dépenses de fonctionnement. */
-const FIN_VER=2;
+   Résultat de gestion = ventes − coût des produits vendus − dépenses de fonctionnement.
+   Chaque unité achetée a UN seul destin : encore en stock, vendue, ou sortie sans vente (ouverte = X.opened, retirée à la main = X.adj).
+   Le coût des unités sorties sans vente est calculé en FIFO et affiché à part : il n'est ni dans le stock, ni dans le coût des ventes,
+   ni dans le résultat de gestion (définition inchangée) ; sans cette ligne, achats ≠ stock + coût des ventes (écart constaté sur FB04). */
+const FIN_VER=3;
 const finN=v=>parseFloat(String(v==null?'':v).replace(',','.'))||0,
  finQ=x=>Math.max(1,parseInt(x&&x.q)||1),
  finHas=v=>v!==undefined&&v!==null&&String(v).trim()!=='',
  finR2=v=>Math.round((v+Number.EPSILON)*100)/100,
+ finFmt=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',
  finExpT=x=>x&&x.t==='stock'?'stock':'op',
+ finIsMsSeal=id=>/^BT\d{2}-(booster|display|case)$/.test(String(id||'')),
  finDupRx=/commission|livraison|exp[ée]dition|frais d.?envoi|colissimo|mondial relay|frais whatnot|frais de vente|\bport\b/i;
 /* migration : ajoute seulement des champs (t:'op' sur les anciennes dépenses, fin:{v,at,lg}) ; rien n'est supprimé ni modifié ; idempotente */
 function finMigExp(a){return (Array.isArray(a)?a:[]).map(x=>x&&typeof x==='object'&&(x.t==='op'||x.t==='stock')?x:Object.assign({},x,{t:'op'}))}
 function finNorm(f,a){if(f&&typeof f==='object'&&f.v>=FIN_VER)return {v:FIN_VER,at:String(f.at||''),lg:+f.lg||0};
- return {v:FIN_VER,at:new Date().toISOString(),lg:(Array.isArray(a)?a:[]).filter(x=>x&&x.t!=='op'&&x.t!=='stock').length}}
+ const lg0=(Array.isArray(a)?a:[]).filter(x=>x&&x.t!=='op'&&x.t!=='stock').length;
+ return {v:FIN_VER,at:String((f&&f.at)||new Date().toISOString()),lg:Math.max(+(f&&f.lg)||0,lg0)}}
+/* journal des retraits / ajouts manuels de stock (boutons − / + d'un scellé) : n > 0 = n unités retirées, n < 0 = unités ajoutées sans achat */
+function finAdjAdd(adj,key,n){if(!adj||typeof adj!=='object'||!n)return adj;adj[key]=(parseInt(adj[key])||0)+n;if(!adj[key])delete adj[key];return adj}
 /* lots d'une série/produit, du plus ancien au plus récent (à date égale : l'achat saisi en premier est le plus ancien, X.buys étant en unshift) */
 function finLots(buys,e,t){return buys.map((b,i)=>({i,b})).filter(o=>o.b.ext===e&&o.b.type===t)
  .map(o=>({i:o.i,d:String(o.b.d||'').slice(0,10),q:Math.max(0,parseInt(o.b.q)||0),p:finN(o.b.p),hp:finHas(o.b.p)}))
  .sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:b.i-a.i)}
-/* stock restant d'un produit : les `own` unités encore là sont les plus récentes (FIFO) ; au-delà des achats notés, le coût est inconnu */
-function finStockKey(lots,own){own=Math.max(0,+own||0);const tq=lots.reduce((a,l)=>a+l.q,0);let r=Math.min(own,tq),val=0,noPrice=0;
- for(let k=lots.length-1;k>=0&&r>0;k--){const l=lots[k],u=Math.min(r,l.q);val+=u*l.p;if(!l.hp)noPrice+=u;r-=u}
- return {own,val,unknown:Math.max(0,own-tq),noPrice}}
+/* stock restant d'un produit : les `own` unités encore là sont les plus récentes (FIFO) ; au-delà des achats notés, le coût est inconnu.
+   parts = détail « quantité × coût unitaire » de ce qui reste (val = Σ quantité × coût unitaire) */
+function finStockKey(lots,own){own=Math.max(0,+own||0);const tq=lots.reduce((a,l)=>a+l.q,0);let r=Math.min(own,tq),val=0,noPrice=0;const parts=[];
+ for(let k=lots.length-1;k>=0&&r>0;k--){const l=lots[k],u=Math.min(r,l.q);val+=u*l.p;if(!l.hp)noPrice+=u;
+  const z=parts.find(y=>y.p===l.p);if(z)z.q+=u;else parts.push({q:u,p:l.p});r-=u}
+ return {own,val,unknown:Math.max(0,own-tq),noPrice,parts}}
+/* texte « 2 × 66,87 € + 1 × 70,00 € » du stock restant d'une ligne */
+function finUnitTxt(r){const p=r.parts||[];if(p.length===1)return finFmt(p[0].p)+' / unité';return p.map(z=>z.q+' × '+finFmt(z.p)).join(' + ')}
 /* coût FIFO des q prochaines unités vendues ; known=false si un coût manque (on n'invente rien) */
 function finFifo(buys,e,t,own,q){const lots=finLots(buys,e,t),tq=lots.reduce((a,l)=>a+l.q,0);own=Math.max(0,+own||0);q=Math.max(1,+q||1);
  const out={known:false,total:0,unit:0};if(!tq||own>tq||own<q)return out;
  let skip=tq-own,need=q,tot=0;
  for(const l of lots){let u=l.q;if(skip>=u){skip-=u;continue}u-=skip;skip=0;const take=Math.min(u,need);if(!l.hp)return out;tot+=take*l.p;need-=take;if(!need)break}
  if(need)return out;out.known=true;out.total=finR2(tot);out.unit=Math.round(tot/q*10000)/10000;return out}
-/* inp : {sales, buys, exp, stock:[{e,t,own}]} déjà filtrés par l'appelant */
-function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[],stock=inp.stock||[];
- let ca=0,cogs=0,nUnk=0,unkCA=0;
- for(const x of sales){const q=finQ(x),v=finN(x.price)*q;ca+=v;if(finHas(x.buy))cogs+=finN(x.buy)*q;else{nUnk++;unkCA+=v}}
+/* inp : {sales, buys, exp, stock:[{e,t,own}], opened:{'FB04-display':n}, adj:{'FB04-display':n}} déjà filtrés par l'appelant */
+function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[],stock=inp.stock||[],opened=inp.opened||{},adj=inp.adj||{};
+ let ca=0,cogs=0,rl=0,nUnk=0,unkCA=0;
+ for(const x of sales){const q=finQ(x),v=finN(x.price)*q;ca+=v;if(finHas(x.buy)){cogs+=finN(x.buy)*q;rl+=(finN(x.price)-finN(x.buy))*q}else{nUnk++;unkCA+=v}}
  let opex=0,expStock=0,cashExp=0;const dup=[];
  for(const x of exp){const a=finN(x.a);cashExp+=a;if(finExpT(x)==='stock')expStock+=a;else{opex+=a;if(finDupRx.test(String(x.l||'')))dup.push(x)}}
  const buyTot=buys.reduce((a,b)=>a+(parseInt(b.q)||0)*finN(b.p),0);
- const keys=new Map();stock.forEach(k=>keys.set(k.e+'|'+k.t,{e:k.e,t:k.t,own:k.own}));
- buys.forEach(b=>{const k=b.ext+'|'+b.type;if(!keys.has(k))keys.set(k,{e:b.ext,t:b.type,own:0})});
- const rows=[];let sv=0,su=0,unk=0,np=0;
- keys.forEach(k=>{const r=finStockKey(finLots(buys,k.e,k.t),k.own);if(!r.own)return;rows.push({e:k.e,t:k.t,...r});sv+=r.val;su+=r.own;unk+=r.unknown;np+=r.noPrice});
+ /* une ligne par produit connu : en stock, acheté, vendu ou sorti */
+ const keys=new Map(),K=(e,t)=>{const k=e+'|'+t;if(!keys.has(k))keys.set(k,{e,t,own:0});return keys.get(k)};
+ stock.forEach(k=>{K(k.e,k.t).own=Math.max(0,+k.own||0)});
+ buys.forEach(b=>K(b.ext,b.type));
+ sales.forEach(x=>{if(x.kind==='seal'&&x.se&&x.st)K(x.se,x.st)});
+ Object.keys(opened).concat(Object.keys(adj)).forEach(s=>{const i=s.indexOf('-');if(i>0)K(s.slice(0,i),s.slice(i+1))});
+ const rows=[],ledger=[],issues=[],plural=(n,a,b)=>n>1?b:a;
+ let sv=0,su=0,unk=0,np=0,cogsSeal=0,outCost=0,outUnits=0,outUnk=0,bU=0,stU=0,soU=0,opU=0,adU=0,xU=0,partsSum=0,
+  kbK=0,svK=0,cgK=0,ocK=0,uIss=0,cIss=0;
+ keys.forEach(k=>{
+  const lots=finLots(buys,k.e,k.t),tq=lots.reduce((a,l)=>a+l.q,0),r=finStockKey(lots,k.own),own=r.own,lab=k.e+' '+k.t,id=k.e+'-'+k.t,
+   ks=sales.filter(x=>x.kind==='seal'&&x.se===k.e&&x.st===k.t),sold=ks.reduce((a,x)=>a+finQ(x),0),
+   kcg=ks.reduce((a,x)=>a+(finHas(x.buy)?finN(x.buy)*finQ(x):0),0),kUnk=ks.filter(x=>!finHas(x.buy)).length,
+   op=Math.max(0,parseInt(opened[id])||0),aj=parseInt(adj[id])||0,
+   kb=lots.reduce((a,l)=>a+l.q*l.p,0),ownIn=Math.min(own,tq),consumed=tq-ownIn;
+  /* coût FIFO des `consumed` unités sorties du stock (les plus anciennes), calculé directement sur les lots */
+  let need=consumed,kc=0,allP=true,pmin=Infinity,pmax=0;
+  for(const l of lots){if(l.hp){pmin=Math.min(pmin,l.p);pmax=Math.max(pmax,l.p)}const u=Math.min(need,l.q);if(u>0){kc+=u*l.p;if(!l.hp)allP=false;need-=u}}
+  if(!isFinite(pmin))pmin=0;
+  const out=consumed-sold,known=allP&&!kUnk&&!r.noPrice,oc=allP&&!kUnk?finR2(kc-kcg):null,expl=out-(op+aj);
+  if(own>0){rows.push({e:k.e,t:k.t,...r});sv+=r.val;su+=r.own;unk+=r.unknown;np+=r.noPrice;partsSum+=r.parts.reduce((a,z)=>a+z.q*z.p,0)}
+  cogsSeal+=kcg;bU+=tq;stU+=ownIn;soU+=sold;opU+=op;adU+=aj;
+  if(out>0)outUnits+=out;
+  if(oc!==null)outCost+=oc;else if(consumed>0||kUnk)outUnk++;
+  if(known&&oc!==null){kbK+=kb;svK+=r.val;cgK+=kcg;ocK+=oc}
+  if(out<0){uIss++;issues.push(lab+' : '+(-out)+' unité'+plural(-out,'','s')+' vendue'+plural(-out,'','s')+' mais encore comptée'+plural(-out,'','s')+' en stock (vente enregistrée sans retrait du stock, ou stock remonté à la main).')}
+  else{
+   if(expl>0){xU+=expl;uIss++;issues.push(lab+' : '+expl+' unité'+plural(expl,'','s')+' sortie'+plural(expl,'','s')+' du stock sans vente ni ouverture notée (retrait manuel avec −, vente supprimée…).')}
+   else if(expl<0){uIss++;issues.push(lab+' : '+(-expl)+' unité'+plural(-expl,'','s')+' comptée'+plural(-expl,'','s')+' deux fois (une vente ET une ouverture / un retrait pour la même unité).')}
+   if(oc!==null){const lo=out*pmin,hi=out*pmax,gap=oc<lo-0.01?oc-lo:oc>hi+0.01?oc-hi:0;
+    if(gap){cIss++;issues.push(lab+' : le coût des ventes ('+finFmt(kcg)+') ne correspond pas au coût d’achat FIFO des unités sorties (écart '+finFmt(finR2(gap))+') : vérifie le prix d’achat saisi sur la vente.')}}}
+  ledger.push({e:k.e,t:k.t,bought:tq,own,ownIn,sold,opened:op,adj:aj,out,unexplained:out>=0?Math.max(0,expl):0,
+   buyCost:finR2(kb),stockVal:finR2(r.val),cogs:finR2(kcg),outCost:oc,unknownUnits:r.unknown})});
  /* doublons possibles (signalés, jamais supprimés) : dépense = montant exact d'un achat de stock ; même vente saisie deux fois à moins de 2 min */
  const bAmt=buys.map(b=>(parseInt(b.q)||0)*finN(b.p)).filter(v=>v>0),dupBuy=exp.filter(x=>finN(x.a)>0&&bAmt.some(v=>Math.abs(v-finN(x.a))<0.005));
  const sk2={},dupSale=[];sales.forEach(x=>{const k=[x.card,x.price,x.buy,x.q,x.who].join('|'),t=Date.parse(x.d)||0;(sk2[k]=sk2[k]||[]).push(t)});
  Object.keys(sk2).forEach(k=>{const a=sk2[k].sort((p,q)=>p-q);for(let i=1;i<a.length;i++)if(a[i]-a[i-1]<120000){dupSale.push(k.split('|')[0]);break}});
- const marge=ca-cogs,result=marge-opex,cashOut=buyTot+cashExp;
+ const marge=ca-cogs,result=marge-opex,cashOut=buyTot+cashExp,cash=ca-cashOut;
  const warn=[];
  if(nUnk)warn.push(nUnk+' vente'+(nUnk>1?'s':'')+' sans prix d’achat ('+finR2(unkCA)+' € de ventes) : coût inconnu, non déduit du résultat.');
  if(unk)warn.push(unk+' produit'+(unk>1?'s':'')+' en stock sans achat enregistré : valeur inconnue, non comptée dans le stock.');
@@ -1594,13 +1635,22 @@ function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[
  if(dup.length)warn.push('À vérifier : '+dup.length+' dépense'+(dup.length>1?'s':'')+' ressemble'+(dup.length>1?'nt':'')+' à des frais de livraison/commission ; si ces frais sont déjà retirés du montant de la vente, ne les compte pas ici.');
  if(dupBuy.length)warn.push('Doublon possible : '+dupBuy.length+' dépense'+(dupBuy.length>1?'s':'')+' du même montant exact qu’un achat de stock ; vérifie qu’un achat n’est pas compté deux fois.');
  if(dupSale.length)warn.push('Doublon possible : '+dupSale.length+' vente'+(dupSale.length>1?'s':'')+' identique'+(dupSale.length>1?'s':'')+' saisie'+(dupSale.length>1?'s':'')+' à moins de 2 minutes d’intervalle.');
+ /* contrôle de cohérence : chaque ligne compare deux calculs faits à partir de sources différentes */
+ const near=(a,b)=>Math.abs(a-b)<0.01,checks=[];
+ checks.push({ok:!uIss,t:'Unités',d:bU+' achetée'+plural(bU,'','s')+' = '+stU+' en stock + '+soU+' vendue'+plural(soU,'','s')+' + '+outUnits+' sortie'+plural(outUnits,'','s')+' sans vente (ouverte'+plural(opU,'','s')+' : '+opU+', retirée'+plural(adU,'','s')+' à la main : '+adU+(xU?', non expliquée'+plural(xU,'','s')+' : '+xU:'')+')'});
+ checks.push({ok:near(kbK,svK+cgK+ocK)&&!cIss,t:'Achats de stock',d:finFmt(finR2(kbK))+' payés = '+finFmt(finR2(svK))+' en stock + '+finFmt(finR2(cgK))+' de coût des ventes + '+finFmt(finR2(ocK))+' sorti sans vente'+(outUnk?' (hors '+outUnk+' produit'+plural(outUnk,'','s')+' au coût inconnu)':'')});
+ checks.push({ok:near(sv,partsSum),t:'Valeur du stock',d:finFmt(finR2(sv))+' = Σ quantité restante × coût d’achat unitaire ('+su+' unité'+plural(su,'','s')+')'});
+ checks.push({ok:near(cash,ca-buyTot-cashExp)&&!dupBuy.length,t:'Trésorerie',d:finFmt(finR2(ca))+' encaissés − '+finFmt(finR2(buyTot))+' d’achats de stock (payés à l’achat, pas relancés à la vente) − '+finFmt(finR2(cashExp))+' de frais = '+finFmt(finR2(cash))});
+ checks.push({ok:near(marge,rl+unkCA)&&near(opex+expStock,cashExp)&&!nUnk,t:'Résultat',d:finFmt(finR2(ca))+' − '+finFmt(finR2(cogs))+' = marge '+finFmt(finR2(marge))+' ; − '+finFmt(finR2(opex))+' de frais = '+finFmt(finR2(result))+' (achats de stock non déduits)'});
  return {ca:finR2(ca),cogs:finR2(cogs),marge:finR2(marge),opex:finR2(opex),result:finR2(result),
   stockValue:finR2(sv),stockUnits:su,stockUnknown:unk,rows,
-  cashIn:finR2(ca),cashOut:finR2(cashOut),cash:finR2(ca-cashOut),stockBuys:finR2(buyTot),expStock:finR2(expStock),
+  cashIn:finR2(ca),cashOut:finR2(cashOut),cash:finR2(cash),stockBuys:finR2(buyTot),expStock:finR2(expStock),
+  cogsSeal:finR2(cogsSeal),outCost:finR2(outCost),outUnits,outUnknown:outUnk,resultAfterOut:finR2(result-outCost),
+  ledger,issues,checks,
   nSales:sales.length,nUnknown:nUnk,unknownCA:finR2(unkCA),dup,dupBuy,dupSale,warn}}
 /* ===== FIN-CALC:END ===== */
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw'});
-let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v){if(!(v.fin&&v.fin.v>=FIN_VER)){try{if(!localStorage.getItem('fb_x_bak_v1'))localStorage.setItem('fb_x_bak_v1',localStorage.getItem('fb_x'))}catch(e){}}X=mkX(v)}}catch(e){}
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},adj:v.adj&&typeof v.adj==='object'&&!Array.isArray(v.adj)?v.adj:{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw'});
+let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v){if(!(v.fin&&v.fin.v>=FIN_VER)){try{if(!localStorage.getItem('fb_x_bak_v1'))localStorage.setItem('fb_x_bak_v1',localStorage.getItem('fb_x'));if(!localStorage.getItem('fb_x_bak_v2')&&v.fin&&v.fin.v===2)localStorage.setItem('fb_x_bak_v2',localStorage.getItem('fb_x'))}catch(e){}}X=mkX(v)}}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
 /* ===== Prix Cardmarket : tendance + moyennes 30 j / 7 j / 1 j (édition non anglaise pour FB01 à FB05) ===== */
@@ -3057,7 +3107,7 @@ document.addEventListener('click',e=>{const ss=e.target.closest&&e.target.closes
  if(g){const v=g.dataset.game==='ms'?'ms':'fw';if(X.game!==v){X.game=v;saveX();S.tab='coll';S.mode='cards';S.msel=null;window.scrollTo(0,0);render()}return}
  if(S.tab!=='coll'||X.game!=='ms')return;
  const b=e.target.closest&&e.target.closest('[data-ms]');
- if(b){const id=b.dataset.id,n=msOwn(id)+(b.dataset.ms==='inc'?1:-1);msSet(id,n);const y=window.scrollY;render();window.scrollTo(0,y);return}
+ if(b){const id=b.dataset.id,n=msOwn(id)+(b.dataset.ms==='inc'?1:-1),was=msOwn(id);msSet(id,n);if(finIsMsSeal(id)&&was!==msOwn(id)){finAdjAdd(X.adj,id,was-msOwn(id));saveX()}const y=window.scrollY;render();window.scrollTo(0,y);return}
  const o=e.target.closest&&e.target.closest('[data-msopen]');if(o){S.msel=o.dataset.msopen;render();return}
  const d=e.target.closest&&e.target.closest('[data-msphdel]');if(d){phDel(d.dataset.msphdel).then(()=>render());return}
  const c=e.target.closest&&e.target.closest('[data-msclose]');if(c&&(c.classList.contains('sheet')?e.target===c:true)){S.msel=null;S.mspick=false;render();return}
@@ -5458,14 +5508,14 @@ const finSealKeys=()=>{const k=[];EXTS.forEach(x=>SEALT.forEach(t=>k.push(x[0]+'
 const finHasBak=()=>{try{return !!localStorage.getItem('fb_fin_bak')}catch(e){return false}};
 function finReset(){const msk={};finSealKeys().forEach(k=>{if(X.ms&&X.ms[k])msk[k]=X.ms[k]});
  const stock=Object.keys(SEAL).some(k=>SEAL[k]&&SEAL[k].own>0)||Object.keys(msk).length>0;
- if(!X.sales.length&&!X.buys.length&&!X.exp.length&&!Object.keys(X.opened||{}).length&&!stock)return 'empty';
- try{localStorage.setItem('fb_fin_bak',JSON.stringify({at:new Date().toISOString(),sales:X.sales,buys:X.buys,exp:X.exp,opened:X.opened||{},seal:SEAL,msSeal:msk}))}catch(e){return 'fail'}
- X.sales=[];X.buys=[];X.exp=[];X.opened={};
+ if(!X.sales.length&&!X.buys.length&&!X.exp.length&&!Object.keys(X.opened||{}).length&&!Object.keys(X.adj||{}).length&&!stock)return 'empty';
+ try{localStorage.setItem('fb_fin_bak',JSON.stringify({at:new Date().toISOString(),sales:X.sales,buys:X.buys,exp:X.exp,opened:X.opened||{},adj:X.adj||{},seal:SEAL,msSeal:msk}))}catch(e){return 'fail'}
+ X.sales=[];X.buys=[];X.exp=[];X.opened={};X.adj={};
  Object.keys(SEAL).forEach(k=>{if(SEAL[k])SEAL[k].own=0});
  Object.keys(msk).forEach(k=>{delete X.ms[k]});
  saveX();saveSeal();return 'ok'}
 function finUndoReset(){let b=null;try{b=JSON.parse(localStorage.getItem('fb_fin_bak')||'null')}catch(e){}
- if(!b)return false;X.sales=b.sales||[];X.buys=b.buys||[];X.exp=b.exp||[];X.opened=b.opened||{};SEAL=b.seal&&typeof b.seal==='object'?b.seal:SEAL;
+ if(!b)return false;X.sales=b.sales||[];X.buys=b.buys||[];X.exp=b.exp||[];X.opened=b.opened||{};X.adj=b.adj||{};SEAL=b.seal&&typeof b.seal==='object'?b.seal:SEAL;
  if(!X.ms)X.ms={};Object.keys(b.msSeal||{}).forEach(k=>{X.ms[k]=b.msSeal[k]});
  saveX();saveSeal();try{localStorage.removeItem('fb_fin_bak')}catch(e){}return true}
 let STK='';   /* produit du stock ouvert pour la vente : 'série|produit' */
@@ -5487,7 +5537,14 @@ function finView(sx){const inS=e=>!sx||(sx==='MS'?/^BT/.test(e||''):e===sx),
  sales=X.sales.filter(x=>inS(x.ext)),buys=X.buys.filter(b=>inS(b.ext)),stock=[];
  EXTS.forEach(([e])=>{if(!inS(e))return;SEALT.forEach(t=>{const o=SEAL[e+'-'+t[0]];if(o&&o.own>0)stock.push({e,t:t[0],own:o.own})})});
  MS_SETS.forEach(m=>{if(!inS(m.id))return;MS_SEAL.forEach(t=>{const q=msOwn(m.id+'-'+t[0]);if(q>0)stock.push({e:m.id,t:t[0],own:q})})});
- return finCalc({sales,buys,exp:sx?[]:X.exp,stock})}
+ const pick=m=>{const o={};Object.keys(m||{}).forEach(k=>{if(inS(k.split('-')[0]))o[k]=m[k]});return o};
+ return finCalc({sales,buys,exp:sx?[]:X.exp,stock,opened:pick(X.opened),adj:pick(X.adj)})}
+/* panneau « Contrôle de cohérence » du carnet de ventes */
+function finCheckHTML(F){const nm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1],lg=F.ledger.filter(l=>l.bought||l.sold||l.own||l.opened||l.adj),ok=F.checks.every(c=>c.ok)&&!F.issues.length;
+ return `<div style="margin-top:10px"><b>🧮 Contrôle de cohérence</b> <small>${ok?'(tout concorde)':'(à vérifier)'}</small></div>`
+  +F.checks.map(c=>`<div class="tr"><span>${c.ok?'✅':'⚠️'} <b>${esc(c.t)}</b> <small>${esc(c.d)}</small></span></div>`).join('')
+  +(F.issues.length?`<div class="sub" style="margin-top:6px">${F.issues.map(i=>'⚠️ '+esc(i)).join('<br>')}</div>`:'')
+  +(lg.length?`<div class="sub" style="margin-top:6px">${lg.map(l=>esc(l.e+' · '+nm(l.t))+' : acheté '+l.bought+' · en stock '+l.ownIn+' · vendu '+l.sold+' · sorti sans vente '+Math.max(0,l.out)+(l.opened||l.adj?' (ouvert '+l.opened+', retiré à la main '+l.adj+')':'')+(l.out>0&&l.outCost!==null?' · coût sorti '+finFmt(l.outCost):'')).join('<br>')}</div>`:'')}
 function trade(){try{msBindInit()}catch(e){}const SL=X.sales.filter(x=>!S.sx||(S.sx==='MS'?/^BT/.test(x.ext||''):x.ext===S.sx)),F=finView(S.sx),dep=X.exp.map(x=>({k:'exp',id:x.id,d:x.d,l:x.l,a:finN(x.a),t:finExpT(x)})).sort((a,b)=>a.d<b.d?1:-1),pv=vnPv(),ncol=v=>v>=0?'var(--ok)':'#ff5a5a';
  const row=x=>{const q=vnQ(x),c=x.cid&&(cards.find(k=>k.id===x.cid)||MS_ALL.find(k=>k.id===x.cid)),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu;
   return `<div class="vnr${x.id===VNNEW?' vnnew':''}">${c?`<span class="vnth sm">${art({...c,own:1})}</span>`:x.kind==='seal'?`<span class="vnth sm">${vnSArt(x.se,x.st,12)}</span>`:''}<span class="vnin"><b>${esc(x.card)}${q>1?` <span class="vnq">×${q}</span>`:''}</b><small>${fmtD(x.d)}${x.who?' → '+esc(x.who):''}${x.kind==='seal'?' · 📦 scellé':''}</small><small>${hasB?'achat '+eur(bu)+' · ':(x.price?'<span style="color:#e8a020">coût inconnu</span> · ':'')}vente <b>${x.price?eur(pr):'—'}</b></small></span><span class="vnrr">${x.price&&hasB?`<b style="color:${ncol(pf)}">${pf>=0?'+':''}${eur(pf)}</b>`:''}<span><button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button><button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></span></div>`},
@@ -5503,13 +5560,13 @@ ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" a
 <label class="vnck"><input type="checkbox" id="vn-r" ${VN.r?'checked':''}> ${VN.k==='s'?'Retirer de mon stock de scellé':'Retirer de ma collection'}</label>
 <div class="vnpv" id="vn-pv">${pv.h}</div>
 <button class="vngo" id="vn-go" data-sadd ${pv.ok?'':'disabled'}>${pv.lab}</button></div>
-${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>🧾 Acheter du stock</b><div class="sub">Displays, boosters, cartes à revendre : ils entrent en stock et ne baissent ton résultat qu’une fois vendus.</div><div class="vnrow"><label>Série<select class="fi" id="fb-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}">${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}">${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label><label>Produit<select class="fi" id="fb-t">${SEALT.map(t=>`<option value="${t[0]}"${t[0]==='display'?' selected':''}>${t[1]}</option>`).join('')}</select></label></div><div class="vnrow"><label>Quantité<input class="fi" id="fb-q" inputmode="numeric" value="1"></label><label>Prix d'achat unitaire (€)<input class="fi" id="fb-p" inputmode="decimal" placeholder="0,00"></label></div><input class="fi" id="fb-d" type="date" value="${today()}"><button class="btn" style="margin-top:8px" data-fbuy>➕ Enregistrer l'achat de stock</button>${F.rows.length?`<div style="margin-top:8px"><b>📦 Stock restant (prix d'achat)</b>${F.rows.map(r=>{const k=r.e+'|'+r.t;return `<div class="tr" role="button" tabindex="0" data-stkpick="${k}" style="cursor:pointer"><span>${esc(r.e)} · ${esc((SEALT.find(t=>t[0]===r.t)||[0,r.t])[1])} ×${r.own} <small>${STK===k?'▲':'Vendre ›'}</small></span><b>${r.unknown||r.noPrice?'coût inconnu':eur(r.val)}</b></div>`+(STK===k?stkSheet(r):'')}).join('')}</div>`:''}</div>
+${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>🧾 Acheter du stock</b><div class="sub">Displays, boosters, cartes à revendre : ils entrent en stock et ne baissent ton résultat qu’une fois vendus.</div><div class="vnrow"><label>Série<select class="fi" id="fb-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}">${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}">${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label><label>Produit<select class="fi" id="fb-t">${SEALT.map(t=>`<option value="${t[0]}"${t[0]==='display'?' selected':''}>${t[1]}</option>`).join('')}</select></label></div><div class="vnrow"><label>Quantité<input class="fi" id="fb-q" inputmode="numeric" value="1"></label><label>Prix d'achat unitaire (€)<input class="fi" id="fb-p" inputmode="decimal" placeholder="0,00"></label></div><input class="fi" id="fb-d" type="date" value="${today()}"><button class="btn" style="margin-top:8px" data-fbuy>➕ Enregistrer l'achat de stock</button>${F.rows.length?`<div style="margin-top:8px"><b>📦 Stock restant (prix d'achat)</b>${F.rows.map(r=>{const k=r.e+'|'+r.t;return `<div class="tr" role="button" tabindex="0" data-stkpick="${k}" style="cursor:pointer"><span>${esc(r.e)} · ${esc((SEALT.find(t=>t[0]===r.t)||[0,r.t])[1])} ×${r.own} <small>${r.unknown||r.noPrice?'':'à '+finUnitTxt(r)+' · '}${STK===k?'▲':'Vendre ›'}</small></span><b>${r.unknown||r.noPrice?'coût inconnu':eur(r.val)}</b></div>`+(STK===k?stkSheet(r):'')}).join('')}</div>`:''}</div>
 <div class="panel" style="margin-top:10px"><b>💸 Dépenses de fonctionnement</b><div class="sub">Application, matériel Whatnot, fournitures… Ne saisis pas ici les commissions ou frais de livraison déjà retirés du montant de la vente.</div><input class="fi" id="ex-l" placeholder="Pour quoi ? (ex. trépied Whatnot, abonnement Claude)"><input class="fi" id="ex-a" inputmode="decimal" placeholder="Montant (€)"><button class="btn" style="margin-top:8px" data-exadd>Enregistrer la dépense</button>${dep.length?`<div style="margin-top:8px">${dep.slice(0,6).map(x=>`<div class="tr"><span>${fmtD(x.d)} · ${esc(x.l)}${x.t==='stock'?' <small>(achat de stock)</small>':''}</span><span><b>${eur(x.a)}</b> <button class="chip" data-extog="${x.id}" aria-label="Changer de catégorie">${x.t==='stock'?'→ Fonct.':'→ Stock'}</button> <button class="chip" data-exdel="${x.id}" aria-label="Supprimer">✕</button></span></div>`).join('')}${dep.length>6?`<div class="sub">+ ${dep.length-6} autres (voir Budget)</div>`:''}</div>`:''}</div>
 <div class="panel" style="margin-top:10px"><b>${SL.length} vente${SL.length>1?'s':''}</b>
 <div class="vnkpi" style="margin-top:8px"><div><small>Chiffre d'affaires</small><b>${eur(F.ca)}</b></div><div><small>Coût produits vendus</small><b>${eur(F.cogs)}</b></div><div><small>Marge brute</small><b style="color:${ncol(F.marge)}">${eur(F.marge)}</b></div></div>
 <div class="tr"><span>Dépenses de fonctionnement${S.sx?' <small>(non réparties par série)</small>':''}</span><b>− ${eur(F.opex)}</b></div><div class="tr"><span><b>Résultat de gestion</b></span><b style="font-size:1.15em;color:${ncol(F.result)}">${eur(F.result)}</b></div>
-<div class="tr"><span>📦 Valeur du stock restant <small>(prix d'achat, ×${F.stockUnits})</small></span><b>${eur(F.stockValue)}</b></div>
-<div style="margin-top:8px"><b>💶 Trésorerie</b> <small>(séparée du résultat)</small></div><div class="tr"><span>Argent encaissé</span><b>${eur(F.cashIn)}</b></div><div class="tr"><span>Argent dépensé <small>(stock ${eur(F.stockBuys)} + frais ${eur(F.cashOut-F.stockBuys)})</small></span><b>− ${eur(F.cashOut)}</b></div><div class="tr"><span>Solde de trésorerie</span><b style="color:${ncol(F.cash)}">${eur(F.cash)}</b></div>${F.warn.length?`<div class="sub" style="margin-top:8px">${F.warn.map(w=>'⚠️ '+esc(w)).join('<br>')}</div>`:''}
+${F.outUnits||F.outCost?`<div class="tr"><span>🔓 Sortis du stock sans vente <small>(×${F.outUnits} ouverts ou retirés · coût d’achat, hors résultat de gestion)</small></span><b>${F.outUnknown?'coût inconnu':eur(F.outCost)}</b></div><div class="tr"><span>Résultat de gestion après ces sorties <small>(information)</small></span><b style="color:${ncol(F.resultAfterOut)}">${eur(F.resultAfterOut)}</b></div>`:''}<div class="tr"><span>📦 Valeur du stock restant <small>(prix d'achat, ×${F.stockUnits})</small></span><b>${eur(F.stockValue)}</b></div>
+<div style="margin-top:8px"><b>💶 Trésorerie</b> <small>(séparée du résultat)</small></div><div class="tr"><span>Argent encaissé</span><b>${eur(F.cashIn)}</b></div><div class="tr"><span>Argent dépensé <small>(stock ${eur(F.stockBuys)} + frais ${eur(F.cashOut-F.stockBuys)})</small></span><b>− ${eur(F.cashOut)}</b></div><div class="tr"><span>Solde de trésorerie <small>(argent disponible)</small></span><b style="color:${ncol(F.cash)}">${eur(F.cash)}</b></div><div class="tr"><span>📦 Stock possédé <small>(au prix d’achat, ce n’est pas de l’argent)</small></span><b>${eur(F.stockValue)}</b></div>${F.warn.length?`<div class="sub" style="margin-top:8px">${F.warn.map(w=>'⚠️ '+esc(w)).join('<br>')}</div>`:''}${finCheckHTML(F)}
 ${SL.map(x=>S.sed===x.id?edit(x):row(x)).join('')}</div>
 <div class="panel" style="margin-top:10px"><b>🗑️ Remise à zéro</b><div class="sub">Efface les ventes, achats de stock, dépenses et le stock de produits scellés. Ta collection de cartes et tes classeurs ne sont pas touchés. Une copie est gardée pour annuler.</div><button class="btn alt" style="margin-top:8px" data-finreset>🗑️ Tout remettre à zéro</button>${finHasBak()?'<button class="btn alt" style="margin-top:8px" data-finundo>↩️ Annuler la dernière remise à zéro</button>':''}</div>`}
 function zoomSheet(){const c=S.zoom&&(cards.find(x=>x.id===S.zoom)||MS_ALL.find(x=>x.id===S.zoom));if(!c)return '';const row=(a,b)=>b?`<div class="tr"><span>${a}</span><b>${esc(String(b))}</b></div>`:'';
@@ -6528,7 +6585,7 @@ else if(d.cfy!==undefined){const a=S.cf&&S.cf.act;if(a==='imp'){applySnap(S.cfd)
 else if(d.cq){const c=cards.find(x=>x.id===d.cq);if(+d.cd>0)bump('c',1);c.own=Math.max(0,c.own+(+d.cd));save()}
 else if(d.sn){if(d.sx)S.ext=d.sx;S.ssel=d.sn}
 else if(d.mode){S.mode=d.mode;window.scrollTo(0,0)}
-else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own';s[k]=Math.max(0,s[k]+(+d.sd));saveSeal()}
+else if(d.sk){const s=sl(S.ext,d.sk),k=d.sw?'want':'own',b0=s[k];s[k]=Math.max(0,s[k]+(+d.sd));saveSeal();if(k==='own'&&b0!==s[k]){finAdjAdd(X.adj,S.ext+'-'+d.sk,b0-s[k]);saveX()}}
 else if(d.col){applyColor(d.col)}
 else if(d.pick!==undefined){S.pick=true}
 else if(d.ext){S.ext=d.ext;S.pick=false;window.scrollTo(0,0)}

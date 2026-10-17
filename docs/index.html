@@ -160,14 +160,14 @@ input:focus,select:focus{outline:none;border-color:var(--ac)!important;box-shado
 .seg{display:flex;background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:3px;gap:3px}
 .seg button{flex:1;min-width:0;padding:10px 2px;border:0;border-radius:9px;background:none;color:var(--mu);font:inherit;font-size:14px;transition:background .15s,color .15s}
 .seg button[aria-pressed=true]{background:var(--ac);color:var(--on,#fff);font-weight:600}
-.thm{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.thm{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .thc{background:var(--sf);border:2px solid var(--ln);border-radius:14px;padding:8px 6px 10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--tx);text-align:center}
 .thc[aria-pressed=true]{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent);font-weight:600}
 .thp{display:block;height:46px;border-radius:9px;position:relative;overflow:hidden;border:1px solid rgba(128,128,128,.35)}
 .thp i{position:absolute;left:8px;height:6px;border-radius:3px}
 .thp i:first-child{top:10px;width:46%;background:var(--ac)}
 .thp i:last-child{top:24px;right:8px;background:currentColor;opacity:.35}
-.thp-dark{background:#0d0d10;color:#fff}.thp-light{background:#f4f1f1;color:#150808}
+.thp-dark{background:#0d0d10;color:#fff}.thp-oled{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #333}.thp-light{background:#f4f1f1;color:#150808}
 .thp-auto{background:linear-gradient(115deg,#0d0d10 50%,#f4f1f1 50%);color:#888}
 .sw2{width:34px;height:34px}
 .swr{gap:8px}
@@ -1519,6 +1519,15 @@ body.gcopen #toast{z-index:70;bottom:auto;top:calc(env(safe-area-inset-top,0px) 
 :root[data-theme="light"] .cg-qa button:hover,:root[data-theme="light"] .cg-ac:hover{background:rgba(70,35,30,.07)}
 :root[data-theme="light"] .cg-mp{box-shadow:0 -10px 26px -14px rgba(70,35,30,.35)}
 :root[data-theme="light"] .cg-pvi{box-shadow:0 12px 26px -12px rgba(70,35,30,.45)}
+</style>
+<style id="oled-css">
+:root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
+:root[data-oled] body{background:#000}
+:root[data-oled] body::before{display:none}
+:root[data-oled] header,:root[data-oled] nav,:root[data-oled] .sheet>div{background:#000!important}
+:root[data-oled] .sheet{background:rgba(0,0,0,.82)}
+:root[data-oled] .panel{background:#050505!important;box-shadow:none!important;background-image:none!important}
+:root[data-oled] .shimg{background:#000}
 </style>
 </head>
 <body>
@@ -4900,7 +4909,7 @@ function applyVib(){if(!_vib0)return;try{navigator.vibrate=VIB?_vib0:function(){
 function applyGcs(){document.documentElement.dataset.gcs=GCS}
 applyVib();applyGcs();
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
-function applyTheme(){const dk=TH==='dark'||(TH==='auto'&&(!mq||mq.matches));document.documentElement.dataset.theme=dk?'dark':'light'}
+function applyTheme(){const ol=TH==='oled',dk=ol||TH==='dark'||(TH==='auto'&&(!mq||mq.matches)),h=document.documentElement;h.dataset.theme=dk?'dark':'light';if(ol)h.dataset.oled='1';else delete h.dataset.oled;try{const m=document.querySelector('meta[name=theme-color]');if(m)m.content=ol?'#000000':dk?'#0A0A0A':'#F4F1F1'}catch(e){}}
 applyTheme();if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{if(TH==='auto')applyTheme()});
 let SEAL={};try{SEAL=JSON.parse(localStorage.getItem('fb_sealed')||'{}')||{}}catch(e){}
 const sl=(e,t)=>SEAL[e+'-'+t]||(SEAL[e+'-'+t]={own:0,want:0,price:''});
@@ -6121,7 +6130,7 @@ function scanCov(){const s=new Set();if(X.game!=='ms')cards.forEach(c=>{if(CARDI
 function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
 function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=(/bt/i.test(S.sc)||(X.game==='ms'&&!mm))?msScanFind(S.sc):n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none">${X.game==='ms'?'':serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>${X.game==='ms'?'Saisis le numéro lu en bas de la carte (toutes les séries Masters), ou précise la série : BT31-035':'Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035'}</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="${X.game==='ms'?'ex. 035 ou BT31-035':'ex. 035 ou FB01-035'}" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
+return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><button class="btn alt" style="margin-bottom:8px" data-binder>📖 Scanner une page de classeur</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none"><input type="file" id="binfile" accept="image/*" style="display:none">${X.game==='ms'?'':serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>${X.game==='ms'?'Saisis le numéro lu en bas de la carte (toutes les séries Masters), ou précise la série : BT31-035':'Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035'}</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="${X.game==='ms'?'ex. 035 ou BT31-035':'ex. 035 ou FB01-035'}" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
@@ -6269,7 +6278,7 @@ const nPx=cards.reduce((n,c)=>n+(MKT[c.id]?1:0),0),prx=sg('💶','Prix des carte
 /* affichage */
 const thp=(v,t)=>`<button class="thc" aria-pressed="${TH===v}" data-th="${v}"><span class="thp thp-${v}" aria-hidden="true"><i></i><i></i></span><span>${t}</span></button>`;
 const swc=THEMES.map(([n,h])=>`<button class="sw sw2" style="background:${h}" aria-label="${n}" aria-pressed="${ACFIX===h}" data-acf="${h}"></button>`).join('');
-const disp=sg('🎨','Affichage','',`<div class="sgl">Thème</div><div class="thm">${[['dark','Sombre'],['light','Clair'],['auto','Automatique']].map(([v,t])=>thp(v,t)).join('')}</div>
+const disp=sg('🎨','Affichage','',`<div class="sgl">Thème</div><div class="thm">${[['dark','Sombre'],['oled','Noir pur (OLED)'],['light','Clair'],['auto','Automatique']].map(([v,t])=>thp(v,t)).join('')}</div>
 <div class="sgl" style="margin-top:16px">Couleur de l’appli</div><div class="swr"><button class="chip" aria-pressed="${ACFIX===''}" data-acf="">Selon la série</button>${swc}</div>
 <div class="panel sxl" style="margin-top:14px">${dbGoldRow()}</div>
 <div class="sgl" style="margin-top:8px">Taille des cartes</div>${seg([['2','Grandes'],['3','Moyennes'],['4','Petites']],GCS,'gcs','Taille des cartes')}
@@ -7473,6 +7482,48 @@ async function photoRun(){let me=photo;
    }catch(e){ocrFail=true;try{console.warn('scanner ocr:',e&&e.message||e)}catch(_){}}finally{clearTimeout(tu);ocrBusy=false}}
   if(alive&&photo===me){if(st.mode==='live')showUnk();else if(st.mode==='unk')panel()}
  }catch(e){if(alive)hint('Analyse impossible : '+(e&&e.message||e))}}
+
+/* ---------- page de classeur entière : photo découpée en grille, une analyse par case ---------- */
+const BGR=[['2x2',2,2],['3x3',3,3],['3x4',3,4],['4x3',4,3]];let bov=null,bGen=0;
+function bClose(){bGen++;if(bov){bov.remove();bov=null}}
+function bCss(){if(document.getElementById('bn-css'))return;const e=document.createElement('style');e.id='bn-css';
+ e.textContent=`.bn{position:fixed;inset:0;z-index:99999;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;font-family:Barlow,system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px)}.bn-t{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px}.bn-t b{flex:1;font:400 20px Big Shoulders Display,Barlow,sans-serif}.bn-t button{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:18px}.bn-g{flex:none;display:flex;gap:6px;padding:0 12px 8px}.bn-g button{flex:1;padding:9px 0;border-radius:10px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:13px}.bn-g button[aria-pressed=true]{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}.bn-s{flex:none;padding:0 12px 8px;font-size:13px;color:var(--mu)}.bn-l{flex:1;overflow:auto;padding:0 12px 12px;display:grid;gap:8px;align-content:start}.bn-c{position:relative;border:2px solid var(--ln);border-radius:10px;background:var(--sf);padding:0;color:var(--tx);font:inherit;text-align:left;overflow:hidden}.bn-c img{display:block;width:100%;aspect-ratio:5/7;object-fit:cover}.bn-c div{padding:4px 6px 6px;font-size:11px;line-height:1.25}.bn-c div b{display:block;font-size:12px}.bn-c[aria-pressed=true]{border-color:var(--ok)}.bn-c[aria-pressed=true]::after{content:"✓";position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:var(--ok);color:#000;font-weight:700;display:flex;align-items:center;justify-content:center}.bn-c.no img{opacity:.5}.bn-c:disabled{opacity:.55}.bn-f{flex:none;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln);background:var(--bg)}`;
+ document.head.appendChild(e)}
+async function binderFile(f){if(!f)return;let bmp;
+ try{bmp=await createImageBitmap(f,{imageOrientation:'from-image'})}catch(_){try{bmp=await createImageBitmap(f)}catch(e2){toast('Photo illisible');return}}
+ bCss();bClose();Eng.urgent=true;Eng.start();
+ const g=BGR.find(x=>x[0]===(bmp.width>bmp.height*1.1?'4x3':'3x3'));
+ bov=document.createElement('div');bov.className='bn';bov.setAttribute('role','dialog');bov.setAttribute('aria-label','Page de classeur');
+ bov.innerHTML='<div class="bn-t"><button data-b="x" aria-label="Fermer">✕</button><b>Page de classeur</b></div><div class="bn-g">'+BGR.map(x=>'<button data-b="g" data-g="'+x[0]+'" aria-pressed="'+(x===g)+'">'+x[1]+'×'+x[2]+'</button>').join('')+'</div><div class="bn-s" id="bn-s"></div><div class="bn-l" id="bn-l"></div><div class="bn-f"><button class="btn" id="bn-add" data-b="add" disabled>Ajouter</button></div>';
+ document.body.appendChild(bov);bov._bmp=bmp;bov.addEventListener('click',onBn);bScan(g)}
+function bUpd(){if(!bov)return;const n=bov.querySelectorAll('.bn-c[aria-pressed=true]').length,b=bov.querySelector('#bn-add');b.disabled=!n;b.textContent=n?'Ajouter '+n+' carte'+(n>1?'s':''):'Ajouter'}
+function onBn(e){const t=e.target.closest('[data-b]');if(!t||!bov)return;const a=t.dataset.b;
+ if(a==='x')bClose();
+ else if(a==='g'){for(const b of bov.querySelectorAll('[data-b=g]'))b.setAttribute('aria-pressed',String(b===t));bScan(BGR.find(x=>x[0]===t.dataset.g))}
+ else if(a==='c'&&t.dataset.id){t.setAttribute('aria-pressed',String(t.getAttribute('aria-pressed')!=='true'));bUpd()}
+ else if(a==='add'){let n=0;for(const b of bov.querySelectorAll('.bn-c[aria-pressed=true]')){const c=cardOf(b.dataset.id);if(!c)continue;bump('c',1);c.own+=1;S.last.unshift(c.id);(st.sess=st.sess||[]).push({id:c.id,q:1,t:Date.now()});n++}
+  if(n){save();try{play('nice')}catch(_){}}bClose();toast(n+' carte'+(n>1?'s ajoutées':' ajoutée'));try{render()}catch(_){}}}
+async function bScan(g){const me=++bGen,bmp=bov._bmp,cols=g[1],rows=g[2],W=bmp.width,H=bmp.height,L=bov.querySelector('#bn-l'),T=bov.querySelector('#bn-s');
+ L.style.gridTemplateColumns='repeat('+cols+',1fr)';L.innerHTML='';bUpd();
+ let n=0;while(!Eng.ready&&Eng.state!=='fail'&&n++<600&&me===bGen&&bov){T.textContent='Préparation du scanner… '+Math.round(Eng.progress*100)+' %';await sleep(100)}
+ if(me!==bGen||!bov)return;if(!Eng.ready){T.textContent='Scanner indisponible pour le moment.';return}
+ const cw=W/cols,ch=H/rows;let ok=0;
+ for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+  if(me!==bGen||!bov)return;T.textContent='Analyse… '+(j*cols+i+1)+' / '+cols*rows;
+  const gh=Math.min(ch*.94,cw*.94*7/5),gw=gh*5/7,x=i*cw+(cw-gw)/2,y=j*ch+(ch-gh)/2,
+   s=Math.min(1,440/Math.max(gw,gh)),rw=Math.max(16,Math.round(gw*s)),rh=Math.max(16,Math.round(gh*s)),im=shrink(bmp,x,y,gw,gh,rw,rh),ins=Math.min(rw,rh)*.004,
+   q=[[ins,ins],[rw-ins,ins],[rw-ins,rh-ins],[ins,rh-ins]];
+  let r=null;try{r=await Eng.analyse({w:rw,h:rh,d:im.data},{cx:rw/2,cy:rh/2,gw:rw,gh:rh},{wide:true,full:true,forceQuad:q})}catch(_){}
+  if(me!==bGen||!bov)return;
+  const t=r&&r.top&&r.top[0],good=!!t&&SC.accepted(t.s,r.margin,r.z||0,Eng.n),c=t&&cardOf(t.id),cand=!!c&&(good||t.s>=.3);
+  const cv=document.createElement('canvas');cv.width=100;cv.height=140;cv.getContext('2d').drawImage(bmp,x,y,gw,gh,0,0,100,140);
+  const b=document.createElement('button');b.type='button';b.className='bn-c'+(good?'':' no');b.dataset.b='c';
+  b.innerHTML='<img alt="" src="'+cv.toDataURL('image/jpeg',.7)+'"><div><b>'+(cand?(good?'':'Peut-être : ')+nmOf(c):'Non reconnue')+'</b>'+(cand?esc(c.id):'—')+'</div>';
+  if(cand){b.dataset.id=c.id;b.setAttribute('aria-pressed',String(good));if(good)ok++}else b.disabled=true;
+  L.appendChild(b);bUpd()}
+ T.textContent=ok+' carte'+(ok>1?'s reconnues':' reconnue')+' sur '+cols*rows+' · touche une case pour corriger la sélection'}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-binder]');if(!t)return;e.stopPropagation();e.preventDefault();const i=document.getElementById('binfile');if(i)i.click()},true);
+document.addEventListener('change',e=>{if(e.target&&e.target.id==='binfile'){const f=e.target.files[0];e.target.value='';binderFile(f)}},true);
 
 /* ---------- branchement sur l'appli ---------- */
 document.addEventListener('click',e=>{const t=e.target.closest('[data-cam],[data-camfile]');if(!t)return;e.stopPropagation();e.preventDefault();

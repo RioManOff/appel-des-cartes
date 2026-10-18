@@ -1239,17 +1239,36 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .hmgw .hmgs{max-width:calc(100% - 130px)}
 .hmgr{position:absolute;top:6px;right:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .hmgr .onl{position:static}
-.hmgu{font:700 13px/1 Barlow,system-ui,sans-serif;color:var(--tx);cursor:pointer;padding:8px 12px;border-radius:14px;white-space:nowrap;background:color-mix(in srgb,var(--ac) 22%,transparent);border:1px solid color-mix(in srgb,var(--ac) 60%,transparent);-webkit-tap-highlight-color:transparent}
+.hmgu{position:relative;font:700 13px/1 Barlow,system-ui,sans-serif;color:var(--tx);cursor:pointer;padding:8px 12px;border-radius:14px;white-space:nowrap;background:color-mix(in srgb,var(--ac) 22%,transparent);border:1px solid color-mix(in srgb,var(--ac) 60%,transparent);-webkit-tap-highlight-color:transparent}
 .hmgu:active{transform:scale(.96)}
+.hmgu.new{background:var(--ac);color:#fff;border-color:transparent;box-shadow:0 0 0 0 color-mix(in srgb,var(--ac) 55%,transparent);animation:hmguP 2.4s infinite}
+.hmgu.new::after{content:"NOUVEAU";position:absolute;top:-8px;right:-4px;font:800 9px/1 Barlow,system-ui,sans-serif;letter-spacing:.06em;padding:3px 5px;border-radius:8px;background:#fff;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+@keyframes hmguP{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ac) 55%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+@media (prefers-reduced-motion:reduce){.hmgu.new{animation:none}}
 .clg{position:fixed;inset:0;background:rgba(5,7,25,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;z-index:60}
-.clg>div{background:var(--bg);color:var(--tx);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));max-height:88%;overflow:auto;overscroll-behavior:contain;box-shadow:0 -12px 40px -10px rgba(0,0,0,.6);animation:shup .2s cubic-bezier(.2,.9,.25,1)}
+.clg>div{background:var(--bg);color:var(--tx);width:100%;max-width:520px;border-radius:22px 22px 0 0;max-height:90%;display:flex;flex-direction:column;box-shadow:0 -12px 40px -10px rgba(0,0,0,.6);animation:shup .2s cubic-bezier(.2,.9,.25,1)}
+.clg .clgh{padding:18px 16px 12px;border-bottom:1px solid var(--ln)}
 .clg h2{margin:0 0 4px;font:400 26px/1.1 Big Shoulders Display,Barlow,sans-serif}
-.clg h3{margin:16px 0 6px;font-size:14px;color:var(--ac);text-transform:uppercase;letter-spacing:.04em}
-.clg ul{margin:0;padding:0;list-style:none}
-.clg li{padding:9px 0;border-bottom:1px solid var(--ln);font-size:14px;line-height:1.35}
+.clg .sub{font-size:13px;opacity:.8}
+.clg .clgc{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.clg .clgc span{font:700 12px/1 Barlow,system-ui,sans-serif;padding:6px 10px;border-radius:12px;background:color-mix(in srgb,var(--ac) 18%,transparent);border:1px solid color-mix(in srgb,var(--ac) 40%,transparent)}
+.clg .clgl{flex:1;overflow:auto;overscroll-behavior:contain;padding:6px 16px 4px}
+.clg details{border-bottom:1px solid var(--ln)}
+.clg summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 0;font:700 15px/1.2 Barlow,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+.clg summary::-webkit-details-marker{display:none}
+.clg summary .gi{font-size:20px;width:26px;text-align:center}
+.clg summary .gt{flex:1}
+.clg summary .gn{font:700 11px/1 Barlow,system-ui,sans-serif;padding:4px 8px;border-radius:10px;background:color-mix(in srgb,var(--ac) 20%,transparent)}
+.clg summary::after{content:"›";font-size:22px;opacity:.6;transition:transform .15s}
+.clg details[open]>summary::after{transform:rotate(90deg)}
+.clg summary .gnew{font:800 9px/1 Barlow,system-ui,sans-serif;letter-spacing:.06em;padding:3px 6px;border-radius:8px;background:var(--ac);color:#fff}
+.clg ul{margin:0 0 10px;padding:0;list-style:none}
+.clg li{display:flex;gap:10px;padding:8px 0 8px 2px;font-size:14px;line-height:1.35}
+.clg li i{font-style:normal;font-size:18px;width:26px;text-align:center;flex:none}
+.clg li div{min-width:0}
 .clg li b{display:block;font-size:15px}
-.clg li span{color:var(--mu,inherit);opacity:.8}
-.clg .clgb{display:flex;gap:8px;margin-top:16px}
+.clg li span{display:block;opacity:.78}
+.clg .clgb{display:flex;gap:8px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln)}
 .clg .clgb .btn{flex:1;padding:12px}
 .hmgw .hmgs{max-width:calc(100% - 175px)}
 /* Devine la carte */
@@ -3228,7 +3247,7 @@ function luck(){mhImgs();if(S.op&&mhIs(S.op.ext)&&S.tab==='luck')S.hzm=true;
  if(HZM()&&S.shop)return shopViewMs();if(HZM()&&S.dl)return duelView()+mhPickSheet();
  if(!HZM())return luckFW().replace('<h2>🎲 Mode hasard</h2>','<h2>🎲 Mode hasard</h2>'+mhSwitch());
  const e=HX(),nb2=Object.keys(VIRT.q).filter(k=>/^BT/.test(k)).length;
- return header()+`<h2>🎲 Mode hasard</h2>${mhSwitch()}<div class="panel">Ouvre des boosters Masters virtuels de ${MH_N} cartes (édition française). Les cartes vont uniquement dans ta collection virtuelle, jamais dans ta vraie collection. <div class="sub">Taux estimés d'après les observations de la communauté (Bandai ne les publie pas) : 7 communes, 3 peu communes, 1 carte foil, 1 emplacement rare qui peut devenir SR, SPR, SCR… Un display = 24 boosters (au moins une SR ou mieux), une case = 12 displays.</div><div class="sub" style="margin-top:6px">⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h), partagés avec Fusion World.</div></div>${mhBar()}${cdBtn('pack',true)}${cdBtn('box')}${cdBtn('case')}<button class="btn" style="margin-top:8px" data-dl>⚔️ Duel de boosters</button><button class="btn" style="margin-top:8px" data-shop>🛒 Boutique virtuelle (${VIRT.pts||0} pts)</button><button class="btn alt" style="margin-top:8px" data-vopen>📚 Collection virtuelle (${nb2} cartes différentes)</button>`+(S.celeb===e?celeb(e):'')+mhPickSheet()}
+ return header()+`<h2>🎲 Mode hasard</h2>${mhSwitch()}<div class="panel">Ouvre des boosters Masters virtuels de ${MH_N} cartes (édition française). Les cartes vont uniquement dans ta collection virtuelle, jamais dans ta vraie collection. <div class="sub">Taux estimés d'après les observations de la communauté (Bandai ne les publie pas) : 7 communes, 3 peu communes, 1 carte foil, 1 emplacement rare qui peut devenir SR, SPR, SCR… Un display = 24 boosters (au moins une SR ou mieux), une case = 12 displays.</div><div class="sub" style="margin-top:6px">⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h), partagés avec Fusion World.</div></div>${mhBar()}${stockPanel()}${cdBtn('pack',true)}${cdBtn('box')}${cdBtn('case')}<button class="btn" style="margin-top:8px" data-dl>⚔️ Duel de boosters</button><button class="btn" style="margin-top:8px" data-shop>🛒 Boutique virtuelle (${VIRT.pts||0} pts)</button><button class="btn alt" style="margin-top:8px" data-vopen>📚 Collection virtuelle (${nb2} cartes différentes)</button>`+(S.celeb===e?celeb(e):'')+mhPickSheet()}
 document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-hzg],[data-hzx]');if(!b||S.tab!=='luck')return;ev.stopPropagation();
  if(b.dataset.hzg!==undefined){S.hzm=b.dataset.hzg==='ms';if(S.hzm&&!S.hxm)S.hxm=MS_SETS[0].id}else{S.hzm=true;S.hxm=b.dataset.hzx}
  S.celeb=null;S.mspick=false;render()},true);
@@ -4871,6 +4890,9 @@ function shopBuy(){const e=HX(),pts=VIRT.pts||0,iv=shInv(e);
 <div class="row" style="margin-top:10px;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap"><button type="button" class="chip" data-shq="${k}:-10" aria-label="Moins 10">−10</button><button type="button" class="chip" data-shq="${k}:-1" aria-label="Moins 1">−1</button><b style="min-width:54px;text-align:center;font-size:20px" aria-live="polite">${q}</b><button type="button" class="chip" data-shq="${k}:1" aria-label="Plus 1">+1</button><button type="button" class="chip" data-shq="${k}:10" aria-label="Plus 10">+10</button><button type="button" class="chip" data-shq="${k}:max" aria-label="Maximum que tu peux acheter">Max (${mx})</button></div>
 <button class="btn" style="margin-top:10px${ok?'':';opacity:.45'}" data-shb2="${k}" ${ok?'':'disabled'}>Acheter ${q} ${nm.toLowerCase()}${q>1?'s':''} — ${tot} pts</button>
 <div class="row" style="margin-top:8px;align-items:center;justify-content:space-between"><span class="sub">En stock : <b>${have}</b> ${nm.toLowerCase()}${have>1?'s':''} ${e}</span><button class="btn alt" style="width:auto;padding:8px 16px${have?'':';opacity:.45'}" data-sho2="${k}" ${have?'':'disabled'}>Ouvrir 1</button></div></div>`}).join('')+`<div class="sub" style="margin-top:8px">Le display coûte moins cher que ${24} boosters séparés (${BPRICE*24} pts) et la case moins cher que 12 displays (${DPRICE*12} pts). Ce que tu achètes reste en stock pour la série ${e} : ouvre-le quand tu veux.</div>`}
+/* stock acheté à la boutique : visible sur l'écran Mode hasard, avec un bouton pour l'ouvrir */
+function stockPanel(){const e=HX(),iv=shInv(e);if(!SHK.some(([k])=>iv[k]>0))return '';
+ return `<div class="panel" style="margin:10px 0"><b>🛒 Ton stock ${e}</b><div class="sub">Acheté à la boutique : il reste là, sans temps d'attente.</div>`+SHK.filter(([k])=>iv[k]>0).map(([k,nm])=>`<div class="row" style="margin-top:8px;align-items:center;justify-content:space-between"><span><b>${iv[k]}</b> ${nm.toLowerCase()}${iv[k]>1?'s':''}</span><button class="btn" style="width:auto;padding:8px 16px" data-sho2="${k}">Ouvrir 1</button></div>`).join('')+`</div>`}
 document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-shq],[data-shb2],[data-sho2]');if(!b||S.tab!=='luck')return;ev.stopPropagation();ev.preventDefault();const d=b.dataset,e=HX();
  if(d.shq){const[k,v]=d.shq.split(':'),p=(SHK.find(x=>x[0]===k)||[,,,()=>1])[3](),mx=Math.max(1,Math.floor((VIRT.pts||0)/p));SHQ[k]=Math.max(1,Math.min(SHMAX[k],v==='max'?Math.min(mx,SHMAX[k]):SHQ[k]+(+v)))}
  else if(d.shb2){const k=d.shb2,r=SHK.find(x=>x[0]===k);if(!r)return;const q=SHQ[k],tot=r[3]()*q;if((VIRT.pts||0)<tot){toast('Pas assez de points');return}VIRT.pts-=tot;shInv(e)[k]+=q;saveV();SHQ[k]=1;toast(q+' '+r[1].toLowerCase()+(q>1?'s':'')+' acheté'+(q>1?'s':'')+' · en stock ✓')}
@@ -5426,7 +5448,7 @@ const k=o.kind==='case'?o.disp:0,lo=k*24;
 h+=`<button class="btn alt" style="margin-bottom:8px;text-align:left" ${o.kind==='case'?'data-dback>← Retour à la case':'data-oback>← Mode hasard'}</button><div class="panel">${o.kind==='case'?'Display '+(k+1)+' · ':''}${o.packs.slice(lo,lo+24).filter(x=>x.st).length} / 24 boosters ouverts<div class="sub">Touche un booster pour l'ouvrir et révéler ses cartes une par une.</div></div><div class="grid" style="margin-top:10px">${Array.from({length:24},(_,j)=>packTile(o,lo+j)).join('')}</div><button class="btn" style="margin-top:12px" data-pall="${k}">⚡ Ouvrir tous les boosters du display</button>`;
 return h+(o.kind==='box'&&o.packs.every(x=>x.st)?(o.duel?duelPanel(o)+dlBtn(o):o.tour?tourPanel(o):cdAfter('box',false,'🔁 Ouvrir un autre display '+E)):'')+(S.celeb===E?celeb(E):'')+opSummary(o)}
 function luckFW(){if(S.hzv)return virtView();if(S.op)return opView();if(S.dl)return duelView();if(S.shop)return shopView();
-return header()+`<h2>🎲 Mode hasard</h2><div class="panel">Ouvre des boosters virtuels de 6 cartes (comme un paquet japonais). Les cartes vont uniquement dans ta collection virtuelle, jamais dans ta vraie collection. <div class="sub">Taux estimés d'après des observations de la communauté (Bandai ne les publie pas).</div><div class="sub" style="margin-top:6px">⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h). Un duel compte comme une ouverture ; la boutique 🛒 n'a pas d'attente.</div></div>${serBar('margin:10px 0;text-align:left',S.ext)}${cdBtn('pack',true)}${cdBtn('box')}${cdBtn('case')}<button class="btn" style="margin-top:8px" data-dl>⚔️ Duel de boosters</button><button class="btn" style="margin-top:8px" data-shop>🛒 Boutique virtuelle (${VIRT.pts||0} pts)</button><button class="btn alt" style="margin-top:8px" data-vopen>📚 Collection virtuelle (${Object.keys(VIRT.q).filter(k=>!/^BT/.test(k)).length} cartes différentes)</button>`+(S.celeb===S.ext?celeb(S.ext):'')}
+return header()+`<h2>🎲 Mode hasard</h2><div class="panel">Ouvre des boosters virtuels de 6 cartes (comme un paquet japonais). Les cartes vont uniquement dans ta collection virtuelle, jamais dans ta vraie collection. <div class="sub">Taux estimés d'après des observations de la communauté (Bandai ne les publie pas).</div><div class="sub" style="margin-top:6px">⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h). Un duel compte comme une ouverture ; la boutique 🛒 n'a pas d'attente.</div></div>${serBar('margin:10px 0;text-align:left',S.ext)}${stockPanel()}${cdBtn('pack',true)}${cdBtn('box')}${cdBtn('case')}<button class="btn" style="margin-top:8px" data-dl>⚔️ Duel de boosters</button><button class="btn" style="margin-top:8px" data-shop>🛒 Boutique virtuelle (${VIRT.pts||0} pts)</button><button class="btn alt" style="margin-top:8px" data-vopen>📚 Collection virtuelle (${Object.keys(VIRT.q).filter(k=>!/^BT/.test(k)).length} cartes différentes)</button>`+(S.celeb===S.ext?celeb(S.ext):'')}
 const cid=id=>id.replace(/_ALT(\d?)/,(m,n)=>' Alt'+(n||''));
 function tradeData(){const prop=cards.filter(c=>c.own>0&&(X.sell[c.id]||c.own>3)).map(c=>({c,q:X.sell[c.id]?c.own:c.own-3})),seek=cards.filter(c=>c.want>0).map(c=>({c,q:c.want}));return {prop,seek}}
 function tradeText(){const {prop,seek}=tradeData(),f=l=>l.map(x=>`${cid(x.c.id)} ${x.c.name||''} ×${x.q}`).join('\n')||'—';return `🔁 Je propose :\n${f(prop)}\n\n🎯 Je cherche :\n${f(seek)}\n\n(L'Appel des Cartes · Fusion World JP)`}
@@ -6145,7 +6167,7 @@ function scanCov(){const s=new Set();if(X.game!=='ms')cards.forEach(c=>{if(CARDI
 function scanLearn(){const n=window.__scLearnN?window.__scLearnN():0;return n?'<div class="sub" id="sc-learn" style="margin-top:8px">🧠 '+n+' carte'+(n>1?'s':'')+' mémorisée'+(n>1?'s':'')+' par le scanner · <a href="#" data-sclear style="color:inherit;text-decoration:underline">Tout oublier</a></div>':'<div id="sc-learn"></div>'}
 function scan(){if(S.burst)return burstView();const mm=S.sc.match(/fb\s*0?(\d+)/i),ex=mm?'FB'+mm[1].padStart(2,'0'):'',n=parseInt(S.sc.replace(/^\s*fb\s*0?\d+[-\s]*/i,'').replace(/\D/g,''),10),m=(/bt/i.test(S.sc)||(X.game==='ms'&&!mm))?msScanFind(S.sc):n>=1?cards.filter(c=>(!ex||c.ext===ex)&&c.n===n):[];
 const last=S.last.slice(0,5).map(id=>cards.find(c=>c.id===id)).filter(Boolean);
-return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}<button class="btn" style="margin-bottom:8px;font-size:18px;padding:16px" data-cam>📷 Scanner avec la caméra</button><button class="btn alt" style="margin-bottom:8px" data-camfile>📸 Analyser une photo</button><button class="btn alt" style="margin-bottom:8px" data-binder>📖 Scanner une page de classeur</button><input type="file" id="camfile" accept="image/*" capture="environment" style="display:none"><input type="file" id="binfile" accept="image/*" style="display:none">${X.game==='ms'?'':serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>${X.game==='ms'?'Saisis le numéro lu en bas de la carte (toutes les séries Masters), ou précise la série : BT31-035':'Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035'}</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="${X.game==='ms'?'ex. 035 ou BT31-035':'ex. 035 ou FB01-035'}" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
+return header()+`<h2>Scanner</h2>${scGameBar()}${smBar()}<button class="btn" style="margin-bottom:4px;font-size:18px;padding:16px;width:100%" data-cam>📷 Scanner</button><div class="sub" style="margin:0 2px 10px;text-align:center">Carte, photo, vidéo ou page de classeur : tout se choisit dans le scanner.</div>${X.game==='ms'?'':serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="scan" style="aspect-ratio:auto;padding:14px;flex-direction:column;gap:8px"><div>${X.game==='ms'?'Saisis le numéro lu en bas de la carte (toutes les séries Masters), ou précise la série : BT31-035':'Saisis le numéro lu en bas de la carte (toutes les séries), ou précise la série : FB03-035'}</div><input id="sc" inputmode="numeric" autocomplete="off" placeholder="${X.game==='ms'?'ex. 035 ou BT31-035':'ex. 035 ou FB01-035'}" value="${S.sc.replace(/"/g,'')}" style="width:100%;padding:14px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:20px;text-align:center"></div>
 ${m.length?`<h2>Carte trouvée !</h2>`+m.map(c=>`<div class="panel" style="margin-bottom:10px;display:grid;grid-template-columns:80px 1fr;gap:12px;align-items:center">${art(c)}<div><b>${c.name}</b><br><span class="sub">${c.id} · ${c.ver}${c.rar?' · '+c.rar:''}</span><br><span class="sub">Déjà possédée : ${c.own}</span><button class="btn" style="margin-top:8px;padding:10px" data-add="${c.id}">Ajouter à ma collection</button></div></div>`).join(''):S.sc?'<p class="sub">Aucune carte avec ce numéro dans les séries.</p>':''}
 ${last.length?'<h2>Ajoutées à l’instant</h2><div class="grid">'+last.map(cardBtn).join('')+'</div>':''}
 <p class="sub">Cadre une carte : elle est reconnue à son illustration, sans connexion, pour les séries déjà illustrées (${scanCov()}). Pour les autres séries, saisis le numéro une fois (ou laisse le scanner le lire, connexion nécessaire) : la carte est mémorisée sur ton appareil et reconnue toute seule ensuite.</p>${scanLearn()}`}
@@ -7125,7 +7147,7 @@ const CSS=`.cs{position:fixed;inset:0;z-index:99999;background:#000;color:#fff;f
 .cs-panel{position:absolute;left:0;right:0;bottom:calc(74px + env(safe-area-inset-bottom,0px));padding:0 12px;display:flex;justify-content:center;z-index:6;pointer-events:none}
 .cs-card{position:relative;pointer-events:auto;width:100%;max-width:520px;background:rgba(20,14,14,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:14px;box-shadow:0 12px 44px rgba(0,0,0,.55);animation:csup .22s ease-out;max-height:calc(100vh - 160px);overflow:auto;overscroll-behavior:contain}
 @keyframes csup{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
-.cs-bar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:8px;padding:12px 12px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.8));z-index:6}
+.cs-bar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:5px;padding:12px 12px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.8));z-index:6}
 .cs-bb{flex:1;max-width:150px;min-width:0;height:54px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.1;font-family:inherit;padding:0 4px;white-space:nowrap}
 .cs-bb span{font-size:19px}.cs-bb[aria-pressed=true]{background:var(--ac,#E50914);border-color:var(--ac,#E50914);color:var(--on,#fff)}
 .cs-res{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;padding-right:26px}
@@ -7188,7 +7210,7 @@ async function open(opts){
   +'<div class="cs-top"><button class="cs-ib" data-a="close" aria-label="Fermer le scanner">✕</button><div class="t"><span class="cs-dot ld" id="cs-dot"></span><span class="cs-gm" role="group" aria-label="Choisir le jeu"><button data-a="game" data-g="fw" aria-pressed="'+(X.game!=='ms')+'">Fusion World</button><button data-a="game" data-g="ms" aria-pressed="'+(X.game==='ms')+'">Masters</button></span><span id="cs-est" style="font-weight:400;opacity:.7;font-size:12px"></span></div>'
   +'<button class="cs-ib" id="cs-torch" data-a="torch" aria-label="Lampe" style="display:none">🔦</button></div>'
   +'<div class="cs-vc" id="cs-vc"><button class="cs-ib" data-a="vpp" aria-label="Pause ou lecture">⏯</button><button class="cs-ib" data-a="vrs" aria-label="Tout afficher">⤢</button></div><div class="cs-hint" id="cs-hint"></div><div class="cs-panel" id="cs-panel"></div>'
-  +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique"><span>⚡</span>Auto</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
+  +'<div class="cs-bar"><button class="cs-bb" data-a="man"><span>⌨️</span>Numéro</button><button class="cs-bb" data-a="shot" id="cs-shotb"><span>📸</span>Photo</button><button class="cs-bb" data-a="gal"><span>🖼️</span>Galerie</button><button class="cs-bb" data-binder><span>📖</span>Page</button><button class="cs-bb" id="cs-auto" data-a="auto" aria-pressed="'+st.auto+'" aria-label="Ajout automatique"><span>⚡</span>Auto</button><button class="cs-bb" data-a="tray" id="cs-trayb"><span>✓</span><b id="cs-n" style="font-weight:600">0 ajoutée</b></button></div>'
   +'<input type="file" id="cs-file" accept="image/*" capture="environment" hidden><input type="file" id="cs-gal" accept="image/*" hidden><input type="file" id="cs-vid" accept="video/*" hidden>';
  document.body.appendChild(ov);alive=true;gEl=$q('#cs-g');svgQ=$q('#cs-poly');mediaEl(opts.bitmap?'photo':'cam');
  ov.addEventListener('click',e=>{e.stopPropagation();onClick(e)});ov.addEventListener('change',onFileChange);vzBind();addEventListener('resize',placeHint);
@@ -7537,7 +7559,7 @@ async function bScan(g){const me=++bGen,bmp=bov._bmp,cols=g[1],rows=g[2],W=bmp.w
   if(cand){b.dataset.id=c.id;b.setAttribute('aria-pressed',String(good));if(good)ok++}else b.disabled=true;
   L.appendChild(b);bUpd()}
  T.textContent=ok+' carte'+(ok>1?'s reconnues':' reconnue')+' sur '+cols*rows+' · touche une case pour corriger la sélection'}
-document.addEventListener('click',e=>{const t=e.target.closest('[data-binder]');if(!t)return;e.stopPropagation();e.preventDefault();const i=document.getElementById('binfile');if(i)i.click()},true);
+document.addEventListener('click',e=>{const t=e.target.closest('[data-binder]');if(!t)return;e.stopPropagation();e.preventDefault();let i=document.getElementById('binfile');if(!i){i=document.createElement('input');i.type='file';i.id='binfile';i.accept='image/*';i.setAttribute('capture','environment');i.style.display='none';document.body.appendChild(i)}i.click()},true);
 document.addEventListener('change',e=>{if(e.target&&e.target.id==='binfile'){const f=e.target.files[0];e.target.value='';binderFile(f)}},true);
 
 /* ---------- branchement sur l'appli ---------- */
@@ -7553,24 +7575,96 @@ window.__sc={SC,Eng,isLearned,snapCtx,learnFrom,evalPhoto,rotated,bestOf,open,cl
 </script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script><script>
 (function(){
 var BUILD_=typeof BUILD!=='undefined'?BUILD:'';
-/* Pour ajouter une mise à jour : copier une ligne [titre, détail] dans le bon groupe (les plus récentes en premier). */
+var SEEN_KEY='fb_clgseen';
+/* Pour ajouter une mise à jour : mettre une ligne [icône, titre, détail] tout en haut du groupe « Dernière version » (ou créer un nouveau groupe au-dessus). */
 var CHANGELOG=[
- {t:'Dernière version'+(BUILD_?' · '+BUILD_:''),i:[
-  ['Menu des mises à jour','Un bouton sur l’accueil ouvre cette liste de tout ce qui a été ajouté.'],
-  ['Prix Cardmarket automatiques','Les prix se mettent à jour tout seuls chaque nuit.'],
-  ['Accueil Fusion World + Masters','Une seule page d’accueil et des stats pour les deux jeux.']]}
+ {n:1,ic:'🆕',t:'Dernière version',tag:BUILD_,i:[
+  ['🛒','Stock de la boutique visible','Les boosters, displays et cases achetés restent affichés sur l’écran Mode hasard, avec un bouton « Ouvrir 1 ».'],
+  ['📷','Un seul bouton Scanner','Les 3 boutons du scanner sont fusionnés en un seul. Photo, galerie, vidéo et page de classeur se choisissent dans la barre du bas du scanner.'],
+  ['⚡','Onglet Scanner direct','Appuyer sur « Scanner » dans la barre du bas ouvre tout de suite la caméra.'],
+  ['📖','Page de classeur : caméra','Le bouton « 📖 Page » du scanner ouvre directement la caméra pour photographier la page.'],
+  ['🔄','Menu des mises à jour refait','Tout ce qui a changé dans l’appli, rangé par rubrique, avec une pastille « nouveau » tant que tu ne l’as pas ouvert.'],
+  ['💶','Prix Cardmarket automatiques','Les prix se mettent à jour tout seuls chaque nuit (sans recharger l’appli).'],
+  ['🏠','Accueil Fusion World + Masters','Une seule page d’accueil et des stats pour les deux jeux.'],
+  ['📊','Stats fusionnées','Fusion World et Masters comptés ensemble, avec le relevé du scouter, ton rang et les séries qui se chargent.'],
+  ['📦','Mes scellés','Tous les produits scellés (booster, display, case) des deux jeux dans une seule liste, avec leur prix.'],
+  ['⚙️','Réglages en pages','Un accueil des réglages et une page par sujet : compte, prix, affichage, sons, scanner, données, aide.']]},
+ {ic:'📷',t:'Ajouter des cartes',i:[
+  ['📷','Scanner 2','Reconnaît la carte par son illustration avec la caméra, lit aussi le numéro, et tout se calcule dans le téléphone.'],
+  ['🧠','Le scanner apprend','Une carte saisie à la main est mémorisée sur l’appareil ; tu peux tout réinitialiser dans les réglages.'],
+  ['🎞️','Scan par vidéo ou photo','Filme tes cartes (chacune n’est ajoutée qu’une fois) ou prends une photo ; une page de classeur entière se découpe en grille, une analyse par case.'],
+  ['⚡','Saisie en rafale','Ajoute vite beaucoup de cartes d’affilée avec le pavé de chiffres et le choix de la série.'],
+  ['🔎','Recherche de carte','Chercher une carte du catalogue et l’ajouter, avec ses versions (Normal, Alt Art).'],
+  ['➕','Menu « + »','« Que veux-tu faire ? » : des rubriques et des tuiles pour tout atteindre en un geste.']]},
+ {ic:'🔥',t:'Masters',i:[
+  ['🃏','Série d’origine Masters','Un onglet Masters dans la Collection, avec le choix Fusion World / Masters.'],
+  ['🎯','Cartes complètes','Fiche de carte, recherchées, doublons, stats et classeurs pour Masters comme pour Fusion World.'],
+  ['🔢','Scanner par codes','Saisie par codes Masters (bt22-9, bt1-5, bt31-12x2, bt22-9spr…).'],
+  ['🎲','Mode hasard Masters','Paquets de 12 cartes, display de 24 paquets, case de 12 displays.'],
+  ['💶','Ventes et impression','Carnet de ventes et liste à imprimer avec Masters (cartes BT et scellés BT).']]},
+ {ic:'🎁',t:'Ouvertures de boosters',i:[
+  ['🌀','Booster en vraie 3D','Ouverture en 3D maison (sans bibliothèque) : tu déchires le booster et les cartes sortent.'],
+  ['🎁','Display et case en 3D','On soulève le couvercle : les boosters (ou les displays) sortent un par un.'],
+  ['✨','Animations v2','Halo, rayons, ombres, déchirure du booster et révélation carte par carte.'],
+  ['🌊','Tout ouvrir','Une vague d’ouverture pour ouvrir d’un coup tout ce que tu as.'],
+  ['⏳','Temps d’attente','1 booster par jour (00 h), 1 display par semaine (lundi 00 h), 1 case par mois (le 1er, 00 h).']]},
+ {ic:'📒',t:'Collection et classeurs',i:[
+  ['📒','Classeurs v2','Emplacements et pages, glisser-déposer, modèles pour créer vite, anciens classeurs convertis, et proposition des nouvelles cartes du catalogue.'],
+  ['↕️','Tri de la collection','Par numéro, nom, exemplaires, ajout récent, prix ou évolution du prix, dans les deux sens ; ton choix est gardé.'],
+  ['🟦','Cases de collection','Les cartes s’affichent en cases, façon classeur.'],
+  ['🐉','Les 7 Dragon Balls','Collecte les boules et monte de rang : de Terrien à Ultra Instinct.'],
+  ['🎴','Devine la carte','Un détail de carte zoomé, 4 noms au choix, 10 cartes par partie.'],
+  ['🗓️','Prochaines séries','Ce qui arrive bientôt.'],
+  ['🗑️','Corbeille','Retrouve ce que tu as supprimé.'],
+  ['🖨️','Liste à imprimer','Choix du jeu et de la série, mêmes listes pour Fusion World et Masters.'],
+  ['📤','Carte de partage','Une image de ta collection à partager.']]},
+ {ic:'💰',t:'Prix et argent',i:[
+  ['📈','Tendance et moyennes','Prix Cardmarket avec la tendance et les moyennes 30 j / 7 j / 1 j (édition non anglaise pour FB01 à FB05).'],
+  ['📉','Courbe du prix d’une carte','L’historique de la tendance des prix, carte par carte.'],
+  ['🔔','Alertes de prix','Un seuil par carte recherchée ; l’appli te prévient à l’ouverture.'],
+  ['📦','Prix des scellés','Premier prix Cardmarket de chaque série pour booster, display et case.'],
+  ['💰','Budget et gestion','Résultat de gestion, stock, trésorerie et contrôle de cohérence.'],
+  ['💶','Carnet de ventes v2','Suivi de tes achats et ventes, avec Masters.'],
+  ['⚖️','Calculateur d’échange','Je donne / je reçois au prix Cardmarket (ou au tien), avec l’écart de valeur.'],
+  ['🔍','Vérifier une annonce','Rapport avant achat à partir des photos du vendeur : centrage, état, questions à poser. Tout est calculé dans le téléphone.']]},
+ {ic:'👥',t:'Compte, amis et communauté',i:[
+  ['☁️','Compte en ligne','Ta collection est sauvegardée et se synchronise entre tes appareils.'],
+  ['🪪','Profil public','Choisis ce que tu publies ; les autres peuvent voir ton profil.'],
+  ['💬','Messagerie entre amis','Discussions privées, messages non lus, notifications, vibration.'],
+  ['🗨️','Chat général v2','Temps réel, bulles groupées, réponses (glisse un message), réactions, @pseudos, cartes dans les messages, message épinglé, modération.'],
+  ['🟢','Personnes en ligne','Voir combien de joueurs sont connectés.'],
+  ['🏟️','Tournoi de la semaine','Un tirage par semaine et par série, avec classement.'],
+  ['🔁','Échanges','Une collection virtuelle pour préparer tes échanges avec tes amis.'],
+  ['🖼️','Photos partagées','Les photos de cartes sont partagées entre joueurs.']]},
+ {ic:'🎨',t:'Confort et réglages',i:[
+  ['🎨','Thèmes','14 couleurs au choix et mode clair / sombre.'],
+  ['🔊','Sons et retours','Sons et vibrations réglables.'],
+  ['📴','Hors ligne','L’appli s’installe et marche sans connexion.'],
+  ['💾','Mes données','Export de ta collection et gestion de tes données.'],
+  ['👋','Tutoriel','À revoir quand tu veux depuis l’aide.'],
+  ['💡','Idée ou bug','Boutons vers le Discord ; pour un bug, les infos techniques sont copiées pour que tu les colles.']]}
 ];
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function seen(){try{return localStorage.getItem(SEEN_KEY)===(BUILD_||'1')}catch(e){return false}}
+function mark(){var n=!seen();document.querySelectorAll('[data-clog]').forEach(function(b){if(b.classList.contains('new')!==n)b.classList.toggle('new',n)})}
 function close(){var o=document.getElementById('clg');if(o)o.remove();document.removeEventListener('keydown',key)}
 function key(e){if(e.key==='Escape')close()}
 function open(){close();
- var h='<div class="clg" id="clg"><div role="dialog" aria-label="Mises à jour"><h2>🆕 Mises à jour</h2><div class="sub">Tout ce qui a été ajouté à l’appli.</div>';
- CHANGELOG.forEach(function(g){h+='<h3>'+esc(g.t)+'</h3><ul>'+g.i.map(function(x){return '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>'}).join('')+'</ul>'});
- h+='<div class="clgb"><button type="button" class="btn alt" data-act="upd">🔄 Recharger l’appli</button><button type="button" class="btn" data-clgx>Fermer</button></div></div></div>';
- document.body.insertAdjacentHTML('beforeend',h);document.addEventListener('keydown',key)}
+ var tot=CHANGELOG.reduce(function(a,g){return a+g.i.length},0),nw=!seen();
+ var h='<div class="clg" id="clg"><div role="dialog" aria-label="Mises à jour"><div class="clgh"><h2>🆕 Mises à jour</h2><div class="sub">Tout ce qui a été ajouté ou changé dans l’appli'+(BUILD_?' · version du '+esc(BUILD_):'')+'.</div><div class="clgc"><span>'+tot+' nouveautés</span><span>'+CHANGELOG.length+' rubriques</span></div></div><div class="clgl">';
+ CHANGELOG.forEach(function(g,k){
+  h+='<details'+(k===0?' open':'')+'><summary><span class="gi">'+g.ic+'</span><span class="gt">'+esc(g.t)+'</span>'+(k===0&&nw?'<span class="gnew">NOUVEAU</span>':'')+'<span class="gn">'+g.i.length+'</span></summary><ul>'+g.i.map(function(x){return '<li><i aria-hidden="true">'+x[0]+'</i><div><b>'+esc(x[1])+'</b><span>'+esc(x[2])+'</span></div></li>'}).join('')+'</ul></details>'});
+ h+='</div><div class="clgb"><button type="button" class="btn alt" data-act="upd">🔄 Mettre à jour</button><button type="button" class="btn" data-clgx>Fermer</button></div></div></div>';
+ document.body.insertAdjacentHTML('beforeend',h);document.addEventListener('keydown',key);
+ try{localStorage.setItem(SEEN_KEY,BUILD_||'1')}catch(e){}mark()}
 document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;
  if(t.closest('[data-clog]')){e.preventDefault();open();return}
  if(t.closest('[data-clgx]')||t.id==='clg')close()},true);
+var mt=0;try{new MutationObserver(function(){clearTimeout(mt);mt=setTimeout(mark,60)}).observe(document.body,{childList:true,subtree:true})}catch(e){}
+mark();
+/* appui sur l'onglet « Scanner » : on ouvre directement le scanner (caméra) */
+document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;var b=t.closest('#nav [data-go="scan"]');if(!b||document.querySelector('.cs'))return;
+ setTimeout(function(){if(document.querySelector('.cs'))return;var c=document.querySelector('main [data-cam], #app [data-cam], [data-cam]:not(#nav [data-cam])');if(c)c.click()},150)},true);
 })();
 </script>
 </body>

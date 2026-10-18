@@ -1237,6 +1237,21 @@ html[data-gcs="4"] .cs-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5
 .hmgw .hmgs{max-width:calc(100% - 118px)}
 .onl span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .hmgw .hmgs{max-width:calc(100% - 130px)}
+.hmgr{position:absolute;top:6px;right:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.hmgr .onl{position:static}
+.hmgu{font:700 13px/1 Barlow,system-ui,sans-serif;color:var(--tx);cursor:pointer;padding:8px 12px;border-radius:14px;white-space:nowrap;background:color-mix(in srgb,var(--ac) 22%,transparent);border:1px solid color-mix(in srgb,var(--ac) 60%,transparent);-webkit-tap-highlight-color:transparent}
+.hmgu:active{transform:scale(.96)}
+.clg{position:fixed;inset:0;background:rgba(5,7,25,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;z-index:60}
+.clg>div{background:var(--bg);color:var(--tx);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));max-height:88%;overflow:auto;overscroll-behavior:contain;box-shadow:0 -12px 40px -10px rgba(0,0,0,.6);animation:shup .2s cubic-bezier(.2,.9,.25,1)}
+.clg h2{margin:0 0 4px;font:400 26px/1.1 Big Shoulders Display,Barlow,sans-serif}
+.clg h3{margin:16px 0 6px;font-size:14px;color:var(--ac);text-transform:uppercase;letter-spacing:.04em}
+.clg ul{margin:0;padding:0;list-style:none}
+.clg li{padding:9px 0;border-bottom:1px solid var(--ln);font-size:14px;line-height:1.35}
+.clg li b{display:block;font-size:15px}
+.clg li span{color:var(--mu,inherit);opacity:.8}
+.clg .clgb{display:flex;gap:8px;margin-top:16px}
+.clg .clgb .btn{flex:1;padding:12px}
+.hmgw .hmgs{max-width:calc(100% - 175px)}
 /* Devine la carte */
 .dvp{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 16px}
 .dvh{font-size:44px;line-height:1}.dvp h3{margin:0;font-size:24px}.dvp .sub{max-width:34ch;margin:0}
@@ -6088,7 +6103,7 @@ function cfSheet(){return S.cf?`<div class="sheet" data-close><div role="dialog"
 const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
 const greet=()=>{const h=new Date().getHours(),g=h>=5&&h<12?'Bonjour':h<18&&h>=12?'Bon après-midi':h>=18&&h<23?'Bonsoir':'Encore debout ?',N=cards.filter(c=>c.ext===S.ext),o=N.filter(c=>c.own>0).length,p=pct(o,N.length),k=Math.floor(Date.now()/864e5)%3,t=(X.act[today()]||{}).c||0;
  const m=p===0?['Ta série '+S.ext+' attend ses premières cartes.','Une carte à la fois : tout commence ici.','Prêt à lancer la chasse à la série '+S.ext+' ?'][k]:p<25?['Beau début sur '+S.ext+' : '+o+' cartes déjà !','Ça se remplit : '+o+' / '+N.length+' sur '+S.ext+'.','Continue, '+S.ext+' commence à prendre forme.'][k]:p<50?['Presque la moitié de '+S.ext+' ! Plus que '+(N.length-o)+' cartes.','Tu avances bien sur '+S.ext+' : '+p+' %.','Plus de '+p+' % de '+S.ext+', ça roule.'][k]:p<75?['Plus de la moitié de '+S.ext+' est à toi !','Le plus dur est fait sur '+S.ext+' : '+p+' %.','Tu as passé la moitié de '+S.ext+', bravo.'][k]:p<100?['Il ne te manque que '+(N.length-o)+' carte'+(N.length-o>1?'s':'')+' pour finir '+S.ext+' !','Dernière ligne droite sur '+S.ext+' : '+p+' %.','Tu y es presque : plus que '+(N.length-o)+' pour '+S.ext+'.'][k]:'Série '+S.ext+' complète, félicitations ! 🏆';
- return `<div class="hmgw"><div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div><span class="onl" data-onl role="status"${onlTxt()?'':' hidden'}>${onlTxt()}</span></div>`};
+ return `<div class="hmgw"><div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div><div class="hmgr"><span class="onl" data-onl role="status"${onlTxt()?'':' hidden'}>${onlTxt()}</span><button type="button" class="hmgu" data-clog aria-haspopup="dialog" aria-label="Voir toutes les mises à jour">🆕 Mises à jour</button></div></div>`};
 const homePanel=()=>{const t=X.act[today()]||{c:0,b:0},v=cards.filter(c=>c.ext===S.ext).reduce((a,c)=>a+c.own*pxv(c),0),vt=cards.reduce((a,c)=>a+c.own*pxv(c),0);return `<div class="panel" style="margin-bottom:10px">${greet()}<div class="sub">Valeur ${S.ext} : <b>${eur(v)}</b> · toutes séries : <b>${eur(vt)}</b> ${MKON?'(Cardmarket + tes prix)':'(selon tes prix)'}</div></div>`};
 /* ===== Tri de la collection ===== */
 const CSORTS=[['num','Numéro',1],['name','Nom',1],['copies','Exemplaires',-1],['recent','Récentes',-1],['price','Prix',-1],['trend','Évolution du prix',-1]],CSORTL={num:'numéro',name:'nom',copies:'exemplaires',recent:'ajout récent',price:'prix',trend:'évolution'};
@@ -7535,5 +7550,28 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
 window.__sc={SC,Eng,isLearned,snapCtx,learnFrom,evalPhoto,rotated,bestOf,open,close,st,ocrParse,numberImage,ocrPrep,ocrRead,NZ,OCRV,fromFile,getState:()=>({mode:st.mode,lock:st.lock,sess:st.sess,eng:Eng.state,auto:st.auto,stick:st.stick,free:st.free,photo:!!photo})};
 
 })();
-</script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
+</script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script><script>
+(function(){
+var BUILD_=typeof BUILD!=='undefined'?BUILD:'';
+/* Pour ajouter une mise à jour : copier une ligne [titre, détail] dans le bon groupe (les plus récentes en premier). */
+var CHANGELOG=[
+ {t:'Dernière version'+(BUILD_?' · '+BUILD_:''),i:[
+  ['Menu des mises à jour','Un bouton sur l’accueil ouvre cette liste de tout ce qui a été ajouté.'],
+  ['Prix Cardmarket automatiques','Les prix se mettent à jour tout seuls chaque nuit.'],
+  ['Accueil Fusion World + Masters','Une seule page d’accueil et des stats pour les deux jeux.']]}
+];
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function close(){var o=document.getElementById('clg');if(o)o.remove();document.removeEventListener('keydown',key)}
+function key(e){if(e.key==='Escape')close()}
+function open(){close();
+ var h='<div class="clg" id="clg"><div role="dialog" aria-label="Mises à jour"><h2>🆕 Mises à jour</h2><div class="sub">Tout ce qui a été ajouté à l’appli.</div>';
+ CHANGELOG.forEach(function(g){h+='<h3>'+esc(g.t)+'</h3><ul>'+g.i.map(function(x){return '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>'}).join('')+'</ul>'});
+ h+='<div class="clgb"><button type="button" class="btn alt" data-act="upd">🔄 Recharger l’appli</button><button type="button" class="btn" data-clgx>Fermer</button></div></div></div>';
+ document.body.insertAdjacentHTML('beforeend',h);document.addEventListener('keydown',key)}
+document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-clog]')){e.preventDefault();open();return}
+ if(t.closest('[data-clgx]')||t.id==='clg')close()},true);
+})();
+</script>
+</body>
 </html>

@@ -1560,21 +1560,6 @@ body.gcopen #toast{z-index:70;bottom:auto;top:calc(env(safe-area-inset-top,0px) 
 nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* fond décoratif qui défile avec la page */
 body::before{position:absolute!important}
-
-/* choix de la série Masters : vignettes avec une illustration de la série */
-.mspl{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex-direction:initial}
-.mspi{position:relative;display:block!important;height:136px;padding:0!important;border-radius:16px;overflow:hidden;border:2px solid rgba(255,255,255,.08)!important;background:radial-gradient(120% 90% at 80% 0%,rgba(var(--c),.55),rgba(var(--c),.12) 55%,#120d0e 100%)!important;color:#fff!important;text-align:left;cursor:pointer;isolation:isolate}
-.mspi .msa{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;transform:scale(1.35);transform-origin:50% 20%;z-index:-2}
-.mspi::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.35) 38%,rgba(10,6,7,.94) 78%)}
-.mspi .mst{position:absolute;left:11px;right:11px;bottom:9px}
-.mspi .msid{display:block;font:italic 800 24px/1 'Barlow Semi Condensed',Barlow,sans-serif;letter-spacing:.01em;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)}
-.mspi .msn{display:block;margin-top:2px;font:600 12.5px/1.2 Barlow,sans-serif;color:rgba(255,255,255,.88);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mspi .msb{display:block;height:4px;margin-top:7px;border-radius:2px;background:rgba(255,255,255,.18);overflow:hidden}
-.mspi .msb i{display:block;height:100%;border-radius:2px;background:rgb(var(--c))}
-.mspi small{display:block!important;margin-top:4px!important;color:rgba(255,255,255,.7)!important;font-size:11px!important}
-.mspi[aria-pressed=true]{border-color:var(--gold,#F5B82E)!important;box-shadow:0 0 0 2px rgba(245,184,46,.25)}
-.mspi .msok{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--gold,#F5B82E);color:#1a1200;display:grid;place-items:center;font:800 14px/1 Barlow,sans-serif}
-.mspi:active{transform:scale(.98)}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3142,9 +3127,18 @@ function msSealTile(set,t){const id=set.id+'-'+t[0],q=msOwn(id),art=t[3]?msImg(s
  return `<div class="tile"><button type="button" class="card" aria-label="${t[1]}" style="width:100%"><div class="art r-U ${q?'':'miss'}">${art}${q>1?`<span class="qty">×${q}</span>`:''}</div><div class="meta">${t[1]}<br><span>${t[2]}</span>${msCm(id)?`<br><b class="pxt">${eur(msCm(id))}</b>`:''}</div></button><button class="adj m" data-ms="dec" data-id="${id}" aria-label="Retirer">−</button><button class="adj p" data-ms="inc" data-id="${id}" aria-label="Ajouter">+</button></div>`}
 function msSealV(set){const tot=msSealQ(set).reduce((a,b)=>a+b,0);
  return `<div class="panel">Produits scellés de la série : <b>${tot}</b> possédé${tot>1?'s':''} non ouvert${tot>1?'s':''}</div><div class="grid">${MS_SEAL.map(t=>msSealTile(set,t)).join('')}</div><p class="sub">Les produits scellés de ${set.id} sont comptés à part de tes cartes.</p>`}
-function msPickArt(s){const R={SCR:6,GDR:6,SLR:5,SPR:4,SR:3,R:1};let b=null,bv=-1;for(const c of s.c){const im=MS_CI[c[0]];if(!im)continue;const v=(R[c[2]]||0)+(/-(SPR|SLR|GDR)$/.test(c[0])?2:0);if(v>bv){bv=v;b=im}}return b}
-function msPickSheet(){if(!S.mspick)return'';const cur=msCur().id;
- return `<div class="sheet" data-msclose><div role="dialog" aria-label="Choisir la série"><h2 style="margin-top:0">Choisir la série</h2><div class="mspl">${MS_SETS.map(s=>{const st=msStat(s),im=msPickArt(s),c=MS_COL[s.id]||'229,9,20',on=s.id===cur;return `<button type="button" class="mspi${st.o?' got':''}" data-msset="${s.id}" aria-pressed="${on}" aria-label="${s.id} ${esc(s.n)} : ${st.o} sur ${st.n} cartes" style="--c:${c}">${im?`<img class="msa" src="${im}" alt="" loading="lazy" decoding="async" draggable="false">`:''}<span class="mst"><b class="msid">${s.id}</b><span class="msn">${esc(s.n)}</span><span class="msb"><i style="width:${Math.max(st.p,st.o?3:0)}%"></i></span><small>${st.o} / ${st.n} · ${st.p} %</small></span>${on?'<span class="msok" aria-hidden="true">✓</span>':''}</button>`}).join('')}</div><button class="btn" style="margin-top:14px" data-msclose>Fermer</button></div></div>`}
+function msPickArt(s){const p=['BT01','BT22','BT31'].includes(s.id)&&MS_IMG[s.id]&&MS_IMG[s.id].pk;if(p)return p;const R={SCR:6,GDR:6,SLR:5,SPR:4,SR:3,R:1};let b=null,bv=-1;for(const c of s.c){const im=MS_CI[c[0]];if(!im)continue;const v=(R[c[2]]||0)+(/-(SPR|SLR|GDR)$/.test(c[0])?2:0);if(v>bv){bv=v;b=im}}return b}
+function msPickSheet(){if(!S.mspick)return'';
+ const cur=msCur().id;let L=MS_SETS.map((s,i)=>({s,i,st:msStat(s)})),O=0,N=0;L.forEach(y=>{O+=y.st.o;N+=y.st.n});
+ if(SRS==='todo'){const g=y=>y.st.n&&y.st.o>=y.st.n?2:y.st.o>0?0:1;L.sort((a,b)=>g(a)-g(b)||(g(a)===0?(b.st.o/b.st.n)-(a.st.o/a.st.n):0)||a.i-b.i)}
+ const seg=(v,t)=>`<button data-sr="sort" data-v="${v}" aria-pressed="${SRS===v}">${t}</button>`;
+ return `<div class="sheet sr-sh" data-msclose><div role="dialog" aria-modal="true" aria-label="Choisir la série" class="sr-d">`
+  +`<div class="sr-hd"><i class="sr-gb"></i><div><h2>Choisir la série</h2><div class="sub">Ma collection Masters : <b>${O}</b> / ${N} cartes · ${pct(O,N)} %</div></div><button class="sr-x" data-msclose aria-label="Fermer">✕</button></div>`
+  +`<div class="sr-seg" role="group" aria-label="Ordre des séries">${seg('num','Par numéro')}${seg('todo','À compléter')}</div>`
+  +`<div class="sr-g">${L.map(({s,st},i)=>{const on=s.id===cur,done=st.n>0&&st.o>=st.n,cr=MS_COL[s.id]||'229,9,20',im=msPickArt(s);
+    return `<button class="sr-t${on?' cur':''}${done?' done':''}" data-msset="${s.id}" data-srx="${s.id}" style="--c:rgb(${cr});--cr:${cr};--p:${st.p};--i:${i}" aria-label="${s.id} ${esc(s.n)}, ${st.o} carte${st.o>1?'s':''} sur ${st.n}${on?', série actuelle':''}"${on?' aria-current="true"':''}>`
+    +`<span class="sr-im"><span class="sr-pk"${im?` style="background-image:url(${im})"`:''}></span><i class="sr-lk"></i><i class="sr-dk"></i>${st.p>0&&st.p<100?'<i class="sr-sf"></i>':''}${done?'<em class="sr-ok">✓</em>':''}${st.p>0&&st.p<100?`<span class="sr-pc">${st.p}<small>%</small></span>`:''}</span>`
+    +`<b class="sr-cd">${s.id}</b><span class="sr-nm">${esc(s.n)}</span><span class="sr-ct"><b>${st.o}</b>/${st.n}</span></button>`}).join('')}</div></div></div>`}
 function msV(){const set=msCur(),all=set.c,kinds=[...new Set(all.filter(msIsSpr).map(msKind))].join(' / ')||'SPR',base=all.filter(c=>!msIsSpr(c)),spr=all.filter(msIsSpr),
  ob=base.filter(c=>msOwn(c[0])>0).length,os=spr.filter(c=>msOwn(c[0])>0).length,pc=base.length?Math.round(100*ob/base.length):0,fo=S.mso||'',fv=S.msv||'',q=(S.msq||'').trim().toLowerCase();
  const l=all.filter(c=>(!q||(c[1]+' '+c[0]).toLowerCase().includes(q))&&(!fo||(fo==='y'?msOwn(c[0])>0:msOwn(c[0])===0))&&(!fv||(fv==='SPR')===msIsSpr(c))),

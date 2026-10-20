@@ -1804,7 +1804,7 @@ function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[
  const bAmt=buys.map(b=>(parseInt(b.q)||0)*finN(b.p)).filter(v=>v>0),dupBuy=exp.filter(x=>finN(x.a)>0&&bAmt.some(v=>Math.abs(v-finN(x.a))<0.005));
  const sk2={},dupSale=[];sales.forEach(x=>{const k=[x.card,x.price,x.buy,x.q,x.who].join('|'),t=Date.parse(x.d)||0;(sk2[k]=sk2[k]||[]).push(t)});
  Object.keys(sk2).forEach(k=>{const a=sk2[k].sort((p,q)=>p-q);for(let i=1;i<a.length;i++)if(a[i]-a[i-1]<120000){dupSale.push(k.split('|')[0]);break}});
- const marge=ca-cogs,result=marge-opex,cashOut=buyTot+cashExp,cash=ca-cashOut;
+ const buyNet=buyTot-outCost,marge=ca-cogs,result=marge-opex,cashOut=buyNet+cashExp,cash=ca-cashOut;   /* stock retiré ou ouvert : il disparaît, son achat ne compte plus (ni trésorerie, ni stock, ni résultat) */
  const warn=[];
  if(nUnk)warn.push(nUnk+' vente'+(nUnk>1?'s':'')+' sans prix d’achat ('+finR2(unkCA)+' € de ventes) : coût inconnu, non déduit du résultat.');
  if(unk)warn.push(unk+' produit'+(unk>1?'s':'')+' en stock sans achat enregistré : valeur inconnue, non comptée dans le stock.');
@@ -1818,11 +1818,11 @@ function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[
  checks.push({ok:!uIss,t:'Unités',d:bU+' achetée'+plural(bU,'','s')+' = '+stU+' en stock + '+soU+' vendue'+plural(soU,'','s')+' + '+outUnits+' sortie'+plural(outUnits,'','s')+' sans vente (ouverte'+plural(opU,'','s')+' : '+opU+', retirée'+plural(adU,'','s')+' à la main : '+adU+(xU?', non expliquée'+plural(xU,'','s')+' : '+xU:'')+')'});
  checks.push({ok:near(kbK,svK+cgK+ocK)&&!cIss,t:'Achats de stock',d:finFmt(finR2(kbK))+' payés = '+finFmt(finR2(svK))+' en stock + '+finFmt(finR2(cgK))+' de coût des ventes + '+finFmt(finR2(ocK))+' sorti sans vente'+(outUnk?' (hors '+outUnk+' produit'+plural(outUnk,'','s')+' au coût inconnu)':'')});
  checks.push({ok:near(sv,partsSum),t:'Valeur du stock',d:finFmt(finR2(sv))+' = Σ quantité restante × coût d’achat unitaire ('+su+' unité'+plural(su,'','s')+')'});
- checks.push({ok:near(cash,ca-buyTot-cashExp)&&!dupBuy.length,t:'Trésorerie',d:finFmt(finR2(ca))+' encaissés − '+finFmt(finR2(buyTot))+' d’achats de stock (payés à l’achat, pas relancés à la vente) − '+finFmt(finR2(cashExp))+' de frais = '+finFmt(finR2(cash))});
+ checks.push({ok:near(cash,ca-buyNet-cashExp)&&!dupBuy.length,t:'Trésorerie',d:finFmt(finR2(ca))+' encaissés − '+finFmt(finR2(buyNet))+' d’achats de stock (hors stock retiré) − '+finFmt(finR2(cashExp))+' de frais = '+finFmt(finR2(cash))});
  checks.push({ok:near(marge,rl+unkCA)&&near(opex+expStock,cashExp)&&!nUnk,t:'Résultat',d:finFmt(finR2(ca))+' − '+finFmt(finR2(cogs))+' = marge '+finFmt(finR2(marge))+' ; − '+finFmt(finR2(opex))+' de frais = '+finFmt(finR2(result))+' (achats de stock non déduits)'});
  return {ca:finR2(ca),cogs:finR2(cogs),marge:finR2(marge),opex:finR2(opex),result:finR2(result),
   stockValue:finR2(sv),stockUnits:su,stockUnknown:unk,rows,
-  cashIn:finR2(ca),cashOut:finR2(cashOut),cash:finR2(cash),stockBuys:finR2(buyTot),expStock:finR2(expStock),
+  cashIn:finR2(ca),cashOut:finR2(cashOut),cash:finR2(cash),stockBuys:finR2(buyNet),expStock:finR2(expStock),
   cogsSeal:finR2(cogsSeal),outCost:finR2(outCost),outUnits,outUnknown:outUnk,resultAfterOut:finR2(result-outCost),
   ledger,issues,checks,
   nSales:sales.length,nUnknown:nUnk,unknownCA:finR2(unkCA),dup,dupBuy,dupSale,warn}}
@@ -5782,7 +5782,7 @@ function trade(){try{msBindInit()}catch(e){}
   :`<div class="tv-empty">${S.sx?'Aucune vente pour '+esc(scope)+'.':'Aucune vente pour l’instant. Touche « Nouvelle vente » pour enregistrer la première : ton résultat se calcule tout seul.'}</div>`;
  /* stock : chaque produit se vend ou se retire (ouvert, donné, perdu…) ; un achat noté par erreur se supprime */
  const rmSheet=r=>{const k=r.e+'|'+r.t,q=Math.min(TVRQ,r.own),lots=X.buys.filter(x=>x.ext===r.e&&x.type===r.t).sort((a,b)=>a.d<b.d?1:-1);
-  return `<div class="panel vnf tv-form tv-rm"><div class="tv-fh"><b>Retirer du stock</b><button type="button" class="tv-x" data-tvsk="rm" data-tvk="${k}" aria-label="Fermer">✕</button></div><div class="sub">${esc(tvSealNm(r.t))} ${esc(r.e)} · ×${r.own} en stock. Sans vente, son coût d’achat est noté à part dans le bilan : il ne baisse pas ton résultat.</div>
+  return `<div class="panel vnf tv-form tv-rm"><div class="tv-fh"><b>Retirer du stock</b><button type="button" class="tv-x" data-tvsk="rm" data-tvk="${k}" aria-label="Fermer">✕</button></div><div class="sub">${esc(tvSealNm(r.t))} ${esc(r.e)} · ×${r.own} en stock. Ce que tu retires disparaît simplement : il ne compte plus nulle part (ni résultat, ni trésorerie, ni stock).</div>
 <div class="tv-seg" role="group" aria-label="Raison"><button type="button" aria-pressed="${TVRR==='op'}" data-tvrr="op"><span>📂 Ouvert</span></button><button type="button" aria-pressed="${TVRR!=='op'}" data-tvrr="adj"><span>🗑️ Autre</span></button></div><div class="sub">« Autre » : donné, perdu, abîmé ou erreur de compte.</div>
 <div class="vnqt"><span>Quantité</span><div class="stepper"><button type="button" data-tvrq="-1" aria-label="Moins">➖</button><b id="tv-rq">${q}</b><button type="button" data-tvrq="1" aria-label="Plus">➕</button>${r.own>1?`<button type="button" class="chip" data-tvrq="all">Tout (×${r.own})</button>`:''}</div></div>
 <button type="button" class="btn" data-tvrm="${k}"><span id="tv-rml">Retirer ×${q} du stock</span></button>
@@ -5804,7 +5804,7 @@ ${lots.length?`<div class="tv-lots"><b>Achats enregistrés</b><div class="sub">U
    :`<div class="tv-empty">Aucune dépense. Ajoute ici ce qui fait tourner ton activité : abonnement, matériel, fournitures.</div>`);
  /* bilan : compte de résultat, trésorerie, points à vérifier, contrôle, remise à zéro */
  const bilanTab=`<div class="panel tv-st"><b class="tv-sh">Compte de résultat</b>${L('Chiffre d’affaires',eur(F.ca))}${L('Coût des produits vendus','− '+eur(F.cogs))}${L('Marge brute',eur(F.marge),'tv-t','color:'+tvCol(F.marge))}${L('Dépenses de fonctionnement'+(S.sx?' <small>non réparties par série</small>':''),'− '+eur(F.opex))}${L('Résultat de gestion',eur(F.result),'tv-t tv-big','color:'+tvCol(F.result))}`
-  +(F.outUnits||F.outCost?L('🔓 Sortis du stock sans vente <small>×'+F.outUnits+' ouverts ou retirés · coût d’achat, hors résultat de gestion</small>',F.outUnknown?'coût inconnu':eur(F.outCost),'tv-t')+L('Résultat après ces sorties <small>pour information</small>',eur(F.resultAfterOut),'','color:'+tvCol(F.resultAfterOut)):'')+`</div>`
+  +`</div>`
   +`<div class="panel tv-st"><b class="tv-sh">Trésorerie <small>séparée du résultat</small></b>${L('Argent encaissé',eur(F.cashIn))}${L('Argent dépensé <small>stock '+eur(F.stockBuys)+' + frais '+eur(F.cashOut-F.stockBuys)+'</small>','− '+eur(F.cashOut))}${L('Solde de trésorerie <small>argent disponible</small>',eur(F.cash),'tv-t','color:'+tvCol(F.cash))}${L('📦 Stock possédé <small>au prix d’achat, ×'+F.stockUnits+' · ce n’est pas de l’argent</small>',eur(F.stockValue),'tv-t')}</div>`
   +(nW?`<div class="panel tv-st tv-w"><b class="tv-sh">À vérifier</b>${todo.length?todo.map(w=>`<p>⚠️ ${esc(w)}</p>`).join(''):'<p>⚠️ Le contrôle de cohérence signale un écart : ouvre-le ci-dessous.</p>'}</div>`:'')
   +`<details class="panel tv-st tv-ck" id="tv-ck"${TVCK?' open':''}><summary><b class="tv-sh">🧮 Contrôle de cohérence</b><span class="${ok?'ok':'ko'}">${ok?'✅ tout concorde':'⚠️ à vérifier'}</span></summary><div class="tv-ckb">${finCheckHTML(F)}</div></details>`

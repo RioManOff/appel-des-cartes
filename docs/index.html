@@ -1670,6 +1670,24 @@ body::before{position:absolute!important}
 .tv-ckb .tr{font-size:13px}
 .tv-rz .btn{margin-top:12px}
 .tv-r:focus-visible,.tv-kp button:focus-visible,.tv-tabs button:focus-visible,.tv-warn:focus-visible,.tv-ck summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tv-sk{cursor:default;align-items:flex-start}
+.tv-sk:active{background:none}
+.tv-sk.on{background:color-mix(in srgb,var(--ac) 9%,transparent)}
+.tv-sk .tv-rr{padding-top:2px}
+.tv-ska{display:flex;gap:9px;margin-top:7px;padding-left:3px}
+.tv-sb{min-height:34px;padding:4px 13px;border:1px solid var(--ln);border-radius:2px;background:var(--bg);color:var(--tx);transform:skewX(var(--sk));font:700 14px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em}
+.tv-sb.rm{color:var(--mu)}
+.tv-sb[aria-expanded="true"]{background:var(--gold);border-color:var(--gold);color:#1A0E10}
+.tv-rm{margin:8px 0 10px}
+.tv-rm .stepper{flex-wrap:wrap}
+.tv-rm .stepper .chip{width:auto;height:auto;min-height:40px;font-size:14px;margin-left:6px}
+.tv-lots{margin-top:6px;padding-top:10px;border-top:1px solid var(--ln)}
+.tv-lots>b{font-size:14px}
+.tv-lot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--ln);font-size:13.5px;font-variant-numeric:tabular-nums}
+.tv-tag.del{color:var(--tv-neg);min-height:34px;padding:4px 12px}
+.tv-tag.del.cf{background:var(--tv-neg);border-color:var(--tv-neg);color:#fff}
+.tv-sb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* ===== fin carnet v2 ===== */
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -5720,12 +5738,23 @@ function finCheckHTML(F){const nm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1],lg=F.le
   +(lg.length?`<div class="sub" style="margin-top:6px">${lg.map(l=>esc(l.e+' · '+nm(l.t))+' : acheté '+l.bought+' · en stock '+l.ownIn+' · vendu '+l.sold+' · sorti sans vente '+Math.max(0,l.out)+(l.opened||l.adj?' (ouvert '+l.opened+', retiré à la main '+l.adj+')':'')+(l.out>0&&l.outCost!==null?' · coût sorti '+finFmt(l.outCost):'')).join('<br>')}</div>`:'')}
 /* ===== CARNET-V2:START — écran « Carnet de ventes » : affichage seulement, les calculs restent ceux de FIN-CALC (finView / finCalc) =====
    TVS : formulaire « Nouvelle vente » ouvert · TVT : onglet (v ventes, s stock, d dépenses, b bilan) · TVF : formulaire de l'onglet ('buy' | 'exp') · TVCK : contrôle déplié */
-let TVS=0,TVT='v',TVF='',TVCK=false;
+let TVS=0,TVT='v',TVF='',TVCK=false,TVSK='sell',TVRQ=1,TVRR='op',TVBDC='';   /* TVSK : panneau du produit de stock ouvert (sell | rm) · TVRQ / TVRR : quantité et raison du retrait · TVBDC : achat à confirmer avant suppression */
 const tvSg=v=>(v>0?'+':'')+eur(v),
  tvCol=v=>v>=0?'var(--ok)':'var(--tv-neg)',
  tvDay=d=>{const t=new Date(d);return isNaN(t)?'':t.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})},
  tvMon=d=>{const t=new Date(d);if(isNaN(t))return ['0','Date inconnue'];const l=t.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});return [t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0'),l.charAt(0).toUpperCase()+l.slice(1)]},
- tvSealNm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1];
+ tvSealNm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1],
+ tvOwn=(e,t)=>vnIsMs(e)?msOwn(e+'-'+t):((SEAL[e+'-'+t]||{}).own||0);
+/* ajoute (n > 0) ou enlève (n < 0) des unités au stock d'un produit scellé (Fusion World : SEAL, Masters : X.ms) */
+function tvStkAdd(e,t,n){n=parseInt(n)||0;if(!n)return;if(vnIsMs(e)){const k=e+'-'+t;msSet(k,msOwn(k)+n)}else{const s=sl(e,t);s.own=Math.max(0,s.own+n);saveSeal()}}
+/* retrait sans vente : 'op' = ouvert (X.opened), sinon retiré à la main (X.adj) ; FIN-CALC compte ces unités en « sorties sans vente » */
+function tvRemove(e,t,q,why){const own=tvOwn(e,t);if(own<=0)return 0;q=Math.max(1,Math.min(own,parseInt(q)||1));tvStkAdd(e,t,-q);const k=e+'-'+t;
+ if(why==='op'){if(!X.opened)X.opened={};X.opened[k]=(parseInt(X.opened[k])||0)+q}else{if(!X.adj)X.adj={};finAdjAdd(X.adj,k,q)}
+ saveX();return q}
+/* achat noté par erreur : il part à la corbeille et ses unités sortent du stock (remises si on le restaure) */
+function tvBuyDel(id){const b=X.buys.find(x=>x.id===id);if(!b)return null;const so=Math.min(Math.max(0,parseInt(b.q)||0),tvOwn(b.ext,b.type));
+ toTrash('buy','Achat '+b.ext+' '+b.type+' ×'+b.q+' ('+fmtD(b.d)+')',Object.assign({},b,{_so:so}));
+ X.buys=X.buys.filter(x=>x.id!==id);tvStkAdd(b.ext,b.type,-so);saveX();return so}
 /* courbe du résultat : chaque vente (prix − achat) et chaque dépense de fonctionnement, dans l'ordre des dates ; le dernier point = résultat de gestion */
 function tvSpark(SL,EX,res){const ev=SL.map(x=>[Date.parse(x.d)||0,(nb(x.price)-nb(x.buy))*vnQ(x)]).concat(EX.map(x=>[Date.parse(x.d)||0,-finN(x.a)]));
  if(ev.length<2)return '';ev.sort((a,b)=>a[0]-b[0]);let c=0;
@@ -5751,12 +5780,19 @@ function trade(){try{msBindInit()}catch(e){}
  srt.forEach(x=>{const [k,l]=tvMon(x.d);let g=grp[grp.length-1];if(!g||g.k!==k){g={k,l,ca:0,m:0,rows:[]};grp.push(g)}const q=vnQ(x);g.ca+=nb(x.price)*q;g.m+=(nb(x.price)-nb(x.buy))*q;g.rows.push(x)});
  const salesTab=srt.length?grp.map(g=>`<div class="tv-mh"><b>${esc(g.l)}</b><span>${eur(g.ca)} · marge <em style="color:${tvCol(g.m)}">${tvSg(g.m)}</em></span></div>${g.rows.map(x=>S.sed===x.id?edit(x):row(x)).join('')}`).join('')+'<div class="tv-hint">Touche une vente pour la modifier ou la supprimer.</div>'
   :`<div class="tv-empty">${S.sx?'Aucune vente pour '+esc(scope)+'.':'Aucune vente pour l’instant. Touche « Nouvelle vente » pour enregistrer la première : ton résultat se calcule tout seul.'}</div>`;
- /* stock : touche un produit pour le vendre */
+ /* stock : chaque produit se vend ou se retire (ouvert, donné, perdu…) ; un achat noté par erreur se supprime */
+ const rmSheet=r=>{const k=r.e+'|'+r.t,q=Math.min(TVRQ,r.own),lots=X.buys.filter(x=>x.ext===r.e&&x.type===r.t).sort((a,b)=>a.d<b.d?1:-1);
+  return `<div class="panel vnf tv-form tv-rm"><div class="tv-fh"><b>Retirer du stock</b><button type="button" class="tv-x" data-tvsk="rm" data-tvk="${k}" aria-label="Fermer">✕</button></div><div class="sub">${esc(tvSealNm(r.t))} ${esc(r.e)} · ×${r.own} en stock. Sans vente, son coût d’achat est noté à part dans le bilan : il ne baisse pas ton résultat.</div>
+<div class="tv-seg" role="group" aria-label="Raison"><button type="button" aria-pressed="${TVRR==='op'}" data-tvrr="op"><span>📂 Ouvert</span></button><button type="button" aria-pressed="${TVRR!=='op'}" data-tvrr="adj"><span>🗑️ Autre</span></button></div><div class="sub">« Autre » : donné, perdu, abîmé ou erreur de compte.</div>
+<div class="vnqt"><span>Quantité</span><div class="stepper"><button type="button" data-tvrq="-1" aria-label="Moins">➖</button><b id="tv-rq">${q}</b><button type="button" data-tvrq="1" aria-label="Plus">➕</button>${r.own>1?`<button type="button" class="chip" data-tvrq="all">Tout (×${r.own})</button>`:''}</div></div>
+<button type="button" class="btn" data-tvrm="${k}"><span id="tv-rml">Retirer ×${q} du stock</span></button>
+${lots.length?`<div class="tv-lots"><b>Achats enregistrés</b><div class="sub">Un achat noté par erreur ? Supprime-le : ses unités sortent aussi du stock (récupérable dans la corbeille).</div>${lots.map(x=>`<div class="tv-lot"><span>${fmtD(x.d)} · ×${x.q}${String(x.p||'')!==''?' à '+eur(nb(x.p)):''}</span><button type="button" class="tv-tag del${TVBDC===x.id?' cf':''}" data-tvbd="${x.id}">${TVBDC===x.id?'Confirmer ?':'Supprimer'}</button></div>`).join('')}</div>`:''}</div>`};
  const fbSel=S.sx&&S.sx!=='MS'?S.sx:'';
  const buyForm=`<div class="panel vnf tv-form"><div class="tv-fh"><b>Achat de stock</b><button type="button" class="tv-x" data-tvf="" aria-label="Fermer">✕</button></div><div class="sub">Displays, boosters, cartes à revendre : ils entrent en stock et ne baissent ton résultat qu’une fois vendus.</div><div class="vnrow"><label>Série<select class="fi" id="fb-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===fbSel?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}">${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label><label>Produit<select class="fi" id="fb-t">${SEALT.map(t=>`<option value="${t[0]}"${t[0]==='display'?' selected':''}>${t[1]}</option>`).join('')}</select></label></div><div class="vnrow"><label>Quantité<input class="fi" id="fb-q" inputmode="numeric" value="1"></label><label>Prix d'achat unitaire (€)<input class="fi" id="fb-p" inputmode="decimal" placeholder="0,00"></label></div><label>Date d’achat<input class="fi" id="fb-d" type="date" value="${today()}"></label><button type="button" class="btn" data-fbuy><span>✓ Enregistrer l’achat</span></button></div>`;
  const stockTab=(TVF==='buy'?buyForm:`<button type="button" class="btn alt tv-add" data-tvf="buy"><span>＋ Acheter du stock</span></button>`)
   +(F.rows.length?`<div class="tv-sum"><b>${eur(F.stockValue)}</b> de stock au prix d’achat · ${F.stockUnits} unité${F.stockUnits>1?'s':''}</div>`
-   +F.rows.map(r=>{const k=r.e+'|'+r.t,unk=r.unknown||r.noPrice;return `<div class="tv-r${STK===k?' on':''}" role="button" tabindex="0" data-stkpick="${k}" aria-expanded="${STK===k}"><span class="vnth">${vnSArt(r.e,r.t,12)}</span><span class="tv-ri"><b>${esc(tvSealNm(r.t))} ${esc(r.e)} <em>×${r.own}</em></b><small>${esc(vnSerName(r.e))}${unk?'':' · '+finUnitTxt(r)}</small></span><span class="tv-rr">${unk?'<b class="tv-unk">coût inconnu</b>':`<b>${eur(r.val)}</b>`}<small class="tv-go">${STK===k?'Fermer ▲':'Vendre ›'}</small></span></div>`+(STK===k?stkSheet(r):'')}).join('')
+   +F.rows.map(r=>{const k=r.e+'|'+r.t,unk=r.unknown||r.noPrice,op=STK===k,b=(m,l)=>`<button type="button" class="tv-sb${m==='rm'?' rm':''}" data-tvsk="${m}" data-tvk="${k}" aria-expanded="${op&&TVSK===m}">${l}</button>`;
+    return `<div class="tv-r tv-sk${op?' on':''}"><span class="vnth">${vnSArt(r.e,r.t,12)}</span><span class="tv-ri"><b>${esc(tvSealNm(r.t))} ${esc(r.e)} <em>×${r.own}</em></b><small>${esc(vnSerName(r.e))}${unk?'':' · '+finUnitTxt(r)}</small><span class="tv-ska">${b('sell','💶 Vendre')}${b('rm','📤 Retirer')}</span></span><span class="tv-rr">${unk?'<b class="tv-unk">coût inconnu</b>':`<b>${eur(r.val)}</b>`}</span></div>`+(op?(TVSK==='rm'?rmSheet(r):stkSheet(r)):'')}).join('')
    :`<div class="tv-empty">Aucun produit scellé en stock${S.sx?' pour '+esc(scope):''}. Enregistre tes achats (displays, boosters…) : ils ne baissent ton résultat qu’une fois vendus.</div>`);
  /* dépenses */
  const opAll=X.exp.filter(x=>finExpT(x)==='op').reduce((a,x)=>a+finN(x.a),0),stAll=X.exp.filter(x=>finExpT(x)==='stock').reduce((a,x)=>a+finN(x.a),0);
@@ -5797,8 +5833,14 @@ ${tvSpark(SL,EXop,F.result)}
 <div class="tv-tabs" id="tv-tabs" role="tablist">${tb('v','Ventes',SL.length)}${tb('s','Stock',F.rows.length)}${tb('d','Dépenses',X.exp.length)}${tb('b','Bilan','')}</div>
 <div class="tv-pane" role="tabpanel">${tab==='v'?salesTab:tab==='s'?stockTab:tab==='d'?expTab:bilanTab}</div>`}
 /* boutons propres au carnet : onglets et ouverture / fermeture des formulaires */
-document.addEventListener('click',e=>{const t=e.target.closest('[data-tvt],[data-tvf]');if(!t)return;const d=t.dataset;
- if(d.tvt!==undefined){TVT=d.tvt;TVF='';STK='';S.sed=null}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-tvt],[data-tvf],[data-tvsk],[data-tvrq],[data-tvrr],[data-tvrm],[data-tvbd]');if(!t)return;const d=t.dataset;
+ if(d.tvrq!==undefined){const [pe,pt]=STK.split('|'),own=tvOwn(pe,pt);TVRQ=d.tvrq==='all'?own:Math.max(1,Math.min(own,TVRQ+(+d.tvrq)));const n=$('#tv-rq'),l=$('#tv-rml');if(n)n.textContent=TVRQ;if(l)l.textContent='Retirer ×'+TVRQ+' du stock';return}
+ if(d.tvrr!==undefined){TVRR=d.tvrr;document.querySelectorAll('[data-tvrr]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tvrr===TVRR)));return}
+ if(d.tvbd!==undefined&&TVBDC!==d.tvbd){TVBDC=d.tvbd;t.textContent='Confirmer ?';t.classList.add('cf');return}
+ if(d.tvsk!==undefined){TVBDC='';if(STK===d.tvk&&TVSK===d.tvsk)STK='';else{STK=d.tvk;TVSK=d.tvsk;TVRQ=1;TVRR='op'}}
+ else if(d.tvrm!==undefined){const [pe,pt]=d.tvrm.split('|'),n=tvRemove(pe,pt,TVRQ,TVRR);STK='';toast(n?'Retiré du stock : ×'+n+' '+tvSealNm(pt)+' '+pe+(TVRR==='op'?' (ouvert)':''):'Plus rien en stock')}
+ else if(d.tvbd!==undefined){TVBDC='';const so=tvBuyDel(d.tvbd);STK='';toast(so===null?'Achat introuvable':'Achat supprimé'+(so?' · ×'+so+' retiré'+(so>1?'s':'')+' du stock':'')+' · récupérable dans la corbeille')}
+ else if(d.tvt!==undefined){TVT=d.tvt;TVF='';STK='';S.sed=null}
  else if(d.tvf==='sale'){TVS=1}
  else if(d.tvf==='-'){TVS=0;vnReset()}
  else{TVF=d.tvf;STK='';if(d.tvf==='buy')TVT='s';else if(d.tvf==='exp')TVT='d'}
@@ -6801,7 +6843,7 @@ else if(d.shop!==undefined){S.shop=true;window.scrollTo(0,0)}
 else if(d.shback!==undefined){S.shop=false;window.scrollTo(0,0)}
 else if(d.shsell!==undefined){let g=0,n=0;cards.forEach(c=>{const q=VIRT.q[c.id]||0;if(q>1){g+=(q-1)*ptsOf(c);n+=q-1;VIRT.q[c.id]=1}});VIRT.pts=(VIRT.pts||0)+g;saveV();toast(n?n+' doublons vendus : +'+g+' pts':'Aucun doublon')}
 else if(d.shbuy){const n=+d.shbuy,cost=n===1?BPRICE:DPRICE;if((VIRT.pts||0)<cost){toast('Pas assez de points');return}VIRT.pts-=cost;saveV();S.shop=false;S.celeb=null;S.op=newOp(n===1?'pack':'box',true);window.scrollTo(0,0)}
-else if(d.trs){const k=X.trash.findIndex(x=>x.id===d.trs);if(k>=0){const t=X.trash[k];if(t.t==='binder'){if(!BIND.find(b=>b.id===t.data.id))BIND.unshift(bkNorm(t.data));saveB()}else if(t.t==='sale')X.sales.unshift(t.data);else if(t.t==='exp')X.exp.unshift(t.data);else if(t.t==='buy')X.buys.unshift(t.data);X.trash.splice(k,1);saveX();toast('Restauré ✓')}}
+else if(d.trs){const k=X.trash.findIndex(x=>x.id===d.trs);if(k>=0){const t=X.trash[k];if(t.t==='binder'){if(!BIND.find(b=>b.id===t.data.id))BIND.unshift(bkNorm(t.data));saveB()}else if(t.t==='sale')X.sales.unshift(t.data);else if(t.t==='exp')X.exp.unshift(t.data);else if(t.t==='buy'){const bd=Object.assign({},t.data),so=Math.max(0,parseInt(bd._so)||0);delete bd._so;X.buys.unshift(bd);if(so)tvStkAdd(bd.ext,bd.type,so)}X.trash.splice(k,1);saveX();toast('Restauré ✓')}}
 else if(d.trd){X.trash=X.trash.filter(x=>x.id!==d.trd);saveX()}
 else if(d.trempty!==undefined){S.cf={msg:'Vider définitivement la corbeille ?',act:'emptytrash'}}
 else if(d.share!==undefined){S.menu=false;shareOpen()}

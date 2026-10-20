@@ -1560,6 +1560,116 @@ body.gcopen #toast{z-index:70;bottom:auto;top:calc(env(safe-area-inset-top,0px) 
 nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* fond décoratif qui défile avec la page */
 body::before{position:absolute!important}
+
+/* ===== Carnet de ventes v2 ===== */
+:root{--tv-neg:#FF5A5A;--tv-warn:#E8A020}
+:root[data-theme="light"]{--tv-neg:#C62828;--tv-warn:#9A5B00}
+/* barre des séries : une seule ligne qui défile */
+.tv-sx{display:flex;gap:7px;overflow-x:auto;margin:0 -16px 10px;padding:3px 20px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tv-sx::-webkit-scrollbar{display:none}
+.tv-sx .chip{flex:none;margin:0;min-height:34px;padding:5px 13px;font-size:14px}
+/* résultat de gestion : le ticket */
+.tv-hero{padding:13px 16px 12px}
+.tv-hs{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:28px;margin-bottom:4px;font:700 16px/1.2 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;color:var(--tx)}
+.tv-l{display:flex;align-items:baseline;gap:6px;padding:4px 0;font-size:14px;line-height:1.3}
+.tv-l>span{min-width:0}
+.tv-l>i{flex:1 1 12px;min-width:12px;border-bottom:1px dotted color-mix(in srgb,var(--mu) 60%,transparent);transform:translateY(-4px)}
+.tv-l>b{flex:none;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+.tv-l small{color:var(--mu);font-size:12px;font-weight:500}
+.tv-l>span small{display:block;margin-top:1px;line-height:1.3}
+.tv-res{display:flex;align-items:center;flex-wrap:wrap;gap:0 10px;margin:9px -16px 8px;padding:9px 32px 9px 16px;background:#000;border-top:3px solid var(--gold);color:#D9C2AE;clip-path:polygon(0 0,100% 0,calc(100% - 20px) 100%,0 100%)}
+:root[data-theme="light"] .tv-res{background:#150A0C}
+.tv-res span{font:700 15px/1.15 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.04em}
+.tv-res b{margin-left:auto;font:italic 900 42px/1.02 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.01em;font-variant-numeric:tabular-nums;color:#4FD58C;white-space:nowrap}
+.tv-res b.n{color:#FF6B6B}
+.tv-sp svg{display:block;width:100%;height:auto;overflow:visible}
+.tv-z{stroke:var(--mu);stroke-opacity:.5;stroke-dasharray:3 4;stroke-width:1}
+.tv-spd{display:flex;justify-content:space-between;gap:8px;margin-top:3px;font-size:11.5px;color:var(--mu)}
+.tv-kp{display:grid;grid-template-columns:1fr 1fr;margin-top:10px;border-top:1px solid var(--ln)}
+.tv-kp button{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 0 2px;border:0;background:none;color:var(--tx);text-align:left}
+.tv-kp button+button{padding-left:14px;border-left:1px solid var(--ln)}
+.tv-kp small{font-size:12px;color:var(--mu)}
+.tv-kp small::after{content:' ›'}
+.tv-kp b{font:italic 900 23px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.01em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tv-warn{flex:none;margin-left:auto;padding:5px 10px;min-height:30px;border:1px solid color-mix(in srgb,var(--tv-warn) 60%,var(--ln));border-radius:2px;background:color-mix(in srgb,var(--tv-warn) 14%,transparent);color:var(--tx);font:600 12.5px/1.2 Barlow,sans-serif;letter-spacing:0}
+.tv-new{margin:4px 0 18px}
+.tv-form.tv-sale{margin:4px 0 16px}
+/* onglets */
+.tv-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:24px 3px 6px;scroll-margin-top:86px}
+.tv-tabs button{min-width:0;min-height:44px;padding:0 3px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--tx);transform:skewX(var(--sk));font:700 15px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em}
+.tv-tabs button>span{display:inline-block;transform:skewX(9deg);white-space:nowrap}
+.tv-tabs i{font-style:normal;font-weight:600;font-size:12.5px;color:var(--mu)}
+.tv-tabs button[aria-selected="true"]{background:var(--gold);border-color:var(--gold);color:#1A0E10;box-shadow:3px 3px 0 var(--ac)}
+.tv-tabs button[aria-selected="true"] i{color:#1A0E10;opacity:.7}
+.tv-pane{min-height:calc(100vh - 150px);min-height:calc(100svh - 150px)}
+/* listes */
+.tv-mh{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 10px;margin:20px 0 0;padding-bottom:6px;border-bottom:2px solid var(--gold)}
+.tv-mh:first-child{margin-top:12px}
+.tv-mh b{font:italic 900 21px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;white-space:nowrap}
+.tv-mh span{font-size:12.5px;color:var(--mu);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tv-mh em{font-style:normal;font-weight:700}
+.tv-r{display:flex;align-items:center;gap:11px;padding:10px 4px;border-bottom:1px solid var(--ln);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tv-r:active{background:color-mix(in srgb,var(--tx) 6%,transparent)}
+.tv-r.on{background:color-mix(in srgb,var(--ac) 9%,transparent);border-bottom-color:transparent}
+.tv-r .vnth{width:36px}
+.tv-ri{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.25}
+.tv-ri b{font-size:14.5px;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.tv-ri em{font-style:normal;color:var(--ok);font-weight:700}
+.tv-ri small{font-size:12px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-rr{flex:none;max-width:48%;display:flex;flex-direction:column;align-items:flex-end;gap:3px;text-align:right}
+.tv-rr b{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tv-rr small{font-size:12px;color:var(--mu);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tv-rr b.tv-unk{color:var(--tv-warn);font-size:13px;font-weight:600}
+.tv-rr .tv-go{color:var(--ac);font-weight:600}
+.tv-sum{margin:16px 0 2px;font-size:13px;color:var(--mu)}
+.tv-sum b{color:var(--tx);font-size:15px;font-variant-numeric:tabular-nums}
+.tv-hint{margin:12px 0 0;text-align:center;font-size:12.5px;color:var(--mu)}
+.tv-empty{padding:26px 10px;text-align:center;color:var(--mu);font-size:14px;line-height:1.5}
+.tv-note{margin-top:12px;font-size:12.5px;line-height:1.4;color:var(--mu)}
+.tv-add{margin-top:10px}
+.tv-ex{cursor:default}
+.tv-ex:active{background:none}
+.tv-ex .tv-rr{gap:5px}
+.tv-tag{min-height:28px;padding:3px 8px;border:1px solid var(--ln);border-radius:2px;background:var(--bg);color:var(--mu);font:600 11.5px Barlow,sans-serif;white-space:nowrap}
+.tv-tag.st{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,var(--ln))}
+.tv-x{flex:none;width:38px;height:38px;display:grid;place-items:center;padding:0;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);font-size:15px}
+/* formulaires */
+.tv-form{margin-top:14px}
+.tv-fh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tv-fh b{font:italic 900 23px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em}
+.tv-seg{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 4px}
+.tv-seg button{min-height:42px;border:1px solid var(--ln);border-radius:2px;background:var(--bg);color:var(--tx);transform:skewX(var(--sk));font:700 15px 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em}
+.tv-seg button>span{display:inline-block;transform:skewX(9deg)}
+.tv-seg button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#1A0E10}
+.tv-form .btn{margin-top:4px}
+.tv-form,.tv-pane .vnf{grid-template-columns:minmax(0,1fr)}
+.tv-form .vnrow,.tv-pane .vnrow{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tv-form .fi,.tv-pane .fi{min-width:0}
+.tv-r.on+.vnf>b:first-child{font:italic 900 21px/1.1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em}
+.tv-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.tv-2 .btn{margin:0!important;min-height:48px;font-size:17px}
+.tv-2 .btn.tv-del{color:var(--tv-neg)}
+.tv-edit{margin:10px 0}
+/* bilan */
+.tv-st{margin-top:14px}
+.tv-sh{display:block;margin-bottom:6px;font:italic 900 21px/1.1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em}
+.tv-sh small{margin-left:6px;font:500 12px Barlow,sans-serif;letter-spacing:0;color:var(--mu)}
+.tv-t{margin-top:3px;padding-top:7px;border-top:1px solid var(--ln)}
+.tv-t>span{font-weight:600}
+.tv-big>span{font-size:15px}
+.tv-big>b{font:italic 900 27px/1 'Big Shoulders Display',Impact,sans-serif}
+.tv-w p{margin:7px 0 0;font-size:13px;line-height:1.45}
+.tv-ck summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none}
+.tv-ck summary::-webkit-details-marker{display:none}
+.tv-ck summary .tv-sh{margin:0;font-size:19px}
+.tv-ck summary span{flex:none;font-size:13px;font-weight:600;white-space:nowrap}
+.tv-ck summary span.ko{color:var(--tv-warn)}
+.tv-ck summary span::after{content:' ▾';color:var(--mu)}
+.tv-ck[open] summary span::after{content:' ▴'}
+.tv-ckb>div:first-child{display:none}
+.tv-ckb .tr{font-size:13px}
+.tv-rz .btn{margin-top:12px}
+.tv-r:focus-visible,.tv-kp button:focus-visible,.tv-tabs button:focus-visible,.tv-warn:focus-visible,.tv-ck summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -5608,13 +5718,64 @@ function finCheckHTML(F){const nm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1],lg=F.le
   +F.checks.map(c=>`<div class="tr"><span>${c.ok?'✅':'⚠️'} <b>${esc(c.t)}</b> <small>${esc(c.d)}</small></span></div>`).join('')
   +(F.issues.length?`<div class="sub" style="margin-top:6px">${F.issues.map(i=>'⚠️ '+esc(i)).join('<br>')}</div>`:'')
   +(lg.length?`<div class="sub" style="margin-top:6px">${lg.map(l=>esc(l.e+' · '+nm(l.t))+' : acheté '+l.bought+' · en stock '+l.ownIn+' · vendu '+l.sold+' · sorti sans vente '+Math.max(0,l.out)+(l.opened||l.adj?' (ouvert '+l.opened+', retiré à la main '+l.adj+')':'')+(l.out>0&&l.outCost!==null?' · coût sorti '+finFmt(l.outCost):'')).join('<br>')}</div>`:'')}
-function trade(){try{msBindInit()}catch(e){}const SL=X.sales.filter(x=>!S.sx||(S.sx==='MS'?/^BT/.test(x.ext||''):x.ext===S.sx)),F=finView(S.sx),dep=X.exp.map(x=>({k:'exp',id:x.id,d:x.d,l:x.l,a:finN(x.a),t:finExpT(x)})).sort((a,b)=>a.d<b.d?1:-1),pv=vnPv(),ncol=v=>v>=0?'var(--ok)':'#ff5a5a';
- const row=x=>{const q=vnQ(x),c=x.cid&&(cards.find(k=>k.id===x.cid)||MS_ALL.find(k=>k.id===x.cid)),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu;
-  return `<div class="vnr${x.id===VNNEW?' vnnew':''}">${c?`<span class="vnth sm">${art({...c,own:1})}</span>`:x.kind==='seal'?`<span class="vnth sm">${vnSArt(x.se,x.st,12)}</span>`:''}<span class="vnin"><b>${esc(x.card)}${q>1?` <span class="vnq">×${q}</span>`:''}</b><small>${fmtD(x.d)}${x.who?' → '+esc(x.who):''}${x.kind==='seal'?' · 📦 scellé':''}</small><small>${hasB?'achat '+eur(bu)+' · ':(x.price?'<span style="color:#e8a020">coût inconnu</span> · ':'')}vente <b>${x.price?eur(pr):'—'}</b></small></span><span class="vnrr">${x.price&&hasB?`<b style="color:${ncol(pf)}">${pf>=0?'+':''}${eur(pf)}</b>`:''}<span><button class="chip" data-sedit="${x.id}" aria-label="Modifier">✏️</button><button class="chip" data-sdel="${x.id}" aria-label="Supprimer">✕</button></span></span></div>`},
- edit=x=>`<div class="panel vnf" style="margin-top:10px;border-left:6px solid var(--ac)"><b>✏️ Modifier la vente</b><label>Carte<input class="fi" id="se-c" value="${esc(x.card)}"></label><label>Acheteur<input class="fi" id="se-w" value="${esc(x.who||'')}"></label><div class="vnrow"><label>Prix d'achat (€ / ${x.kind==='seal'?'unité':'carte'})<input class="fi" id="se-a" inputmode="decimal" value="${esc(String(x.buy||''))}"></label><label>Prix de vente (€ / ${x.kind==='seal'?'unité':'carte'})<input class="fi" id="se-p" inputmode="decimal" value="${esc(String(x.price||''))}"></label></div><div class="vnrow"><label>Quantité<input class="fi" id="se-q" inputmode="numeric" value="${vnQ(x)}"></label><label>Date<input class="fi" id="se-d" type="date" value="${esc(String(x.d).slice(0,10))}"></label></div><button class="btn" data-ssave="${x.id}">✓ Enregistrer</button><button class="btn alt" data-scancel>Annuler</button></div>`;
- return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2><div class="row"><button class="chip" aria-pressed="${S.sx===''}" data-sxf="">Toutes</button>${EXTS.map(x=>`<button class="chip" aria-pressed="${S.sx===x[0]}" data-sxf="${x[0]}">${x[0]}</button>`).join('')}<button class="chip" aria-pressed="${S.sx==='MS'}" data-sxf="MS">Masters</button></div>
-<div class="panel vnf" style="margin-top:10px"><b>🆕 Nouvelle vente</b>
-<div class="row" style="margin:0"><button type="button" class="chip" aria-pressed="${VN.k!=='s'}" data-vnk="c">🃏 Carte</button><button type="button" class="chip" aria-pressed="${VN.k==='s'}" data-vnk="s">📦 Scellé</button></div>
+/* ===== CARNET-V2:START — écran « Carnet de ventes » : affichage seulement, les calculs restent ceux de FIN-CALC (finView / finCalc) =====
+   TVS : formulaire « Nouvelle vente » ouvert · TVT : onglet (v ventes, s stock, d dépenses, b bilan) · TVF : formulaire de l'onglet ('buy' | 'exp') · TVCK : contrôle déplié */
+let TVS=0,TVT='v',TVF='',TVCK=false;
+const tvSg=v=>(v>0?'+':'')+eur(v),
+ tvCol=v=>v>=0?'var(--ok)':'var(--tv-neg)',
+ tvDay=d=>{const t=new Date(d);return isNaN(t)?'':t.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})},
+ tvMon=d=>{const t=new Date(d);if(isNaN(t))return ['0','Date inconnue'];const l=t.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});return [t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0'),l.charAt(0).toUpperCase()+l.slice(1)]},
+ tvSealNm=t=>(SEALT.find(x=>x[0]===t)||[0,t])[1];
+/* courbe du résultat : chaque vente (prix − achat) et chaque dépense de fonctionnement, dans l'ordre des dates ; le dernier point = résultat de gestion */
+function tvSpark(SL,EX,res){const ev=SL.map(x=>[Date.parse(x.d)||0,(nb(x.price)-nb(x.buy))*vnQ(x)]).concat(EX.map(x=>[Date.parse(x.d)||0,-finN(x.a)]));
+ if(ev.length<2)return '';ev.sort((a,b)=>a[0]-b[0]);let c=0;
+ const p=ev.map(e=>c+=e[1]),mn=Math.min(0,...p),mx=Math.max(0,...p),rg=(mx-mn)||1,W=320,H=46,X=i=>(3+i*(W-6)/(p.length-1)).toFixed(1),Y=v=>(H-4-(v-mn)/rg*(H-8)).toFixed(1),
+  pts=p.map((v,i)=>X(i)+','+Y(v)).join(' '),z=Y(0),col=tvCol(res);
+ return `<div class="tv-sp"><svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><linearGradient id="tv-gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:${col};stop-opacity:.32"/><stop offset="1" style="stop-color:${col};stop-opacity:0"/></linearGradient></defs><line x1="0" x2="${W}" y1="${z}" y2="${z}" class="tv-z"/><polygon points="${X(0)},${z} ${pts} ${X(p.length-1)},${z}" fill="url(#tv-gr)"/><polyline points="${pts}" fill="none" style="stroke:${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${X(p.length-1)}" cy="${Y(p[p.length-1])}" r="3.5" style="fill:${col}"/></svg><div class="tv-spd"><span>${tvDay(ev[0][0])}</span><span>Évolution du résultat</span><span>${tvDay(ev[ev.length-1][0])}</span></div></div>`}
+/* après chaque affichage : la série choisie reste visible dans la barre des séries */
+function tvAfter(){if(S.tab!=='trade')return;const r=document.getElementById('tv-sx'),b=r&&r.querySelector('[aria-pressed="true"]');if(!b)return;
+ const x=b.offsetLeft-r.offsetLeft;if(x<r.scrollLeft+8||x+b.offsetWidth>r.scrollLeft+r.clientWidth-8)r.scrollLeft=Math.max(0,x-(r.clientWidth-b.offsetWidth)/2)}
+function trade(){try{msBindInit()}catch(e){}
+ const SL=X.sales.filter(x=>!S.sx||(S.sx==='MS'?/^BT/.test(x.ext||''):x.ext===S.sx)),F=finView(S.sx),EXop=S.sx?[]:X.exp.filter(x=>finExpT(x)==='op'),
+  dep=X.exp.map(x=>({id:x.id,d:x.d,l:x.l,a:finN(x.a),t:finExpT(x)})).sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:0),pv=vnPv(),
+  ok=F.checks.every(c=>c.ok)&&!F.issues.length,todo=F.warn.concat(F.issues),nW=todo.length||(ok?0:1),
+  scope=!S.sx?'Toutes séries':S.sx==='MS'?'Masters':S.sx+' · '+vnSerName(S.sx),
+  L=(a,b,c,st)=>`<div class="tv-l${c?' '+c:''}"><span>${a}</span><i></i><b${st?` style="${st}"`:''}>${b}</b></div>`;
+ /* une vente : touche la ligne pour la modifier ou la supprimer */
+ const row=x=>{const q=vnQ(x),c=x.cid&&(cards.find(k=>k.id===x.cid)||MS_ALL.find(k=>k.id===x.cid)),pr=nb(x.price)*q,bu=nb(x.buy)*q,hasB=x.buy!==undefined&&String(x.buy)!=='',pf=pr-bu,
+   th=c?art({...c,own:1}):x.kind==='seal'?vnSArt(x.se,x.st,12):'<div class="art r-U">💶</div>';
+  return `<div class="tv-r${x.id===VNNEW?' vnnew':''}" role="button" tabindex="0" data-sedit="${x.id}"><span class="vnth">${th}</span><span class="tv-ri"><b>${esc(x.card)}${q>1?` <em>×${q}</em>`:''}</b><small>${tvDay(x.d)}${x.who?' · '+esc(x.who):''}${hasB?' · achat '+eur(bu):''}</small></span><span class="tv-rr">${x.price&&hasB?`<b style="color:${tvCol(pf)}">${tvSg(pf)}</b>`:x.price?'<b class="tv-unk">coût inconnu</b>':'<b>—</b>'}<small>${x.price?(q>1?q+' × '+eur(nb(x.price)):'vendu '+eur(pr)):'prix non noté'}</small></span></div>`},
+  edit=x=>{const u=x.kind==='seal'?'unité':'carte';return `<div class="panel vnf tv-form tv-edit"><div class="tv-fh"><b>Modifier la vente</b><button type="button" class="tv-x" data-scancel aria-label="Fermer sans enregistrer">✕</button></div><label>${x.kind==='seal'?'Produit':'Carte'}<input class="fi" id="se-c" value="${esc(x.card)}"></label><label>Acheteur<input class="fi" id="se-w" value="${esc(x.who||'')}" placeholder="facultatif"></label><div class="vnrow"><label>Prix d'achat (€ / ${u})<input class="fi" id="se-a" inputmode="decimal" placeholder="0,00" value="${esc(String(x.buy||''))}"></label><label>Prix de vente (€ / ${u})<input class="fi" id="se-p" inputmode="decimal" placeholder="0,00" value="${esc(String(x.price||''))}"></label></div><div class="vnrow"><label>Quantité<input class="fi" id="se-q" inputmode="numeric" value="${vnQ(x)}"></label><label>Date<input class="fi" id="se-d" type="date" value="${esc(String(x.d).slice(0,10))}"></label></div><button type="button" class="btn" data-ssave="${x.id}"><span>✓ Enregistrer</span></button><div class="tv-2"><button type="button" class="btn alt" data-scancel><span>Annuler</span></button><button type="button" class="btn alt tv-del" data-sdel="${x.id}"><span>🗑️ Supprimer</span></button></div></div>`};
+ /* ventes du plus récent au plus ancien, rangées par mois */
+ const srt=SL.map((x,i)=>({x,i,t:Date.parse(x.d)||0})).sort((a,b)=>b.t-a.t||a.i-b.i).map(o=>o.x),grp=[];
+ srt.forEach(x=>{const [k,l]=tvMon(x.d);let g=grp[grp.length-1];if(!g||g.k!==k){g={k,l,ca:0,m:0,rows:[]};grp.push(g)}const q=vnQ(x);g.ca+=nb(x.price)*q;g.m+=(nb(x.price)-nb(x.buy))*q;g.rows.push(x)});
+ const salesTab=srt.length?grp.map(g=>`<div class="tv-mh"><b>${esc(g.l)}</b><span>${eur(g.ca)} · marge <em style="color:${tvCol(g.m)}">${tvSg(g.m)}</em></span></div>${g.rows.map(x=>S.sed===x.id?edit(x):row(x)).join('')}`).join('')+'<div class="tv-hint">Touche une vente pour la modifier ou la supprimer.</div>'
+  :`<div class="tv-empty">${S.sx?'Aucune vente pour '+esc(scope)+'.':'Aucune vente pour l’instant. Touche « Nouvelle vente » pour enregistrer la première : ton résultat se calcule tout seul.'}</div>`;
+ /* stock : touche un produit pour le vendre */
+ const fbSel=S.sx&&S.sx!=='MS'?S.sx:'';
+ const buyForm=`<div class="panel vnf tv-form"><div class="tv-fh"><b>Achat de stock</b><button type="button" class="tv-x" data-tvf="" aria-label="Fermer">✕</button></div><div class="sub">Displays, boosters, cartes à revendre : ils entrent en stock et ne baissent ton résultat qu’une fois vendus.</div><div class="vnrow"><label>Série<select class="fi" id="fb-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}"${x[0]===fbSel?' selected':''}>${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}">${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label><label>Produit<select class="fi" id="fb-t">${SEALT.map(t=>`<option value="${t[0]}"${t[0]==='display'?' selected':''}>${t[1]}</option>`).join('')}</select></label></div><div class="vnrow"><label>Quantité<input class="fi" id="fb-q" inputmode="numeric" value="1"></label><label>Prix d'achat unitaire (€)<input class="fi" id="fb-p" inputmode="decimal" placeholder="0,00"></label></div><label>Date d’achat<input class="fi" id="fb-d" type="date" value="${today()}"></label><button type="button" class="btn" data-fbuy><span>✓ Enregistrer l’achat</span></button></div>`;
+ const stockTab=(TVF==='buy'?buyForm:`<button type="button" class="btn alt tv-add" data-tvf="buy"><span>＋ Acheter du stock</span></button>`)
+  +(F.rows.length?`<div class="tv-sum"><b>${eur(F.stockValue)}</b> de stock au prix d’achat · ${F.stockUnits} unité${F.stockUnits>1?'s':''}</div>`
+   +F.rows.map(r=>{const k=r.e+'|'+r.t,unk=r.unknown||r.noPrice;return `<div class="tv-r${STK===k?' on':''}" role="button" tabindex="0" data-stkpick="${k}" aria-expanded="${STK===k}"><span class="vnth">${vnSArt(r.e,r.t,12)}</span><span class="tv-ri"><b>${esc(tvSealNm(r.t))} ${esc(r.e)} <em>×${r.own}</em></b><small>${esc(vnSerName(r.e))}${unk?'':' · '+finUnitTxt(r)}</small></span><span class="tv-rr">${unk?'<b class="tv-unk">coût inconnu</b>':`<b>${eur(r.val)}</b>`}<small class="tv-go">${STK===k?'Fermer ▲':'Vendre ›'}</small></span></div>`+(STK===k?stkSheet(r):'')}).join('')
+   :`<div class="tv-empty">Aucun produit scellé en stock${S.sx?' pour '+esc(scope):''}. Enregistre tes achats (displays, boosters…) : ils ne baissent ton résultat qu’une fois vendus.</div>`);
+ /* dépenses */
+ const opAll=X.exp.filter(x=>finExpT(x)==='op').reduce((a,x)=>a+finN(x.a),0),stAll=X.exp.filter(x=>finExpT(x)==='stock').reduce((a,x)=>a+finN(x.a),0);
+ const expForm=`<div class="panel vnf tv-form"><div class="tv-fh"><b>Dépense de fonctionnement</b><button type="button" class="tv-x" data-tvf="" aria-label="Fermer">✕</button></div><div class="sub">Application, matériel Whatnot, fournitures… Ne saisis pas ici les commissions ou frais de livraison déjà retirés du montant de la vente.</div><label>Pour quoi ?<input class="fi" id="ex-l" placeholder="ex. trépied Whatnot, abonnement Claude"></label><label>Montant (€)<input class="fi" id="ex-a" inputmode="decimal" placeholder="0,00"></label><button type="button" class="btn" data-exadd><span>✓ Enregistrer la dépense</span></button></div>`;
+ const expTab=(TVF==='exp'?expForm:`<button type="button" class="btn alt tv-add" data-tvf="exp"><span>＋ Ajouter une dépense</span></button>`)
+  +(S.sx?`<div class="tv-note">Les dépenses ne sont pas réparties par série : elles comptent seulement dans « Toutes ».</div>`:'')
+  +(dep.length?`<div class="tv-sum"><b>${eur(opAll)}</b> de frais de fonctionnement${stAll?` · ${eur(stAll)} classés « achat de stock »`:''}</div>`
+   +dep.map(x=>`<div class="tv-r tv-ex"><span class="tv-ri"><b>${esc(x.l)}</b><small>${tvDay(x.d)}</small></span><span class="tv-rr"><b>${eur(x.a)}</b><button type="button" class="tv-tag${x.t==='stock'?' st':''}" data-extog="${x.id}" aria-label="${x.t==='stock'?'Achat de stock':'Fonctionnement'} : changer de catégorie">${x.t==='stock'?'Achat de stock':'Fonctionnement'} ⇄</button></span><button type="button" class="tv-x" data-exdel="${x.id}" aria-label="Supprimer la dépense">✕</button></div>`).join('')
+   :`<div class="tv-empty">Aucune dépense. Ajoute ici ce qui fait tourner ton activité : abonnement, matériel, fournitures.</div>`);
+ /* bilan : compte de résultat, trésorerie, points à vérifier, contrôle, remise à zéro */
+ const bilanTab=`<div class="panel tv-st"><b class="tv-sh">Compte de résultat</b>${L('Chiffre d’affaires',eur(F.ca))}${L('Coût des produits vendus','− '+eur(F.cogs))}${L('Marge brute',eur(F.marge),'tv-t','color:'+tvCol(F.marge))}${L('Dépenses de fonctionnement'+(S.sx?' <small>non réparties par série</small>':''),'− '+eur(F.opex))}${L('Résultat de gestion',eur(F.result),'tv-t tv-big','color:'+tvCol(F.result))}`
+  +(F.outUnits||F.outCost?L('🔓 Sortis du stock sans vente <small>×'+F.outUnits+' ouverts ou retirés · coût d’achat, hors résultat de gestion</small>',F.outUnknown?'coût inconnu':eur(F.outCost),'tv-t')+L('Résultat après ces sorties <small>pour information</small>',eur(F.resultAfterOut),'','color:'+tvCol(F.resultAfterOut)):'')+`</div>`
+  +`<div class="panel tv-st"><b class="tv-sh">Trésorerie <small>séparée du résultat</small></b>${L('Argent encaissé',eur(F.cashIn))}${L('Argent dépensé <small>stock '+eur(F.stockBuys)+' + frais '+eur(F.cashOut-F.stockBuys)+'</small>','− '+eur(F.cashOut))}${L('Solde de trésorerie <small>argent disponible</small>',eur(F.cash),'tv-t','color:'+tvCol(F.cash))}${L('📦 Stock possédé <small>au prix d’achat, ×'+F.stockUnits+' · ce n’est pas de l’argent</small>',eur(F.stockValue),'tv-t')}</div>`
+  +(nW?`<div class="panel tv-st tv-w"><b class="tv-sh">À vérifier</b>${todo.length?todo.map(w=>`<p>⚠️ ${esc(w)}</p>`).join(''):'<p>⚠️ Le contrôle de cohérence signale un écart : ouvre-le ci-dessous.</p>'}</div>`:'')
+  +`<details class="panel tv-st tv-ck" id="tv-ck"${TVCK?' open':''}><summary><b class="tv-sh">🧮 Contrôle de cohérence</b><span class="${ok?'ok':'ko'}">${ok?'✅ tout concorde':'⚠️ à vérifier'}</span></summary><div class="tv-ckb">${finCheckHTML(F)}</div></details>`
+  +`<div class="panel tv-st tv-rz"><b class="tv-sh">🗑️ Remise à zéro</b><div class="sub">Efface les ventes, achats de stock, dépenses et le stock de produits scellés. Ta collection de cartes et tes classeurs ne sont pas touchés. Une copie est gardée pour annuler.</div><button type="button" class="btn alt" data-finreset><span>🗑️ Tout remettre à zéro</span></button>${finHasBak()?'<button type="button" class="btn alt" data-finundo><span>↩️ Annuler la dernière remise à zéro</span></button>':''}</div>`;
+ /* formulaire « Nouvelle vente » (mêmes champs et mêmes calculs qu'avant) */
+ const saleForm=`<div class="panel vnf tv-form tv-sale" id="tv-sale"><div class="tv-fh"><b>Nouvelle vente</b><button type="button" class="tv-x" data-tvf="-" aria-label="Fermer">✕</button></div>
+<div class="tv-seg" role="group" aria-label="Type de vente"><button type="button" aria-pressed="${VN.k!=='s'}" data-vnk="c"><span>🃏 Carte</span></button><button type="button" aria-pressed="${VN.k==='s'}" data-vnk="s"><span>📦 Scellé</span></button></div>
 ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="search" placeholder="Cherche une carte : nom ou numéro (Goku, FB01-035)" value="${esc(VN.c)}" style="margin-top:0"><div id="vn-sug"></div></div>
 <div class="vnsel" id="vn-sel">${vnSelHTML()}</div>`}
 <div class="vnrow"><label>Prix d'achat (€ / ${VN.k==='s'?'unité':'carte'})<input class="fi" id="vn-a" inputmode="decimal" placeholder="0,00" value="${esc(VN.a)}"></label><label>Prix de vente (€ / ${VN.k==='s'?'unité':'carte'})<input class="fi" id="vn-p" inputmode="decimal" placeholder="0,00" value="${esc(VN.p)}"></label></div>
@@ -5622,16 +5783,32 @@ ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" a
 <input class="fi" id="vn-w" placeholder="Acheteur (facultatif)" value="${esc(VN.w)}" style="margin-top:0">
 <label class="vnck"><input type="checkbox" id="vn-r" ${VN.r?'checked':''}> ${VN.k==='s'?'Retirer de mon stock de scellé':'Retirer de ma collection'}</label>
 <div class="vnpv" id="vn-pv">${pv.h}</div>
-<button class="vngo" id="vn-go" data-sadd ${pv.ok?'':'disabled'}>${pv.lab}</button></div>
-${salesChart(SL)}<div class="panel" style="margin-top:10px"><b>🧾 Acheter du stock</b><div class="sub">Displays, boosters, cartes à revendre : ils entrent en stock et ne baissent ton résultat qu’une fois vendus.</div><div class="vnrow"><label>Série<select class="fi" id="fb-e"><optgroup label="Fusion World">${EXTS.map(x=>`<option value="${x[0]}">${x[0]} · ${esc(x[1])}</option>`).join('')}</optgroup><optgroup label="Masters">${MS_SETS.map(x=>`<option value="${x.id}">${x.id} · ${esc(x.n)}</option>`).join('')}</optgroup></select></label><label>Produit<select class="fi" id="fb-t">${SEALT.map(t=>`<option value="${t[0]}"${t[0]==='display'?' selected':''}>${t[1]}</option>`).join('')}</select></label></div><div class="vnrow"><label>Quantité<input class="fi" id="fb-q" inputmode="numeric" value="1"></label><label>Prix d'achat unitaire (€)<input class="fi" id="fb-p" inputmode="decimal" placeholder="0,00"></label></div><input class="fi" id="fb-d" type="date" value="${today()}"><button class="btn" style="margin-top:8px" data-fbuy>➕ Enregistrer l'achat de stock</button>${F.rows.length?`<div style="margin-top:8px"><b>📦 Stock restant (prix d'achat)</b>${F.rows.map(r=>{const k=r.e+'|'+r.t;return `<div class="tr" role="button" tabindex="0" data-stkpick="${k}" style="cursor:pointer"><span>${esc(r.e)} · ${esc((SEALT.find(t=>t[0]===r.t)||[0,r.t])[1])} ×${r.own} <small>${r.unknown||r.noPrice?'':'à '+finUnitTxt(r)+' · '}${STK===k?'▲':'Vendre ›'}</small></span><b>${r.unknown||r.noPrice?'coût inconnu':eur(r.val)}</b></div>`+(STK===k?stkSheet(r):'')}).join('')}</div>`:''}</div>
-<div class="panel" style="margin-top:10px"><b>💸 Dépenses de fonctionnement</b><div class="sub">Application, matériel Whatnot, fournitures… Ne saisis pas ici les commissions ou frais de livraison déjà retirés du montant de la vente.</div><input class="fi" id="ex-l" placeholder="Pour quoi ? (ex. trépied Whatnot, abonnement Claude)"><input class="fi" id="ex-a" inputmode="decimal" placeholder="Montant (€)"><button class="btn" style="margin-top:8px" data-exadd>Enregistrer la dépense</button>${dep.length?`<div style="margin-top:8px">${dep.slice(0,6).map(x=>`<div class="tr"><span>${fmtD(x.d)} · ${esc(x.l)}${x.t==='stock'?' <small>(achat de stock)</small>':''}</span><span><b>${eur(x.a)}</b> <button class="chip" data-extog="${x.id}" aria-label="Changer de catégorie">${x.t==='stock'?'→ Fonct.':'→ Stock'}</button> <button class="chip" data-exdel="${x.id}" aria-label="Supprimer">✕</button></span></div>`).join('')}${dep.length>6?`<div class="sub">+ ${dep.length-6} autres (voir Budget)</div>`:''}</div>`:''}</div>
-<div class="panel" style="margin-top:10px"><b>${SL.length} vente${SL.length>1?'s':''}</b>
-<div class="vnkpi" style="margin-top:8px"><div><small>Chiffre d'affaires</small><b>${eur(F.ca)}</b></div><div><small>Coût produits vendus</small><b>${eur(F.cogs)}</b></div><div><small>Marge brute</small><b style="color:${ncol(F.marge)}">${eur(F.marge)}</b></div></div>
-<div class="tr"><span>Dépenses de fonctionnement${S.sx?' <small>(non réparties par série)</small>':''}</span><b>− ${eur(F.opex)}</b></div><div class="tr"><span><b>Résultat de gestion</b></span><b style="font-size:1.15em;color:${ncol(F.result)}">${eur(F.result)}</b></div>
-${F.outUnits||F.outCost?`<div class="tr"><span>🔓 Sortis du stock sans vente <small>(×${F.outUnits} ouverts ou retirés · coût d’achat, hors résultat de gestion)</small></span><b>${F.outUnknown?'coût inconnu':eur(F.outCost)}</b></div><div class="tr"><span>Résultat de gestion après ces sorties <small>(information)</small></span><b style="color:${ncol(F.resultAfterOut)}">${eur(F.resultAfterOut)}</b></div>`:''}<div class="tr"><span>📦 Valeur du stock restant <small>(prix d'achat, ×${F.stockUnits})</small></span><b>${eur(F.stockValue)}</b></div>
-<div style="margin-top:8px"><b>💶 Trésorerie</b> <small>(séparée du résultat)</small></div><div class="tr"><span>Argent encaissé</span><b>${eur(F.cashIn)}</b></div><div class="tr"><span>Argent dépensé <small>(stock ${eur(F.stockBuys)} + frais ${eur(F.cashOut-F.stockBuys)})</small></span><b>− ${eur(F.cashOut)}</b></div><div class="tr"><span>Solde de trésorerie <small>(argent disponible)</small></span><b style="color:${ncol(F.cash)}">${eur(F.cash)}</b></div><div class="tr"><span>📦 Stock possédé <small>(au prix d’achat, ce n’est pas de l’argent)</small></span><b>${eur(F.stockValue)}</b></div>${F.warn.length?`<div class="sub" style="margin-top:8px">${F.warn.map(w=>'⚠️ '+esc(w)).join('<br>')}</div>`:''}${finCheckHTML(F)}
-${SL.map(x=>S.sed===x.id?edit(x):row(x)).join('')}</div>
-<div class="panel" style="margin-top:10px"><b>🗑️ Remise à zéro</b><div class="sub">Efface les ventes, achats de stock, dépenses et le stock de produits scellés. Ta collection de cartes et tes classeurs ne sont pas touchés. Une copie est gardée pour annuler.</div><button class="btn alt" style="margin-top:8px" data-finreset>🗑️ Tout remettre à zéro</button>${finHasBak()?'<button class="btn alt" style="margin-top:8px" data-finundo>↩️ Annuler la dernière remise à zéro</button>':''}</div>`}
+<button class="vngo" id="vn-go" data-sadd ${pv.ok?'':'disabled'}>${pv.lab}</button></div>`;
+ const tab=['v','s','d','b'].includes(TVT)?TVT:'v',
+  tb=(k,l,n)=>`<button type="button" role="tab" aria-selected="${tab===k}" data-tvt="${k}"><span>${l}${n!==''?` <i>${n}</i>`:''}</span></button>`;
+ return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2>
+${TVS?saleForm:`<button type="button" class="btn tv-new" data-tvf="sale"><span>＋ Nouvelle vente</span></button>`}
+<div class="tv-sx" id="tv-sx" role="group" aria-label="Série">${[['','Toutes'],...EXTS.map(x=>[x[0],x[0]]),['MS','Masters']].map(([v,l])=>`<button type="button" class="chip" aria-pressed="${S.sx===v}" data-sxf="${v}">${l}</button>`).join('')}</div>
+<section class="panel tv-hero" aria-label="Résultat de gestion"><div class="tv-hs"><span>${esc(scope)}</span>${nW?`<button type="button" class="tv-warn" data-tvt="b" data-tvj="1">⚠️ ${nW} à vérifier ›</button>`:''}</div>
+<div class="tv-tally">${L('Chiffre d’affaires',eur(F.ca))}${L('Coût des produits vendus','− '+eur(F.cogs))}${L('Dépenses de fonctionnement',S.sx?'<small>non réparties par série</small>':'− '+eur(F.opex))}</div>
+<div class="tv-res"><span>Résultat de gestion</span><b class="${F.result>=0?'p':'n'}">${tvSg(F.result)}</b></div>
+${tvSpark(SL,EXop,F.result)}
+<div class="tv-kp"><button type="button" data-tvt="b" data-tvj="1"><small>Trésorerie</small><b style="color:${tvCol(F.cash)}">${eur(F.cash)}</b></button><button type="button" data-tvt="s" data-tvj="1"><small>Stock au prix d’achat</small><b>${eur(F.stockValue)}</b></button></div></section>
+<div class="tv-tabs" id="tv-tabs" role="tablist">${tb('v','Ventes',SL.length)}${tb('s','Stock',F.rows.length)}${tb('d','Dépenses',X.exp.length)}${tb('b','Bilan','')}</div>
+<div class="tv-pane" role="tabpanel">${tab==='v'?salesTab:tab==='s'?stockTab:tab==='d'?expTab:bilanTab}</div>`}
+/* boutons propres au carnet : onglets et ouverture / fermeture des formulaires */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-tvt],[data-tvf]');if(!t)return;const d=t.dataset;
+ if(d.tvt!==undefined){TVT=d.tvt;TVF='';STK='';S.sed=null}
+ else if(d.tvf==='sale'){TVS=1}
+ else if(d.tvf==='-'){TVS=0;vnReset()}
+ else{TVF=d.tvf;STK='';if(d.tvf==='buy')TVT='s';else if(d.tvf==='exp')TVT='d'}
+ render();
+ if(d.tvj){const b=document.getElementById('tv-tabs');if(b)b.scrollIntoView({behavior:'smooth',block:'start'})}
+ else if(d.tvf==='sale'){const i=$(VN.k==='s'?'#vn-p':'#vn-c');if(i)setTimeout(()=>i.focus(),60)}
+ else if(d.tvf==='exp'){const i=$('#ex-l');if(i)setTimeout(()=>i.focus(),60)}});
+document.addEventListener('toggle',e=>{if(e.target&&e.target.id==='tv-ck')TVCK=e.target.open},true);
+document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.classList&&t.classList.contains('tv-r')&&t.getAttribute('role')==='button'){e.preventDefault();t.click()}});
+/* ===== CARNET-V2:END ===== */
 function zoomSheet(){const c=S.zoom&&(cards.find(x=>x.id===S.zoom)||MS_ALL.find(x=>x.id===S.zoom));if(!c)return '';const row=(a,b)=>b?`<div class="tr"><span>${a}</span><b>${esc(String(b))}</b></div>`:'';
 return `<div class="sheet" data-zx><div role="dialog" aria-label="Zoom" style="text-align:center"><div class="tilt" data-rare="${c.rar==='SCR'||c.rar==='SR'||c.ver!=='Normal'?1:0}" style="width:min(72vw,280px);margin:0 auto">${c.ms?msArt(msFind(c.id)):art(c)}</div><div class="sub" style="margin-top:6px">Touche et fais glisser le doigt sur la carte, ou incline ton téléphone.</div><h2 style="margin:12px 0 4px">${esc(c.name||'Nom à compléter')}</h2><div class="sub">${c.id} · ${c.ms?'Masters · '+msSetName(c.ext):EXTS.find(x=>x[0]===c.ext)[1]}</div><div style="text-align:left;margin-top:10px">${row('Type',c.type)}${row('Couleur',c.col)}${row('Rareté',c.rar)}${row('Version',c.ver)}${row('Possédée','×'+c.own)}${c.want?row('Recherchée','×'+c.want):''}${row('Prix indicatif',c.price?c.price+' €':'')}${row('État',c.cond)}${row('Notes',c.note)}</div><button class="btn" style="margin-top:12px" data-zx>Fermer</button></div></div>`}
 function printListFW(){const lab={missing:'Cartes manquantes',own:'Cartes possédées',upg:'Cartes à remplacer',sell:'Cartes à échanger'}[S.pr];const l=cards.filter(c=>(S.pal||c.ext===S.ext)&&(S.pr==='missing'?c.own===0:S.pr==='own'?c.own>0:S.pr==='upg'?X.upg[c.id]:X.sell[c.id]));return {lab,l}}
@@ -5885,7 +6062,7 @@ function hmFan(H){const n=H.l.length,dl=LAST.vk!==viewKey()?' hmdl':'';
  return `<div class="hmfan${dl}">${out.map((o,s)=>`<button class="hmc" ${o.c.ms?'data-hms2':'data-zoom'}="${o.c.id}" aria-label="Agrandir ${esc(o.c.name||o.c.id)}" style="--i:${s-(n-1)/2};--k:${o.k};z-index:${20-o.k}">${o.c.ms?msArt(o.c.arr):art(o.c)}</button>`).join('')}</div>`}
 /* argent du mois + 6 derniers mois */
 function hmMoney(){const sp=spendAll();
- if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton résultat de gestion (ventes moins coût des produits vendus et frais) s’affichera ici.</div><button class="btn" style="margin-top:12px" data-go="trade">💶 Enregistrer une vente</button></div>`;
+ if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton résultat de gestion (ventes moins coût des produits vendus et frais) s’affichera ici.</div><button class="btn" style="margin-top:12px" data-go="trade" data-tvf="sale">💶 Enregistrer une vente</button></div>`;
  const mk=today().slice(0,7),sM=X.sales.filter(x=>hmLd(x.d).slice(0,7)===mk),vM=sM.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),aM=sM.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),opx=X.exp.filter(x=>finExpT(x)==='op'),dM=opx.filter(x=>String(x.d).slice(0,7)===mk).reduce((a,x)=>a+finN(x.a),0),rM=vM-aM-dM,t=new Date(),ms=[];
  for(let k=5;k>=0;k--){const d=new Date(t.getFullYear(),t.getMonth()-k,1),key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),v=X.sales.filter(x=>hmLd(x.d).slice(0,7)===key).reduce((a,x)=>a+(nb(x.price)-nb(x.buy))*vnQ(x),0),e=opx.filter(x=>String(x.d).slice(0,7)===key).reduce((a,x)=>a+finN(x.a),0);ms.push({lab:d.toLocaleDateString('fr-FR',{month:'short'}).replace('.',''),net:v-e})}
  const mx=Math.max(1,...ms.map(m=>Math.abs(m.net))),W=240,bw=28,gp=(W-6*bw)/5,base=44,bars=ms.map((m,i)=>{const x=i*(bw+gp),h=Math.max(m.net?3:0,Math.abs(m.net)/mx*(m.net>=0?40:14)),y=m.net>=0?base-h:base;
@@ -6485,7 +6662,7 @@ if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCo
 if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=st}
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
-if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto()}
+if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}}
 function renderCore(){if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
@@ -6567,11 +6744,11 @@ else if(d.timg!==undefined){S.timg=tradeImage()}
 else if(d.tdl!==undefined){try{const a=document.createElement('a');a.href=S.timg;a.download='echanges-appel-des-cartes.png';document.body.appendChild(a);a.click();a.remove();toast('Image téléchargée')}catch(e){toast('Maintiens l’image pour l’enregistrer')}return}
 else if(d.vnk){VN.k=d.vnk;if(d.vnk==='s'&&!VN.e)VN.e=S.ext}
 else if(d.vnt){VN.t=d.vnt}
-else if(d.vnsells){const [se,st]=d.vnsells.split('|');vnReset();VN.k='s';VN.e=se;VN.t=st;{const pp=sealPx(se,st);if(pp)VN.p=sealMine(se,st)?String(sl(se,st).price):fmtP(pp)}S.ssel=null;S.menu=false;S.tab='trade';window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}
+else if(d.vnsells){const [se,st]=d.vnsells.split('|');vnReset();VN.k='s';VN.e=se;VN.t=st;{const pp=sealPx(se,st);if(pp)VN.p=sealMine(se,st)?String(sl(se,st).price):fmtP(pp)}S.ssel=null;S.menu=false;S.tab='trade';TVS=1;window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}
 else if(d.vnpick){vnSelect(d.vnpick);return}
 else if(d.vnclr!==undefined){vnClear();return}
 else if(d.vnq){VN.q=Math.max(1,Math.min(99,VN.q+(+d.vnq)));const n=$('#vn-qn');if(n)n.textContent=VN.q;vnCalc();return}
-else if(d.vnsell){const c=cards.find(x=>x.id===d.vnsell)||MS_ALL.find(x=>x.id===d.vnsell);if(c){S.msel=null;vnReset();VN.k='c';VN.id=c.id;VN.c=c.name||c.id;if(c.price||cmP(c))VN.p=String(c.price||fmtP(cmP(c)));S.sel=null;S.zoom=false;S.menu=false;S.tab='trade';window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}}
+else if(d.vnsell){const c=cards.find(x=>x.id===d.vnsell)||MS_ALL.find(x=>x.id===d.vnsell);if(c){S.msel=null;vnReset();VN.k='c';VN.id=c.id;VN.c=c.name||c.id;if(c.price||cmP(c))VN.p=String(c.price||fmtP(cmP(c)));S.sel=null;S.zoom=false;S.menu=false;S.tab='trade';TVS=1;window.scrollTo(0,0);setTimeout(()=>{const i=$('#vn-p');if(i)i.focus()},150)}}
 else if(d.sadd!==undefined&&VN.k==='s'){const e=VN.e||S.ext,t=VN.t,tt=SEALT.find(x=>x[0]===t),nm=vnSerName(e),pr=VN.p.trim(),q=VN.q,st=vnStk(e,t);
  let buyAuto=VN.a.trim();if(!buyAuto){const f=finFifo(X.buys,e,t,st.own,q);if(f.known)buyAuto=String(f.unit)}
   if(VN.r&&st.own>0){vnStkDec(e,t,q)}
@@ -6579,7 +6756,7 @@ else if(d.sadd!==undefined&&VN.k==='s'){const e=VN.e||S.ext,t=VN.t,tt=SEALT.find
  const id='s'+Date.now().toString(36);
  X.sales.unshift({id,d:dd,card:tt[1]+' '+e+' · '+nm,cid:'',kind:'seal',se:e,st:t,who:VN.w.trim(),price:pr,buy:buyAuto,q,ext:e});saveX();VNNEW=id;setTimeout(()=>{VNNEW=''},2500);vnReset();
  try{navigator.vibrate&&navigator.vibrate(25)}catch(_){}try{play('nice')}catch(_){}
- toast('Vente enregistrée ✓'+(pr?' · '+eur(nb(pr)*q):''))}
+ toast('Vente enregistrée ✓'+(pr?' · '+eur(nb(pr)*q):''));TVT='v'}
 else if(d.sadd!==undefined){let c=VN.id&&(cards.find(x=>x.id===VN.id)||MS_ALL.find(x=>x.id===VN.id)),txt=VN.c.trim();if(!c&&txt)c=vnExact(txt);
  const pr=VN.p.trim(),bu=VN.a.trim(),q=VN.q;if(!c&&!txt&&!pr){toast('Indique une carte ou un prix');return}
  if(c&&VN.r&&c.own>0){c.own-=Math.min(q,c.own);save()}
@@ -6587,7 +6764,7 @@ else if(d.sadd!==undefined){let c=VN.id&&(cards.find(x=>x.id===VN.id)||MS_ALL.fi
  const id='s'+Date.now().toString(36),pf=(nb(pr)-nb(bu))*q;
  X.sales.unshift({id,d:dd,card:c?c.id+' · '+(c.name||''):(txt||'—'),cid:c?c.id:'',who:VN.w.trim(),price:pr,buy:bu,q,ext:c?c.ext:''});saveX();VNNEW=id;setTimeout(()=>{VNNEW=''},2500);vnReset();
  try{navigator.vibrate&&navigator.vibrate(25)}catch(_){}try{play('nice')}catch(_){}
- toast('Vente enregistrée ✓'+(pr?' · '+(pf>=0?'+':'')+eur(pf):''))}
+ toast('Vente enregistrée ✓'+(pr?' · '+(pf>=0?'+':'')+eur(pf):''));TVT='v'}
 else if(d.sdel){const x=X.sales.find(y=>y.id===d.sdel);if(x)toTrash('sale','Vente « '+x.card+' » '+(x.price||'')+' €',x);X.sales=X.sales.filter(x=>x.id!==d.sdel);saveX()}
 else if(d.th){TH=d.th;try{localStorage.setItem('fb_theme',TH)}catch(e){}applyTheme()}
 else if(d.zoom!==undefined){S.zoom=d.zoom;askTilt()}
@@ -6606,7 +6783,7 @@ else if(d.pcopy!==undefined){copyText(printText()).then(ok=>toast(ok?'Liste copi
 else if(d.sbuy){const q=Math.max(1,parseInt($('#sb-q').value)||1),pr=$('#sb-p').value.trim(),dd=$('#sb-d').value||today(),sx=sl(S.ext,d.sbuy);sx.own+=q;saveSeal();X.buys.unshift({id:'u'+Date.now().toString(36),ext:S.ext,type:d.sbuy,d:dd,q,p:pr});saveX();toast('Achat enregistré ✓')}
 else if(d.sopen1){const sx=sl(S.ext,d.sopen1);if(sx.own>0){sx.own--;const k=S.ext+'-'+d.sopen1;X.opened[k]=(X.opened[k]||0)+1;saveSeal();saveX();toast('Retiré du stock non ouvert')}else toast('Rien à ouvrir : stock à 0')}
 else if(d.sbdel){const b=X.buys.find(x=>x.id===d.sbdel);if(b){toTrash('buy','Achat '+b.ext+' '+b.type+' ×'+b.q+' ('+fmtD(b.d)+')',b);X.buys=X.buys.filter(x=>x.id!==d.sbdel);saveX()}}
-else if(d.exadd!==undefined){const l=$('#ex-l').value.trim(),a=$('#ex-a').value.trim();if(!nb(a)){toast('Indique un montant');return}X.exp.unshift({id:'e'+Date.now().toString(36),d:today(),l:l||'Dépense',a,t:'op'});saveX();toast('Dépense enregistrée ✓')}
+else if(d.exadd!==undefined){const l=$('#ex-l').value.trim(),a=$('#ex-a').value.trim();if(!nb(a)){toast('Indique un montant');return}X.exp.unshift({id:'e'+Date.now().toString(36),d:today(),l:l||'Dépense',a,t:'op'});saveX();toast('Dépense enregistrée ✓');TVF=''}
 else if(d.finreset!==undefined){S.cf={msg:'Tout remettre à zéro ?<br><br>🗑️ Effacés : <b>ventes, achats de stock, dépenses, stock de produits scellés</b> (boosters, displays, cases).<br>✅ Non touchés : ta collection de cartes, tes classeurs, ton budget mensuel.<br><br><span class="sub">Une copie est gardée : tu pourras annuler juste après. Pense aussi à exporter une sauvegarde (Réglages).</span>',act:'finreset',yes:'Oui, tout remettre à zéro',no:'Annuler'}}
 else if(d.finundo!==undefined){toast(finUndoReset()?'Données restaurées ✓':'Rien à restaurer')}
 else if(d.stkpick){STK=STK===d.stkpick?'':d.stkpick}
@@ -6615,7 +6792,7 @@ else if(d.stksell){const [e,t]=d.stksell.split('|'),r=stkSell(e,t,$('#sv-q').val
 else if(d.extog){const x=X.exp.find(y=>y.id===d.extog);if(x){x.t=finExpT(x)==='op'?'stock':'op';saveX();toast(x.t==='stock'?'Classée : achat de stock (hors résultat)':'Classée : dépense de fonctionnement')}}
 else if(d.fbuy!==undefined){const e=$('#fb-e').value,t=$('#fb-t').value,q=Math.max(1,parseInt($('#fb-q').value)||1),pr=$('#fb-p').value.trim(),dd=$('#fb-d').value||today();if(!nb(pr)){toast('Indique le prix d’achat unitaire');return}
  if(vnIsMs(e)){const k=e+'-'+t;msSet(k,msOwn(k)+q)}else{const o=sl(e,t);o.own+=q;saveSeal()}
- X.buys.unshift({id:'u'+Date.now().toString(36),ext:e,type:t,d:dd,q,p:pr});saveX();toast('Achat de stock enregistré ✓')}
+ X.buys.unshift({id:'u'+Date.now().toString(36),ext:e,type:t,d:dd,q,p:pr});saveX();toast('Achat de stock enregistré ✓');TVF=''}
 else if(d.exdel){const x=X.exp.find(y=>y.id===d.exdel);if(x){toTrash('exp','Dépense « '+x.l+' » '+x.a+' €',x);X.exp=X.exp.filter(y=>y.id!==d.exdel);saveX()}}
 else if(d.dl!==undefined){S.dl=true;window.scrollTo(0,0)}
 else if(d.dlgo){const p=cdPend(d.dlgo);if(p){S.dl=false;S.celeb=null;S.op=p;window.scrollTo(0,0)}else if(cdTake(d.dlgo)){play('open');S.dl=false;S.celeb=null;S.op=newDuel(d.dlgo);opKeep(S.op);window.scrollTo(0,0)}}

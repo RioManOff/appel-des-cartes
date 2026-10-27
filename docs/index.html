@@ -7720,12 +7720,12 @@ document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest
 let PNOFF=false;try{PNOFF=localStorage.getItem('fb_pnoff')==='1'}catch(e){}
 {const n0=pnNotify;pnNotify=function(nm,multi){if(PNOFF)return Promise.resolve();return n0(nm,multi)}}
 function pnRow(){const s=pnState(),on=!PNOFF&&s==='granted',lg=!!SBS;
- const st=s==='none'?'Ce téléphone ne permet pas les notifications.':s==='denied'&&!PNOFF?'Bloquées par le téléphone : autorise-les dans ses réglages.':on?'Une alerte à chaque nouveau message, même appli en arrière-plan.':'Aucune alerte quand on t’envoie un message.';
+ const st=s==='none'?'Ce téléphone ne permet pas les notifications.':s==='denied'&&!PNOFF?'Bloquées par le téléphone : autorise-les dans ses réglages.':on?'Une alerte à chaque nouveau message, même quand le site est fermé.':'Aucune alerte quand on t’envoie un message.';
  return `<button class="sxr" role="switch" aria-checked="${on}" data-pntog${s==='none'?' disabled':''}><span class="sxt"><b>🔔 Notifications des messages</b><small>${st}${lg?'':' Connecte-toi pour recevoir des messages.'}</small></span><span class="tgl"><i></i></span></button>`}
 function pnTog(){return `<section class="panel cmc pn-tg">${pnRow()}</section>`}
 async function pnToggle(){const s=pnState();
- if(!PNOFF&&s==='granted'){PNOFF=true;toast('🔕 Notifications des messages coupées')}
- else{PNOFF=false;if(s!=='granted')await pnAsk();else toast('🔔 Notifications des messages activées')}
+ if(!PNOFF&&s==='granted'){PNOFF=true;toast('🔕 Notifications des messages coupées');pushOff()}
+ else{PNOFF=false;if(s!=='granted')await pnAsk();else toast('🔔 Notifications des messages activées');PUSHT=0;pushOn()}
  try{localStorage.setItem('fb_pnoff',PNOFF?'1':'0')}catch(e){}render()}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-pntog]');if(!t)return;e.stopPropagation();pnToggle()},true);
 /* dans Messages : l'interrupteur remplace l'ancien bouton « Activer » */
@@ -7733,6 +7733,23 @@ pnCard=function(lg){return lg?pnTog():''};
 setTimeout(()=>{try{const i=COMM.findIndex(x=>x&&x.o===15);if(i>=0)COMM[i].h=pnCard}catch(e){}},0);
 /* dans Réglages : sous « Compte et profil » */
 {const s0=set;set=function(){const h=s0();if(typeof h!=='string'||h.indexOf('<h2>Réglages</h2>')<0)return h;const k='<div class="panel stg">',a=h.indexOf(k),b=a<0?-1:h.indexOf(k,a+k.length);return b<0?h:h.slice(0,b)+'<div class="panel stg pn-st">'+pnRow()+'</div>'+h.slice(b)}}
+
+/* ===== notifications push : le téléphone est prévenu par le serveur, même site fermé ===== */
+const PUSHK='BPx6gHIkH6X56FDEPMqjisBV8VsT2aPHJNATYQTrQdgwYSxIMYwh7uu6Z0DuGJGuUA2VG73LdlJxBdC7ZfrGoz8';let PUSHOK=false,PUSHT=0;
+function pushOk(){return 'serviceWorker' in navigator&&'PushManager' in window&&/^https:/.test(location.protocol)}
+const pushKey=()=>{let s=PUSHK.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function pushOn(){if(!pushOk()||!SBS||PNOFF||pnState()!=='granted')return;PUSHT=Date.now();
+ try{const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+  if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushKey()});
+  const j=sub.toJSON();if(!j||!j.endpoint||!j.keys)return;
+  await frApi('/rest/v1/rpc/push_save',{method:'POST',body:JSON.stringify({p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth})});
+  PUSHOK=SBS.uid}catch(e){PUSHOK=false}}
+async function pushOff(){PUSHOK=false;if(!pushOk())return;try{const reg=await navigator.serviceWorker.getRegistration();const sub=reg&&await reg.pushManager.getSubscription();if(!sub)return;
+ try{if(SBS)await frApi('/rest/v1/rpc/push_del',{method:'POST',body:JSON.stringify({p_endpoint:sub.endpoint})})}catch(e){}await sub.unsubscribe()}catch(e){}}
+/* au démarrage et après connexion : on (ré)enregistre l'abonnement de ce téléphone */
+setInterval(()=>{if(SBS&&!PNOFF&&PUSHOK!==SBS.uid&&Date.now()-PUSHT>60000)pushOn()},5000);
+/* quand le serveur s'en charge, pas de deuxième notification envoyée par l'appli */
+{const n1=pnNotify;pnNotify=function(nm,multi){if(PUSHOK&&SBS&&PUSHOK===SBS.uid&&document.hidden){try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}return Promise.resolve()}return n1(nm,multi)}}
 /* ===== PN-TOGGLE:END ===== */
 
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
@@ -8591,7 +8608,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
-  ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message.'],
+  ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.'],
   ['🔒','Plus de zoom','L’écran ne zoome plus par erreur avec deux doigts ou un double appui.'],
   ['🚩','Drapeaux corrigés','Le drapeau français ramène toujours à tes séries françaises, et on ne voit plus de cartes japonaises ou américaines dans le menu français.'],
   ['🏆','Série complète','Une petite fête quand tu termines le Full Set ou le Master Set d’une série.'],

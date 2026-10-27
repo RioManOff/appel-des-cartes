@@ -1998,6 +1998,8 @@ div.cx-spa{cursor:default}
 .sr-g[hidden]{display:none!important}
 .sr-seg[hidden],.ms-cat[hidden]{display:none!important}
 .ms-cat button{min-width:0;overflow:hidden}.ms-cat img{max-width:100%}
+.pn-tg .sxr{width:100%}
+.pn-st .sxr,.pn-tg .sxr{border-bottom:0}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </style>
@@ -6877,7 +6879,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 oct. 2026 · 33';
+const BUILD='27 oct. 2026 · 34';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7714,6 +7716,25 @@ document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest
 /* ===== DZ-COLL:END ===== */
 
 ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1&&!(e.target.closest&&e.target.closest('[data-zx]')))e.preventDefault()},{passive:false});
+/* ===== PN-TOGGLE : activer / couper les notifications des messages (réglage gardé sur l'appareil) ===== */
+let PNOFF=false;try{PNOFF=localStorage.getItem('fb_pnoff')==='1'}catch(e){}
+{const n0=pnNotify;pnNotify=function(nm,multi){if(PNOFF)return Promise.resolve();return n0(nm,multi)}}
+function pnRow(){const s=pnState(),on=!PNOFF&&s==='granted',lg=!!SBS;
+ const st=s==='none'?'Ce téléphone ne permet pas les notifications.':s==='denied'&&!PNOFF?'Bloquées par le téléphone : autorise-les dans ses réglages.':on?'Une alerte à chaque nouveau message, même appli en arrière-plan.':'Aucune alerte quand on t’envoie un message.';
+ return `<button class="sxr" role="switch" aria-checked="${on}" data-pntog${s==='none'?' disabled':''}><span class="sxt"><b>🔔 Notifications des messages</b><small>${st}${lg?'':' Connecte-toi pour recevoir des messages.'}</small></span><span class="tgl"><i></i></span></button>`}
+function pnTog(){return `<section class="panel cmc pn-tg">${pnRow()}</section>`}
+async function pnToggle(){const s=pnState();
+ if(!PNOFF&&s==='granted'){PNOFF=true;toast('🔕 Notifications des messages coupées')}
+ else{PNOFF=false;if(s!=='granted')await pnAsk();else toast('🔔 Notifications des messages activées')}
+ try{localStorage.setItem('fb_pnoff',PNOFF?'1':'0')}catch(e){}render()}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-pntog]');if(!t)return;e.stopPropagation();pnToggle()},true);
+/* dans Messages : l'interrupteur remplace l'ancien bouton « Activer » */
+pnCard=function(lg){return lg?pnTog():''};
+setTimeout(()=>{try{const i=COMM.findIndex(x=>x&&x.o===15);if(i>=0)COMM[i].h=pnCard}catch(e){}},0);
+/* dans Réglages : sous « Compte et profil » */
+{const s0=set;set=function(){const h=s0();if(typeof h!=='string'||h.indexOf('<h2>Réglages</h2>')<0)return h;const k='<div class="panel stg">',a=h.indexOf(k),b=a<0?-1:h.indexOf(k,a+k.length);return b<0?h:h.slice(0,b)+'<div class="panel stg pn-st">'+pnRow()+'</div>'+h.slice(b)}}
+/* ===== PN-TOGGLE:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -8570,6 +8591,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message.'],
   ['🔒','Plus de zoom','L’écran ne zoome plus par erreur avec deux doigts ou un double appui.'],
   ['🚩','Drapeaux corrigés','Le drapeau français ramène toujours à tes séries françaises, et on ne voit plus de cartes japonaises ou américaines dans le menu français.'],
   ['🏆','Série complète','Une petite fête quand tu termines le Full Set ou le Master Set d’une série.'],

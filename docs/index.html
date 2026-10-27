@@ -6452,7 +6452,7 @@ function enV(){if(S.mode==='sealed')S.mode='cards';const e=S.ext,N=cards.filter(
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-enq]');if(!b)return;e.stopPropagation();const id=b.dataset.enq,n=Math.max(0,Math.min(99,enOwn(id)+(+b.dataset.ed||0)));if(!X.en)X.en={};if(n)X.en[id]=n;else delete X.en[id];saveX();try{if(+b.dataset.ed>0&&navigator.vibrate)navigator.vibrate(8)}catch(_){}render()},true);
 /* ===== EN-COLL:END ===== */
 function kGal(){if(X.game!=='ms'||S.tab!=='coll')return '';const s=msCur();if(!/^K/.test(s.id))return '';msHi(s.id+'-x');const L=KPK[s.id]||[];if(!L.length)return '';return `<div class="panel kgal"><b>📦 Boosters et displays</b><div class="kgal-l">${L.map(u=>`<img src="${u}" alt="" loading="lazy">`).join('')}</div></div>`}
-function coll(){const v=X.game==='ms'?msV()+'':X.fwed==='en'?enV():collFW();return v.replace('</header>','</header>'+gameBar()+kGal())}
+function coll(){const v=X.game==='ms'?msV()+'':X.fwed==='en'?enV():collFW();return v.replace('</header>','</header>'+gameBar())}
 function collFW(){if(S.mode==='sealed')return sealed();const N=cards.filter(c=>c.ext===S.ext),NA=alt(S.ext).length,o=N.filter(c=>c.own>0).length,q=S.q.toLowerCase();
 const l=cards.filter(c=>c.ext===S.ext&&(!S.own||(S.own==='y'?c.own>0:c.own===0))&&(!S.ver||c.ver===S.ver)&&(!S.col||c.col===S.col)&&(!S.rar||c.rar===S.rar)&&(!S.fx||(S.fx==='fav'?X.fav[c.id]:S.fx==='sell'?X.sell[c.id]:X.upg[c.id]))&&(!q||(c.name+' '+c.id+' '+c.n).toLowerCase().includes(q)));
 const ch=(k,v,t)=>`<button class="chip" aria-pressed="${S[k]===v}" data-f="${k}" data-v="${v}">${t}</button>`;

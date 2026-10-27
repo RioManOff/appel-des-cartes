@@ -1726,6 +1726,11 @@ body::before{position:absolute!important}
 .kgal-l img{flex:none;height:110px;width:auto;border-radius:6px;background:#fff}
 
 .cs-gm{display:none!important}
+
+.chip.delacct{color:var(--tv-neg,#ff5a5a)}
+.chip.delacct.cf{background:var(--tv-neg,#ff5a5a);color:#fff;border-color:transparent}
+.fannote{margin:22px 4px 0;font-size:11.5px;line-height:1.5;color:var(--mu);text-align:center}
+.fannote a{color:var(--mu);text-decoration:underline}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3310,7 +3315,7 @@ function msPickSheet(){if(!S.mspick)return'';
  const seg=(v,t)=>`<button data-sr="sort" data-v="${v}" aria-pressed="${SRS===v}">${t}</button>`;
  return `<div class="sheet sr-sh" data-msclose><div role="dialog" aria-modal="true" aria-label="Choisir la série" class="sr-d">`
   +`<div class="sr-hd"><i class="sr-gb"></i><div><h2>Choisir la série</h2><div class="sub">Ma collection Masters : <b>${O}</b> / ${N} cartes · ${pct(O,N)} %</div></div><button class="sr-x" data-msclose aria-label="Fermer">✕</button></div>`
-  +`<div class="ms-cat" role="group" aria-label="Catégorie de séries"><button data-mskind="bt" aria-pressed="${MSK==='bt'&&!/^K/.test(msCur().id)}" aria-label="Séries Masters BT01 à BT31">${LOGO_MS}<small>BT01 à BT31</small></button><button data-mskind="db" aria-pressed="${MSK==='db'}" aria-label="Draft Box DB1 à DB3"><span class="ms-dbl">DRAFT<br>BOX</span><small>DB1 à DB3</small></button><button data-mskind="gc" aria-pressed="${MSK==='gc'}" aria-label="Carddass Le Grand Combat"><img src="${LGBOX}" alt=""><small>Le Grand Combat</small></button>${MS_SETS.filter(s=>/^K/.test(s.id)).map(s=>{const g=MS_IMG[s.id]||{},im=g.pk||g.box;return `<button data-msset="${s.id}" aria-pressed="${msCur().id===s.id}" aria-label="${esc(s.n)}">${im?`<img src="${im}" alt="">`:'<span class="ms-dbl">CARTES</span>'}<small>${esc(s.n)}</small></button>`}).join('')}</div>`
+  +`<div class="ms-cat" role="group" aria-label="Catégorie de séries"><button data-mskind="bt" aria-pressed="${MSK==='bt'&&!/^K/.test(msCur().id)}" aria-label="Séries Masters BT01 à BT31"><span class="ms-dbl">MASTERS</span><small>BT01 à BT31</small></button><button data-mskind="db" aria-pressed="${MSK==='db'}" aria-label="Draft Box DB1 à DB3"><span class="ms-dbl">DRAFT<br>BOX</span><small>DB1 à DB3</small></button><button data-mskind="gc" aria-pressed="${MSK==='gc'}" aria-label="Carddass Le Grand Combat"><img src="${LGBOX}" alt=""><small>Le Grand Combat</small></button>${MS_SETS.filter(s=>/^K/.test(s.id)).map(s=>{const g=MS_IMG[s.id]||{},im=g.pk||g.box;return `<button data-msset="${s.id}" aria-pressed="${msCur().id===s.id}" aria-label="${esc(s.n)}">${im?`<img src="${im}" alt="">`:'<span class="ms-dbl">CARTES</span>'}<small>${esc(s.n)}</small></button>`}).join('')}</div>`
   +`<div class="sr-seg" role="group" aria-label="Ordre des séries">${seg('num','Par numéro')}${seg('todo','À compléter')}</div>`
   +`<div class="sr-g">${L.map(({s,st},i)=>{const on=s.id===cur,done=st.n>0&&st.o>=st.n,cr=MS_COL[s.id]||'229,9,20',im=msPickArt(s);
     return `<button class="sr-t${on?' cur':''}${done?' done':''}" data-msset="${s.id}" data-srx="${s.id}" style="--c:rgb(${cr});--cr:${cr};--p:${st.p};--i:${i}" aria-label="${s.id} ${esc(s.n)}, ${st.o} carte${st.o>1?'s':''} sur ${st.n}${on?', série actuelle':''}"${on?' aria-current="true"':''}>`
@@ -6605,6 +6610,19 @@ ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div
 /* ===== Réglages v2 ===== */
 const BUILD='27 oct. 2026 · 23';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
+
+/* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
+let DELC=0;
+document.addEventListener('click',async e=>{const b=e.target.closest&&e.target.closest('[data-delacct]');if(!b)return;e.stopPropagation();
+ if(!SBS){toast('Tu n’es pas connecté');return}
+ if(!DELC){DELC=1;b.textContent='⚠️ Touche encore pour supprimer définitivement ton compte';b.classList.add('cf');setTimeout(()=>{DELC=0;if(b.isConnected){b.textContent='🗑️ Supprimer mon compte';b.classList.remove('cf')}},6000);return}
+ DELC=0;b.disabled=true;b.textContent='Suppression…';
+ try{const t=await sbTok(),r=await sbFetch('/rest/v1/rpc/supprimer_mon_compte',{method:'POST',headers:{Authorization:'Bearer '+t},body:'{}'});if(!r.ok)throw 0;
+  SBS=null;SBAUTO=false;SBMSG='';try{localStorage.removeItem('fb_sbs');localStorage.removeItem('fb_syncat');localStorage.setItem('fb_sba','0')}catch(_){}
+  toast('Compte supprimé ✓ · ta collection reste sur ce téléphone');render()}
+ catch(_){b.disabled=false;b.textContent='🗑️ Supprimer mon compte';toast('Suppression impossible pour le moment : réessaie')}},true);
+/* mention légale en bas des Réglages */
+const FANNOTE=`<p class="fannote">L’Appel des Cartes est une application de fan, gratuite et non officielle. Elle n’est ni affiliée, ni approuvée par Bandai, Toei Animation, Shueisha ou Bird Studio. Dragon Ball et les illustrations des cartes appartiennent à leurs propriétaires. · <a href="confidentialite.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="suppression-compte.html" target="_blank" rel="noopener">Supprimer mon compte</a></p>`;
 function set(){
 const sg=(ic,t,sub,body)=>`<section class="sgp"><h3 class="sgh"><i aria-hidden="true">${ic}</i><span>${t}${sub?`<small>${sub}</small>`:''}</span></h3>${body}</section>`;
 const seg=(arr,cur,k,lab)=>`<div class="seg" role="group" aria-label="${lab}">${arr.map(([v,t])=>`<button aria-pressed="${cur===v}" data-${k}="${v}">${t}</button>`).join('')}</div>`;
@@ -6782,7 +6800,7 @@ if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=s
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}}
-function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]();$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
+function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]()+(S.tab==='set'?FANNOTE:'');$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
@@ -6998,7 +7016,7 @@ addEventListener('focus',()=>{sbCheck()});
 if(sbOn()&&SBS){setTimeout(()=>{SBPUSHED=localStorage.getItem('fb_at')||'';sbCheck()},1500)}
 function sbPanel(){if(!sbOn())return '';const inp='width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;margin-top:6px';
 if(!SBS)return `<div class="panel" style="margin-bottom:10px">👤 Compte<div class="sub">Retrouve ta collection sur tous tes appareils.</div><input id="sb-n" type="text" maxlength="20" autocomplete="nickname" placeholder="Pseudo (pour créer un compte)" style="${inp}"><input id="sb-e" type="email" autocomplete="email" placeholder="Adresse e-mail" style="${inp}"><input id="sb-p" type="password" autocomplete="current-password" placeholder="Mot de passe (6 caractères minimum)" style="${inp}"><button class="btn" style="margin-top:8px" data-sbin>Se connecter</button><button class="btn alt" style="margin-top:8px" data-sbup>Créer un compte</button>${SBMSG?`<div class="sub" style="margin-top:8px">${esc(SBMSG)}</div>`:''}</div>`;
-return `<div class="panel" style="margin-bottom:10px">👤 Compte<div class="sub">${SBS.pseudo?`Salut <b>${esc(SBS.pseudo)}</b> 👋`:'Connecté'} · ${esc(SBS.email)}</div><div style="display:flex;gap:8px;margin-top:8px"><input id="sb-n" type="text" maxlength="20" autocomplete="nickname" placeholder="${SBS.pseudo?'Changer de pseudo':'Choisis ton pseudo'}" style="${inp};margin-top:0"><button class="btn" style="width:auto;padding:0 16px" data-sbpseudo>OK</button></div><div class="sub" style="margin-top:4px">${esc(SBMSG||(SBAUTO?'Synchronisation automatique activée':''))}</div><button class="btn alt" style="margin-top:8px" data-sbpull>⬇️ Charger la collection du compte</button><button class="btn alt" style="margin-top:8px" data-sbpush>⬆️ Envoyer cet appareil vers le compte</button><button class="chip" style="margin-top:8px" data-sbout>Se déconnecter</button></div>${frPanel()}`}
+return `<div class="panel" style="margin-bottom:10px">👤 Compte<div class="sub">${SBS.pseudo?`Salut <b>${esc(SBS.pseudo)}</b> 👋`:'Connecté'} · ${esc(SBS.email)}</div><div style="display:flex;gap:8px;margin-top:8px"><input id="sb-n" type="text" maxlength="20" autocomplete="nickname" placeholder="${SBS.pseudo?'Changer de pseudo':'Choisis ton pseudo'}" style="${inp};margin-top:0"><button class="btn" style="width:auto;padding:0 16px" data-sbpseudo>OK</button></div><div class="sub" style="margin-top:4px">${esc(SBMSG||(SBAUTO?'Synchronisation automatique activée':''))}</div><button class="btn alt" style="margin-top:8px" data-sbpull>⬇️ Charger la collection du compte</button><button class="btn alt" style="margin-top:8px" data-sbpush>⬆️ Envoyer cet appareil vers le compte</button><button class="chip" style="margin-top:8px" data-sbout>Se déconnecter</button><button type="button" class="chip delacct" style="margin-top:8px" data-delacct>🗑️ Supprimer mon compte</button></div>${frPanel()}`}
 
 
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='tr-q'&&TR){TR.q=e.target.value;const l=document.getElementById('tr-l');if(l)l.innerHTML=trLists()}});

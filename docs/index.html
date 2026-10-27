@@ -6875,7 +6875,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 oct. 2026 · 31';
+const BUILD='27 oct. 2026 · 32';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7651,7 +7651,7 @@ function dzCard(id){const m=/^(D\d+)-/.exec(id||'');if(!m)return undefined;const
 /* photos en grand : un fichier par série, dans le dépôt de sa langue */
 const DZ_HI={};
 function dzHi(sid){const s=dzSet(sid);if(!s||DZ_HI[sid])return;DZ_HI[sid]=1;
- fetch(DZ_BASE+s.dz.r+'/'+sid+'.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{const pk=d._pk||[];delete d._pk;Object.assign(MS_CI,d);
+ fetch(sid+'.json').then(r=>r.ok?r.json():Promise.reject()).catch(()=>fetch(DZ_BASE+s.dz.r+'/'+sid+'.json').then(r=>r.ok?r.json():Promise.reject())).then(d=>{const pk=d._pk||[];delete d._pk;Object.assign(MS_CI,d);
   if(pk.length){KPK[sid]=pk;MS_IMG[sid]=Object.assign({},MS_IMG[sid]||{},{pk:pk[0],box:pk[1]||pk[0]})}
   clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},150)}).catch(()=>{DZ_HI[sid]=2})}
 {const h0=msHi;msHi=function(k){const m=/^(D\d+)-/.exec(k||'');if(m)return dzHi(m[1]);return h0(k)}}

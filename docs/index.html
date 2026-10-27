@@ -1731,6 +1731,253 @@ body::before{position:absolute!important}
 .chip.delacct.cf{background:var(--tv-neg,#ff5a5a);color:#fff;border-color:transparent}
 .fannote{margin:22px 4px 0;font-size:11.5px;line-height:1.5;color:var(--mu);text-align:center}
 .fannote a{color:var(--mu);text-decoration:underline}
+
+/* ===== Collection v3 : en-tête de série façon écran de combat, barre d'outils fixe, cartes, scellés ===== */
+:root{--cxg:var(--gold);--cxk:#14090B}
+:root[data-theme="light"]{--cxg:#8F6200}
+/* édition : 3 drapeaux */
+.cx-ed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:2px 0 10px}
+.cx-ed button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;min-width:0;padding:0 6px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);font:700 14px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;transform:skewX(var(--sk,-9deg));cursor:pointer}
+.cx-ed button>*{transform:skewX(9deg)}
+.cx-ed svg{width:24px;height:16px;flex:none;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.35)}
+.cx-ed span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cx-ed button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold);box-shadow:inset 0 -3px 0 var(--gold)}
+.cx-ed button[aria-pressed="false"] svg{opacity:.7}
+/* en-tête de série : portrait (booster) + jauge de vie */
+.cx-hero{position:relative;display:grid;grid-template-columns:74px minmax(0,1fr);column-gap:14px;padding:14px 12px 12px 12px;margin:0 0 10px;border:1px solid rgba(var(--cr),.45);border-left:6px solid rgb(var(--cr));border-radius:2px 18px 2px 18px;background:radial-gradient(120% 130% at 0 0,rgba(var(--cr),.34),transparent 62%),var(--sf);box-shadow:0 18px 30px -24px #000;overflow:hidden}
+.cx-hero.done{border-color:var(--gold);border-left-color:var(--gold);box-shadow:0 18px 30px -24px #000,0 0 0 1px var(--gold),0 0 22px -6px color-mix(in srgb,var(--gold) 70%,transparent)}
+.cx-pkb{grid-column:1;grid-row:1;align-self:start;display:block;width:74px;margin:-2px 0 0;padding:0;border:0;background:none;cursor:pointer}
+.cx-pk{display:block;width:74px;aspect-ratio:5/7;background-position:center;background-size:contain;background-repeat:no-repeat;transform:rotate(-6deg);filter:drop-shadow(0 10px 9px rgba(0,0,0,.55));transition:transform .2s}
+.cx-pkb:active .cx-pk{transform:rotate(-6deg) scale(.95)}
+.cx-pk.no{display:grid;place-items:center;background:linear-gradient(155deg,rgb(var(--cr)),color-mix(in srgb,rgb(var(--cr)) 35%,#000));border:2px solid var(--gold);border-radius:4px}
+.cx-pk.no b{font:900 italic 19px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.04em;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.cx-hr{grid-column:2;grid-row:1;min-width:0}
+.cx-h1{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.cx-hb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:0;padding:0;border:0;background:none;color:var(--tx);text-align:left;cursor:pointer}
+.cx-hc{display:flex;align-items:center;gap:3px}
+.cx-hc b{font:900 italic 29px/.95 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;color:var(--cxg)}
+.cx-hc svg{width:17px;height:17px;color:var(--mu);margin-top:3px}
+.cx-hn{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font:600 15px/1.2 Barlow,sans-serif;color:var(--tx)}
+.cx-arrs{display:flex;gap:6px;flex:none}
+.cx-arr{display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid rgba(var(--cr),.55);border-radius:2px;background:rgba(0,0,0,.25);color:var(--tx);transform:skewX(var(--sk,-9deg));cursor:pointer}
+:root[data-theme="light"] .cx-arr{background:rgba(255,255,255,.7)}
+.cx-arr svg{width:18px;height:18px;transform:skewX(9deg)}
+.cx-arr:active{transform:skewX(var(--sk,-9deg)) scale(.92)}
+.cx-pw{display:flex;align-items:center;gap:10px;margin-top:10px}
+.cx-hp{flex:1;min-width:0;height:16px;padding:2px;background:#000;border:2px solid var(--gold);border-radius:2px;transform:skewX(-14deg)}
+.cx-hp i{display:block;height:100%;max-width:100%;background:linear-gradient(90deg,rgb(var(--cr)),color-mix(in srgb,rgb(var(--cr)) 55%,#fff));box-shadow:0 0 10px rgba(var(--cr),.7);transition:width .45s cubic-bezier(.2,.9,.25,1)}
+.cx-hero.done .cx-hp i{background:linear-gradient(90deg,#f0a500,#ffe28a,#f0a500)}
+.cx-pc{flex:none;min-width:2.4ch;text-align:right;font:900 italic 30px/.9 'Big Shoulders Display',Impact,sans-serif;color:var(--cxg)}
+.cx-pc small{font-size:.55em;margin-left:1px}
+.cx-hs{margin-top:7px;font:500 13px/1.35 Barlow,sans-serif;color:var(--mu)}
+.cx-hs b{color:var(--tx);font-weight:700}
+.cx-hv{font:800 italic 15.5px/1 'Big Shoulders Display',Impact,sans-serif!important;letter-spacing:.02em;color:var(--cxg)!important}
+.cx-bdg{display:inline-block;margin:0 6px 2px 0;padding:2px 8px;background:var(--gold);color:var(--cxk);font:900 italic 12px/1.3 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.06em;transform:skewX(var(--sk,-9deg))}
+.cx-tags{grid-column:1/-1;display:flex;gap:6px;margin:12px -12px 0;padding:2px 12px 3px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cx-tags::-webkit-scrollbar{display:none}
+.cx-tag{flex:none;display:flex;align-items:baseline;gap:5px;min-height:36px;padding:0 11px;border:1px solid var(--ln);border-radius:2px;background:linear-gradient(rgb(var(--cr)),rgb(var(--cr))) left bottom/var(--t) 3px no-repeat,rgba(0,0,0,.22);color:var(--tx);transform:skewX(var(--sk,-9deg));cursor:pointer;align-items:center}
+:root[data-theme="light"] .cx-tag{background:linear-gradient(rgb(var(--cr)),rgb(var(--cr))) left bottom/var(--t) 3px no-repeat,var(--bg)}
+.cx-tag>*{transform:skewX(9deg)}
+.cx-tag b{font:700 14.5px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em}
+.cx-tag span{font:600 12px/1 Barlow,sans-serif;color:var(--mu)}
+.cx-tag.ok{border-color:color-mix(in srgb,var(--gold) 75%,transparent)}
+.cx-tag.ok span{color:var(--cxg)}
+.cx-tag.ok span::after{content:' ✓'}
+.cx-tag[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--cxk)}
+.cx-tag[aria-pressed="true"] span{color:var(--cxk)}
+.cx-note{grid-column:1/-1;margin-top:8px;font:500 12.5px/1.35 Barlow,sans-serif;color:var(--mu)}
+/* Cartes / Scellés */
+.cx-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+.cx-tabs button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 8px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);transform:skewX(var(--sk,-9deg));cursor:pointer}
+.cx-tabs button>*{transform:skewX(9deg)}
+.cx-tabs span{font:900 italic 18px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.05em}
+.cx-tabs small{font:600 12.5px/1 Barlow,sans-serif;opacity:.9}
+.cx-tabs button[aria-pressed="true"]{color:var(--tx);border-color:var(--gold);box-shadow:inset 0 -3px 0 var(--gold)}
+.cx-tabs button[aria-pressed="true"] small{color:var(--cxg)}
+/* barre d'outils : reste en haut quand on descend dans la liste */
+.cx-anchor{display:block;height:1px;margin-bottom:-1px}
+.cx-hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;display:flex;align-items:center;gap:6px;margin:0 -16px;padding:10px 16px 8px;background:color-mix(in srgb,var(--bg) 93%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.cx-stuck header{position:relative}
+.cx-hud.stuck{box-shadow:0 2px 0 var(--gold),0 14px 22px -14px #000}
+.cx-hud::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:env(safe-area-inset-top,0px);background:var(--bg)}
+.cx-s{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:46px;padding:0 6px 0 12px;background:var(--sf);border:2px solid var(--ln);border-bottom:3px solid var(--ac);border-radius:2px;cursor:text}
+.cx-s:focus-within{border-color:var(--gold);border-bottom-color:var(--ac)}
+.cx-s>svg{width:18px;height:18px;flex:none;color:var(--mu)}
+.cx-hud .cx-s input[type=search]{flex:1;min-width:0;width:auto;height:100%;margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;color:var(--tx);font:500 15px Barlow,sans-serif}
+.cx-hud .cx-s input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.cx-hud .cx-s input::placeholder{color:var(--mu);opacity:.85}
+.cx-sx{display:grid;place-items:center;flex:none;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:var(--ln);color:var(--tx);cursor:pointer}
+.cx-sx svg{width:14px;height:14px}
+.cx-ib{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:50px;height:46px;padding:0;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--tx);cursor:pointer}
+.cx-ib svg{width:19px;height:19px}
+.cx-ib small{font:700 10.5px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;color:var(--mu)}
+.cx-ib i{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--gold);color:var(--cxk);font:800 11.5px/19px Barlow,sans-serif;font-style:normal;text-align:center;box-shadow:0 0 0 2px var(--bg)}
+.cx-ib.on{background:var(--gold);border-color:var(--gold);color:var(--cxk)}
+.cx-ib.on small{color:var(--cxk)}
+.cx-ib.on2{border-color:var(--gold)}
+.cx-ib.on2 small{color:var(--tx)}
+/* Toutes / Possédées / Manquantes / En double */
+.cx-seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:2px 4px 10px 0}
+.cx-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:50px;padding:4px 2px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);transform:skewX(var(--sk,-9deg));cursor:pointer}
+.cx-seg button>*{transform:skewX(9deg)}
+.cx-seg span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 13px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em}
+.cx-seg b{font:900 italic 20px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--tx)}
+.cx-seg button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--cxk)}
+.cx-seg button[aria-pressed="true"] b{color:var(--cxk)}
+/* filtres actifs */
+.cx-pills{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.cx-pill{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 12px;border:1px solid var(--gold);border-radius:17px;background:color-mix(in srgb,var(--gold) 14%,transparent);color:var(--tx);font:600 13.5px/1 Barlow,sans-serif;cursor:pointer}
+.cx-pill svg{width:13px;height:13px}
+.cx-pill.clr{border-color:transparent;background:none;color:var(--mu);text-decoration:underline;text-underline-offset:3px}
+/* ajout rapide */
+.cx-qb{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:8px 8px 8px 12px;border:1px dashed var(--gold);border-radius:2px;background:color-mix(in srgb,var(--gold) 9%,transparent);font:500 13px/1.35 Barlow,sans-serif}
+.cx-qb>svg{width:18px;height:18px;flex:none;color:var(--gold)}
+.cx-qb span{flex:1;min-width:0}
+.cx-qb button{flex:none;min-height:36px;padding:0 14px;border:0;border-radius:2px;background:var(--gold);color:var(--cxk);font:700 14px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;cursor:pointer}
+/* astuce, nombre de résultats */
+.cx-tip{margin:0 0 10px;padding:10px 12px;border-left:4px solid var(--gold);background:color-mix(in srgb,var(--gold) 8%,transparent);font:500 13.5px/1.4 Barlow,sans-serif;color:var(--tx)}
+.cx-rh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font:500 13.5px/1.3 Barlow,sans-serif;color:var(--mu)}
+.cx-rh b{color:var(--tx)}
+.cx-rh small{display:block;margin-top:3px;font-size:12.5px}
+.cx-rh button{display:inline-flex;align-items:center;gap:6px;flex:none;min-height:34px;padding:0 2px;border:0;background:none;color:var(--tx);font:600 13.5px/1 Barlow,sans-serif;cursor:pointer}
+.cx-rh button svg{width:16px;height:16px;color:var(--cxg)}
+/* grille */
+.cx-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
+html[data-gcs="2"] .cx-g{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}
+html[data-gcs="4"] .cx-g{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 6px}
+html .cx-g.v-book{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+.cx-t{position:relative;min-width:0;content-visibility:auto;contain-intrinsic-size:auto 190px}
+.cx-a{position:relative}
+.cx-a>.card{display:block;width:100%}
+.cx-t .art .qty{display:none}
+.cx-t:not(.own) .art em{opacity:.85}
+.cx-mk{position:absolute;top:24%;left:4px;z-index:2;display:flex;flex-direction:column;gap:3px;pointer-events:none}
+.cx-mk svg,.cx-mk2 svg{width:17px;height:17px;padding:2.5px;border-radius:50%;background:rgba(10,6,6,.82);box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.cxi-h{color:#FF5A6E}.cxi-s{color:#58B4FF}.cxi-u{color:#FFB35A}.cxi-t{color:var(--gold)}
+.cx-st{position:absolute;left:50%;bottom:7px;z-index:2;display:flex;align-items:center;height:32px;transform:translateX(-50%);border:1px solid var(--gold);border-radius:16px;background:rgba(10,6,6,.88);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.cx-st button{display:grid;place-items:center;width:31px;height:30px;padding:0;border:0;background:none;color:#fff;font:600 21px/1 Barlow,sans-serif;cursor:pointer}
+.cx-st button:active{transform:scale(.86)}
+.cx-st b{min-width:14px;text-align:center;font:900 italic 18px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--gold)}
+.cx-st.z{left:auto;right:6px;transform:none;border-color:rgba(255,255,255,.4);background:rgba(10,6,6,.72)}
+.cx-i{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 5px;min-width:0;margin-top:7px;cursor:pointer}
+.cx-no{font:800 15.5px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;color:var(--tx)}
+.cx-t:not(.own) .cx-no{color:var(--mu)}
+.cx-r{font:700 11.5px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;color:var(--mu)}
+.cx-px{margin-left:auto;white-space:nowrap;font:800 italic 14.5px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em;color:var(--cxg)}
+.cx-nm,.cx-mk2{display:none}
+html[data-gcs="2"] .cx-g:not(.v-list):not(.v-book) .cx-nm{display:block;flex-basis:100%;order:9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 13px/1.25 Barlow,sans-serif;color:var(--mu)}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-r{display:none}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-no{font-size:13px}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-px{font-size:12px}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-st{height:28px;bottom:5px}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-st button{width:24px;height:26px;font-size:18px}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-st b{font-size:15px}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-mk svg{width:15px;height:15px}
+/* liste */
+.cx-g.v-list{grid-template-columns:minmax(0,1fr)!important;gap:0}
+.v-list .cx-t{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;column-gap:12px;padding:9px 0;border-bottom:1px solid var(--ln);contain-intrinsic-size:auto 84px}
+.v-list .cx-a{display:contents}
+.v-list .cx-a>.card{grid-column:1;grid-row:1}
+.v-list .art{font-size:15px;border-width:1px;border-radius:4px}
+.v-list .art em{font-size:8px;padding:0 3px;bottom:2px;left:2px}
+.v-list .cx-mk{display:none}
+.v-list .cx-i{grid-column:2;grid-row:1;margin:0;row-gap:4px}
+.v-list .cx-nm{display:block;flex-basis:100%;order:-1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 14.5px/1.25 Barlow,sans-serif;color:var(--tx)}
+.v-list .cx-t:not(.own) .cx-nm{color:var(--mu)}
+.v-list .cx-mk2{display:inline-flex;gap:3px;align-self:center}
+.v-list .cx-mk2 svg{width:15px;height:15px;padding:2px}
+.v-list .cx-px{margin-left:6px}
+.v-list .cx-st,.v-list .cx-st.z{grid-column:3;grid-row:1;position:static;transform:none}
+/* classeur : pages de 9 */
+.cx-pg{margin:22px 0 8px;padding:0 8px 10px;border:1px solid color-mix(in srgb,var(--gold) 38%,transparent);border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 8%,transparent),rgba(0,0,0,.16))}
+.cx-pt{height:28px;margin:-15px 0 10px;text-align:center}
+.cx-pt span{display:inline-block;padding:5px 16px 4px;border:1px solid var(--gold);border-radius:2px;background:var(--bg);color:var(--cxg);font:900 italic 15px/1.2 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.06em;transform:skewX(var(--sk,-9deg))}
+.cx-pg.ok .cx-pt span{background:var(--gold);color:var(--cxk)}
+/* plus de cartes, autres séries, rien trouvé */
+.cx-more{display:block;width:100%;min-height:50px;margin:18px 0 0;border:1px dashed var(--gold);border-radius:2px;background:none;color:var(--tx);font:600 14.5px/1.3 Barlow,sans-serif;cursor:pointer}
+.cx-more small{color:var(--mu);font-weight:500}
+.cx-oh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:26px 0 12px;font:900 italic 20px/1.1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.04em;color:var(--tx)}
+.cx-oh small{font:500 13px/1.3 Barlow,sans-serif;letter-spacing:0;color:var(--mu)}
+.cx-empty{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px 0 10px;padding:24px 16px;border:1px dashed var(--ln);border-radius:2px 14px 2px 14px;text-align:center;color:var(--mu);font:500 14px/1.4 Barlow,sans-serif}
+.cx-empty b{color:var(--tx);font-size:16px}
+.cx-empty .cx-pill{margin-top:8px}
+/* ajout rapide : la carte touchée « saute » avec un +1 */
+.cx-g.quick .cx-a>.card{cursor:copy}
+.cx-g.quick .cx-t:not(.own) .art{outline:2px dashed color-mix(in srgb,var(--gold) 65%,transparent);outline-offset:-2px}
+.cx-t.pop .cx-a::after{content:'+1';position:absolute;left:50%;top:36%;z-index:3;font:900 italic 32px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--gold);text-shadow:0 2px 0 #000,0 0 14px rgba(0,0,0,.85);pointer-events:none;animation:cxpop .75s ease-out forwards}
+.cx-t.pop .art{animation:cxbump .32s ease-out}
+@keyframes cxpop{0%{opacity:0;transform:translate(-50%,12px) scale(.6)}25%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-30px) scale(1)}}
+@keyframes cxbump{40%{transform:scale(1.06)}}
+html.calm .cx-t.pop .cx-a::after{animation-duration:.01s}
+html.calm .cx-t.pop .art{animation:none}
+/* scellés */
+.cx-sls{margin:8px 0 12px;font:500 14px/1.45 Barlow,sans-serif;color:var(--mu)}
+.cx-sls b{color:var(--tx)}
+.cx-sg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cx-sp{position:relative;display:flex;flex-direction:column;min-width:0;padding:10px 10px 12px;border:1px solid var(--ln);border-radius:2px 14px 2px 14px;background:var(--sf)}
+.cx-sp.own{border-color:color-mix(in srgb,var(--gold) 65%,transparent)}
+.cx-spa{display:grid;place-items:center;height:132px;margin:0;padding:6px;border:0;border-radius:2px 10px 2px 10px;background:radial-gradient(circle at 50% 62%,rgba(var(--cr),.3),transparent 70%);color:inherit;cursor:pointer}
+div.cx-spa{cursor:default}
+.cx-spa img,.cx-spa .cx-spi{max-width:100%;max-height:120px;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+.cx-sp:not(.own) .cx-spa img{filter:grayscale(.85) brightness(.72)}
+.cx-spe{font-size:48px;line-height:1}
+.cx-spt{display:flex;flex-direction:column;gap:3px;margin:8px 0 10px;min-width:0}
+.cx-spt b{font:900 italic 19px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.04em}
+.cx-spt small{color:var(--mu);font:500 12.5px/1.2 Barlow,sans-serif}
+.cx-spt .cx-px{margin:4px 0 0}
+.cx-spt em{font:600 12px/1.2 Barlow,sans-serif;font-style:normal;color:var(--cxg)}
+.cx-st.big{position:static;transform:none;align-self:flex-start;height:38px;margin-top:auto;border-radius:19px}
+.cx-st.big button{width:40px;height:36px}
+.cx-st.big b{font-size:20px;min-width:18px}
+.cx-st.big.z{border-color:var(--ln);background:var(--bg)}
+.cx-st.big.z button{color:var(--tx)}
+.cx-slh{margin-top:12px}
+/* fiche : carte précédente / suivante */
+.cx-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-2px 0 12px}
+.cx-nav button{display:grid;place-items:center;width:48px;height:40px;padding:0;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--tx);transform:skewX(var(--sk,-9deg));cursor:pointer}
+.cx-nav button svg{width:20px;height:20px;transform:skewX(9deg)}
+.cx-nav button:disabled{opacity:.3;cursor:default}
+.cx-nav span{font:600 13.5px/1 Barlow,sans-serif;color:var(--mu)}
+.sheet>div.cx-nx{animation:cxnx .22s ease-out}
+.sheet>div.cx-pv{animation:cxpv .22s ease-out}
+@keyframes cxnx{from{transform:translateX(28px);opacity:.35}}
+@keyframes cxpv{from{transform:translateX(-28px);opacity:.35}}
+/* feuille Filtres et affichage */
+.cx-fh{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.cx-fh h2{flex:1;margin:0}
+.cx-x{display:grid;place-items:center;flex:none;width:42px;height:42px;padding:0;border:1px solid var(--ln);border-radius:50%;background:var(--sf);color:var(--tx);cursor:pointer}
+.cx-x svg{width:16px;height:16px}
+.cx-fs{padding:14px 0 12px;border-top:1px solid var(--ln)}
+.cx-fh+.cx-fs{border-top:0}
+.cx-fs h3{margin:0 0 10px;font:700 13.5px/1 Barlow,sans-serif;color:var(--mu)}
+.cx-fc{display:flex;flex-wrap:wrap;gap:8px}
+.cx-ch{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 14px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--tx);transform:skewX(var(--sk,-9deg));cursor:pointer}
+.cx-ch>*{transform:skewX(9deg)}
+.cx-ch span{font:700 15px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em}
+.cx-ch small{font:600 12px/1 Barlow,sans-serif;color:var(--mu)}
+.cx-ch svg{width:17px;height:17px}
+.cx-ch[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--cxk)}
+.cx-ch[aria-pressed="true"] small,.cx-ch[aria-pressed="true"] svg{color:var(--cxk)}
+.cx-fs2{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.cx-fs2>span{font:500 13.5px/1.2 Barlow,sans-serif;color:var(--mu)}
+.cx-ff{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 4px 4px;border-top:1px solid var(--ln)}
+.cx-ff .btn{min-height:52px;font-size:18px;margin:0}
+/* petits écrans */
+@media (max-width:370px){
+ .cx-hero{grid-template-columns:60px minmax(0,1fr);column-gap:12px}
+ .cx-pkb,.cx-pk{width:60px}
+ .cx-hc b{font-size:25px}
+ .cx-hn{font-size:14px}
+ .cx-arr{width:32px;height:34px}
+ .cx-pc{font-size:26px}
+ .cx-ib{width:44px}
+ .cx-seg span{font-size:11.5px;letter-spacing:0}
+ .sheet .cx-sq{flex-wrap:wrap}
+ .sheet .cx-sq .qa{grid-template-columns:repeat(4,minmax(0,1fr));width:100%}
+ .sheet .cx-sq .qb{width:auto;height:58px}
+ .cx-ed button{gap:5px;font-size:13px}
+ .cx-ed svg{width:20px;height:14px}
+}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3466,7 +3713,7 @@ document.addEventListener('click',e=>{const m=e.target.closest&&e.target.closest
  document.addEventListener('touchstart',e=>{t0=null;if(e.touches.length!==1||document.querySelector('.sheet')||hs(e.target))return;const p=e.touches[0];t0={x:p.clientX,y:p.clientY,t:Date.now()}},{passive:true});
  document.addEventListener('touchend',e=>{if(!t0)return;const p=e.changedTouches[0],dx=p.clientX-t0.x,dy=p.clientY-t0.y,dt=Date.now()-t0.t;t0=null;
   if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*.6||dt>700)return;
-  const a=document.querySelectorAll('.sr-bar .sr-arr');if(a.length<2)return;
+  const a=document.querySelectorAll('.sr-bar .sr-arr,.cx-hero .cx-arr');if(a.length<2)return;
   (dx<0?a[a.length-1]:a[0]).click();try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}},{passive:true});
 })();
 /* Prix Masters : fichier prix_ms.json mis à jour chaque nuit (les prix intégrés servent de secours) */
@@ -5939,7 +6186,7 @@ function printTextFW(){const {lab,l}=printList();return lab+' — '+(S.pal?'tout
 const TUT=[
 ['👋','Bienvenue !','L\'Appel des Cartes gère ta collection Dragon Ball Super Card Game : Fusion World (édition japonaise, FB01 à FB11) et Masters (édition française : BT01 à BT31 (BT01 à BT04 en français, les autres séries avec les noms anglais)). Tout reste sur ton téléphone, sans compte.'],
 ['🔀','Deux jeux, un seul endroit','En haut de l\'onglet Collection, choisis Fusion World ou Masters. Chaque jeu a ses séries, ses cartes, ses prix et ses stats. L\'appli se souvient de ton dernier choix.'],
-['🗂️','Ta collection','Touche la barre de série pour voir toutes les séries, ou utilise les flèches ‹ › pour passer à la voisine. Les filtres (Possédées, Manquantes, Normal, Alt Art, raretés) et le tri t\'aident à t\'y retrouver. Touche une carte pour ouvrir sa fiche, − et + changent sa quantité.'],
+['🗂️','Ta collection','Les drapeaux choisissent l\'édition (japonaise, française, anglaise). Touche l\'en-tête de la série pour en choisir une autre, ou utilise les flèches ‹ ›. Toutes, Possédées, Manquantes et Doubles trient tes cartes ; la recherche, Filtres et Trier t\'aident à t\'y retrouver. ⚡ Rapide : chaque carte touchée est ajoutée (ou tape son numéro puis Entrée). Touche une carte pour ouvrir sa fiche, − et + changent sa quantité.'],
 ['🃏','La fiche d\'une carte','Tu y règles la quantité possédée et recherchée, et tu peux la marquer ⭐ favorite, 💱 à échanger ou 🔧 à remplacer. Le bouton Agrandir l\'affiche en grand. Tu vois aussi son prix Cardmarket avec la courbe, et tu peux la vendre avec « Vendre cette carte ».'],
 ['📦','Les produits scellés','L\'onglet « Scellé » de chaque série suit tes boosters, displays et cases, avec leur prix. Leur valeur est comptée dans ta collection.'],
 ['💶','Prix et valeur','Les prix viennent de Cardmarket (le premier prix de vente). « Valeur de ta série » te dit combien vaut ce que tu as et ce qu\'il te manque. Tu peux aussi fixer ton propre prix sur la fiche. Les prix Fusion World se mettent à jour, ceux de Masters aussi, chaque nuit.'],
@@ -6608,7 +6855,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 oct. 2026 · 23';
+const BUILD='27 oct. 2026 · 24';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -6792,14 +7039,14 @@ function initTilt(){if(RM)return;document.querySelectorAll('.tilt').forEach(el=>
 if(!TILTON&&window.DeviceOrientationEvent){TILTON=true;window.addEventListener('deviceorientation',e=>{const el=document.querySelector('.tilt');if(!el||e.gamma==null||el.matches(':active'))return;setTilt(el,clamp01(.5+Math.max(-30,Math.min(30,e.gamma))/60),clamp01(.5+Math.max(-30,Math.min(30,(e.beta||0)-40))/60))})}}
 const askTilt=()=>{try{if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{})}catch(e){}};
 let LAST={sk:'',vk:''};
-const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.mnmore,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh,!!S.alsh].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
+const sheetKey=()=>[S.sel,S.ssel,S.pick,!!S.cf,S.menu,S.mnmore,S.zoom,S.tut,!!S.shr,!!S.srt,S.b2&&S.b2.sh,!!S.vsh,!!S.alsh,!!S.cxf,S.ensel||'',S.msel||'',!!S.mspick].join('|'),viewKey=()=>[S.tab,S.mode,S.ext,X.game,X.fwed,S.mss,S.msm,S.bsel,S.bpick,S.b2&&S.b2.new?1:0,S.hzv,S.shop,S.dl,S.burst,S.op?[S.op.kind,S.op.cur,S.op.disp].join(':'):''].join('|');
 let RESTORE=false;const SCRM={};
 function render(){const y=window.scrollY,sd=document.querySelector('.sheet>div'),st=sd?sd.scrollTop:0,sk=sheetKey(),vk=viewKey(),sameS=sk===LAST.sk,sameV=vk===LAST.vk;
 if(sameV&&S.op)document.getElementById('app').classList.remove('enter');renderCore();LAST={sk,vk};
 if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=st}
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
-if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}}
+if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}try{cxAfter()}catch(e){}}
 function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]()+(S.tab==='set'?FANNOTE:'');$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
@@ -7065,6 +7312,302 @@ function sphBlob(f){return new Promise((res,rej)=>{const r=new FileReader();r.on
 async function sphUp(f,id){if(!f||!id)return;if(!SBS){toast('Connecte-toi dans Réglages pour ajouter une photo');return}toast('Envoi de la photo…');try{const b=await sphBlob(f),t=await sbTok(),r=await fetch(SBC.url+'/storage/v1/object/card-photos/'+encodeURIComponent(id)+'.jpg',{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'true'},body:b});if(!r.ok){toast(r.status===400||r.status===403?'Cette carte a déjà une photo d\'un autre utilisateur':'Envoi impossible');return}SPH[id]=sphUrl(id,Date.now());try{localStorage.setItem('fb_sph',JSON.stringify(SPH))}catch(e){}toast('Photo ajoutée, tout le monde la voit ✓');render()}catch(e){toast('Envoi impossible')}}
 async function sphDel(id){if(!SBS||!id)return;try{const t=await sbTok(),r=await fetch(SBC.url+'/storage/v1/object/card-photos/'+encodeURIComponent(id)+'.jpg',{method:'DELETE',headers:{apikey:SBC.key,Authorization:'Bearer '+t}});if(!r.ok){toast('Tu ne peux retirer que tes propres photos');return}await sphLoad();delete SPH[id];render();toast('Photo retirée')}catch(e){toast('Retrait impossible')}}
 if(sbOn()){sphLoad();addEventListener('focus',()=>sphLoad())}
+/* ===== COLL-V3:START — onglet Collection refait de A à Z : la même présentation pour le japonais, le français et l'anglais =====
+   En-tête de série (affiche, jauge, raretés, valeur), barre d'outils qui reste en haut (recherche, ajout rapide, filtres, tri),
+   Toutes / Possédées / Manquantes / En double, 3 affichages (grille, liste, classeur), recherche dans toutes les séries,
+   fiche avec carte précédente / suivante, scellés en grand. Les données et les boutons ± existants sont réutilisés. */
+const CXVS=[['grid','Grille'],['list','Liste'],['book','Classeur']];
+let CXV='grid';try{const v=localStorage.getItem('fb_cxv');if(CXVS.some(x=>x[0]===v))CXV=v}catch(e){}
+let CXQ=false,CXN=216,CXK='',CXL=[],CXPOP=null,CXNAV=0,CXIO=null,CXSO=null,CXTOP=0;
+const CXSTEP=216;
+const cxSvg=(p,c)=>`<svg viewBox="0 0 24 24"${c?` class="${c}"`:''} aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const CXIC={
+ search:cxSvg('<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>'),
+ bolt:cxSvg('<path d="M13.5 2 4.5 13.6h6.6L10 22l9.4-11.9h-6.8z" fill="currentColor" stroke="none"/>'),
+ filt:cxSvg('<path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2.1"/><circle cx="9" cy="12" r="2.1"/><circle cx="17" cy="17.5" r="2.1"/>'),
+ sort:cxSvg('<path d="M8 4v15M8 19l-3.5-3.5M8 19l3.5-3.5M16 20V5M16 5l-3.5 3.5M16 5l3.5 3.5"/>'),
+ left:cxSvg('<path d="M15 5l-7 7 7 7"/>'),right:cxSvg('<path d="M9 5l7 7-7 7"/>'),chev:cxSvg('<path d="M6 9l6 6 6-6"/>'),
+ heart:cxSvg('<path d="M12 20.5s-7.6-4.6-9.2-9.3C1.6 7.8 3.7 4.6 7 4.6c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.3 0 5.4 3.2 4.2 6.6-1.6 4.7-9.2 9.3-9.2 9.3z" fill="currentColor" stroke="none"/>','cxi-h'),
+ swap:cxSvg('<path d="M4 8h13M14 4l4 4-4 4M20 16H7M10 12l-4 4 4 4"/>','cxi-s'),
+ wrench:cxSvg('<path d="M14.6 6.4a4 4 0 0 0-5.2 5.2L4 17l3 3 5.4-5.4a4 4 0 0 0 5.2-5.2l-2.7 2.7-2.4-.6-.6-2.4z"/>','cxi-u'),
+ target:cxSvg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/>','cxi-t'),
+ copy:cxSvg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>'),
+ x:cxSvg('<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>'),
+ v_grid:cxSvg('<rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/>'),
+ v_list:cxSvg('<path d="M10 6.5h10M10 12h10M10 17.5h10"/><rect x="3.5" y="4.5" width="3.5" height="4" rx=".6"/><rect x="3.5" y="10" width="3.5" height="4" rx=".6"/><rect x="3.5" y="15.5" width="3.5" height="4" rx=".6"/>'),
+ v_book:cxSvg('<path d="M12 6.6C10 5 7 4.5 3.8 5v13.2c3.2-.5 6.2 0 8.2 1.6 2-1.6 5-2.1 8.2-1.6V5C17 4.5 14 5 12 6.6zM12 6.6v13.2"/>')
+};
+const cxN=s=>String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const CXH=new Map();
+const cxHay=c=>{const k=c.id+'|'+(c.name||'');let h=CXH.get(k);if(h===undefined){h=cxN([c.name,c.full||'',c.id,c.id.replace(/[-_]/g,' '),String(c.n||'').padStart(3,'0'),c.rar||''].join(' '));CXH.set(k,h)}return h};
+const cxWords=q=>cxN(q).trim().split(/\s+/).filter(Boolean);
+const cxMatch=(c,w)=>{if(!w.length)return true;const h=cxHay(c);return w.every(t=>h.includes(t))};
+const CXRO=['L','C','UC','R','SR','SCR','CR','SPR','SLR','GDR','DPR','DAR','GFR'];
+const cxRo=r=>{const i=CXRO.indexOf(r);return i<0?99:i};
+const cxNo=id=>{const m=/-(\d{2,4})/.exec(id);return m?m[1]:id};
+const cxPc=(a,b)=>b?(a>=b?100:Math.max(a>0?1:0,Math.min(99,Math.round(a/b*100)))):0;
+const cxS=(n,a,b)=>n>1?b||a+'s':a;
+const cxSp=t=>`<span>${t}</span>`;
+const cxSl=(e,t)=>SEAL[e+'-'+t]||{own:0,want:0,price:''};
+/* carte Masters brute (pour msArt / msSheet) : index construit une seule fois */
+const cxRaw=id=>{let m=cxRaw.m;if(!m){m=cxRaw.m=new Map();MS_SETS.forEach(t=>t.c.forEach(c=>m.set(c[0],c)))}return m.get(id)||msFind(id)};
+
+/* l'édition affichée : mêmes questions pour les trois (quelles cartes, combien j'en ai, quel prix, quels filtres) */
+function cxCtx(){
+ if(X.game==='ms'){msBindInit();const set=msCur(),id=set.id,ks=[...new Set(set.c.filter(msIsSpr).map(msKind))];
+  return{ed:'ms',id,nm:set.n,set,L:MS_ALL.filter(c=>c.ext===id),rgb:MS_COL[id]||'229,9,20',
+   own:c=>msOwn(c.id),isAlt:c=>c.ver==='ALT',want:c=>msdG(c.id).want||0,px:c=>msPx(c.id),
+   altLab:ks.length===1?ks[0]:'Spéciales',
+   F:{own:S.mso||'',ver:S.msv==='SPR'?'alt':S.msv==='Normal'?'norm':'',rar:S.msr||'',fx:S.msx||'',typ:''},
+   q:S.msq||'',sealed:S.msm==='sealed',pool:()=>MS_ALL}}
+ const en=X.fwed==='en',e=S.ext;
+ return{ed:en?'en':'fw',id:e,nm:serNm(e),L:SRB[e]||[],rgb:srRGB(e),
+  own:en?(c=>enOwn(c.id)):(c=>c.own||0),isAlt:c=>c.ver!=='Normal',want:en?(()=>0):(c=>c.want||0),px:en?(()=>0):pxv,
+  altLab:'Alt Art',
+  F:{own:S.own||'',ver:S.ver==='Alternative Art'?'alt':S.ver==='Normal'?'norm':'',rar:S.rar||'',fx:en?'':(S.fx||''),typ:S.typ||''},
+  q:S.q||'',sealed:!en&&S.mode==='sealed',pool:()=>cards}}
+
+function cxPass(x,c,skipOwn){const F=x.F,o=x.own(c);
+ if(!skipOwn&&F.own&&(F.own==='y'?o<1:F.own==='n'?o>0:F.own==='d'?o<2:false))return false;
+ if(F.ver&&(F.ver==='alt')!==x.isAlt(c))return false;
+ if(F.rar&&(F.rar==='L'?!(c.type==='Leader'||c.rar==='L'):c.rar!==F.rar))return false;
+ if(F.typ&&c.type!==F.typ)return false;
+ if(F.fx&&(F.fx==='want'?!(x.want(c)>o):!(X[F.fx]&&X[F.fx][c.id])))return false;
+ return true}
+const cxNF=x=>['ver','rar','typ','fx'].filter(k=>x.F[k]).length;
+
+function cxStat(x){const s={o:0,n:x.L.length,oN:0,nN:0,oA:0,nA:0,dup:0,have:0,mn:0,ma:0,copies:0,R:{},px:false};
+ for(const c of x.L){const q=x.own(c),a=x.isAlt(c),p=x.px(c)||0;if(p)s.px=true;
+  if(a){s.nA++;if(q)s.oA++}else{s.nN++;if(q)s.oN++}
+  if(q){s.o++;s.copies+=q;s.have+=q*p;if(q>1)s.dup++}else if(a)s.ma+=p;else s.mn+=p;
+  const r=c.rar;if(r){const t=s.R[r]||(s.R[r]={n:0,o:0});t.n++;if(q)t.o++}}
+ return s}
+
+/* nouveau tri : par rareté (la plus rare d'abord) */
+const CXRK={C:1,UC:2,R:3,L:3.5,SR:4,CR:5,SCR:6,DPR:6,SPR:7,DAR:7,SLR:8,GFR:8,GDR:9};
+if(!CSORTS.some(y=>y[0]==='rar')){CSORTS.splice(2,0,['rar','Rareté',-1]);CSORTD.rar=['la plus commune d’abord','la plus rare d’abord'];CSORTL.rar='rareté'}
+try{const v=JSON.parse(localStorage.getItem('fb_csort')||'null');if(v&&v.k==='rar'){CSK='rar';CSD=v.d?1:0}}catch(e){}
+{const c0=csortApply;csortApply=function(l){if(CSK!=='rar')return c0(l);const dir=csortDir(),ix=new Map(msAllCards().map((c,i)=>[c.id,i])),rk=c=>(CXRK[c.rar]||0)+(c.ver!=='Normal'?.5:0);
+ return [...l].sort((a,b)=>{const ra=rk(a),rb=rk(b);if(!ra!==!rb)return ra?-1:1;return ra===rb?ix.get(a.id)-ix.get(b.id):(ra-rb)*dir})}}
+function cxSort(x,l){if(CSK==='num'&&!CSD)return l;
+ if(x.ed==='en'){const m=new Map(l.map(c=>[c.id,c]));return csortApply(l.map(c=>Object.assign({},c,{own:enOwn(c.id)}))).map(c=>m.get(c.id))}
+ return csortApply(l)}
+
+/* ---------- en-tête de l'écran ---------- */
+const cxHead=x=>`<header><div><h1>🐉 <span class="ttl">L'Appel des Cartes</span></h1><div class="sub">Ma collection · ${x.ed==='ms'?'édition française':x.ed==='en'?'édition anglaise':'édition japonaise'}</div></div></header>`;
+function cxFlags(x){const b=(v,f,l,a)=>`<button type="button" data-game="${v}" aria-pressed="${x.ed===v}" aria-label="${a}">${FLAG[f]}<span>${l}</span></button>`;
+ return `<div class="cx-ed" role="group" aria-label="Choisir l’édition">${b('fw','jp','Japonais','Édition japonaise : Fusion World')}${b('ms','fr','Français','Édition française : Masters, Draft Box, Le Grand Combat et anciennes collections')}${b('en','gb','Anglais','Édition anglaise : Fusion World')}</div>`}
+function cxPort(x){
+ if(x.ed==='ms'){const g=MS_IMG[x.id]||{};let im=g.pk||g.box||'';if(!im)try{im=msPickArt(x.set)||''}catch(e){}
+  return im?`<span class="cx-pk" style="background-image:url(${im})"></span>`:`<span class="cx-pk no"><b>${esc(x.id)}</b></span>`}
+ return PACKIMG[x.id]?`<span class="cx-pk srp-${x.id}"></span>`:`<span class="cx-pk no"><b>${esc(x.id)}</b></span>`}
+function cxTag(at,lab,o,n,on,aria){const ok=n>0&&o>=n;return `<button type="button" class="cx-tag${ok?' ok':''}" ${at} aria-pressed="${on}" aria-label="${aria} : ${o} sur ${n}${ok?', complet':''}" style="--t:${n?(o/n*100).toFixed(1):0}%"><b>${lab}</b><span>${o}/${n}</span></button>`}
+function cxHero(x,s){
+ const pc=cxPc(s.o,s.n),fullN=s.nN>0&&s.oN>=s.nN,fullA=s.n>0&&s.o>=s.n,pick=x.ed==='ms'?'data-mspick':'data-pick',
+  arr=d=>{if(x.ed==='ms'){const L=MS_SETS,i=L.indexOf(x.set),n=L.length;return `data-msset="${L[(i+(d>0?1:n-1))%n].id}"`}return `data-sr="${d>0?'next':'prev'}"`},
+  rr=Object.keys(s.R).sort((a,b)=>cxRo(a)-cxRo(b)||a.localeCompare(b)),
+  badge=fullA?`<em class="cx-bdg">${s.nA?'Master Set':'Complète'} ✓</em>`:fullN&&s.nA?`<em class="cx-bdg">Full Set ✓</em>`:'';
+ const tags=(rr.length>1?rr.map(r=>cxTag(`data-cxr="${r}"`,r,s.R[r].o,s.R[r].n,x.F.rar===r,'Rareté '+r)).join(''):'')
+  +(x.ed!=='ms'&&s.nA?cxTag('data-cxv="alt"','ALT',s.oA,s.nA,x.F.ver==='alt','Alternative Art'):'');
+ const val=MKON&&x.ed!=='en'&&s.px?` · valeur <b class="cx-hv">${eur(s.have)}</b>`:'';
+ const part=x.ed==='ms'&&x.set.part?`<div class="cx-note">Liste partielle : ${s.n} cartes ajoutées pour l’instant, les autres arriveront.${x.set.lang?' '+esc(x.set.lang):''}</div>`:'';
+ return `<section class="cx-hero${fullA?' done':''}" style="--cr:${x.rgb}" aria-label="Série ${esc(x.id)} ${esc(x.nm)}">`
+  +`<button type="button" class="cx-pkb" ${pick} tabindex="-1" aria-hidden="true">${cxPort(x)}</button>`
+  +`<div class="cx-hr"><div class="cx-h1"><button type="button" class="cx-hb" ${pick} aria-haspopup="dialog" aria-label="Changer de série. Série actuelle : ${esc(x.id)} ${esc(x.nm)}"><span class="cx-hc"><b>${esc(x.id)}</b>${CXIC.chev}</span><span class="cx-hn">${esc(x.nm)}</span></button>`
+  +`<span class="cx-arrs"><button type="button" class="cx-arr" ${arr(-1)} aria-label="Série précédente">${CXIC.left}</button><button type="button" class="cx-arr" ${arr(1)} aria-label="Série suivante">${CXIC.right}</button></span></div>`
+  +`<div class="cx-pw"><div class="cx-hp" role="progressbar" aria-valuemin="0" aria-valuemax="${s.n}" aria-valuenow="${s.o}" aria-label="Cartes possédées dans la série"><i style="width:${s.n?Math.max(s.o?2:0,s.o/s.n*100).toFixed(1):0}%"></i></div><b class="cx-pc">${pc}<small>%</small></b></div>`
+  +`<div class="cx-hs">${badge}<b>${s.o}</b> / ${s.n} carte${s.n>1?'s':''}${val}</div></div>`
+  +(tags?`<div class="cx-tags" role="group" aria-label="Filtrer par rareté">${tags}</div>`:'')+part+`</section>`}
+function cxTabs(x,s){if(x.ed==='en')return '';
+ const ms=x.ed==='ms',sc=ms?msSealQ(x.set).reduce((a,b)=>a+b,0):sealTs(x.id).reduce((a,t)=>a+Math.max(0,+(cxSl(x.id,t[0]).own)||0),0),at=v=>ms?`data-msmode="${v}"`:`data-mode="${v}"`;
+ return `<div class="cx-tabs" role="group" aria-label="Cartes ou produits scellés"><button type="button" ${at('cards')} aria-pressed="${!x.sealed}">${cxSp('Cartes')}<small>${s.o}/${s.n}</small></button><button type="button" ${at('sealed')} aria-pressed="${x.sealed}">${cxSp('Scellés')}<small>${sc}</small></button></div>`}
+
+/* ---------- une carte ---------- */
+const cxMarks=(id,w)=>(X.fav[id]?CXIC.heart:'')+(X.sell[id]?CXIC.swap:'')+(X.upg[id]?CXIC.wrench:'')+(w?CXIC.target:'');
+function cxTile(x,c,other){if(x.r1===undefined){const R=new Set();for(const y of x.L){if(y.rar)R.add(y.rar);if(R.size>1)break}x.r1=R.size<2}const id=c.id,q=x.own(c),p=x.px(c),ms=x.ed==='ms',en=x.ed==='en',nm=c.name||'',lab=esc(nm||id);
+ const artH=ms?msArt(cxRaw(id)):art(en?Object.assign({},c,{own:q}):c);
+ const open=ms?`data-msopen="${id}"`:en?`data-cxen="${id}"`:`data-n="${id}"`;
+ const at=d=>`data-cxd="${d}"`;
+ const mk=cxMarks(id,x.want(c)>q),rp=!ms&&RPR[id];
+ return `<div class="cx-t${q?' own':''}${CXPOP&&CXPOP.id===id?' pop':''}" data-cxid="${id}">`
+  +`<div class="cx-a"><button type="button" class="card" ${open} aria-label="${lab}, ${esc(id)}, ${q?'possédée, '+q+' exemplaire'+cxS(q,''):'manquante'}">${artH}</button>${mk?`<span class="cx-mk" aria-hidden="true">${mk}</span>`:''}`
+  +`<span class="cx-st${q?'':' z'}">${q?`<button type="button" class="cx-m" ${at(-1)} aria-label="Retirer un exemplaire de ${lab}">−</button><b>${q}</b>`:''}<button type="button" class="cx-p" ${at(1)} aria-label="Ajouter un exemplaire de ${lab}">+</button></span></div>`
+  +`<div class="cx-i"><b class="cx-no">${other?esc(c.ext)+' ':''}${cxNo(id)}</b>${c.rar&&(other||!x.r1)?`<span class="cx-r">${esc(c.rar)}</span>`:''}${rp?'<span class="cx-r">Réimp.</span>':''}<span class="cx-px">${p?eur(p):''}</span><span class="cx-nm">${esc(nm)}</span>${mk?`<span class="cx-mk2" aria-hidden="true">${mk}</span>`:''}</div></div>`}
+function cxBook(x,l){let o='';for(let i=0;i<l.length;i+=9){const pg=l.slice(i,i+9),ok=pg.every(c=>x.own(c)>0);
+  o+=`<section class="cx-pg${ok?' ok':''}"><div class="cx-pt"><span>Page ${i/9+1}${ok?' ✓':''}</span></div><div class="cx-g v-book${CXQ?' quick':''}">${pg.map(c=>cxTile(x,c)).join('')}</div></section>`}
+ return o}
+
+/* ---------- l'onglet Cartes ---------- */
+function cxCards(x,s){
+ const W=cxWords(x.q),base=x.L.filter(c=>cxPass(x,c,1)&&cxMatch(c,W)),cnt={'':base.length,y:0,n:0,d:0};
+ for(const c of base){const o=x.own(c);if(o)cnt.y++;else cnt.n++;if(o>1)cnt.d++}
+ let l=x.F.own?base.filter(c=>cxPass(x,c)):base;l=cxSort(x,l);CXL=l.map(c=>c.id);
+ const key=[x.ed,x.id,x.F.own,x.F.ver,x.F.rar,x.F.typ,x.F.fx,x.q,CSK,CSD,CXV].join('|');if(key!==CXK){CXK=key;CXN=216}
+ const nf=cxNF(x),ph='Nom ou numéro';
+ const hud=`<i class="cx-anchor" aria-hidden="true"></i><div class="cx-hud" role="search"><label class="cx-s">${CXIC.search}<input id="cxq" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${ph}" value="${esc(x.q)}" aria-label="Chercher une carte">${x.q?`<button type="button" class="cx-sx" data-cxclr aria-label="Effacer la recherche">${CXIC.x}</button>`:''}</label>`
+  +`<button type="button" class="cx-ib${CXQ?' on':''}" data-cxquick aria-pressed="${CXQ}" aria-label="Ajout rapide : chaque carte touchée est ajoutée">${CXIC.bolt}<small>Rapide</small></button>`
+  +`<button type="button" class="cx-ib" data-cxfilt aria-haspopup="dialog" aria-label="Filtres et affichage${nf?' : '+nf+' filtre'+cxS(nf,'')+' actif'+cxS(nf,''):''}">${CXIC.filt}<small>Filtres</small>${nf?`<i>${nf}</i>`:''}</button>`
+  +`<button type="button" class="cx-ib${CSK!=='num'||CSD?' on2':''}" data-sortopen aria-haspopup="dialog" aria-label="Trier : ${CSORTS.find(y=>y[0]===CSK)[1]}">${CXIC.sort}<small>Trier</small></button></div>`;
+ const seg=`<div class="cx-seg" role="group" aria-label="Quelles cartes afficher">${[['','Toutes'],['y','Possédées'],['n','Manquantes'],['d','Doubles']].map(([v,t])=>`<button type="button" data-cxo="${v}" aria-pressed="${x.F.own===v}" aria-label="${t} : ${cnt[v]}">${cxSp(t)}<b>${cnt[v]}</b></button>`).join('')}</div>`;
+ const P=[];if(x.F.rar)P.push(['rar',x.F.rar==='L'&&x.ed==='ms'?'Leaders':'Rareté '+x.F.rar]);if(x.F.ver)P.push(['ver',x.F.ver==='alt'?x.altLab:'Normales']);if(x.F.typ)P.push(['typ',x.F.typ]);if(x.F.fx)P.push(['fx',{fav:'Favoris',sell:'À échanger',upg:'À remplacer',want:'Recherchées'}[x.F.fx]]);
+ const pills=P.length?`<div class="cx-pills">${P.map(([k,t])=>`<button type="button" class="cx-pill" data-cxrm="${k}" aria-label="Retirer le filtre ${esc(t)}">${esc(t)}${CXIC.x}</button>`).join('')}${P.length>1?'<button type="button" class="cx-pill clr" data-cxrm="all">Tout effacer</button>':''}</div>`:'';
+ const qb=CXQ?`<div class="cx-qb" role="status">${CXIC.bolt}<span><b>Ajout rapide</b> : touche une carte (+1) ou tape son numéro puis Entrée.</span><button type="button" data-cxquick>Terminer</button></div>`:'';
+ const tl={'':'carte',y:'carte possédée',n:'carte manquante',d:'carte en double'}[x.F.own]||'carte',
+  cost=x.F.own==='n'&&MKON&&x.ed!=='en'?l.reduce((a,c)=>a+(x.px(c)||0),0):0,
+  rh=x.F.own||nf||x.q?`<div class="cx-rh"><span><b>${l.length}</b> ${l.length>1?tl.replace(/^carte/,'cartes').replace(/(possédée|manquante)$/,'$1s'):tl}${x.q?` pour « ${esc(x.q.trim())} »`:''}${cost>0?`<small>≈ <b class="cx-hv">${eur(cost)}</b> pour la compléter</small>`:''}</span>${l.length?`<button type="button" data-cxcopy aria-label="Copier la liste de ces ${l.length} cartes">${CXIC.copy}Copier</button>`:''}</div>`:'';
+ const shown=l.slice(0,CXN),more=l.length-shown.length;
+ const body=!l.length?`<div class="cx-empty"><b>${x.q?'Aucune carte ne correspond dans '+esc(x.id)+'.':x.F.own==='n'&&!nf?'Série complète : il ne te manque rien !':x.F.own==='d'&&!nf?'Aucune carte en double dans cette série.':'Aucune carte ne correspond.'}</b>${nf||x.F.own?'<span>Retire un filtre pour voir plus de cartes.</span><button type="button" class="cx-pill" data-cxrm="all">Effacer les filtres</button>':''}</div>`
+  :CXV==='book'?cxBook(x,shown):`<div class="cx-g v-${CXV}${CXQ?' quick':''}">${shown.map(c=>cxTile(x,c)).join('')}</div>`;
+ const mb=more>0?`<button type="button" class="cx-more" data-cxmore>Afficher ${Math.min(CXSTEP,more)} cartes de plus <small>(${more} restante${cxS(more,'')})</small></button>`:'';
+ let oth='';if(W.length){const o=[],P2=x.pool();for(const c of P2){if(c.ext===x.id||!cxPass(x,c)||!cxMatch(c,W))continue;o.push(c);if(o.length>=61)break}
+  if(o.length)oth=`<h3 class="cx-oh">Dans les autres séries <small>${o.length>60?'60 premiers résultats : précise ta recherche':o.length+' résultat'+cxS(o.length,'')}</small></h3><div class="cx-g v-${CXV==='list'?'list':'grid'}">${o.slice(0,60).map(c=>cxTile(x,c,1)).join('')}</div>`}
+ const tip=!s.o&&!x.q&&!nf&&!x.F.own&&!CXQ?`<div class="cx-tip">Touche <b>+</b> sous une carte pour l’ajouter, ou active <b>⚡ Rapide</b> pour en ajouter plein d’un coup.</div>`
+  :CSK==='recent'&&l.length&&!l.some(c=>X.added[c.id])?'<div class="cx-tip">Les cartes que tu ajoutes à partir de maintenant apparaîtront ici en premier.</div>'
+  :CSK==='price'&&l.length&&!l.some(c=>x.px(c))?'<div class="cx-tip">Aucun prix connu pour ces cartes : note le prix d’une carte dans sa fiche pour pouvoir trier par prix.</div>':'';
+ return hud+seg+pills+qb+tip+rh+body+mb+oth}
+
+/* ---------- l'onglet Scellés ---------- */
+function cxSealCard(img,t,sub,n,px,want,open,dec,inc){
+ return `<div class="cx-sp${n?' own':''}">${open?`<button type="button" class="cx-spa" ${open} aria-label="${t} : acheter, prix, vendre">${img}</button>`:`<div class="cx-spa">${img}</div>`}<div class="cx-spt"><b>${t}</b><small>${sub}</small>${px?`<span class="cx-px">${eur(px)}</span>`:''}${want?`<em>Recherché × ${want}</em>`:''}</div>`
+  +`<span class="cx-st big${n?'':' z'}">${n?`<button type="button" class="cx-m" ${dec} aria-label="Retirer : ${t}">−</button><b>${n}</b>`:''}<button type="button" class="cx-p" ${inc} aria-label="Ajouter : ${t}">+</button></span></div>`}
+function cxSealed(x){
+ if(x.ed==='ms'){const set=x.set,q=msSealQ(set),tot=q.reduce((a,b)=>a+b,0);
+  return `<div class="cx-sls">${tot?`<b>${tot}</b> produit${cxS(tot,'')} scellé${cxS(tot,'')} non ouvert${cxS(tot,'')}`:'Aucun produit scellé noté pour cette série.'} Ils sont comptés à part de tes cartes.</div><div class="cx-sg" style="--cr:${x.rgb}">${MS_SEAL.map((t,k)=>{const id=set.id+'-'+t[0],im=t[3]?msImg(set.id,t[3],'cx-spi'):'';
+   return cxSealCard(im||`<span class="cx-spe">${{booster:'🎴',display:'📦',case:'🗃️'}[t[0]]}</span>`,t[1],t[2],q[k],msCm(id),0,'',`data-ms="dec" data-id="${id}"`,`data-ms="inc" data-id="${id}"`)}).join('')}</div>`}
+ const e=x.id,T=sealTs(e),tot=T.reduce((a,t)=>a+Math.max(0,+(cxSl(e,t[0]).own)||0),0),inv=X.buys.filter(b=>b.ext===e).reduce((a,b)=>a+b.q*nb(b.p),0),val=sealVal(e);
+ return `<div class="cx-sls">${tot?`<b>${tot}</b> produit${cxS(tot,'')} scellé${cxS(tot,'')} non ouvert${cxS(tot,'')}`:'Aucun produit scellé noté pour cette série.'}${inv?` · investi <b>${eur(inv)}</b>`:''}${val>0?` · valeur <b>${eur(val)}</b>`:''}</div>`
+  +`<div class="cx-sg" style="--cr:${x.rgb}">${T.map(t=>{const s=cxSl(e,t[0]),im=imgOf(e,t[0]);return cxSealCard(im?`<img class="cx-spi" src="${im}" alt="" draggable="false">`:`<span class="cx-spe">${SEALI[t[0]]}</span>`,t[1],t[2],Math.max(0,+s.own||0),sealPx(e,t[0]),s.want,`data-sn="${t[0]}"`,`data-sk="${t[0]}" data-sd="-1"`,`data-sk="${t[0]}" data-sd="1"`)}).join('')}</div>`
+  +`<p class="sub cx-slh">Touche un produit pour noter un achat, son prix, l’ouvrir ou le vendre.</p>`}
+
+/* ---------- fiches ---------- */
+function cxNavWrap(h,id){if(!h||S.tab!=='coll')return h;const i=CXL.indexOf(id);if(i<0||CXL.length<2)return h;
+ const nav=`<div class="cx-nav"><button type="button" data-cxnav="-1" aria-label="Carte précédente"${i?'':' disabled'}>${CXIC.left}</button><span>${i+1} / ${CXL.length}</span><button type="button" data-cxnav="1" aria-label="Carte suivante"${i<CXL.length-1?'':' disabled'}>${CXIC.right}</button></div>`;
+ return h.replace(/(<div role="dialog"[^>]*>)/,'$1'+nav)}
+function cxEnSheet(){const c=S.ensel&&cards.find(y=>y.id===S.ensel);if(!c||S.tab!=='coll'||X.game==='ms'||X.fwed!=='en')return '';const q=enOwn(c.id);
+ return cxNavWrap(`<div class="sheet" data-cxenx><div role="dialog" aria-label="${esc(c.id)}"><div class="detail">${art(Object.assign({},c,{own:q}))}<div><h2 style="margin-top:0">${esc(c.name||'Nom à compléter')}</h2>${esc(c.id)}<br><span class="sub">🇬🇧 Édition anglaise · ${esc(c.ver)}${c.rar?' · Rareté : '+esc(c.rar):''}</span><br><span class="sub">Édition japonaise : ${c.own} exemplaire${cxS(c.own,'')}</span></div></div>`
+  +`<div>Possédée en anglais</div><div class="stepper"><button type="button" data-enq="${c.id}" data-ed="-1" aria-label="Retirer">➖</button><b>${q}</b><button type="button" data-enq="${c.id}" data-ed="1" aria-label="Ajouter">➕</button></div>`
+  +`<a class="btn alt" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px" target="_blank" rel="noopener noreferrer" href="https://www.cardmarket.com/fr/DragonBallSuper/Products/Search?searchString=${encodeURIComponent(c.id.replace(/_ALT\d?$/,''))}&language=1">💶 Voir le prix sur Cardmarket</a><button type="button" class="btn" data-cxenx>Fermer</button></div></div>`,c.id)}
+function cxFiltSheet(x){if(!S.cxf||S.tab!=='coll'||x.sealed)return '';
+ const W=cxWords(x.q),B=x.L.filter(c=>cxMatch(c,W)),cb=f=>B.filter(f).length,F=x.F;
+ const ch=(at,on,t,n,ic)=>`<button type="button" class="cx-ch" ${at} aria-pressed="${on}">${ic||''}${cxSp(t)}${n!=null?`<small>${n}</small>`:''}</button>`;
+ const views=CXVS.map(([k,t])=>ch(`data-cxview="${k}"`,CXV===k,t,null,CXIC['v_'+k])).join('');
+ const sizes=CXV==='list'?'':`<div class="cx-fs2"><span>Taille des cartes</span><div class="cx-fc">${[['2','Grandes'],['3','Moyennes'],['4','Petites']].map(([v,t])=>ch(`data-gcs="${v}"`,GCS===v,t)).join('')}</div></div>`;
+ const na=cb(c=>x.isAlt(c)),vers=na?ch('data-cxv="norm"',F.ver==='norm','Normales',cb(c=>!x.isAlt(c)))+ch('data-cxv="alt"',F.ver==='alt',x.altLab,na):'';
+ const rs=[...new Set(x.L.map(c=>c.rar).filter(Boolean))].sort((a,b)=>cxRo(a)-cxRo(b)||a.localeCompare(b));
+ const rars=rs.length>1?rs.map(r=>ch(`data-cxr="${r}"`,F.rar===r,r,cb(c=>c.rar===r))).join(''):'';
+ const types=x.ed==='ms'?(x.L.some(c=>c.type==='Leader')?ch('data-cxr="L"',F.rar==='L','Leaders',cb(c=>c.type==='Leader')):''):['Leader','Battle','Extra'].filter(t=>x.L.some(c=>c.type===t)).map(t=>ch(`data-cxt="${t}"`,F.typ===t,t,cb(c=>c.type===t))).join('');
+ const lists=x.ed==='en'?'':[['fav','Favoris',CXIC.heart],['sell','À échanger',CXIC.swap],['upg','À remplacer',CXIC.wrench],['want','Recherchées',CXIC.target]].map(([k,t,ic])=>ch(`data-cxx="${k}"`,F.fx===k,t,cb(c=>k==='want'?x.want(c)>x.own(c):!!(X[k]&&X[k][c.id])),ic)).join('');
+ const n=x.L.filter(c=>cxPass(x,c)&&cxMatch(c,W)).length,sec=(t,b)=>b?`<div class="cx-fs"><h3>${t}</h3><div class="cx-fc">${b}</div></div>`:'';
+ return `<div class="sheet cx-fsh" data-cxfx><div role="dialog" aria-modal="true" aria-label="Filtres et affichage" class="cx-fd">`
+  +`<div class="cx-fh"><h2>Filtres et affichage</h2><button type="button" class="cx-x" data-cxfx aria-label="Fermer">${CXIC.x}</button></div>`
+  +`<div class="cx-fs"><h3>Affichage</h3><div class="cx-fc">${views}</div>${sizes}</div>`
+  +sec('Version',vers)+sec(x.ed==='ms'?'Rareté':'Rareté',rars)+sec('Type',types)+sec('Mes listes',lists)
+  +`<div class="cx-ff"><button type="button" class="btn alt" data-cxrm="all">${cxSp('Tout effacer')}</button><button type="button" class="btn" data-cxfx>${cxSp('Voir '+n+' carte'+cxS(n,''))}</button></div></div></div>`}
+
+/* ---------- l'écran ---------- */
+function cxColl(){const x=cxCtx(),s=cxStat(x);
+ let h=cxHead(x)+cxFlags(x)+remBanner()+cxHero(x,s)+cxTabs(x,s)+(x.sealed?cxSealed(x):cxCards(x,s));
+ if(x.ed==='ms')h+=cxNavWrap(cxSheetFix(msSheet()),S.msel)+msPickSheet();
+ else if(x.ed==='en')h+=cxEnSheet();
+ return h+cxFiltSheet(x)}
+coll=cxColl;
+{const s0=sheet;sheet=function(){const h=s0();return h&&S.tab==='coll'&&X.game!=='ms'&&X.fwed!=='en'?cxNavWrap(cxSheetFix(h),S.sel):h}}
+const cxSheetFix=h=>h.replace('<div style="display:flex;gap:12px;align-items:center">','<div class="cx-sq" style="display:flex;gap:12px;align-items:center">');
+
+/* ---------- actions ---------- */
+function cxClear(k){const ms=X.game==='ms';
+ if(k==='all'){if(ms){S.mso='';S.msv='';S.msr='';S.msx=''}else{S.own='';S.ver='';S.rar='';S.fx='';S.typ='';S.col=''}return}
+ if(ms){if(k==='rar')S.msr='';else if(k==='ver')S.msv='';else if(k==='fx')S.msx='';else if(k==='own')S.mso=''}
+ else{if(k==='rar')S.rar='';else if(k==='ver')S.ver='';else if(k==='fx')S.fx='';else if(k==='typ')S.typ='';else if(k==='own')S.own=''}}
+function cxSnap(){try{if(S.tab!=='coll')return null;const x=cxCtx();if(x.sealed)return null;const s=cxStat(x);return{k:x.ed+'|'+x.id,fn:s.nN>0&&s.oN>=s.nN,fa:s.n>0&&s.o>=s.n,na:s.nA}}catch(e){return null}}
+function cxCheck(pre){if(!pre)return;const b=cxSnap();if(!b||b.k!==pre.k)return;
+ let m='';if(!pre.fa&&b.fa)m=b.na?'Master Set complet !':'série complète !';else if(!pre.fn&&b.fn&&b.na)m='Full Set complet !';
+ if(!m)return;toast('🏆 '+pre.k.split('|')[1]+' : '+m);try{play('w')}catch(e){}try{navigator.vibrate&&navigator.vibrate([30,60,30,60,90])}catch(e){}
+ if(!RM){const f=document.createElement('div');f.className='flash';document.body.appendChild(f);setTimeout(()=>f.remove(),950)}}
+function cxBump(id,d){const pre=cxSnap(),ms=X.game==='ms',en=!ms&&X.fwed==='en';if(ms&&!cxRaw(id))return;
+ if(ms)msSet(id,msOwn(id)+d);
+ else if(en){const n=Math.max(0,Math.min(99,enOwn(id)+d));if(!X.en)X.en={};if(n)X.en[id]=n;else delete X.en[id];saveX()}
+ else{const c=BKC[id]||cards.find(y=>y.id===id);if(!c)return;if(d>0)bump('c',1);c.own=Math.max(0,(c.own||0)+d);save()}
+ try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+ if(d>0)CXPOP={id};if(!cxPatch(id))render();CXPOP=null;try{dbWatch()}catch(e){}cxCheck(pre)}
+/* après ± : on redessine seulement la carte, l'en-tête et les compteurs (la carte reste à sa place, même si elle ne correspond plus au filtre) */
+function cxPatch(id){try{if(S.tab!=='coll'||document.querySelector('.sheet'))return false;const x=cxCtx();if(x.sealed)return false;
+ const t=document.querySelector('.cx-t[data-cxid="'+id+'"]'),c=BKC[id]||(x.ed==='ms'?MS_ALL.find(y=>y.id===id):cards.find(y=>y.id===id));if(!t||!c)return false;
+ const s=cxStat(x),tmp=document.createElement('div'),put=(sel,html)=>{const el=document.querySelector(sel);if(!el)return;tmp.innerHTML=html;const n=tmp.firstElementChild;if(n)el.replaceWith(n)};
+ tmp.innerHTML=cxTile(x,c,c.ext!==x.id);const nt=tmp.firstElementChild;t.replaceWith(nt);
+ const tg=document.querySelector('.cx-tags'),sx=tg?tg.scrollLeft:0;put('.cx-hero',cxHero(x,s));const tg2=document.querySelector('.cx-tags');if(tg2&&sx)tg2.scrollLeft=sx;
+ put('.cx-tabs',cxTabs(x,s));
+ const W=cxWords(x.q),cnt={'':0,y:0,n:0,d:0};for(const y of x.L){if(!cxPass(x,y,1)||!cxMatch(y,W))continue;cnt['']++;const o=x.own(y);if(o)cnt.y++;else cnt.n++;if(o>1)cnt.d++}
+ document.querySelectorAll('.cx-seg [data-cxo]').forEach(b=>{const v=b.dataset.cxo,k=b.querySelector('b'),l=b.querySelector('span');if(k)k.textContent=cnt[v];if(l)b.setAttribute('aria-label',l.textContent+' : '+cnt[v])});
+ const pg=nt.closest('.cx-pg');if(pg){const ok=[...pg.querySelectorAll('.cx-t')].every(y=>y.classList.contains('own')),sp=pg.querySelector('.cx-pt span');pg.classList.toggle('ok',ok);if(sp)sp.textContent=sp.textContent.replace(/ ✓$/,'')+(ok?' ✓':'')}
+ return true}catch(e){return false}}
+function cxEnterAdd(v){const x=cxCtx();if(x.sealed)return;const q=v.trim(),m=/^0*(\d{1,4})\s*(a|alt)?$/i.exec(q);let c=null;
+ if(m){const n=+m[1],a=!!m[2];c=x.L.find(y=>+y.n===n&&x.isAlt(y)===a)||(a?null:x.L.find(y=>+y.n===n))||null}
+ if(!c&&CXL.length===1)c=x.L.find(y=>y.id===CXL[0])||null;
+ if(!c){toast(m?'Aucune carte n° '+m[1]+' dans '+x.id:'Plusieurs cartes : tape le numéro ou touche la carte');return}
+ const pre=cxSnap(),id=c.id;if(x.ed==='ms')msSet(id,msOwn(id)+1);else if(x.ed==='en'){if(!X.en)X.en={};X.en[id]=Math.min(99,enOwn(id)+1);saveX()}else{bump('c',1);c.own=(c.own||0)+1;save()}
+ try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+ if(x.ed==='ms')S.msq='';else S.q='';CXPOP={id};render();const i=document.getElementById('cxq');if(i)try{i.focus({preventScroll:true})}catch(e){}
+ toast('+1 · '+id+(c.name?' '+c.name:'')+' (×'+x.own(c)+')');try{dbWatch()}catch(e){}cxCheck(pre)}
+function cxGo(d){const ms=X.game==='ms',en=!ms&&X.fwed==='en',cur=ms?S.msel:en?S.ensel:S.sel,i=CXL.indexOf(cur),j=i+d;if(i<0||j<0||j>=CXL.length)return;
+ if(ms)S.msel=CXL[j];else if(en)S.ensel=CXL[j];else S.sel=CXL[j];CXNAV=d;render()}
+function cxCopy(){const x=cxCtx(),W=cxWords(x.q);let l=x.L.filter(c=>cxPass(x,c)&&cxMatch(c,W));l=cxSort(x,l);if(!l.length)return;
+ const T={'':'Cartes',y:'Cartes possédées',n:'Cartes manquantes',d:'Cartes en double'}[x.F.own]||'Cartes',ed=x.ed==='ms'?'':x.ed==='en'?' (édition anglaise)':' (édition japonaise)';
+ const t=`${T} — ${x.id} ${x.nm}${ed} : ${l.length}\n`+l.map(c=>{const o=x.own(c);return `${c.id} ${c.full||c.name||''}${c.rar?' ('+c.rar+')':''}${o>1&&x.F.own!=='n'?' ×'+o:''}`}).join('\n')+`\n\n— L'Appel des Cartes`;
+ copyText(t).then(ok=>toast(ok?'Liste copiée ✓ ('+l.length+' carte'+cxS(l.length,'')+')':'Copie impossible ici'))}
+function cxTop(){const a=document.querySelector('.cx-anchor');if(!a)return;const y=a.getBoundingClientRect().top+window.scrollY;if(window.scrollY>y+1)window.scrollTo(0,y)}
+function cxAfter(){
+ if(S.tab!=='coll'){if(CXQ||S.cxf||S.ensel){CXQ=false;S.cxf=false;S.ensel=null}document.body.classList.remove('cx-stuck')}
+ if(CXNAV){const sh=document.querySelector('.sheet');if(sh){sh.classList.remove('in');const d=sh.firstElementChild;if(d&&!RM)d.classList.add(CXNAV>0?'cx-nx':'cx-pv')}CXNAV=0}
+ CXPOP=null;if(CXTOP){CXTOP=0;cxTop()}
+ {const tg=document.querySelector('.cx-tags'),on=tg&&tg.querySelector('[aria-pressed="true"]');if(on){const a=on.offsetLeft,b=a+on.offsetWidth;if(a<tg.scrollLeft||b>tg.scrollLeft+tg.clientWidth)tg.scrollLeft=Math.max(0,b-tg.clientWidth+16)}}
+ if(CXIO){CXIO.disconnect();CXIO=null}
+ if(CXSO){CXSO.disconnect();CXSO=null}
+ {const an=document.querySelector('.cx-anchor'),hud=document.querySelector('.cx-hud');if(an&&hud&&'IntersectionObserver' in window){CXSO=new IntersectionObserver(es=>{const y=es[es.length-1],st=!y.isIntersecting&&y.boundingClientRect.top<0;hud.classList.toggle('stuck',st);document.body.classList.toggle('cx-stuck',st)});CXSO.observe(an)}else document.body.classList.remove('cx-stuck')}
+ const m=document.querySelector('[data-cxmore]');if(m&&'IntersectionObserver' in window){CXIO=new IntersectionObserver(es=>{if(es.some(y=>y.isIntersecting)){CXIO.disconnect();CXIO=null;setTimeout(()=>{if(m.isConnected&&S.tab==='coll'){CXN+=CXSTEP;render()}},60)}},{rootMargin:'500px 0px'});CXIO.observe(m)}}
+document.addEventListener('click',e=>{
+ if(e.target.closest&&e.target.closest('[data-apx],[data-apa]')){X.game='fw';X.fwed='jp';S.typ='';S.rar='';saveX()}   /* une série Fusion World ouverte depuis les stats */
+ if(S.tab!=='coll'||!e.target.closest)return;const t=e.target;
+ if(X.game==='ms'&&t.closest('[data-msset]'))setTimeout(()=>window.scrollTo(0,0),0);
+ {const q=t.closest('.cx-t [data-cxd]');if(q){e.stopPropagation();e.preventDefault();cxBump(q.closest('.cx-t').dataset.cxid,+q.dataset.cxd||0);return}}
+ if(CXQ&&!e.defaultPrevented){const b=t.closest('.cx-t button.card');if(b){e.stopPropagation();e.preventDefault();cxBump(b.closest('.cx-t').dataset.cxid,1);return}}   /* après un appui long, pas de +1 */
+ const k=t.closest('[data-cxo],[data-cxr],[data-cxv],[data-cxt],[data-cxx],[data-cxrm],[data-cxfilt],[data-cxfx],[data-cxview],[data-cxquick],[data-cxclr],[data-cxcopy],[data-cxmore],[data-cxen],[data-cxenx],[data-cxnav]');
+ if(!k){const i=t.closest('.cx-i');if(i){const b=i.parentNode.querySelector('.cx-a button.card');if(b)b.click()}return}
+ const d=k.dataset,ms=X.game==='ms';
+ if((d.cxfx!==undefined||d.cxenx!==undefined)&&k.classList.contains('sheet')&&t!==k)return;   /* toucher l'intérieur de la feuille ne la ferme pas */
+ e.stopPropagation();let top=false;
+ if(d.cxo!==undefined){if(ms)S.mso=d.cxo;else S.own=d.cxo;top=true}
+ else if(d.cxr!==undefined){if(ms)S.msr=S.msr===d.cxr?'':d.cxr;else S.rar=S.rar===d.cxr?'':d.cxr;top=true}
+ else if(d.cxv!==undefined){const v=d.cxv==='alt'?(ms?'SPR':'Alternative Art'):'Normal';if(ms)S.msv=S.msv===v?'':v;else S.ver=S.ver===v?'':v;top=true}
+ else if(d.cxt!==undefined){S.typ=S.typ===d.cxt?'':d.cxt;top=true}
+ else if(d.cxx!==undefined){if(ms)S.msx=S.msx===d.cxx?'':d.cxx;else S.fx=S.fx===d.cxx?'':d.cxx;top=true}
+ else if(d.cxrm!==undefined){cxClear(d.cxrm);top=true}
+ else if(d.cxfilt!==undefined){S.cxf=true}
+ else if(d.cxfx!==undefined){S.cxf=false}
+ else if(d.cxview!==undefined){CXV=CXVS.some(y=>y[0]===d.cxview)?d.cxview:'grid';try{localStorage.setItem('fb_cxv',CXV)}catch(_){}top=true}
+ else if(d.cxquick!==undefined){CXQ=!CXQ;if(CXQ)toast('⚡ Ajout rapide : touche une carte pour l’ajouter')}
+ else if(d.cxclr!==undefined){if(ms)S.msq='';else S.q=''}
+ else if(d.cxcopy!==undefined){cxCopy();return}
+ else if(d.cxmore!==undefined){CXN+=CXSTEP}
+ else if(d.cxen!==undefined){S.ensel=d.cxen}
+ else if(d.cxenx!==undefined){S.ensel=null}
+ else if(d.cxnav!==undefined){cxGo(+d.cxnav||0);return}
+ if(top&&!S.cxf)CXTOP=1;
+ render();
+ if(d.cxclr!==undefined){const i=document.getElementById('cxq');if(i)try{i.focus({preventScroll:true})}catch(_){}}},true);
+document.addEventListener('input',e=>{const t=e.target;if(!t||t.id!=='cxq')return;if(X.game==='ms')S.msq=t.value;else S.q=t.value;const p=t.selectionStart;CXTOP=1;render();const n=document.getElementById('cxq');if(n){try{n.focus({preventScroll:true});n.setSelectionRange(p,p)}catch(_){}}});
+document.addEventListener('keydown',e=>{if(S.tab!=='coll'||e.altKey||e.ctrlKey||e.metaKey)return;const tg=e.target;
+ if(tg&&tg.id==='cxq'&&e.key==='Enter'){e.preventDefault();if(CXQ&&tg.value.trim()){cxEnterAdd(tg.value);return}tg.blur();return}
+ if(tg&&/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName))return;
+ if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&document.querySelector('.cx-nav')){e.preventDefault();cxGo(e.key==='ArrowRight'?1:-1)}
+ else if(e.key==='Escape'&&(S.cxf||S.ensel)){e.preventDefault();S.cxf=false;S.ensel=null;render()}
+ else if(e.key==='/'&&!document.querySelector('.sheet')){const i=document.getElementById('cxq');if(i){e.preventDefault();i.focus()}}});
+/* glisser la fiche vers la gauche ou la droite = carte suivante ou précédente */
+(()=>{let s0=null;
+ document.addEventListener('touchstart',e=>{s0=null;if(S.tab!=='coll'||e.touches.length!==1||!e.target.closest)return;const d=e.target.closest('.sheet>[role=dialog]');if(!d||!d.querySelector('.cx-nav')||e.target.closest('input,select,textarea,a,.cmt,.pxc,.row'))return;const p=e.touches[0];s0={x:p.clientX,y:p.clientY,t:Date.now()}},{passive:true});
+ document.addEventListener('touchend',e=>{if(!s0)return;const p=e.changedTouches[0],dx=p.clientX-s0.x,dy=p.clientY-s0.y,dt=Date.now()-s0.t;s0=null;if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx)*.7||dt>650)return;cxGo(dx<0?1:-1)},{passive:true})})();
+/* ===== COLL-V3:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -7911,6 +8454,14 @@ var SEEN_KEY='fb_clgseen';
 /* Pour ajouter une mise à jour : mettre une ligne [icône, titre, détail] tout en haut du groupe « Dernière version » (ou créer un nouveau groupe au-dessus). */
 var CHANGELOG=[
  {n:1,ic:'🆕',t:'Dernière version',tag:BUILD_,i:[
+  ['🗂️','Collection refaite de A à Z','Un nouvel en-tête par série (affiche, jauge, pourcentage, valeur) et les cartes visibles tout de suite. Les + et − sont instantanés. Même présentation pour le japonais, le français et l’anglais.'],
+  ['🔎','Recherche et filtres','La barre de recherche reste en haut quand tu descends. Toutes, Possédées, Manquantes et Doubles en un appui ; les raretés de l’en-tête filtrent aussi ; « Filtres » regroupe version, rareté, type et tes listes. La recherche montre aussi les cartes des autres séries.'],
+  ['⚡','Ajout rapide','Active ⚡ Rapide : chaque carte touchée est ajoutée (+1), ou tape son numéro puis Entrée. Idéal pour noter l’ouverture d’un booster ou d’un display.'],
+  ['📒','Grille, liste ou classeur','Dans Filtres : la grille (grandes, moyennes ou petites cartes), la liste avec les noms, ou les pages de classeur de 9.'],
+  ['💎','Trier par rareté','Nouveau tri : les cartes les plus rares d’abord (ou l’inverse).'],
+  ['👉','Fiche : carte suivante','Dans la fiche d’une carte, les flèches ‹ › (ou glisser le doigt) passent à la carte suivante de la liste.'],
+  ['📋','Copier la liste','Avec un filtre (par exemple Manquantes ou Doubles), « Copier » garde la liste pour l’envoyer à un ami. Les manquantes affichent aussi le prix pour compléter la série.'],
+  ['🏆','Série complète','Une petite fête quand tu termines le Full Set ou le Master Set d’une série.'],
   ['📷','Scanner : toutes les séries','Le scanner reconnaît maintenant toutes les cartes (Fusion World, Masters, Le Grand Combat et les anciennes collections) sans avoir à choisir le jeu ou la série.'],
   ['🗃️','Anciennes collections','10 collections françaises avec leurs photos : Dragon Ball Z, GT Cards, Carddass, Carddass Jumbo, Anthologie, Skill Card, JCC, Digital Carddass, Dorothée Mag et le calendrier de l’Avent, avec leurs boosters et displays. Drapeau français → « Anciennes collections ».'],
   ['📚','Draft Box DB1, DB2 et DB3','Dragon Brawl, Divine Multiverse et Giant Force en français : 424 cartes avec leur nom et leur rareté. Drapeau français, puis touche le logo de la catégorie : BT, Draft Box ou Le Grand Combat.'],

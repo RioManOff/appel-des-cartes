@@ -2002,6 +2002,8 @@ div.cx-spa{cursor:default}
 .pn-st .sxr,.pn-tg .sxr{border-bottom:0}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+.mn-big:not(.mn-cm) .mn-b.pri{grid-column:1/-1}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3722,7 +3724,7 @@ document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.clos
  if(b.dataset.hzg!==undefined){S.hzm=b.dataset.hzg==='ms';if(S.hzm&&!S.hxm)S.hxm=MS_SETS[0].id}else{S.hzm=true;S.hxm=b.dataset.hzx}
  S.celeb=null;S.mspick=false;render()},true);
 /* Menu « + » court : 6 actions en grand, le reste derrière « Plus… » */
-const MN6=[['📷','Scanner une carte','data-cam','pri'],['⚡','Saisir en rafale','data-hburst'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
+const MN6=[['📷','Scanner une carte','data-cam','pri'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
 const MN6X=['Scanner une carte','Saisir en rafale','Chercher une carte','Mes classeurs','Ouvrir des boosters','Mes scellés'];
 function mnBig(t,i){return `<button type="button" class="mn-b${t[3]?' '+t[3]:''}" ${t[2]} style="--i:${i}"><i aria-hidden="true">${t[0]}</i><span>${t[1]}</span></button>`}
 function mnSheet(){let i=0;
@@ -6879,7 +6881,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 oct. 2026 · 34';
+const BUILD='28 oct. 2026 · 35';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */

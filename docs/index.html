@@ -2000,10 +2000,19 @@ div.cx-spa{cursor:default}
 .ms-cat button{min-width:0;overflow:hidden}.ms-cat img{max-width:100%}
 .pn-tg .sxr{width:100%}
 .pn-st .sxr,.pn-tg .sxr{border-bottom:0}
+.aff-sh{z-index:80}
+.aff-d{width:min(560px,100%);max-height:88vh;overflow:auto;padding:18px 16px 20px;border-radius:22px 22px 0 0;background:var(--bg,#0b0b0b);border-top:3px solid var(--gold)}
+.aff-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.aff-top h2{margin:0}
+.aff-h{margin:16px 0 8px;font:700 15px/1.2 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;color:var(--gold)}
+.aff-l{display:grid;gap:8px}
+.aff-i{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--tx);text-decoration:none}
+.aff-i img,.aff-ph{flex:none;width:56px;height:56px;object-fit:contain;border-radius:8px;background:#fff;display:grid;place-items:center;font-size:26px}
+.aff-ph{background:color-mix(in srgb,var(--gold) 18%,transparent)}
+.aff-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.aff-t b{font-size:15px;line-height:1.25}.aff-t small{color:var(--mu);font-size:13px}
+.aff-go{flex:none;padding:7px 12px;border-radius:999px;background:var(--gold);color:#111;font-weight:800;font-size:13px}
+.aff-e{margin:18px 0}.aff-n{margin:16px 0 0;font-size:12px;line-height:1.4;color:var(--mu)}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-
-.mn-big:not(.mn-cm) .mn-b.pri{grid-column:1/-1}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3724,7 +3733,7 @@ document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.clos
  if(b.dataset.hzg!==undefined){S.hzm=b.dataset.hzg==='ms';if(S.hzm&&!S.hxm)S.hxm=MS_SETS[0].id}else{S.hzm=true;S.hxm=b.dataset.hzx}
  S.celeb=null;S.mspick=false;render()},true);
 /* Menu « + » court : 6 actions en grand, le reste derrière « Plus… » */
-const MN6=[['📷','Scanner une carte','data-cam','pri'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
+const MN6=[['📷','Scanner une carte','data-cam','pri'],['🛒','Boutique','data-affshop'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
 const MN6X=['Scanner une carte','Saisir en rafale','Chercher une carte','Mes classeurs','Ouvrir des boosters','Mes scellés'];
 function mnBig(t,i){return `<button type="button" class="mn-b${t[3]?' '+t[3]:''}" ${t[2]} style="--i:${i}"><i aria-hidden="true">${t[0]}</i><span>${t[1]}</span></button>`}
 function mnSheet(){let i=0;
@@ -6881,7 +6890,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='28 oct. 2026 · 35';
+const BUILD='28 oct. 2026 · 36';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7754,6 +7763,23 @@ setInterval(()=>{if(SBS&&!PNOFF&&PUSHOK!==SBS.uid&&Date.now()-PUSHT>60000)pushOn
 {const n1=pnNotify;pnNotify=function(nm,multi){if(PUSHOK&&SBS&&PUSHOK===SBS.uid&&document.hidden){try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}return Promise.resolve()}return n1(nm,multi)}}
 /* ===== PN-TOGGLE:END ===== */
 
+/* ===== AFF-SHOP : « Boutique » dans le menu + — liens Amazon lus dans docs/boutique.json ===== */
+let AFF=null;
+async function affLoad(){try{const r=await fetch('boutique.json',{cache:'no-store'});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.items))AFF=j}}catch(e){}if(!AFF)AFF={items:[]}}
+const affUrl=u=>{try{const x=new URL(String(u));return x.protocol==='https:'&&/(^|\.)(amzn\.to|amzn\.eu|amazon\.(fr|com|de|es|it|co\.uk|be))$/i.test(x.hostname)?x.href:''}catch(e){return ''}};
+function affClose(){const o=document.getElementById('aff-sh');if(o)o.remove();document.removeEventListener('keydown',affKey)}
+function affKey(e){if(e.key==='Escape')affClose()}
+async function affOpen(){affClose();if(!AFF)await affLoad();
+ const L=(AFF.items||[]).filter(x=>x&&affUrl(x.url));const g={};L.forEach(x=>{const c=x.cat||'Produits';(g[c]=g[c]||[]).push(x)});
+ const card=x=>`<a class="aff-i" href="${esc(affUrl(x.url))}" target="_blank" rel="noopener sponsored nofollow">${x.img&&/^https:\/\//.test(x.img)?`<img src="${esc(x.img)}" alt="" loading="lazy">`:'<span class="aff-ph" aria-hidden="true">🛒</span>'}<span class="aff-t"><b>${esc(x.nom||'Voir sur Amazon')}</b>${x.info?`<small>${esc(x.info)}</small>`:''}</span><span class="aff-go">Voir</span></a>`;
+ const body=L.length?Object.keys(g).map(c=>`<h3 class="aff-h">${esc(c)}</h3><div class="aff-l">${g[c].map(card).join('')}</div>`).join(''):'<p class="sub aff-e">Bientôt ici : une sélection de boosters, displays et accessoires Dragon Ball Super.</p>';
+ const o=document.createElement('div');o.id='aff-sh';o.className='sheet in aff-sh';
+ o.innerHTML=`<div role="dialog" aria-modal="true" aria-label="Boutique" class="aff-d"><div class="aff-top"><h2>🛒 Boutique</h2><button type="button" class="sr-x" data-affx aria-label="Fermer">✕</button></div>${body}<p class="aff-n">En tant que Partenaire Amazon, L’Appel des Cartes réalise un bénéfice sur les achats remplissant les conditions requises. Le prix ne change pas pour toi.</p></div>`;
+ o.addEventListener('click',e=>{if(e.target===o||(e.target.closest&&e.target.closest('[data-affx]')))affClose()});
+ document.body.appendChild(o);document.addEventListener('keydown',affKey);const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-affshop]');if(!t)return;e.stopPropagation();S.menu=false;S.mnmore=false;render();affOpen()},true);
+/* ===== AFF-SHOP:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -8610,6 +8636,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['🛒','Boutique','Dans le menu ＋ : une sélection de produits Dragon Ball Super (boosters, displays, accessoires) sur Amazon.'],
   ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.'],
   ['🔒','Plus de zoom','L’écran ne zoome plus par erreur avec deux doigts ou un double appui.'],
   ['🚩','Drapeaux corrigés','Le drapeau français ramène toujours à tes séries françaises, et on ne voit plus de cartes japonaises ou américaines dans le menu français.'],

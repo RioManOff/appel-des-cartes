@@ -2013,6 +2013,11 @@ div.cx-spa{cursor:default}
 .aff-e{margin:18px 0}.aff-n{margin:16px 0 0;font-size:12px;line-height:1.4;color:var(--mu)}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+nav .mid i{clip-path:none;border-radius:50%;width:62px;height:62px;top:-30px;color:#8d1a07;font-weight:900;font-size:30px;text-shadow:0 1px 0 rgba(255,240,200,.6);
+ background:radial-gradient(circle at 35% 28%,#fff1b8 0,#ffc94d 16%,#ff9a1e 46%,#e2560c 76%,#8d2705 100%);
+ box-shadow:inset -4px -6px 10px rgba(110,25,0,.55),inset 2px 2px 6px rgba(255,255,255,.35),0 0 16px rgba(255,150,30,.55),0 6px 14px -4px rgba(0,0,0,.6)}
+nav .mid i::before{content:"";position:absolute;left:16%;top:9%;width:36%;height:21%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,0));transform:rotate(-30deg);pointer-events:none}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -6890,7 +6895,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='28 oct. 2026 · 36';
+const BUILD='28 oct. 2026 · 37';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8636,6 +8641,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['🟠','Nouveau bouton ＋','Le bouton du milieu, en bas, est maintenant une boule de cristal.'],
   ['🛒','Boutique','Dans le menu ＋ : une sélection de produits Dragon Ball Super (boosters, displays, accessoires) sur Amazon.'],
   ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.'],
   ['🔒','Plus de zoom','L’écran ne zoome plus par erreur avec deux doigts ou un double appui.'],

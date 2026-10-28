@@ -1,3 +1,9 @@
 {
-  "items": []
+  "items": [
+    {"cat": "Protège-cartes", "nom": "Ultra Pro Card Sleeves – 200 pochettes", "info": "Pochettes souples transparentes, taille standard (2 × 100)", "img": "boutique/1.jpg", "url": "https://link.amazon/B0bEpsJ2a"},
+    {"cat": "Protège-cartes", "nom": "Ultra Pro Penny Sleeves – 300 pochettes", "info": "Pochettes souples sans acide (3 × 100)", "img": "boutique/2.jpg", "url": "https://link.amazon/B0b542V2l"},
+    {"cat": "Protège-cartes", "nom": "Ultra Pro Penny Sleeves – 400 pochettes", "info": "Pochettes souples sans acide (4 × 100)", "img": "boutique/3.jpg", "url": "https://link.amazon/B0bCKBkvS"},
+    {"cat": "Protège-cartes", "nom": "Ultra Pro Soft Sleeves – 1000 pochettes", "info": "Pochettes souples transparentes (10 × 100)", "img": "boutique/4.jpg", "url": "https://link.amazon/B04HcPREq"},
+    {"cat": "Toploaders", "nom": "Ultra Pro Toploaders 3\" × 4\"", "info": "Étuis rigides pour tes meilleures cartes (boîtes de 25)", "img": "boutique/5.jpg", "url": "https://link.amazon/B02261t9Q"}
+  ]
 }

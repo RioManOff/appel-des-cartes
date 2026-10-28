@@ -7766,12 +7766,12 @@ setInterval(()=>{if(SBS&&!PNOFF&&PUSHOK!==SBS.uid&&Date.now()-PUSHT>60000)pushOn
 /* ===== AFF-SHOP : « Boutique » dans le menu + — liens Amazon lus dans docs/boutique.json ===== */
 let AFF=null;
 async function affLoad(){try{const r=await fetch('boutique.json',{cache:'no-store'});if(r.ok){const j=await r.json();if(j&&Array.isArray(j.items))AFF=j}}catch(e){}if(!AFF)AFF={items:[]}}
-const affUrl=u=>{try{const x=new URL(String(u));return x.protocol==='https:'&&/(^|\.)(amzn\.to|amzn\.eu|amazon\.(fr|com|de|es|it|co\.uk|be))$/i.test(x.hostname)?x.href:''}catch(e){return ''}};
+const affUrl=u=>{try{const x=new URL(String(u));return x.protocol==='https:'&&/(^|\.)(amzn\.to|amzn\.eu|link\.amazon|amazon\.(fr|com|de|es|it|co\.uk|be))$/i.test(x.hostname)?x.href:''}catch(e){return ''}};
 function affClose(){const o=document.getElementById('aff-sh');if(o)o.remove();document.removeEventListener('keydown',affKey)}
 function affKey(e){if(e.key==='Escape')affClose()}
 async function affOpen(){affClose();if(!AFF)await affLoad();
  const L=(AFF.items||[]).filter(x=>x&&affUrl(x.url));const g={};L.forEach(x=>{const c=x.cat||'Produits';(g[c]=g[c]||[]).push(x)});
- const card=x=>`<a class="aff-i" href="${esc(affUrl(x.url))}" target="_blank" rel="noopener sponsored nofollow">${x.img&&/^https:\/\//.test(x.img)?`<img src="${esc(x.img)}" alt="" loading="lazy">`:'<span class="aff-ph" aria-hidden="true">🛒</span>'}<span class="aff-t"><b>${esc(x.nom||'Voir sur Amazon')}</b>${x.info?`<small>${esc(x.info)}</small>`:''}</span><span class="aff-go">Voir</span></a>`;
+ const card=x=>`<a class="aff-i" href="${esc(affUrl(x.url))}" target="_blank" rel="noopener sponsored nofollow">${x.img&&/^(https:\/\/|boutique\/[\w.-]+\.(jpe?g|png|webp)$)/.test(x.img)?`<img src="${esc(x.img)}" alt="" loading="lazy">`:'<span class="aff-ph" aria-hidden="true">🛒</span>'}<span class="aff-t"><b>${esc(x.nom||'Voir sur Amazon')}</b>${x.info?`<small>${esc(x.info)}</small>`:''}</span><span class="aff-go">Voir</span></a>`;
  const body=L.length?Object.keys(g).map(c=>`<h3 class="aff-h">${esc(c)}</h3><div class="aff-l">${g[c].map(card).join('')}</div>`).join(''):'<p class="sub aff-e">Bientôt ici : une sélection de boosters, displays et accessoires Dragon Ball Super.</p>';
  const o=document.createElement('div');o.id='aff-sh';o.className='sheet in aff-sh';
  o.innerHTML=`<div role="dialog" aria-modal="true" aria-label="Boutique" class="aff-d"><div class="aff-top"><h2>🛒 Boutique</h2><button type="button" class="sr-x" data-affx aria-label="Fermer">✕</button></div>${body}<p class="aff-n">En tant que Partenaire Amazon, L’Appel des Cartes réalise un bénéfice sur les achats remplissant les conditions requises. Le prix ne change pas pour toi.</p></div>`;

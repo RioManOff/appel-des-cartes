@@ -2020,6 +2020,10 @@ div.cx-spa{cursor:default}
 .pv-r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:7px 10px;border:1px solid var(--ln);border-radius:2px;background:var(--sf)}
 .pv-r b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pv-r small{color:var(--mu)}
 .pv-r.an b{color:var(--mu);font-weight:600}
+.onl-l{display:flex;flex-direction:column;gap:6px;margin-top:12px;max-height:55vh;overflow:auto}
+.onl-r{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--ln);border-radius:2px;background:var(--sf)}
+.onl-r b{font-weight:700}.onl-r small{color:var(--mu);font-weight:500}
+.onl-vi{display:grid;place-items:center;width:36px;height:36px;font-size:20px}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
@@ -6951,7 +6955,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='30 oct. 2026 · 49';
+const BUILD='30 oct. 2026 · 50';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7908,6 +7912,37 @@ function pvDraw(){const el=document.getElementById('pv-box');if(el)el.innerHTML=
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-pvopen]');if(!b)return;e.stopPropagation();PV.open=!PV.open;render();if(PV.open)pvLoad()},true);
 /* ===== SONDAGE-NOMS:END ===== */
 
+/* ===== EN-LIGNE : toucher « en ligne » montre qui est là (pseudo des joueurs connectés, les autres comptés comme visiteurs) ===== */
+ONL.meta={};ONL.pp='';ONL.sh=false;
+const onlPs=()=>String(SBS&&SBS.pseudo||'').slice(0,30);
+function onlTrack(){ONL.pp=onlPs();onlSend({topic:ONL.topic,event:'presence',ref:String(++ONL.n),payload:{type:'presence',event:'track',payload:{t:Date.now(),p:ONL.pp}}})}
+const onlMetaP=v=>{const m=v&&Array.isArray(v.metas)?v.metas:[];for(const x of m)if(x&&typeof x.p==='string'&&x.p.trim())return x.p.trim().slice(0,30);return ''};
+onlStart=function(){
+ if(!window.WebSocket||!sbOn()||ONL.ws||document.hidden)return;
+ let w;try{w=new WebSocket(SBC.url.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SBC.key)+'&vsn=1.0.0')}catch(e){return}
+ ONL.ws=w;
+ w.onopen=()=>{ONL.n=1;onlSend({topic:ONL.topic,event:'phx_join',ref:String(++ONL.n),join_ref:'1',payload:{config:{broadcast:{ack:false,self:false},presence:{key:ONL.me},private:false},access_token:SBC.key}});
+  ONL.hb=setInterval(()=>{onlSend({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++ONL.n)});if(ONL.ok&&ONL.pp!==onlPs())onlTrack()},25000)};
+ w.onmessage=ev=>{let m;try{m=JSON.parse(ev.data)}catch(e){return}
+  if(m.topic!==ONL.topic)return;
+  if(m.event==='phx_reply'&&m.payload&&m.payload.status==='ok'&&String(m.ref)==='2'){ONL.tries=0;onlTrack()}
+  else if(m.event==='presence_state'){const p=m.payload||{};ONL.keys=new Set(Object.keys(p));ONL.meta={};Object.keys(p).forEach(k=>{ONL.meta[k]=onlMetaP(p[k])});ONL.keys.add(ONL.me);ONL.ok=true;onlDraw()}
+  else if(m.event==='presence_diff'){const p=m.payload||{};Object.keys(p.joins||{}).forEach(k=>{ONL.keys.add(k);ONL.meta[k]=onlMetaP(p.joins[k])});Object.keys(p.leaves||{}).forEach(k=>{if(k!==ONL.me){ONL.keys.delete(k);delete ONL.meta[k]}});ONL.keys.add(ONL.me);ONL.ok=true;onlDraw()}
+  else if(m.event==='phx_error'||m.event==='phx_close'){w.close()}};
+ w.onclose=w.onerror=()=>{if(ONL.ws!==w)return;onlStop();if(!document.hidden){ONL.tries++;ONL.rt=setTimeout(onlStart,Math.min(60000,3000*Math.pow(2,Math.min(ONL.tries,5))))}}};
+function onlList(){const me=ONL.me,names=[];let v=0;ONL.keys.forEach(k=>{const p=k===me?onlPs():(ONL.meta[k]||'');if(p)names.push({p,me:k===me});else v++});
+ const u=[...new Map(names.map(x=>[x.p.toLowerCase(),x])).values()].sort((a,b)=>b.me-a.me||a.p.localeCompare(b.p,'fr'));return{u,v}}
+function onlSheet(){if(!ONL.sh)return '';const {u,v}=onlList(),n=ONL.keys.size;
+ return `<div class="sheet onl-sh" data-onlx><div role="dialog" aria-modal="true" aria-label="Qui est en ligne"><h2 style="margin-top:0">🟢 En ligne</h2><div class="sub">${n} personne${n>1?'s':''} sur l’appli en ce moment</div>
+ <div class="onl-l">${u.map(x=>`<div class="onl-r">${cmAv(x.p)}<b>${esc(x.p)}${x.me?' <small>(toi)</small>':''}</b></div>`).join('')}${v?`<div class="onl-r onl-v"><span class="onl-vi">👤</span><b>${v} visiteur${v>1?'s':''}</b><small>pas connecté${v>1?'s':''} à un compte</small></div>`:''}</div>
+ <button type="button" class="btn alt" data-onlx style="margin-top:14px">Fermer</button></div></div>`}
+{const r0=render;render=function(){const x=r0.apply(this,arguments);document.querySelectorAll('.onl-sh').forEach(e=>e.remove());if(ONL.sh){const d=document.createElement('div');d.innerHTML=onlSheet();const s=d.firstElementChild;if(s){s.classList.add('in');document.getElementById('app').appendChild(s)}}return x}}
+{const d0=onlDraw;onlDraw=function(){d0();document.querySelectorAll('[data-onl]').forEach(e=>{if(!e.hasAttribute('role')){e.setAttribute('role','button');e.tabIndex=0}e.style.cursor='pointer'});if(ONL.sh){const s=document.querySelector('.onl-sh');if(s){const d=document.createElement('div');d.innerHTML=onlSheet();const n=d.firstElementChild;if(n){n.classList.add('in');s.replaceWith(n)}}}}}
+document.addEventListener('click',e=>{const o=e.target.closest&&e.target.closest('[data-onl]');if(o&&ONL.ok){e.stopPropagation();ONL.sh=true;render();return}
+ const x=e.target.closest&&e.target.closest('[data-onlx]');if(x&&(!x.classList.contains('sheet')||e.target===x)){e.stopPropagation();ONL.sh=false;render()}},true);
+document.addEventListener('keydown',e=>{if(ONL.sh&&e.key==='Escape'){e.stopPropagation();ONL.sh=false;render()}else if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('[data-onl]')){e.preventDefault();ONL.sh=true;render()}},true);
+/* ===== EN-LIGNE:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -8764,6 +8799,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['🟢','Qui est en ligne ?','Touche « en ligne » sur l’accueil pour voir les pseudos des joueurs connectés en ce moment.'],
   ['📚','Toute la série d’un coup','Dans Collection, le bouton « Série » (à côté de Trier) ajoute 1 exemplaire de chaque carte qui te manque, ou remet toute la série à 0.'],
   ['🐉','Nouvelles séries Fusion World','FS12, SB01 et SB02 (Manga Booster), ST01 (Story Booster 01), 1st Anniversary Set et PROMO, avec leurs photos (en HD quand tu agrandis). Drapeau japonais → Choisir la série → case « Dragon Ball Super Fusion World ».'],
   ['🃏','Photos des decks FS01 à FS11','Toutes les cartes des decks ont maintenant leur photo, et en HD quand tu agrandis une carte. Les versions ★ qui manquaient dans FS06, FS07, FS08 et FS10 sont ajoutées.'],

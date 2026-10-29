@@ -2011,6 +2011,9 @@ div.cx-spa{cursor:default}
 .aff-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.aff-t b{font-size:15px;line-height:1.25}.aff-t small{color:var(--mu);font-size:13px}
 .aff-go{flex:none;padding:7px 12px;border-radius:999px;background:var(--gold);color:#111;font-weight:800;font-size:13px}
 .aff-e{margin:18px 0}.aff-n{margin:16px 0 0;font-size:12px;line-height:1.4;color:var(--mu)}
+.al-b{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:10px;text-align:left}
+.al-b small{font-weight:500;font-size:12.5px;opacity:.8}
+.al-b:disabled{opacity:.45}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
@@ -6942,7 +6945,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='29 oct. 2026 · 45';
+const BUILD='29 oct. 2026 · 46';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7851,6 +7854,30 @@ FSPH.forEach(id=>{if(!CARDIMG[id])CARDIMG[id]='fs/'+id+'.webp';HDIMG[id]='fs/hd/
  return h.replace('style="width:min(72vw,280px);margin:0 auto"','style="width:min(88vw,460px,calc((100vh - 230px) * .72));margin:0 auto"').replace(/(<img class="cimg"[^>]*?src=")[^"]*"/,'$1'+HDIMG[id]+'"').replace(' loading="lazy"','')}}
 /* ===== FS-HD:END ===== */
 
+/* ===== SERIE-TOUT : bouton « Série » pour ajouter ou enlever toute la série d'un coup ===== */
+const STXIC=cxSvg('<rect x="4" y="5" width="11" height="14" rx="1.5"/><path d="M9 3h9.5A1.5 1.5 0 0 1 20 4.5V17"/><path d="M9.5 9.5v5M7 12h5"/>');
+function stxCtx(){const x=cxCtx();return x.sealed?null:x}
+function stxSheet(){const x=stxCtx();if(!x)return '';const L=x.L,miss=L.filter(c=>x.own(c)<1).length,have=L.filter(c=>x.own(c)>0).length;
+ return `<div class="sheet al-sh" data-alx><div role="dialog" aria-modal="true" aria-label="Toute la série"><h2 style="margin-top:0">${esc(x.id)} · toute la série</h2><div class="sub">${esc(x.nm)} · ${have} / ${L.length} cartes possédées</div>
+ <button type="button" class="btn al-b" data-alall="add"${miss?'':' disabled'}>➕ Ajouter toute la série<small>${miss?'+1 pour les '+miss+' carte'+(miss>1?'s':'')+' qui te manquent':'Tu as déjà toutes les cartes'}</small></button>
+ <button type="button" class="btn alt al-b" data-alall="del"${have?'':' disabled'}>➖ Enlever toute la série<small>${have?'Remet les '+have+' carte'+(have>1?'s':'')+' de la série à 0':'Aucune carte à enlever'}</small></button>
+ <button type="button" class="btn alt" data-alx>Annuler</button></div></div>`}
+function stxOpen(){S.stx=true;render()}
+function stxShut(){S.stx=false;render()}
+function stxDo(k){const x=stxCtx();if(!x)return;const ms=x.ed==='ms',en=x.ed==='en';let n=0;
+ x.L.forEach(c=>{const o=x.own(c);if(k==='add'&&o>=1)return;if(k==='del'&&o<1)return;const v=k==='add'?1:0;n++;
+  if(ms)msSet(c.id,v);else if(en){if(!X.en)X.en={};if(v)X.en[c.id]=v;else delete X.en[c.id]}else c.own=v});
+ if(en)saveX();else if(!ms)save();
+ S.stx=false;render();try{dbWatch()}catch(e){}
+ toast(n?(k==='add'?'✓ '+n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':''):'✓ '+n+' carte'+(n>1?'s':'')+' enlevée'+(n>1?'s':'')):'Rien à changer')}
+{const c0=coll;coll=function(){const h=c0();return typeof h==='string'?h.replace(/(<small>Trier<\/small><\/button>)(<\/div>)/,'$1<button type="button" class="cx-ib" data-alopen aria-haspopup="dialog" aria-label="Ajouter ou enlever toute la série">'+STXIC+'<small>Série</small></button>$2')+(S.stx?stxSheet():''):h}}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-alopen],[data-alall],[data-alx]');if(!t)return;
+ if(t.hasAttribute('data-alx')&&t.classList.contains('sheet')&&e.target!==t)return;e.stopPropagation();e.preventDefault();
+ if(t.dataset.alopen!==undefined)return stxOpen();if(t.dataset.alall)return stxDo(t.dataset.alall);stxShut()},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.stx){e.stopPropagation();stxShut()}},true);
+document.addEventListener('click',e=>{if(S.stx&&e.target.closest&&e.target.closest('#nav [data-go],#nav [data-menu],[data-game]'))S.stx=false},true);
+/* ===== SERIE-TOUT:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -8707,6 +8734,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['📚','Toute la série d’un coup','Dans Collection, le bouton « Série » (à côté de Trier) ajoute 1 exemplaire de chaque carte qui te manque, ou remet toute la série à 0.'],
   ['🐉','Nouvelles séries Fusion World','FS12, SB01 et SB02 (Manga Booster), ST01 (Story Booster 01), 1st Anniversary Set et PROMO, avec leurs photos (en HD quand tu agrandis). Drapeau japonais → Choisir la série → case « Dragon Ball Super Fusion World ».'],
   ['🃏','Photos des decks FS01 à FS11','Toutes les cartes des decks ont maintenant leur photo, et en HD quand tu agrandis une carte. Les versions ★ qui manquaient dans FS06, FS07, FS08 et FS10 sont ajoutées.'],
   ['🖥️','Téléphone, tablette ou PC','L’appli s’adapte toute seule à ton écran : sur PC, le menu passe sur le côté, les cartes s’affichent sur plus de colonnes et l’accueil sur deux colonnes. Sur tablette, tout s’élargit.'],

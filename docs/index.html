@@ -2731,7 +2731,7 @@ const msUuid=s=>typeof s==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a
   msSum=()=>{CMB.n=Object.values(MS.unread).reduce((a,b)=>a+b,0)},
   msCnt=()=>CMB.n>0?(CMB.n>99?'99+':CMB.n)+' non lu'+(CMB.n>1?'s':''):'',
   msName=uid=>{const f=(FR.list||[]).find(x=>x.uid===uid);return f?f.name:''};
-function msNorm(r,me){
+function dmNorm(r,me){
   if(!r||typeof r!=='object'||typeof r.body!=='string'||!msUuid(r.sender)||!msUuid(r.recipient))return null;
   const id=Math.floor(+r.id);if(!(id>0))return null;
   const s=r.sender.toLowerCase(),d=r.recipient.toLowerCase(),mine=s===me;if(!mine&&d!==me)return null;
@@ -2821,7 +2821,7 @@ const chFriend=()=>(FR.list||[]).find(x=>x.st==='accepted'&&x.uid===CH.uid),
 function chDay(t){const d=new Date(t),n=new Date(),k=x=>x.getFullYear()*400+x.getMonth()*32+x.getDate(),y=new Date(n.getFullYear(),n.getMonth(),n.getDate()-1);
   if(k(d)===k(n))return 'Aujourd’hui';if(k(d)===k(y))return 'Hier';
   return d.toLocaleDateString('fr-FR',d.getFullYear()!==n.getFullYear()?{day:'numeric',month:'long',year:'numeric'}:{day:'numeric',month:'long'})}
-function chRows(rows,f){const me=msMe(),seen=new Set(),out=[];for(const r of Array.isArray(rows)?rows:[]){const m=msNorm(r,me);if(!m||m.other!==f||seen.has(m.id))continue;seen.add(m.id);out.push(m)}return out.sort((a,b)=>a.id-b.id)}
+function chRows(rows,f){const me=msMe(),seen=new Set(),out=[];for(const r of Array.isArray(rows)?rows:[]){const m=dmNorm(r,me);if(!m||m.other!==f||seen.has(m.id))continue;seen.add(m.id);out.push(m)}return out.sort((a,b)=>a.id-b.id)}
 function chSync(){let l=0;for(const m of CH.msgs)if(m.id>l)l=m.id;CH.last=l}
 function chAdd(list){const have=new Set(CH.msgs.map(m=>m.id));for(const m of list)if(!have.has(m.id))CH.msgs.push(m);CH.msgs.sort((a,b)=>a.id-b.id);chSync()}
 function chListHTML(){
@@ -2914,7 +2914,7 @@ async function chSend(){
   const n=CH.n;CH.sending=true;if(t)t.readOnly=true;chBtn();
   try{
     const r=await frApi('/rest/v1/messages',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({recipient:CH.uid,body:txt})});
-    if(n===CH.n){const m=msNorm(Array.isArray(r)?r[0]:r,msMe());if(m)chAdd([m]);CH.off=false;CH.sel=0;CH.del=0;CHD[CH.uid]='';const t2=$('#ch-t');if(t2){t2.value='';t2.removeAttribute('style');t2.rows=1}chDraw('bottom');chHead()}
+    if(n===CH.n){const m=dmNorm(Array.isArray(r)?r[0]:r,msMe());if(m)chAdd([m]);CH.off=false;CH.sel=0;CH.del=0;CHD[CH.uid]='';const t2=$('#ch-t');if(t2){t2.value='';t2.removeAttribute('style');t2.rows=1}chDraw('bottom');chHead()}
   }catch(e){const x=msErr(e);toast(x.m);if(n===CH.n){if(x.k==='ami'){FR.loaded=false;frLoad()}else if(x.k==='nosrv'){CH.err='nosrv';render()}}}
   if(n===CH.n){CH.sending=false;const t3=$('#ch-t');if(t3)t3.readOnly=false;chBtn()}}
 function chBtn(){const s=$('#ch-s'),t=$('#ch-t');if(!s)return;const v=t?t.value:'';s.disabled=CH.sending||!msTrim(msTxt(v));
@@ -6895,7 +6895,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='28 oct. 2026 · 37';
+const BUILD='29 oct. 2026 · 38';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8641,6 +8641,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['💬','Messages privés réparés','Les messages d’une discussion s’affichent de nouveau (ils étaient bien envoyés, mais restaient invisibles).'],
   ['🟠','Nouveau bouton ＋','Le bouton du milieu, en bas, est maintenant une boule de cristal.'],
   ['🛒','Boutique','Dans le menu ＋ : une sélection de produits Dragon Ball Super (boosters, displays, accessoires) sur Amazon.'],
   ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.'],

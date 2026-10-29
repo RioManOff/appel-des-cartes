@@ -2066,7 +2066,7 @@ html[data-ly=pc] .sheet>.sr-d{max-width:980px;padding-bottom:28px}
 html[data-ly=pc] :is(#toast,#lpm){left:calc(50% + var(--side) / 2)}
 html[data-ly=pc] #toast{bottom:28px}
 html[data-ly=pc] #lpm{bottom:28px}
-html[data-ly=pc] .cg-fab{bottom:24px;right:24px}
+html[data-ly=pc] .cg-fab{bottom:24px!important;right:24px}
 html[data-ly=pc] .cg-ov{left:var(--side)}
 </style>
 <style id="oled-css">
@@ -6945,7 +6945,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='29 oct. 2026 · 46';
+const BUILD='29 oct. 2026 · 47';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */

@@ -6985,7 +6985,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='29 oct. 2026 · 43';
+const BUILD='29 oct. 2026 · 44';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7892,8 +7892,9 @@ function spSections(L){const sealed=spSealed(L);
   return{key:e,at:`data-spfw="${e}"`,code:e,name:nm,cls:PACKIMG[e]?'srp-'+e:'',art:PACKIMG[e]?'':(isDeck(e)?'fs/'+e+'-01.webp':''),rgb:srRGB(e),o:s.o,n:s.n,sq:sealed?s.sq:null,cur:X.game!=='ms'&&spCurLang()===L&&S.ext===e}});
  const out=[{id:'fb',t:'Boosters',sub:'FB01 à FB11',L:fw(EXTS),soon:1},{id:'fs',t:'Decks',sub:'FS01 à FS11',L:fw(DECKS)}];
  if(L==='jp'){const om=dzOwnMap(),f12=spDzTile('D1537',om,sealed);if(f12){out[1].L.push(f12);out[1].sub='FS01 à FS12'}
-  const ot=['D1547','D1480','D1510','D1492','D1392'].map(id=>spDzTile(id,om,sealed)).filter(Boolean);
-  if(ot.length)out.push({id:'ot',t:'Autres séries',sub:'ST01, SB01, SB02, 1st Anniversary, promos',L:ot})}
+  const bo=['D1480','D1510','D1547'].map(id=>spDzTile(id,om,sealed)).filter(Boolean);if(bo.length){out[0].L.push(...bo);out[0].sub='FB01 à FB11 · SB01, SB02, ST01'}
+  const ot=['D1492','D1392'].map(id=>spDzTile(id,om,sealed)).filter(Boolean);
+  if(ot.length)out.push({id:'ot',t:'Autres séries',sub:'1st Anniversary Set, cartes promo',L:ot})}
  return out}
 /* les anciennes collections de chaque langue, de A à Z */
 function spOld(L){const om=dzOwnMap(),cat=L==='jp'?'jp':L==='en'?'us':'frx',out=[];
@@ -8826,7 +8827,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
-  ['🗂️','Choisir la série, refait de A à Z','La même fenêtre pour le japonais, le français et l’anglais : les 3 langues et la recherche en haut, puis les boosters, les decks et les autres séries en affiches, et les anciennes collections rangées de A à Z.'],
+  ['🗂️','Choisir la série, refait de A à Z','La même fenêtre pour le japonais, le français et l’anglais : les 3 langues et la recherche en haut, puis les boosters (avec SB01, SB02 et ST01 en japonais), les decks (avec FS12) et les autres séries en affiches, et les anciennes collections rangées de A à Z.'],
   ['🐉','Nouvelles séries Fusion World','FS12, SB01 et SB02 (Manga Booster), ST01 (Story Booster 01), 1st Anniversary Set et PROMO, avec leurs photos (en HD quand tu agrandis). Drapeau japonais → Choisir la série → case « Dragon Ball Super Fusion World ».'],
   ['🃏','Photos des decks FS01 à FS11','Toutes les cartes des decks ont maintenant leur photo, et en HD quand tu agrandis une carte. Les versions ★ qui manquaient dans FS06, FS07, FS08 et FS10 sont ajoutées.'],
   ['🖥️','Téléphone, tablette ou PC','L’appli s’adapte toute seule à ton écran : sur PC, le menu passe sur le côté, les cartes s’affichent sur plus de colonnes et l’accueil sur deux colonnes. Sur tablette, tout s’élargit.'],

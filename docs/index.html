@@ -2019,6 +2019,7 @@ div.cx-spa{cursor:default}
 .pv-l{display:flex;flex-direction:column;gap:4px}
 .pv-r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:7px 10px;border:1px solid var(--ln);border-radius:2px;background:var(--sf)}
 .pv-r b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pv-r small{color:var(--mu)}
+.pv-r.an b{color:var(--mu);font-weight:600}
 
 html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
@@ -6950,7 +6951,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='30 oct. 2026 · 48';
+const BUILD='30 oct. 2026 · 49';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7898,9 +7899,9 @@ const pvAgo=d=>{try{return new Date(d).toLocaleDateString('fr-FR',{day:'numeric'
 function pvList(){if(PV.st==='load')return '<div class="sub">Chargement…</div>';
  if(PV.st==='nosql')return '<div class="sub">Il manque le fichier sondage_noms.sql dans Supabase.</div>';
  if(PV.st!=='ok')return '<div class="sub">Liste indisponible (réservée à l’administrateur).</div>';
- const L=PV.L||[],an=L.filter(x=>x.pseudo==='Anonyme').length,nm=L.filter(x=>x.pseudo!=='Anonyme');
- return (nm.length?`<div class="pv-l">${nm.map(x=>`<div class="pv-r"><b>${esc(x.pseudo)}</b><span>${x.choix==='ios'?'🍎 iPhone':'🤖 Android'}</span><small>${pvAgo(x.quand)}</small></div>`).join('')}</div>`:'<div class="sub">Personne de connecté n’a encore voté.</div>')
-  +(an?`<div class="sub" style="margin-top:6px">+ ${an} vote${an>1?'s':''} anonyme${an>1?'s':''} (pas connecté${an>1?'s':''} au moment du vote)</div>`:'')}
+ const L=PV.L||[],an=L.filter(x=>x.pseudo==='Anonyme').length;
+ if(!L.length)return '<div class="sub">Personne n’a encore voté.</div>';
+ return `<div class="sub" style="margin-bottom:6px">${L.length} vote${L.length>1?'s':''}${an?' · '+an+' sans pseudo (pas connecté au moment du vote)':''}</div><div class="pv-l">${L.map(x=>{const a=x.pseudo==='Anonyme';return `<div class="pv-r${a?' an':''}"><b>${a?'Anonyme'+(x.appareil?' · appareil '+esc(x.appareil):''):esc(x.pseudo)}</b><span>${x.choix==='ios'?'🍎 iPhone':'🤖 Android'}</span><small>${pvAgo(x.quand)}</small></div>`}).join('')}</div>`}
 function pvDraw(){const el=document.getElementById('pv-box');if(el)el.innerHTML=pvList()}
 {const b0=pollBox;pollBox=function(){const h=b0();if(!h||!(typeof GC!=='undefined'&&GC.admin))return h;
  return h.replace(/<\/section>$/,`<button type="button" class="chip pv-b" data-pvopen aria-expanded="${PV.open}">${PV.open?'Masquer les votants':'👀 Voir qui a voté'}</button>${PV.open?`<div id="pv-box">${pvList()}</div>`:''}</section>`)}}

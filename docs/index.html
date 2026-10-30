@@ -2219,6 +2219,179 @@ html:is([data-ly=tab],[data-ly=pc]) .mj-st b{font-size:24px}
 @media (max-width:359px){.mj-num{font-size:70px}.mj-tab{font-size:16px}.mj-hero{gap:4px 12px}}
 html.calm :is(.mj,.mj-d,.mj-bn,.mj-sd,.mj-num,.mj-spot){animation:none!important}
 html.calm .mj-hero::after{display:none}
+
+/* ===== STATS v2 ===== */
+/* la boule de cristal en plus compact : la boule à gauche, le niveau de puissance à droite */
+.st-h{padding:14px 14px 14px;text-align:left}
+.st-h .ap-ht{left:10px;right:10px;top:8px}
+.st-hg{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px 18px;padding:44px 4px 0}
+.st-h .ap-bw{width:min(34vw,132px);margin:0 0 0 8px}
+.st-h .ap-hn{margin:0;text-align:left}
+.st-h .ap-hv{margin-top:6px;padding:0 8px 0 0;font-size:54px}
+.st-h .ap-hs{margin-top:4px;line-height:1.35}
+.st-h .ap-rk{margin-top:18px;text-align:center}
+/* onglets Résumé / Cartes / Séries */
+.st-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 6px 6px 2px}
+.st-tab{min-height:46px;padding:6px 8px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);font:800 19px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.03em;transform:skewX(var(--sk));transition:background-color .15s,color .15s,box-shadow .15s}
+.st-tab>span{display:inline-block;transform:skewX(9deg)}
+.st-tab[aria-selected="true"]{background:var(--gold);border-color:var(--gold);color:#1A0E10;box-shadow:4px 4px 0 var(--ac)}
+.st-p{display:grid;gap:14px;margin-top:14px}
+.st-c{margin:0;min-width:0}
+.st-p .panel+.panel{margin-top:0}
+.st-vh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.st-c h3{margin:0;font-size:21px}
+.st-vs{color:var(--mu);font-size:13px;text-align:right}
+.st-lk{display:inline-flex;align-items:center;gap:3px;padding:6px 0 6px 8px;border:0;background:none;color:var(--gold);font:600 14px/1 Barlow,system-ui,sans-serif}
+.st-lk svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.st-wait{margin:8px 0 4px;color:var(--mu);font-size:14px;line-height:1.45}
+.st-wait.sm{margin:2px 0 8px;font-size:13px}
+/* valeur : le total, la variation, la courbe, d'où vient l'argent */
+.st-vn{font:900 48px/.95 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.01em;color:var(--gold);text-shadow:3px 3px 0 color-mix(in srgb,var(--ac) 75%,transparent);font-variant-numeric:tabular-nums}
+.st-dl{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:12px 0 0;font-size:14px}
+.st-dl b{padding:4px 9px;border-radius:2px;font:800 17px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em}
+.st-dl span{font-weight:700}
+.st-dl small{flex-basis:100%;color:var(--mu);font-size:13px}
+.st-dl.up b{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}.st-dl.up span{color:var(--ok)}
+.st-dl.dn b{background:rgba(255,90,110,.15);color:#FF5A6E}.st-dl.dn span{color:#FF5A6E}
+.st-dl.eq b{background:color-mix(in srgb,var(--mu) 16%,transparent);color:var(--mu)}
+.st-ch{margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)}
+.st-cv{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.st-cv>span:first-child{display:flex;align-items:baseline;gap:8px}
+.st-cv b{font:800 22px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.st-cv small{color:var(--mu);font-size:13px}
+.st-rgs{display:flex;gap:6px}
+.st-rgs .chip{min-height:32px;padding:4px 11px;font-size:13.5px}
+.st-cs{color:var(--mu);font-size:13px}
+.st-sv{display:block;width:100%;height:auto;margin-top:4px;touch-action:pan-y;cursor:crosshair}
+.st-sv text{fill:var(--mu);font:11px Barlow,system-ui,sans-serif}
+.st-ln{fill:none;stroke:var(--gold);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.st-gl{stroke:var(--ln);stroke-dasharray:3 4}
+.st-dt{fill:var(--gold);opacity:.55}
+.st-pt{fill:var(--gold);stroke:var(--bg);stroke-width:2}
+.st-cl{stroke:var(--tx);stroke-width:1;stroke-dasharray:2 3}
+.st-cf{display:flex;justify-content:space-between;gap:10px;margin-top:4px;color:var(--mu);font-size:12.5px}
+.st-cf b{color:var(--tx);font-weight:600}
+.st-cb{display:flex;height:12px;margin:16px 4px 9px;border-radius:2px;overflow:hidden;background:var(--ln);transform:skewX(-14deg)}
+.st-cb i{display:block;height:100%}
+.st-cb i+i{box-shadow:-2px 0 0 var(--sf)}
+.st-lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mu)}
+.st-lg span{display:inline-flex;align-items:center;gap:6px}
+.st-lg i{width:10px;height:10px;border-radius:2px;flex:none}
+.st-lg b{color:var(--tx);font-weight:600}
+/* activité : trois compteurs et le calendrier des jours où tu as ajouté des cartes */
+.st-as{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.st-as>div{min-width:0;padding:10px 6px 9px;text-align:center;background:color-mix(in srgb,var(--bg) 55%,transparent);border:1px solid var(--ln);border-radius:2px 10px 2px 10px}
+.st-as b{display:block;font:900 30px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;color:var(--gold);font-variant-numeric:tabular-nums}
+.st-as small{display:block;margin-top:5px;color:var(--mu);font-size:12px;line-height:1.25}
+.st-hw{--w:17}
+.st-hmm{position:relative;display:grid;grid-template-columns:repeat(var(--w),minmax(0,1fr));gap:3px;height:15px;margin:0 0 4px;font-size:11px;line-height:15px;color:var(--mu);overflow:hidden}
+.st-hmm span{white-space:nowrap}
+.st-hm{display:grid;grid-template-columns:repeat(var(--w),minmax(0,1fr));grid-template-rows:repeat(7,auto);grid-auto-flow:column;gap:3px;touch-action:pan-y}
+.st-hm i,.st-kl i{display:block;aspect-ratio:1;border-radius:3px;background:color-mix(in srgb,var(--mu) 14%,transparent)}
+.st-hm i[data-d]{cursor:pointer}
+:is(.st-hm,.st-kl) i.l1{background:color-mix(in srgb,var(--gold) 32%,transparent)}
+:is(.st-hm,.st-kl) i.l2{background:color-mix(in srgb,var(--gold) 56%,transparent)}
+:is(.st-hm,.st-kl) i.l3{background:color-mix(in srgb,var(--gold) 80%,transparent)}
+:is(.st-hm,.st-kl) i.l4{background:var(--gold);box-shadow:0 0 6px color-mix(in srgb,var(--gold) 65%,transparent)}
+.st-hm i.lx{background:none}
+.st-hm i.on{outline:2px solid var(--tx);outline-offset:1px}
+.st-hk{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:9px}
+.st-ai{color:var(--mu);font-size:13px;line-height:1.35}
+.st-kl{display:inline-flex;align-items:center;gap:3px;color:var(--mu);font-size:11.5px}
+.st-kl i{width:11px;height:11px}
+.st-kl i:first-child{margin-left:3px}.st-kl i:last-child{margin-right:3px}
+/* chiffres clés : six cases */
+.st-tg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.st-tl{--kr:245,180,0;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;min-height:128px;padding:12px 12px 12px 14px;text-align:left;color:var(--tx);border:1px solid rgba(var(--kr),.4);border-radius:2px 14px 2px 14px;background:linear-gradient(150deg,rgba(var(--kr),.2),rgba(var(--kr),.03) 62%),var(--sf)}
+.st-tl:active{transform:scale(.98)}
+.st-ti{display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin-bottom:5px;border-radius:50%;color:rgb(var(--kr));background:rgba(var(--kr),.15)}
+.st-ti svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.st-tn{font:900 32px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.st-tt{font-weight:700;font-size:14.5px}
+.st-tl small{color:var(--mu);font-size:12.5px;line-height:1.3}
+/* éditions */
+.st-eg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.st-ed{display:flex;align-items:center;gap:12px;min-width:0;padding:12px;text-align:left;color:var(--tx);background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px}
+.st-ed:active{transform:scale(.98)}
+.st-ef{flex:none;display:flex;width:34px}
+.st-ef svg{display:block;width:34px;height:auto;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.16)}
+.st-eo{display:flex;align-items:center;justify-content:center;width:34px;height:23px;font-size:18px;border-radius:3px;background:color-mix(in srgb,var(--mu) 18%,transparent)}
+.st-et{min-width:0}
+.st-et b{display:block;font:900 26px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;font-variant-numeric:tabular-nums}
+.st-et>span{display:block;margin-top:3px;font-weight:600;font-size:14px}
+.st-et small{display:block;color:var(--mu);font-size:12px}
+/* pépites : les cartes qui valent le plus */
+.st-pr{display:grid;grid-auto-flow:column;grid-auto-columns:104px;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:4px 16px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.st-pr::-webkit-scrollbar{display:none}
+.st-pc{display:flex;flex-direction:column;gap:5px;min-width:0;padding:0;border:0;background:none;color:var(--tx);text-align:left;scroll-snap-align:start}
+.st-pa{position:relative;display:block}
+.st-pa .art{border-radius:7px}
+.st-pm{position:absolute;left:-5px;top:-5px;z-index:2;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font:900 14px/1 'Big Shoulders Display',Impact,sans-serif;font-style:normal;color:#1A0E10;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.st-pm.m1{background:var(--gold)}.st-pm.m2{background:#D9DDE3}.st-pm.m3{background:#E0915A}
+.st-pc b{font:800 18px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--gold);font-variant-numeric:tabular-nums}
+.st-pc small{overflow:hidden;color:var(--mu);font-size:12.5px;white-space:nowrap;text-overflow:ellipsis}
+/* hausses et baisses */
+.st-mg{display:grid;gap:14px}
+.st-ml{display:flex;align-items:center;gap:7px;margin:0 0 8px;font-weight:700;font-size:14px}
+.st-ml svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.st-ml.up{color:var(--ok)}.st-ml.dn{color:#FF5A6E}.st-ml.dn svg{transform:scaleY(-1)}
+.st-mv{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;margin-top:6px;padding:7px 10px 7px 8px;text-align:left;color:var(--tx);background:color-mix(in srgb,var(--bg) 55%,transparent);border:1px solid var(--ln);border-radius:2px 12px 2px 12px}
+.st-ma{display:block;width:38px}.st-ma .art{border-radius:4px;border-width:1px;font-size:11px}
+.st-mt{min-width:0}.st-mt b{display:block;overflow:hidden;font-weight:600;font-size:14.5px;white-space:nowrap;text-overflow:ellipsis}
+.st-mt small{display:block;color:var(--mu);font-size:12px;line-height:1.3}
+.st-md{font:800 18px/1 'Big Shoulders Display',Impact,sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums}
+.st-md.up{color:var(--ok)}.st-md.dn{color:#FF5A6E}
+/* raretés, types, personnages */
+.st-rbk+.st-rbk{margin-top:16px;padding-top:14px;border-top:1px solid var(--ln)}
+.st-rt{display:flex;justify-content:space-between;gap:8px;margin:0 0 8px;font-weight:700}
+.st-rt span{color:var(--mu);font-weight:500;font-size:13px}
+.st-rb{display:flex;height:14px;margin:0 4px 10px;border-radius:2px;overflow:hidden;background:var(--ln);transform:skewX(-14deg)}
+.st-rb i{display:block;height:100%}
+.st-rb i+i{box-shadow:-2px 0 0 var(--sf)}
+.st-rr{display:grid;grid-template-columns:50px minmax(0,1fr) 96px;align-items:center;gap:10px;padding:5px 0}
+.st-rc{display:inline-flex;justify-content:center;padding:4px 6px;border-radius:2px;color:#1A0E10;background:var(--r);font:900 14px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;transform:skewX(var(--sk))}
+.st-rk{position:relative;display:block;height:8px;overflow:hidden;border-radius:999px;background:var(--ln)}
+.st-rk i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:inherit;background:var(--r,var(--gold))}
+.st-rv{color:var(--mu);font-size:13px;white-space:nowrap;text-align:right}
+.st-rv b{color:var(--tx);font-weight:600}
+.st-cside{display:grid;gap:16px}
+.st-ty{padding-top:14px;border-top:1px solid var(--ln)}
+.st-yg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.st-yt{display:flex;flex-direction:column;gap:2px;min-width:0;padding:10px;background:color-mix(in srgb,var(--bg) 55%,transparent);border:1px solid var(--ln);border-radius:2px 10px 2px 10px}
+.st-yt b{font:900 26px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;color:var(--gold)}
+.st-yt>span:not(.st-rk){font-weight:600;font-size:14px}
+.st-yt small{color:var(--mu);font-size:12px}
+.st-yt .st-rk{margin-top:6px}
+.st-cl0{list-style:none;margin:0;padding:0}
+.st-cr{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:12px;padding:7px 0}
+.st-cn{font:900 22px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;color:var(--gold);text-align:center}
+.st-cx{min-width:0}.st-cxl{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.st-cxl>b{overflow:hidden;font-weight:600;white-space:nowrap;text-overflow:ellipsis}
+.st-cx .st-rk{margin-top:6px}
+/* séries : trois compteurs avant le radar */
+.st-sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.st-sg>div{padding:10px 6px;text-align:center;background:var(--sf);border:1px solid var(--ln);border-radius:2px 10px 2px 10px}
+.st-sg b{display:block;font:900 30px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;color:var(--gold)}
+.st-sg small{display:block;margin-top:4px;color:var(--mu);font-size:12px;line-height:1.25}
+.st-p .ap-lg{margin-top:4px}
+/* tablette et PC : deux colonnes */
+html:is([data-ly=tab],[data-ly=pc]) .st-h{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:end;gap:10px 26px;padding:16px 22px 20px}
+html:is([data-ly=tab],[data-ly=pc]) .st-hg{padding-top:40px}
+html:is([data-ly=tab],[data-ly=pc]) .st-h .ap-bw{width:150px}
+html:is([data-ly=tab],[data-ly=pc]) .st-h .ap-hv{font-size:64px}
+html:is([data-ly=tab],[data-ly=pc]) .st-h .ap-rk{margin:0 0 6px}
+html:is([data-ly=tab],[data-ly=pc]) .st-tabs{max-width:620px}
+html:is([data-ly=tab],[data-ly=pc]) .st-p{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+html:is([data-ly=tab],[data-ly=pc]) .st-w2{grid-column:1/-1}
+html:is([data-ly=tab],[data-ly=pc]) .st-tg{grid-template-columns:repeat(3,minmax(0,1fr))}
+html:is([data-ly=tab],[data-ly=pc]) .st-eg{grid-template-columns:repeat(4,minmax(0,1fr))}
+html:is([data-ly=tab],[data-ly=pc]) .st-mg{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+html:is([data-ly=tab],[data-ly=pc]) .st-pr{grid-auto-columns:120px;margin:0;padding:4px 0 8px}
+html:is([data-ly=tab],[data-ly=pc]) .st-s .ap-l{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html:is([data-ly=tab],[data-ly=pc]) .st-s .ap-l>*{margin-top:0}
+html:is([data-ly=tab],[data-ly=pc]) .st-s .ap-l>:is(.hmgn,p,.hmmore){grid-column:1/-1}
+html:is([data-ly=tab],[data-ly=pc]) .st-s .ap-l>.hmmore{justify-self:center}
+@media (max-width:359px){.st-h .ap-hv{font-size:44px}.st-tab{font-size:16px}.st-vn{font-size:40px}.st-as b{font-size:25px}}
+html.calm .st-hm i.l4{box-shadow:none}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -7096,7 +7269,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='30 oct. 2026 · 52';
+const BUILD='30 oct. 2026 · 53';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8084,6 +8257,229 @@ document.addEventListener('click',e=>{const o=e.target.closest&&e.target.closest
 document.addEventListener('keydown',e=>{if(ONL.sh&&e.key==='Escape'){e.stopPropagation();ONL.sh=false;render()}else if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('[data-onl]')){e.preventDefault();ONL.sh=true;render()}},true);
 /* ===== EN-LIGNE:END ===== */
 
+/* ===== STATS v2 : l'onglet Stats refait =====
+   En haut : la boule de cristal (ta collection qui se remplit), ton rang et sa jauge de ki.
+   Trois onglets : Résumé (valeur et sa courbe, activité, chiffres clés, éditions) · Cartes (pépites, hausses et baisses,
+   raretés, types, personnages) · Séries (prochain objectif et radar des séries).
+   La courbe vient des relevés de prix de chaque nuit (docs/hist/FB01.json…) : quantités d'aujourd'hui × prix de chaque jour. */
+const ST={tab:'r',rg:'',hk:'',h:null,wait:false};
+try{const t=localStorage.getItem('fb_stt');if(/^[rcs]$/.test(t||''))ST.tab=t}catch(e){}
+const stCol={fw:'#F5B82E',ms:'#4FA3FF',se:'#FF7A2F'},
+ stRCol={L:'#F5B82E',C:'#9C8B7C',UC:'#3FBF7F',R:'#3FA0FF',SR:'#A86BFF',SPR:'#FF9A1E',SCR:'#FF5A6E',GDR:'#FFD66B',SLR:'#E86BFF',CR:'#2BC9C9',ALT:'#FF9A1E'},
+ stRNm={L:'Leader',C:'Commune',UC:'Peu commune',R:'Rare',SR:'Super rare',SPR:'Spéciale',SCR:'Secrète',GDR:'God rare',SLR:'Super leader',CR:'Concept rare',ALT:'Alt Art'},
+ stIc={dice:'<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>',
+  up:'<path d="M4 16l6-6 4 4 6-7"/><path d="M15 7h5v5"/>',fire:'<path d="M12 21c-4 0-6.5-2.6-6.5-6.2 0-3.4 2.4-5.4 3.6-8 .8 1.9 2 2.9 3.3 3.3-.2-2.8.9-5.2 2.6-7.1.4 3.6 4.5 6 4.5 11.2C19.5 18.3 16.5 21 12 21z"/>'},
+ stSvg=k=>`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${stIc[k]||apIc[k]||''}</svg>`,
+ stPad=n=>String(n).padStart(2,'0'),stYmd=d=>d.getFullYear()+'-'+stPad(d.getMonth()+1)+'-'+stPad(d.getDate()),
+ stDt=s=>new Date(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10),12),
+ stDF=(s,o)=>{try{return stDt(s).toLocaleDateString('fr-FR',o||{day:'numeric',month:'short'})}catch(e){return s}},
+ stNm=n=>String(n||'').split(/\s*[:,(]\s*/)[0].trim(),
+ stPct=(a,b)=>b?Math.round(a/b*1000)/10:0,
+ stCW=()=>{const w=innerWidth,ly=document.documentElement.dataset.ly;
+  if(ly==='pc')return Math.max(300,Math.round((Math.min(1180,w-250)-72-16)/2-40));
+  if(ly==='tab')return Math.max(280,Math.round((w-48)/2-40));
+  return Math.max(240,Math.min(560,w-72))};
+
+/* ---------- les chiffres de la collection ---------- */
+function stData(){msBindInit();
+ const MA=MS_ALL,MP=c=>msPx(c.id)||0,fO=cards.filter(c=>c.own>0),mO=MA.filter(c=>c.own>0);
+ const uniq=fO.length+mO.length,all=cards.length+MA.length,copies=fO.reduce((a,c)=>a+c.own,0)+mO.reduce((a,c)=>a+c.own,0);
+ const vFw=fO.reduce((a,c)=>a+c.own*pxv(c),0),vMa=mO.reduce((a,c)=>a+c.own*MP(c),0),sa=sealAll(),
+  vSe=sa.reduce((a,x)=>a+x.s.own*sealPx(x.e,x.t[0]),0)+MS_SETS.reduce((a,t)=>a+MS_SEAL.reduce((b,k)=>b+msOwn(t.id+'-'+k[0])*msCm(t.id+'-'+k[0]),0),0),
+  msc=msSealCount(),sealN=sa.reduce((a,x)=>a+x.s.own,0)+msc.n,sealU=sa.filter(x=>x.s.own>0).length+msc.u;
+ const AL=alt().concat(MA.filter(c=>c.ver==='ALT')),aOwn=AL.filter(c=>c.own>0).length,aV=AL.reduce((a,c)=>a+c.own*(c.ms?MP(c):pxv(c)),0);
+ const W=cards.filter(c=>c.want>0).concat(MA.filter(c=>c.want>0)),swn=sa.filter(x=>x.s.want>0).length,wn=W.length+swn,
+  wc=W.reduce((a,c)=>a+Math.max(0,c.want-c.own)*(c.ms?MP(c):pxv(c)),0)+sa.reduce((a,x)=>a+Math.max(0,x.s.want-x.s.own)*sealPx(x.e,x.t[0]),0);
+ const P=tradeData().prop.concat(msProp()),pn=P.reduce((a,x)=>a+x.q,0),pv=P.reduce((a,x)=>a+x.q*(x.c.ms?MP(x.c):pxv(x.c)),0);
+ const bo=(+VIRT.b||0)+Object.values(VIRT.bs||{}).reduce((a,n)=>a+(+n||0),0);
+ const ev=dbEval(),lit=ev.balls.filter(b=>b.lit).length,rk=dbRank(uniq);
+ /* éditions : japonaise (Fusion World), anglaise, française (Masters et autres), anciennes collections */
+ const ed={jp:[0,0],en:[0,0],fr:[0,0],old:[0,0]};
+ fO.forEach(c=>{ed.jp[0]++;ed.jp[1]+=c.own});
+ for(const k in (X.en||{})){const n=+X.en[k]||0;if(n>0){ed.en[0]++;ed.en[1]+=n}}
+ for(const k in (X.ms||{})){const n=+X.ms[k]||0;if(n<=0||/-(booster|display|case)$/.test(k))continue;
+  const m=/^(D\d+)-\d/.exec(k);let g='fr';if(m){const s=typeof dzSet==='function'?dzSet(m[1]):null;if(!s)continue;g=s.dz.idc===330?'jp':s.dz.cat==='frx'?'fr':'old'}
+  ed[g][0]++;ed[g][1]+=n}
+ /* les cartes qui valent le plus (une ligne par carte) */
+ const top=fO.map(c=>({c,p:pxv(c)})).concat(mO.map(c=>({c,p:MP(c)}))).filter(x=>x.p>0).sort((a,b)=>b.p-a.p||b.c.own-a.c.own).slice(0,8);
+ /* personnages préférés : cartes différentes par nom (sans le sous-titre) */
+ const CH=new Map();fO.concat(mO).forEach(c=>{const k=stNm(c.name);if(!k)return;const v=CH.get(k)||{n:k,u:0,q:0};v.u++;v.q+=c.own;CH.set(k,v)});
+ const chars=[...CH.values()].sort((a,b)=>b.u-a.u||b.q-a.q||a.n.localeCompare(b.n,'fr')).slice(0,5);
+ return{MA,fO,mO,uniq,all,copies,vFw,vMa,vSe,val:vFw+vMa+vSe,cardV:vFw+vMa,sealN,sealU,AL,aOwn,aV,W,swn,wn,wc,pn,pv,bo,ev,lit,rk,ed,top,chars,
+  au:apAU[rk.i]||apAU[1],pw:apW(uniq,all),pc:apPc(uniq,all),left:Math.max(0,rk.to-uniq),gw:rk.to?Math.max(0,Math.min(100,(uniq-rk.from)/(rk.to-rk.from)*100)):100}}
+
+/* ---------- la courbe de la valeur (cartes Fusion World) ---------- */
+function stHistKey(){let k=(MKON?'1':'0')+(MKD||'');for(const c of cards)if(c.own>0)k+='|'+c.id+':'+c.own+':'+(c.price||'');for(const e in PXH){const o=PXH[e];if(o&&o.j)k+='#'+e+o.j.d.length}return k}
+function stHistLoad(){if(!MKON)return;const ex=new Set();for(const c of cards)if(c.own>0&&/^FB\d\d$/.test(c.ext))ex.add(c.ext);
+ const ps=[];ex.forEach(e=>{const o=pxHist(e);if(o&&o.p)ps.push(o.p)});
+ if(ps.length&&!ST.wait){ST.wait=true;Promise.all(ps).then(()=>{ST.wait=false;stRefresh()},()=>{ST.wait=false})}}
+function stHist(){const k=stHistKey();if(k===ST.hk)return ST.h;ST.hk=k;ST.h=null;if(!MKON)return null;
+ const own=cards.filter(c=>c.own>0);if(!own.length)return null;
+ const ds=new Set();own.forEach(c=>{const o=PXH[c.ext];if(o&&o.j)o.j.d.forEach(d=>ds.add(d))});if(!ds.size)return null;if(MKD)ds.add(MKD);
+ const D=[...ds].sort(),n=D.length;if(n<2)return null;
+ const tot=new Array(n).fill(0),per=[],iM=MKD?D.indexOf(MKD):-1;
+ for(const c of own){const up=nb(c.price);if(up>0){for(let i=0;i<n;i++)tot[i]+=c.own*up;continue}
+  const o=PXH[c.ext],j=o&&o.j,col=j&&j.t[c.id],v=new Array(n).fill(null);
+  if(col){const ix=new Map(j.d.map((d,i)=>[d,i]));for(let i=0;i<n;i++){const t=ix.get(D[i]);if(t!==undefined&&col[t]>0)v[i]=col[t]/100}}
+  if(iM>=0&&MKA[c.id]&&MKT[c.id])v[iM]=MKT[c.id];
+  let f=null;for(let i=0;i<n;i++)if(v[i]!==null){f=v[i];break}
+  if(f===null){const p=pxv(c);for(let i=0;i<n;i++)tot[i]+=c.own*p;continue}
+  let l=f;for(let i=0;i<n;i++){if(v[i]===null)v[i]=l;else l=v[i];tot[i]+=c.own*v[i]}
+  per.push({c,v})}
+ /* référence pour « en 7 jours » : le dernier relevé d'il y a au moins 7 jours (sinon le premier) */
+ const last=pxDay(D[n-1]);let r=0;for(let i=0;i<n;i++)if(pxDay(D[i])<=last-7)r=i;
+ return ST.h={D,tot,per,r,span:last-pxDay(D[0]),full:pxDay(D[r])<=last-7}}
+function stDelta(h){const n=h.D.length,a=h.tot[h.r],b=h.tot[n-1],d=b-a;return{d,p:a>0?d/a*100:0,since:h.full?'en 7 jours':'depuis le '+stDF(h.D[h.r])}}
+function stChart(h){const D=h.D,n=D.length,av=[['7','7 j',7],['30','30 j',30]].filter(r=>h.span>r[2]);
+ let rg=ST.rg||(h.span>30?'30':'0');if(rg!=='0'&&!av.some(r=>r[0]===rg))rg='0';
+ let i0=0;if(rg!=='0'){const lim=pxDay(D[n-1])-(+rg);i0=Math.max(0,D.findIndex(d=>pxDay(d)>=lim));if(n-i0<2)i0=0}
+ const sd=D.slice(i0),sv=h.tot.slice(i0),m=sd.length;let lo=Math.min(...sv),hi=Math.max(...sv);
+ if(hi-lo<.01){hi+=.5;lo=Math.max(0,lo-.5)}else{const pad=(hi-lo)*.12;hi+=pad;lo=Math.max(0,lo-pad)}
+ const W=stCW(),H=150,L=4,T=10,B=22,R=8,pw=W-L-R,ph=H-T-B,d0=pxDay(sd[0]),d1=pxDay(sd[m-1]),f1=v=>v.toFixed(1);
+ const xs=d=>L+(pxDay(d)-d0)/Math.max(1,d1-d0)*pw,ys=v=>T+(hi-v)/(hi-lo)*ph;
+ const P=sd.map((d,i)=>({x:xs(d),y:ys(sv[i]),f:eur(sv[i]),t:stDF(d,{weekday:'short',day:'numeric',month:'short'})})),q=P[m-1];
+ const ln=P.map((u,i)=>(i?'L':'M')+f1(u.x)+' '+f1(u.y)).join(''),ar=ln+'L'+f1(q.x)+' '+(T+ph)+'L'+f1(P[0].x)+' '+(T+ph)+'Z';
+ ST.cv={w:W,p:P,last:{f:q.f,t:'au '+stDF(sd[m-1])}};
+ const chips=av.length?[...av.map(r=>[r[0],r[1]]),['0','Tout']].map(([v,t])=>`<button type="button" class="chip" data-strg="${v}" aria-pressed="${rg===v}">${t}</button>`).join(''):`<span class="st-cs">${Math.round(h.span)+1} jours</span>`;
+ const lo2=Math.min(...sv),hi2=Math.max(...sv);
+ return `<div class="st-ch"><div class="st-cv"><span><b id="st-cv">${ST.cv.last.f}</b><small id="st-cd">${ST.cv.last.t}</small></span><span class="st-rgs">${chips}</span></div>`
+  +`<svg class="st-sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="Valeur de tes cartes Fusion World du ${stDF(sd[0])} au ${stDF(sd[m-1])} : de ${eur(lo2)} à ${eur(hi2)}">`
+  +`<defs><linearGradient id="stg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold);stop-opacity:.42"/><stop offset="1" style="stop-color:var(--gold);stop-opacity:0"/></linearGradient></defs>`
+  +`<line class="st-gl" x1="${L}" x2="${W-R}" y1="${f1(ys(hi2))}" y2="${f1(ys(hi2))}"/><line class="st-gl" x1="${L}" x2="${W-R}" y1="${f1(ys(lo2))}" y2="${f1(ys(lo2))}"/>`
+  +`<path d="${ar}" fill="url(#stg)"/><path d="${ln}" class="st-ln"/>${m<=24?P.map(u=>`<circle class="st-dt" cx="${f1(u.x)}" cy="${f1(u.y)}" r="2.2"/>`).join(''):''}`
+  +`<text x="${L}" y="${H-5}">${stDF(sd[0])}</text><text x="${W-R}" y="${H-5}" text-anchor="end">${stDF(sd[m-1])}</text>`
+  +`<line id="st-cl" class="st-cl" y1="${T-4}" y2="${T+ph}" visibility="hidden"/><circle id="st-cp" class="st-pt" r="5" visibility="hidden"/><circle class="st-pt" cx="${f1(q.x)}" cy="${f1(q.y)}" r="5"/></svg>`
+  +`<div class="st-cf"><span>Plus bas <b>${eur(lo2)}</b></span><span>Plus haut <b>${eur(hi2)}</b></span></div></div>`}
+function stValIn(D){const h=stHist();
+ let dl='';if(h){const x=stDelta(h),cls=Math.abs(x.d)<.005?'eq':x.d>0?'up':'dn',ar=cls==='up'?'▲':cls==='dn'?'▼':'＝';
+  dl=`<p class="st-dl ${cls}"><b>${ar} ${x.d>0?'+':x.d<0?'−':''}${eur(Math.abs(x.d))}</b>${Math.abs(x.p)>=.05?`<span>${x.d>0?'+':x.d<0?'−':''}${Math.abs(x.p).toFixed(1).replace('.',',')}\u00a0%</span>`:''}<small>cartes Fusion World ${x.since}</small></p>`}
+ const parts=[['fw','Cartes Fusion World',D.vFw],['ms','Cartes Masters',D.vMa],['se','Scellés',D.vSe]].filter(x=>x[2]>0),tv=D.val||1;
+ const comp=parts.length?`<div class="st-cb" role="img" aria-label="${parts.map(x=>x[1]+' '+eur(x[2])).join(', ')}">${parts.map(x=>`<i style="width:${(x[2]/tv*100).toFixed(2)}%;background:${stCol[x[0]]}"></i>`).join('')}</div><div class="st-lg">${parts.map(x=>`<span><i style="background:${stCol[x[0]]}"></i>${x[1]} <b>${eur(x[2])}</b></span>`).join('')}</div>`:'';
+ const ch=!MKON?'<p class="st-wait">Active les prix Cardmarket dans Réglages pour suivre l’évolution de ta collection.</p>'
+  :h?stChart(h):D.fO.length?(ST.wait?'<p class="st-wait">Chargement de la courbe…</p>':'<p class="st-wait">La courbe se construit : un nouveau relevé de prix s’ajoute chaque nuit.</p>')
+  :'<p class="st-wait">Ajoute des cartes Fusion World pour voir l’évolution de leur valeur jour après jour.</p>';
+ return `<div class="st-vh"><h3>Valeur de ma collection</h3><button type="button" class="st-lk" data-apv>Détail ${apSvg('go','')}</button></div>`
+  +`<div class="st-vn">${eur(D.val)}</div>${dl}${ch}${comp}`}
+
+/* ---------- hausses et baisses de la semaine ---------- */
+function stMovIn(){const h=stHist();if(!h)return MKON&&cards.some(c=>c.own>0)?'<p class="st-wait">Les hausses et les baisses arrivent avec les relevés de prix.</p>':'<p class="st-wait">Tes cartes Fusion World qui montent ou qui baissent s’afficheront ici.</p>';
+ const n=h.D.length,L=h.per.map(x=>({c:x.c,a:x.v[h.r],b:x.v[n-1],d:(x.v[n-1]-x.v[h.r])*x.c.own})).filter(x=>Math.abs(x.d)>=.01);
+ const up=L.filter(x=>x.d>0).sort((a,b)=>b.d-a.d).slice(0,3),dn=L.filter(x=>x.d<0).sort((a,b)=>a.d-b.d).slice(0,3),since=h.full?'en 7 jours':'depuis le '+stDF(h.D[h.r]);
+ const row=(x,u)=>`<button type="button" class="st-mv" data-n="${x.c.id}" aria-label="${esc(x.c.name)} : ${eur(x.a)} puis ${eur(x.b)}"><span class="st-ma">${art(x.c)}</span><span class="st-mt"><b>${esc(x.c.name)}</b><small>${x.c.id.replace(/_ALT\d?$/,'')} · ${eur(x.a)} → ${eur(x.b)}${x.c.own>1?' · ×'+x.c.own:''}</small></span><span class="st-md ${u?'up':'dn'}">${u?'+':'−'}${eur(Math.abs(x.d))}</span></button>`;
+ if(!up.length&&!dn.length)return `<p class="st-wait">Aucun prix de tes cartes n’a bougé ${since}.</p>`;
+ return `<div class="st-mg"><div><p class="st-ml up">${stSvg('up')}En hausse ${since}</p>${up.length?up.map(x=>row(x,1)).join(''):'<p class="st-wait sm">Rien en hausse.</p>'}</div>`
+  +`<div><p class="st-ml dn">${stSvg('up')}En baisse ${since}</p>${dn.length?dn.map(x=>row(x,0)).join(''):'<p class="st-wait sm">Rien en baisse.</p>'}</div></div>`}
+
+/* ---------- activité : chaque jour où tu as ajouté des cartes s'allume ---------- */
+function stAct(){const A=X.act||{},td=new Date(),g=d=>{const a=A[d];return a?(+a.c||0):0},gb=d=>{const a=A[d];return a?(+a.b||0):0};
+ let st=0;const cur=new Date(td);if(!(g(stYmd(cur))+gb(stYmd(cur))))cur.setDate(cur.getDate()-1);
+ while(st<4000){const k=stYmd(cur);if(g(k)+gb(k)>0){st++;cur.setDate(cur.getDate()-1)}else break}
+ let wk=0;{const c=new Date(td);for(let i=0;i<7;i++){wk+=g(stYmd(c));c.setDate(c.getDate()-1)}}
+ let best=0,bd='',tot=0,days=0;for(const k in A){const v=+((A[k]||{}).c)||0;tot+=v;if(v>0)days++;if(v>best){best=v;bd=k}}
+ return{st,wk,best,bd,tot,days}}
+function stHeat(){const A=X.act||{},W=innerWidth>=1100?24:innerWidth>=700?22:17,td=new Date();td.setHours(12,0,0,0);
+ const dow=(td.getDay()+6)%7,s0=new Date(td);s0.setDate(s0.getDate()-dow-7*(W-1));
+ let cells='',mo='',lm=-1,n=0,dn=0;
+ for(let w=0;w<W;w++){const wd=new Date(s0);wd.setDate(s0.getDate()+w*7);
+  for(let d=0;d<7;d++){const x=new Date(wd);x.setDate(wd.getDate()+d);const k=stYmd(x),fut=x>td,a=A[k]||{},v=+a.c||0,b=+a.b||0;
+   if(!fut){n+=v;if(v||b)dn++}
+   if(d===0&&x.getDate()<=7&&w<W-1){const m=x.getMonth();if(m!==lm){mo+=`<span style="grid-column:${w+1}/span ${Math.min(3,W-w)}">${x.toLocaleDateString('fr-FR',{month:'short'}).replace('.','')}</span>`;lm=m}}
+   const lv=fut?'x':v===0?(b?1:0):v<3?1:v<10?2:v<30?3:4;
+   cells+=`<i class="l${lv}"${fut?'':` data-d="${k}" data-v="${v}" data-b="${b}"`}></i>`}}
+ return `<div class="st-hw" style="--w:${W}"><div class="st-hmm" aria-hidden="true">${mo}</div><div class="st-hm" role="img" aria-label="Activité des ${W} dernières semaines : ${n} carte${apS(n)} ajoutée${apS(n)} sur ${dn} jour${apS(dn)}">${cells}</div></div>`
+  +`<div class="st-hk"><span class="st-ai" id="st-ai" aria-live="polite">Touche un jour pour voir le détail.</span><span class="st-kl" aria-hidden="true">Moins<i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i>Plus</span></div>`}
+function stActIn(){const a=stAct();
+ return `<div class="st-vh"><h3>Ton activité</h3></div><div class="st-as">`
+  +`<div><b>${a.st}</b><small>jour${apS(a.st)} d’affilée${a.st>=3?' 🔥':''}</small></div>`
+  +`<div><b>${apNf(a.wk)}</b><small>carte${apS(a.wk)} ajoutée${apS(a.wk)} en 7 jours</small></div>`
+  +`<div><b>${a.best?apNf(a.best):'—'}</b><small>${a.best?'record, le '+stDF(a.bd):'pas encore de record'}</small></div></div>${stHeat()}`}
+
+/* ---------- les morceaux de chaque onglet ---------- */
+function stHero(D){const el=Date.now()-apT0,rise=el<1700;
+ return `<section class="ap-h st-h${rise?' rise':''}" style="--au:${D.au};--p:${D.pw.toFixed(1)}${rise?';--ad:'+(-Math.round(el))+'ms':''}">`
+ +`<div class="ap-ht"><button class="ap-mb" data-go="dball" aria-label="Dragon Balls : ${D.lit} sur 7. Ouvrir">${D.ev.balls.map(b=>`<span class="dbo${b.lit?'':' off'}"></span>`).join('')}<small>${D.lit}/7</small></button><button class="ap-sh" data-share aria-label="Partager ma collection">${apSvg('share','')}</button></div>`
+ +`<div class="st-hg"><div class="ap-bw" role="img" aria-label="Collection complète à ${D.pc} % : ${D.uniq} cartes différentes sur ${D.all}"><span class="ap-fl"></span><span class="ap-bl">${D.uniq>0?`<span class="ap-lq">${apWave}</span>`:''}<span class="ap-bs">${apStars(4,b=>b>100-D.pw)}</span><span class="ap-hl"></span></span></div>`
+ +`<div class="ap-hn"><span class="ap-hk">Niveau de puissance</span><b class="ap-hv">${apNf(D.uniq)}</b><span class="ap-hs">cartes différentes sur ${apNf(D.all)} · <b>${D.pc}\u00a0%</b></span></div></div>`
+ +`<div class="ap-rk"><h2 class="ap-rm">${D.rk.name}</h2><div class="ap-kg${D.gw<=0?' z':''}" style="--w:${D.gw.toFixed(1)}%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(D.gw)}" aria-label="${D.rk.next?'Progression vers '+D.rk.next:'Rang maximum'}"><i></i></div>`
+ +`<p class="ap-rc">${D.rk.next?`Encore <b>${apNf(D.left)}</b> carte${apS(D.left)} différente${apS(D.left)} pour atteindre <b>${D.rk.next}</b>`:'Rang maximum atteint : tu as dépassé toutes les limites !'}</p></div></section>`}
+const stTabs=()=>`<div class="st-tabs" role="tablist" aria-label="Statistiques">${[['r','Résumé'],['c','Cartes'],['s','Séries']].map(([k,l])=>`<button type="button" role="tab" class="st-tab" id="st-t${k}" aria-selected="${ST.tab===k}" aria-controls="st-p" data-stt="${k}"${ST.tab===k?'':' tabindex="-1"'}><span>${l}</span></button>`).join('')}</div>`;
+const stTile=(att,kr,ic,lab,num,sub)=>`<button type="button" class="st-tl" ${att} style="--kr:${kr}"><span class="st-ti">${stSvg(ic)}</span><b class="st-tn" style="font-size:${apFr(num)+8}px">${num}</b><span class="st-tt">${lab}</span>${sub?`<small>${sub}</small>`:''}</button>`;
+function stResume(D){const E=D.ed,fl=k=>(typeof FLAG!=='undefined'&&FLAG[k])||'',
+  edT=(g,f,lab,x)=>`<button type="button" class="st-ed" data-game="${g}"><span class="st-ef">${f}</span><span class="st-et"><b>${apNf(x[0])}</b><span>${lab}</span><small>${x[0]?apNf(x[1])+' exemplaire'+apS(x[1]):'Aucune carte'}</small></span></button>`,
+  eAll=E.jp[0]+E.en[0]+E.fr[0]+E.old[0];
+ return `<section class="panel st-c st-val" id="st-val">${stValIn(D)}</section>`
+ +`<section class="panel st-c st-act">${stActIn()}</section>`
+ +`<section class="st-c st-w2"><div class="st-vh"><h3>Ma collection en chiffres</h3></div><div class="st-tg">`
+ +stTile('data-go="coll"','61,184,255','card','Cartes',apNf(D.copies),apNf(D.uniq)+' différente'+apS(D.uniq)+(D.cardV>0?' · '+apA(D.cardV):''))
+ +stTile('data-hgo="sealed"','255,138,43','box','Scellés',apNf(D.sealN),D.sealN?apNf(D.sealU)+' produit'+apS(D.sealU)+(D.vSe>0?' · '+apA(D.vSe):''):'Aucun pour l’instant')
+ +stTile('data-apa','177,79,224','alt','Alt Art',apNf(D.aOwn),'sur '+apNf(D.AL.length)+(D.aV>0?' · '+apA(D.aV):''))
+ +stTile('data-go="want"','255,77,106','heart','Recherchées',apNf(D.wn),D.wn?(D.wc>0?apA(D.wc)+' à acheter':'Ta liste d’envies'):'Rien de suivi')
+ +stTile('data-go="dup"','143,160,178','swap','À proposer',apNf(D.pn),D.pn?'Échange ou vente'+(D.pv>0?' · '+apA(D.pv):''):'Pas de doublon en trop')
+ +stTile('data-go="luck"','79,213,140','dice','Boosters ouverts',apNf(D.bo),'Dans le mode hasard')
+ +`</div></section>`
+ +`<section class="st-c st-w2"><div class="st-vh"><h3>Mes éditions</h3><span class="st-vs">${apNf(eAll)} carte${apS(eAll)} différente${apS(eAll)} en tout</span></div><div class="st-eg">`
+ +edT('fw',fl('jp'),'Japonaise',E.jp)+edT('en',fl('gb'),'Anglaise',E.en)+edT('ms',fl('fr'),'Française',E.fr)+edT('fw','<span class="st-eo" aria-hidden="true">🗃️</span>','Anciennes',E.old)
+ +`</div></section>`}
+function stRarIn(D){
+ const fw=['L','C','UC','R','SR','SCR'].map(r=>{const T=cards.filter(c=>c.ver==='Normal'&&c.rar===r);return{r,o:T.filter(c=>c.own>0).length,n:T.length}}).concat([(()=>{const T=alt();return{r:'ALT',o:T.filter(c=>c.own>0).length,n:T.length}})()]);
+ const mr={};D.MA.forEach(c=>{const r=c.ver==='ALT'?'SPR':c.rar||'?';const x=mr[r]||(mr[r]={r,o:0,n:0});x.n++;if(c.own>0)x.o++});
+ const K=['C','UC','R','SR','SPR','SCR','GDR','SLR','CR'],ki=r=>{const i=K.indexOf(r);return i<0?99:i},ms=Object.values(mr).filter(x=>x.n>0&&(K.includes(x.r)||x.o>0)).sort((a,b)=>ki(a.r)-ki(b.r)||a.r.localeCompare(b.r));
+ const blk=(t,L)=>{const ow=L.reduce((a,x)=>a+x.o,0);
+  return `<div class="st-rbk"><p class="st-rt">${t}<span>${apNf(ow)} différente${apS(ow)}</span></p>`
+  +(ow?`<div class="st-rb" role="img" aria-label="Répartition par rareté : ${L.filter(x=>x.o).map(x=>(stRNm[x.r]||x.r)+' '+x.o).join(', ')}">${L.filter(x=>x.o).map(x=>`<i style="width:${(x.o/ow*100).toFixed(2)}%;background:${stRCol[x.r]||'#8F7C6C'}"></i>`).join('')}</div>`:'')
+  +L.map(x=>`<div class="st-rr" style="--r:${stRCol[x.r]||'#8F7C6C'}"><span class="st-rc" title="${stRNm[x.r]||x.r}">${x.r==='ALT'?'ALT':x.r}</span><span class="st-rk" aria-hidden="true"><i style="--w:${apW(x.o,x.n).toFixed(1)}%"></i></span><span class="st-rv"><b>${apNf(x.o)}</b> / ${apNf(x.n)}</span></div>`).join('')+`</div>`};
+ const showMs=D.mO.length>0,showFw=D.fO.length>0||!showMs;
+ return `<div class="st-vh"><h3>Raretés</h3></div>${showFw?blk('Fusion World',fw):''}${showMs?blk('Masters',ms):''}`}
+function stTypIn(D){const T=['Leader','Battle','Extra'].map(t=>{const L=cards.filter(c=>c.ver==='Normal'&&c.type===t);return{t,o:L.filter(c=>c.own>0).length,n:L.length}});
+ return `<div class="st-vh"><h3>Types de cartes</h3><span class="st-vs">Fusion World</span></div><div class="st-yg">${T.map(x=>`<div class="st-yt"><b>${apNf(x.o)}</b><span>${x.t}</span><small>sur ${apNf(x.n)} · ${apPc(x.o,x.n)}\u00a0%</small><span class="st-rk" aria-hidden="true"><i style="--w:${apW(x.o,x.n).toFixed(1)}%"></i></span></div>`).join('')}</div>`}
+function stChrIn(D){const L=D.chars;if(!L.length)return `<div class="st-vh"><h3>Personnages préférés</h3></div><p class="st-wait">Tes personnages les plus collectionnés apparaîtront ici.</p>`;const mx=L[0].u||1;
+ return `<div class="st-vh"><h3>Personnages préférés</h3></div><ol class="st-cl0">${L.map((x,i)=>`<li class="st-cr"><span class="st-cn">${i+1}</span><span class="st-cx"><span class="st-cxl"><b>${esc(x.n)}</b><span class="st-rv"><b>${apNf(x.u)}</b> carte${apS(x.u)}${x.q>x.u?` · ${apNf(x.q)} ex.`:''}</span></span><span class="st-rk" aria-hidden="true"><i style="--w:${(x.u/mx*100).toFixed(1)}%"></i></span></span></li>`).join('')}</ol>`}
+function stCartes(D){
+ const pep=D.top.length?`<div class="st-pr">${D.top.map((x,i)=>`<button type="button" class="st-pc" ${x.c.ms?`data-msgo="${x.c.id}"`:`data-n="${x.c.id}"`} aria-label="${i+1}. ${esc(x.c.name||x.c.id)} : ${eur(x.p)}${x.c.own>1?', '+x.c.own+' exemplaires':''}"><span class="st-pa">${art(x.c)}${i<3?`<em class="st-pm m${i+1}">${i+1}</em>`:''}</span><b>${eur(x.p)}</b><small>${esc(x.c.name||x.c.id)}</small></button>`).join('')}</div>`
+  :`<p class="st-wait">Tes cartes les plus chères s’afficheront ici dès qu’elles auront un prix.</p>`;
+ return `<section class="panel st-c st-w2"><div class="st-vh"><h3>Mes pépites</h3><span class="st-vs">Les cartes qui valent le plus</span></div>${pep}</section>`
+ +`<section class="panel st-c st-w2" id="st-mov">${stMovIn()}</section>`
+ +`<section class="panel st-c">${stRarIn(D)}</section>`
+ +`<section class="panel st-c st-cside"><div>${stChrIn(D)}</div><div class="st-ty">${stTypIn(D)}</div></section>`}
+function stSeries(D){const SS=apSer(),uniq=D.uniq;
+ const nxt=(()=>{if(!uniq)return '';let s=SS.filter(x=>!x.done&&x.nn>0).sort((a,b)=>a.mN-b.mN)[0],f=1;if(!s){s=SS.filter(x=>!x.full&&x.na>0).sort((a,b)=>a.mA-b.mA)[0];f=0}if(!s)return '';
+  const n=f?s.mN:s.mA,u=f?'carte':'Alt Art',k=f?'Full Set':'Master Set';
+  return apRd(`data-apx="${s.e}"`,'88,200,255','radar','Prochain objectif',s.e+' · '+k,n,u+(f?apS(n):''),'Prochain objectif : '+s.e+', '+n+' '+u+(f?apS(n):'')+' pour le '+k+'. Ouvrir la série')})();
+ let done=SS.filter(x=>x.done).length,full=SS.filter(x=>x.full).length,go=SS.filter(x=>x.ow>0).length;
+ MS_SETS.forEach(s=>{const N=s.c.filter(c=>!msIsSpr(c)),A=s.c.filter(msIsSpr),o=N.filter(c=>msOwn(c[0])>0).length,ao=A.filter(c=>msOwn(c[0])>0).length;if(N.length&&o>=N.length)done++;if(N.length+A.length&&o+ao>=N.length+A.length)full++;if(o+ao>0)go++});
+ return `<section class="st-c st-w2"><div class="st-sg"><div><b>${done}</b><small>Full Set${apS(done)} complet${apS(done)}</small></div><div><b>${full}</b><small>Master Set${apS(full)} complet${apS(full)}</small></div><div><b>${go}</b><small>série${apS(go)} commencée${apS(go)}</small></div></div>`
+ +`<p class="ap-lg"><span><i></i>Full Set : toutes les cartes numérotées</span><span><i class="m"></i>Master Set : avec les Alt Art (remplit le booster)</span></p>${nxt}`
+ +`<label class="ap-q">${apSvg('find','')}<input id="sq" type="search" autocomplete="off" enterkeyhint="search" placeholder="Série ou code (ex. FB05)" aria-label="Chercher une série par son nom ou son code" value="${esc(S.sq)}"></label><div class="ap-l" id="apl">${apList()}</div>`
+ +`<div class="ap-d"><button class="chip" aria-pressed="${!!S.apd}" data-apd>Détails par type et par rareté</button></div>${S.apd?apDetail():''}</section>`}
+
+/* ---------- l'écran ---------- */
+statsFW=function(){const D=stData();stHistLoad();
+ const body=ST.tab==='c'?stCartes(D):ST.tab==='s'?stSeries(D):stResume(D);
+ return header()+stHero(D)+stTabs()+`<div class="st-p st-${ST.tab}" id="st-p" role="tabpanel" aria-labelledby="st-t${ST.tab}">${body}</div>`
+ +`<p class="sub ap-fn">${MKON?'Valeur = quantité × ton prix, sinon le premier prix Cardmarket du '+MKDF+'. Les scellés comptent aussi : édition japonaise, prix du '+pxFd(MKSD)+'. La courbe reprend tes quantités d’aujourd’hui avec le prix de chaque jour.':'Prix Cardmarket désactivé dans Réglages : seuls les prix que tu as saisis comptent.'}</p>`};
+/* la courbe et les hausses se redessinent seules quand l'historique arrive */
+function stRefresh(){if(S.tab!=='stats')return;let D=null;const v=document.getElementById('st-val');if(v){D=stData();v.innerHTML=stValIn(D)}const m=document.getElementById('st-mov');if(m)m.innerHTML=stMovIn()}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest||S.tab!=='stats')return;
+ const b=t.closest('[data-stt]');if(b){e.stopPropagation();const k=b.dataset.stt;if(ST.tab!==k){ST.tab=k;try{localStorage.setItem('fb_stt',k)}catch(_){}render()}return}
+ const r=t.closest('[data-strg]');if(r){e.stopPropagation();ST.rg=r.dataset.strg;stRefresh();return}},true);
+document.addEventListener('keydown',e=>{if(S.tab!=='stats'||!e.target||!e.target.matches||!e.target.matches('.st-tab'))return;if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();
+ const K=['r','c','s'],i=(K.indexOf(ST.tab)+(e.key==='ArrowRight'?1:2))%3;ST.tab=K[i];try{localStorage.setItem('fb_stt',ST.tab)}catch(_){}render();const n=document.getElementById('st-t'+ST.tab);if(n)n.focus()});
+/* doigt (ou souris) sur la courbe : la valeur du jour touché ; sur le calendrier : le détail du jour */
+(function(){let dn=false;
+ const show=(e,rst)=>{const v=ST.cv,s=document.querySelector('.st-sv'),rd=document.getElementById('st-cv'),dd=document.getElementById('st-cd'),cl=document.getElementById('st-cl'),cp=document.getElementById('st-cp');if(!v||!s||!rd||!dd||!cl||!cp)return;
+  if(rst){rd.textContent=v.last.f;dd.textContent=v.last.t;cl.setAttribute('visibility','hidden');cp.setAttribute('visibility','hidden');return}
+  const r=s.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*v.w;let b=v.p[0];for(const u of v.p)if(Math.abs(u.x-x)<Math.abs(b.x-x))b=u;
+  rd.textContent=b.f;dd.textContent=b.t;cl.setAttribute('x1',b.x);cl.setAttribute('x2',b.x);cl.setAttribute('visibility','visible');cp.setAttribute('cx',b.x);cp.setAttribute('cy',b.y);cp.setAttribute('visibility','visible')};
+ const day=e=>{const g=e.target.closest&&e.target.closest('.st-hm');if(!g)return;let c=e.target.closest('i[data-d]');
+  if(!c&&e.clientX!==undefined){const el=document.elementFromPoint(e.clientX,e.clientY);c=el&&el.closest&&el.closest('.st-hm i[data-d]')}
+  if(!c)return;g.querySelectorAll('i.on').forEach(x=>x.classList.remove('on'));c.classList.add('on');const v=+c.dataset.v||0,b=+c.dataset.b||0,o=document.getElementById('st-ai');
+  if(o)o.textContent=stDF(c.dataset.d,{weekday:'long',day:'numeric',month:'long'})+' : '+(v?v+' carte'+apS(v)+' ajoutée'+apS(v):'aucune carte ajoutée')+(b?' · '+b+' booster'+apS(b)+' ouvert'+apS(b):'')};
+ document.addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('.st-sv')){dn=true;show(e)}day(e)});
+ document.addEventListener('pointermove',e=>{if(e.target.closest&&e.target.closest('.st-sv')&&(dn||e.pointerType==='mouse'))show(e)});
+ const end=()=>{if(dn){dn=false;show(null,true)}};document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+ document.addEventListener('pointerout',e=>{if(e.pointerType==='mouse'&&e.target.closest&&e.target.closest('.st-sv')&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.st-sv')))show(null,true)})})();
+/* ===== STATS v2:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -8943,6 +9339,11 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:53,d:'2026-10-30',it:[
+  ['n','📊','Stats refaites','La boule de cristal en plus compact, et trois onglets : Résumé, Cartes et Séries.','str'],
+  ['n','📈','Courbe de la valeur','La valeur de tes cartes Fusion World jour après jour, et ce qu’elle a gagné ou perdu en 7 jours.','str'],
+  ['n','🔥','Ton activité','Un calendrier des jours où tu as ajouté des cartes, avec ta série de jours d’affilée et ton record.','str'],
+  ['n','💎','Pépites, hausses et baisses','Tes cartes les plus chères, celles qui montent ou qui baissent, tes raretés, tes personnages préférés et tes éditions.','stc']]},
  {v:52,d:'2026-10-30',it:[
   ['n','🆕','Mises à jour refaites','Chaque version avec sa date, ce qui est nouveau pour toi depuis ta dernière visite, une recherche, et un bouton « Voir » qui t’emmène tout de suite à la nouveauté.'],
   ['n','📣','Prévenu des nouvelles versions','Dès qu’une nouvelle version sort, un bandeau te le dit : un appui pour l’installer, sans rien perdre.'],
@@ -9026,7 +9427,7 @@ const MJF=[
   ['🎯','Cartes recherchées','La liste des cartes que tu veux, avec une alerte de prix pour chacune.','want'],
   ['🔁','Doublons','Tes cartes en plusieurs exemplaires, prêtes pour un échange.','dup'],
   ['📦','Mes scellés','Boosters, displays et cases des deux jeux dans une seule liste, avec leur prix.','sealed'],
-  ['📊','Stats','Fusion World et Masters comptés ensemble, avec le relevé du scouter et ton rang.','stats'],
+  ['📊','Stats','Ta valeur et sa courbe, ton activité, tes pépites, tes raretés et tes séries : Fusion World et Masters ensemble.','str'],
   ['🐉','Les 7 Dragon Balls','Collecte les boules et monte de rang : de Terrien à Ultra Instinct.','dball'],
   ['🗓️','Prochaines séries','Ce qui sort bientôt.','soon'],
   ['🖨️','Liste à imprimer','Choisis le jeu et la série, puis imprime ta liste.','print'],
@@ -9053,6 +9454,7 @@ const MJF=[
   ['🎲','Boosters Masters','Paquets de 12 cartes, display de 24 paquets, case de 12 displays.','luck']]],
  ['💶','Prix et argent',[
   ['📈','Prix Cardmarket','La tendance et les moyennes sur 30, 7 et 1 jour, mises à jour chaque nuit.','prix'],
+  ['📈','Courbe de ta collection','Dans Stats : la valeur de tes cartes Fusion World jour après jour, et ce qui monte ou baisse.','str'],
   ['📉','Courbe du prix','L’historique du prix de chaque carte, dans sa fiche.','coll'],
   ['🔔','Alertes de prix','Un seuil par carte recherchée : l’appli te prévient à l’ouverture.','al'],
   ['📦','Prix des scellés','Le premier prix Cardmarket de chaque série pour booster, display et case.','sealed'],
@@ -9120,7 +9522,10 @@ const GO={
  al:()=>{try{S.menu=false;S.alnew=[];S.alsh=true;render()}catch(e){}},
  me:()=>{try{if(SBS&&SBS.pseudo&&typeof ppOpen==='function'){ppOpen(SBS.pseudo);return}}catch(e){}clk({go:'comm'})},
  vr:()=>{if(typeof window.vrOpen==='function')window.vrOpen()},
- tut:()=>clk({tut:''})
+ tut:()=>clk({tut:''}),
+ str:()=>{try{ST.tab='r'}catch(e){}clk({go:'stats'})},
+ stc:()=>{try{ST.tab='c'}catch(e){}clk({go:'stats'})},
+ sts:()=>{try{ST.tab='s'}catch(e){}clk({go:'stats'})}
 };
 function go(k){close();setTimeout(()=>{try{(GO[k]||(()=>clk({go:k})))()}catch(e){}},40)}
 

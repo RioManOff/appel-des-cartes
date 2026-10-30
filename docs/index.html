@@ -5511,7 +5511,7 @@ let curCol='';function serTheme(e){const h=(goldOn()?'#F5B400':ACFIX)||SERCOL[e]
 serTheme('FB01');
 const EXTS=[['FB01','Awakened Pulse'],['FB02','Blazing Aura'],['FB03','Raging Roar'],['FB04','Ultra Limit'],['FB05','New Adventure'],['FB06','Rivals Clash'],['FB07',"Wish for Shenron"],['FB08',"Saiyan's Pride"],['FB09',"Dual Evolution"],['FB10',"Cross Force"],['FB11',"Brightness of Hope"]],S={dl:false,shop:false,tut:HELP?null:0,zoom:false,sx:'',pr:'missing',pal:false,fx:'',bpg:0,bre:false,timg:null,hzv:false,hzo:false,hz:null,burst:false,balt:false,menu:false,fq:'',bsel:null,bpick:false,bq:'',bx:'',bnew:'',cf:null,cfd:null,mode:'cards',ssel:null,pick:false,ext:'FB01',sc:'',last:[],tab:START,q:'',own:'',ver:'',col:'',rar:'',sel:null};
 const $=s=>document.querySelector(s),pct=(a,b)=>b?Math.round(a/b*100):0;
-const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['scan','📷','Scanner'],['mid'],['comm','👥','Amis'],['stats','📊','Stats'],['set','⚙️','Réglages']];
+const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['luck','🎲','Boosters'],['mid'],['comm','👥','Amis'],['stats','📊','Stats'],['set','⚙️','Réglages']];
 const nrm=(e)=>cards.filter(c=>c.ver==='Normal'&&(!e||c.ext===e)),alt=(e)=>cards.filter(c=>c.ver!=='Normal'&&(!e||c.ext===e));
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
 let PH={},ARTMODE='';
@@ -6955,7 +6955,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='30 oct. 2026 · 50';
+const BUILD='30 oct. 2026 · 51';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8799,6 +8799,7 @@ var CHANGELOG=[
   ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
   ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
   ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
+  ['🎲','Boosters dans la barre du bas','Le mode hasard (ouvrir des boosters) remplace « Scanner » dans la barre du bas. Le scanner reste dans le menu ＋. Merci YoHaki pour l’idée !'],
   ['🟢','Qui est en ligne ?','Touche « en ligne » sur l’accueil pour voir les pseudos des joueurs connectés en ce moment.'],
   ['📚','Toute la série d’un coup','Dans Collection, le bouton « Série » (à côté de Trier) ajoute 1 exemplaire de chaque carte qui te manque, ou remet toute la série à 0.'],
   ['🐉','Nouvelles séries Fusion World','FS12, SB01 et SB02 (Manga Booster), ST01 (Story Booster 01), 1st Anniversary Set et PROMO, avec leurs photos (en HD quand tu agrandis). Drapeau japonais → Choisir la série → case « Dragon Ball Super Fusion World ».'],

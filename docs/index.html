@@ -2078,6 +2078,147 @@ html[data-ly=pc] #toast{bottom:28px}
 html[data-ly=pc] #lpm{bottom:28px}
 html[data-ly=pc] .cg-fab{bottom:24px!important;right:24px}
 html[data-ly=pc] .cg-ov{left:var(--side)}
+
+/* ===== MAJ : Mises à jour (journal des versions, guide, alerte de nouvelle version) ===== */
+html.mj-lock,html.mj-lock body{overflow:hidden}
+.mj{position:fixed;inset:0;z-index:82;display:flex;align-items:flex-end;justify-content:center;background:rgba(8,3,5,.74);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:shfade .14s ease-out}
+.mj-d{position:relative;display:flex;flex-direction:column;width:100%;max-width:560px;height:94vh;height:94dvh;background:var(--bg);color:var(--tx);border-top:3px solid var(--gold);border-radius:16px 16px 0 0;box-shadow:0 -4px 0 var(--ac),0 -20px 50px -14px #000;animation:shup .24s cubic-bezier(.2,.9,.25,1);overflow:hidden}
+.mj :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mj-top{flex:none;display:flex;align-items:center;gap:12px;padding:12px 14px 0 16px}
+.mj .mj-top h2{margin:2px auto 0 -16px;font-size:24px}
+.mj-x{flex:none}
+.mj-sc{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 16px calc(28px + env(safe-area-inset-bottom,0px))}
+/* tableau de score : numéro de version */
+.mj-hero{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:4px 16px;margin:16px 6px 20px 0;padding:14px 16px 16px 12px;color:#FFF4E0;background:repeating-linear-gradient(115deg,transparent 0 22px,color-mix(in srgb,var(--ac) 13%,transparent) 22px 24px),#000;border:2px solid var(--gold);border-radius:2px 18px 2px 18px;box-shadow:6px 6px 0 var(--ac);overflow:hidden}
+.mj-hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 34%,rgba(255,214,110,.34) 50%,transparent 66%);transform:translateX(-110%)}
+.mj-hero.mj-flash::after{animation:mjsweep 1s cubic-bezier(.3,.6,.3,1) both}
+@keyframes mjsweep{to{transform:translateX(110%)}}
+.mj-hl{display:flex;flex-direction:column;align-items:flex-start}
+.mj-vl{margin:0 0 2px 6px;font:700 14px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.06em;color:#D9C2AE}
+.mj-num{display:block;min-width:1.15em;padding:2px 6px 0 2px;font:900 88px/.84 'Big Shoulders Display',Impact,sans-serif;letter-spacing:-.01em;text-align:center;font-variant-numeric:tabular-nums;color:var(--gold);text-shadow:4px 4px 0 var(--ac);transform:skewX(var(--sk))}
+.mj-num.mj-pop{animation:mjpop .55s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes mjpop{0%,100%{transform:skewX(var(--sk)) scale(1)}35%{transform:skewX(var(--sk)) scale(1.14)}}
+.mj-hr{min-width:0}
+.mj-st{display:flex;flex-wrap:wrap;align-items:center;gap:3px 9px}
+.mj-st b{font:800 20px/1.1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.02em;color:#fff}
+.mj-st small{flex-basis:100%;color:#D9C2AE;font-size:13px;line-height:1.35}
+.mj-sd{flex:none;width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 25%,transparent)}
+.mj-sd.s-up{background:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 30%,transparent);animation:mjblink 1.6s ease-in-out infinite}
+.mj-sd.s-chk{background:none;border:2px solid #D9C2AE;border-right-color:transparent;box-shadow:none;animation:mjspin .8s linear infinite}
+.mj-sd.s-off{background:#8F7C6C;box-shadow:none}
+@keyframes mjspin{to{transform:rotate(360deg)}}
+@keyframes mjblink{50%{opacity:.35}}
+.mj-hd,.mj-hn{margin:5px 0 0;font-size:13.5px;line-height:1.4;color:#D9C2AE}
+.mj-hn b{font-weight:700;color:var(--gold)}
+.mj-ha{grid-column:1/-1}
+.mj-ha:empty{display:none}
+.mj .mj-in{margin-top:12px;min-height:50px;font-size:19px}
+.mj .mj-re{margin-top:10px}
+/* onglets + recherche, collés en haut */
+.mj-bar{position:sticky;top:0;z-index:3;margin:0 -16px;padding:10px 16px 12px;background:var(--bg);box-shadow:0 1px 0 var(--ln)}
+.mj-tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 6px 12px 2px}
+.mj-tab{min-height:46px;padding:6px 8px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--mu);font:800 18px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.03em;transform:skewX(var(--sk));transition:background-color .15s,color .15s,box-shadow .15s}
+.mj-tab>span{display:inline-flex;align-items:center;gap:7px;transform:skewX(9deg)}
+.mj-tab[aria-selected="true"]{background:var(--gold);border-color:var(--gold);color:#1A0E10;box-shadow:4px 4px 0 var(--ac)}
+.mj-c{padding:3px 6px;border-radius:9px;background:color-mix(in srgb,var(--mu) 24%,transparent);font:800 12px/1 Barlow,system-ui,sans-serif;font-style:normal;letter-spacing:0}
+.mj-tab[aria-selected="true"] .mj-c{background:rgba(26,14,16,.16)}
+.mj-q{position:relative;display:block}
+.mj-qi{position:absolute;left:14px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--mu);pointer-events:none}
+.mj-qi svg{display:block;width:100%;height:100%}
+.mj .mj-q input[type=search]{width:100%;min-height:46px;margin:0;padding:11px 14px 11px 42px;font-size:15.5px}
+/* journal : un jour = une Dragon Ball (autant d'étoiles que de versions sorties ce jour-là) */
+.mj-p{padding-top:4px}
+.mj-day{margin:20px 0 4px}
+.mj-dh{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.mj-orb{flex:none;width:38px}
+.mj-orb .dbo{--s:38px}
+.mj-dw{flex:1;min-width:0}
+.mj .mj-dt{margin:0;font:900 23px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.03em;color:var(--gold)}
+.mj-dd{display:block;margin-top:4px;color:var(--mu);font-size:13px}
+.mj-cp{flex:none;min-height:34px;padding:6px 13px;border:1px solid var(--ln);border-radius:2px;background:var(--sf);color:var(--tx);font:700 14px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.04em;transform:skewX(var(--sk))}
+.mj-cp>span{display:inline-block;transform:skewX(9deg)}
+.mj-cp:active{background:var(--ln)}
+.mj-vs{display:grid;gap:12px;margin-left:18px;padding-left:20px;border-left:2px solid color-mix(in srgb,var(--gold) 42%,transparent)}
+.mj-v{position:relative;padding:12px 14px 4px;background:var(--sf);border:1px solid var(--ln);border-left:4px solid var(--ln);border-radius:2px 14px 2px 14px}
+.mj-v::before{content:'';position:absolute;left:-31px;top:17px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid color-mix(in srgb,var(--gold) 60%,transparent)}
+.mj-v.is-new{border-left-color:var(--gold);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 26%,transparent),0 14px 26px -20px #000}
+.mj-v.is-new::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px color-mix(in srgb,var(--gold) 80%,transparent)}
+.mj-vh{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-bottom:2px}
+/* numéro de version en capsule */
+.mj-cap{display:inline-flex;align-items:center;height:24px;padding:0 11px 0 10px;border-radius:999px;color:#1A0E10;background:linear-gradient(90deg,#FFF4E0 0 50%,var(--gold) 50% 100%);font:900 15px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.05em;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2),0 0 0 1px rgba(0,0,0,.35)}
+.mj-nt{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-weight:700;font-size:13px}
+.mj-nt::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.mj-by{color:var(--mu);font-size:13px}
+.mj-it{list-style:none;margin:0;padding:0}
+.mj-i{display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;align-items:start;padding:11px 0;border-top:1px solid color-mix(in srgb,var(--ln) 75%,transparent)}
+.mj-i:first-child{border-top:0}
+.mj-i[hidden]{display:none}
+.mj-ic{font-size:20px;line-height:1.25;text-align:center}
+.mj-tl{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.mj-tl b{font-weight:700;font-size:15.5px;line-height:1.3}
+.mj-tx p{margin:3px 0 0;max-width:64ch;color:var(--mu);font-size:14px;line-height:1.5}
+.mj-tg{padding:2px 7px;border-radius:2px;font:700 12px/1.3 Barlow,system-ui,sans-serif;white-space:nowrap}
+.mj-tg.t-n{background:var(--gold);color:#1A0E10}
+.mj-tg.t-a{border:1px solid color-mix(in srgb,var(--ac) 75%,transparent);color:var(--tx)}
+.mj-tg.t-c{border:1px solid color-mix(in srgb,var(--ok) 70%,transparent);color:var(--ok)}
+.mj-go{grid-column:2;justify-self:start;margin:9px 0 2px 3px;min-height:34px;padding:6px 16px;border:0;border-radius:2px;background:var(--ac);color:var(--on,#fff);font:800 15px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.05em;transform:skewX(var(--sk));box-shadow:3px 3px 0 var(--gold)}
+.mj-go>span{display:inline-block;transform:skewX(9deg)}
+.mj-go:active{transform:skewX(var(--sk)) translate(2px,2px);box-shadow:1px 1px 0 var(--gold)}
+.mj-old{margin:24px 0 6px;padding:0 14px;background:color-mix(in srgb,var(--sf) 60%,transparent);border:1px dashed var(--ln);border-radius:2px 14px 2px 14px}
+.mj-old>summary{display:flex;align-items:center;gap:12px;padding:14px 0;cursor:pointer;list-style:none}
+.mj-old>summary::-webkit-details-marker{display:none}
+.mj-oi{font-size:22px}
+.mj-ot{flex:1;min-width:0}.mj-ot b{display:block;font-weight:700}.mj-ot small{display:block;color:var(--mu);font-size:13px}
+.mj-oc{font-size:24px;line-height:1;color:var(--mu);transition:transform .2s}
+.mj-old[open] .mj-oc{transform:rotate(90deg)}
+.mj-old .mj-it{padding-bottom:6px}
+/* guide : toutes les fonctions */
+.mj-jump{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:8px -16px 2px;padding:6px 16px 10px}
+.mj-jump::-webkit-scrollbar{display:none}
+.mj-jump .chip{flex:none}
+.mj-g{margin:18px 0 6px}
+.mj .mj-gt{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:21px}
+.mj-gl{list-style:none;margin:0;padding:2px 14px;background:var(--sf);border:1px solid var(--ln);border-left:6px solid var(--ac);border-radius:2px 14px 2px 14px}
+.mj-empty{padding:30px 6px 10px;text-align:center;color:var(--mu)}
+.mj-empty p{margin:0 0 12px}
+.mj-empty b{color:var(--tx)}
+.mj-ft{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:28px 0 4px}
+.mj-fb{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:8px 10px;border:1px solid var(--ln);border-radius:2px 12px 2px 12px;background:var(--sf);color:var(--tx);font-weight:600;font-size:14.5px;text-align:center;text-decoration:none}
+.mj-fx{grid-column:1/-1;justify-self:center;margin-top:4px;padding:8px;border:0;background:none;color:var(--mu);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+/* bandeau « nouvelle version » (partout dans l'appli) */
+.mj-bn{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;z-index:8;display:flex;align-items:center;gap:10px;width:min(520px,calc(100% - 20px));padding:9px 9px 9px 10px;transform:translateX(-50%);color:#FFF4E0;background:#000;border:2px solid var(--gold);border-radius:2px 14px 2px 14px;box-shadow:5px 5px 0 var(--ac),0 18px 34px -12px #000;animation:mjbn .4s cubic-bezier(.2,.9,.3,1.25) both}
+@keyframes mjbn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+.mj-bo{flex:none;width:32px}.mj-bo .dbo{--s:32px}
+.mj-bt{flex:1;min-width:0}
+.mj-bt b{display:block;font:900 18px/1.05 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.03em;color:var(--gold)}
+.mj-bt small{display:block;margin-top:2px;color:#D9C2AE;font-size:12.5px;line-height:1.3}
+.mj-bu{flex:none;min-height:40px;padding:6px 13px;border:0;border-radius:2px;background:var(--gold);color:#1A0E10;font:900 16px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;letter-spacing:.04em;transform:skewX(var(--sk));box-shadow:3px 3px 0 var(--ac)}
+.mj-bu>span{display:inline-block;transform:skewX(9deg)}
+.mj-bx{flex:none;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#D9C2AE;font-size:14px}
+body.gcopen .mj-bn,html.mj-lock .mj-bn{display:none}
+html[data-ly=pc] .mj-bn{left:calc(50% + var(--side) / 2)}
+/* « Voir » : l'endroit de la nouveauté clignote en or */
+.mj-spot{outline:3px solid var(--gold)!important;outline-offset:4px;animation:mjspot 1.2s ease-in-out 3!important}
+@keyframes mjspot{0%,100%{outline-offset:3px;outline-color:var(--gold)}50%{outline-offset:8px;outline-color:color-mix(in srgb,var(--gold) 30%,transparent)}}
+/* pastille de l'accueil : le nombre de nouveautés */
+.hmgu.new[data-nw]::after{content:attr(data-nw);min-width:19px;padding:3px 5px;border-radius:9px;background:var(--gold);color:#1A0E10;font-size:10.5px;letter-spacing:0;text-align:center}
+/* tablette et PC : fenêtre au centre */
+html:is([data-ly=tab],[data-ly=pc]) .mj{align-items:center;padding:24px}
+html[data-ly=pc] .mj{padding-left:calc(var(--side) + 24px)}
+html:is([data-ly=tab],[data-ly=pc]) .mj-d{max-width:720px;height:min(900px,calc(100vh - 48px));height:min(900px,calc(100dvh - 48px));border:2px solid var(--gold);border-radius:4px 22px 4px 22px;box-shadow:8px 8px 0 var(--ac),0 30px 80px -20px #000}
+html[data-ly=pc] .mj-d{max-width:780px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-top{padding:16px 18px 0 24px}
+html:is([data-ly=tab],[data-ly=pc]) .mj .mj-top h2{margin-left:-24px;font-size:28px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-sc{padding-left:24px;padding-right:24px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-bar,html:is([data-ly=tab],[data-ly=pc]) .mj-jump{margin-left:-24px;margin-right:-24px;padding-left:24px;padding-right:24px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-num{font-size:112px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-i{grid-template-columns:28px minmax(0,1fr) auto}
+html:is([data-ly=tab],[data-ly=pc]) .mj-go{grid-column:3;grid-row:1;align-self:center;margin:0 4px 0 6px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-hero{padding:18px 22px 20px 16px;gap:6px 22px}
+html:is([data-ly=tab],[data-ly=pc]) .mj-st b{font-size:24px}
+@media (max-width:359px){.mj-num{font-size:70px}.mj-tab{font-size:16px}.mj-hero{gap:4px 12px}}
+html.calm :is(.mj,.mj-d,.mj-bn,.mj-sd,.mj-num,.mj-spot){animation:none!important}
+html.calm .mj-hero::after{display:none}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -6955,7 +7096,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='30 oct. 2026 · 51';
+const BUILD='30 oct. 2026 · 52';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7008,7 +7149,7 @@ const dat=sg('💾','Mes données','Elles restent sur ton appareil, sauf si tu t
 <div class="panel sxl" style="margin-top:12px">${lrow('data-go="trash"','🗑️','Corbeille',X.trash.length+' ›')}</div>`);
 /* aide */
 const own=cards.filter(c=>c.own>0).length,tot=cards.reduce((a,c)=>a+c.own,0),imgs=Object.keys(CARDIMG).filter(k=>!k.startsWith('BT')).length;
-const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
+const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-clog','🆕','Mises à jour','Version '+BUILD.split('·').pop().trim()+' ›')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
 <div class="panel" style="margin-top:12px">${kv('Cartes différentes possédées',own+' / '+cards.length)}${kv('Exemplaires au total',tot)}${kv('Images de cartes',imgs+' / '+cards.length)}${kv('Version',BUILD)}</div>`);
 const sp=S.setp&&SETP[S.setp]?S.setp:'';
 const g=(a,ic,t,r)=>lrow('data-setp="'+a+'"',ic,t,(r?esc(r)+' ':'')+'›');
@@ -8783,133 +8924,376 @@ window.__sc={SC,Eng,isLearned,snapCtx,learnFrom,evalPhoto,rotated,bestOf,open,cl
 
 })();
 </script><script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script><script>
+/* ===== MAJ : « Mises à jour » — chaque version datée, guide de toutes les fonctions, alerte et installation des nouvelles versions =====
+   Nouvelle version : ajouter un bloc {v,d,it:[[type,icône,titre,texte,écran]]} tout en haut de MJV, monter BUILD,
+   et publier docs/version.json avec le même numéro, par exemple {"v":53,"build":"31 oct. 2026 · 53"}.
+   type : n = nouveau · a = amélioré · c = corrigé — écran (facultatif) : une clé de GO, ou une valeur de data-go */
 (function(){
-var BUILD_=typeof BUILD!=='undefined'?BUILD:'';
-var SEEN_KEY='fb_clgseen';
-/* Pour ajouter une mise à jour : mettre une ligne [icône, titre, détail] tout en haut du groupe « Dernière version » (ou créer un nouveau groupe au-dessus). */
-var CHANGELOG=[
- {n:1,ic:'🆕',t:'Dernière version',tag:BUILD_,i:[
-  ['🗂️','Collection refaite de A à Z','Un nouvel en-tête par série (affiche, jauge, pourcentage, valeur) et les cartes visibles tout de suite. Les + et − sont instantanés. Même présentation pour le japonais, le français et l’anglais.'],
-  ['🔎','Recherche et filtres','La barre de recherche reste en haut quand tu descends. Toutes, Possédées, Manquantes et Doubles en un appui ; les raretés de l’en-tête filtrent aussi ; « Filtres » regroupe version, rareté, type et tes listes. La recherche montre aussi les cartes des autres séries.'],
-  ['⚡','Ajout rapide','Active ⚡ Rapide : chaque carte touchée est ajoutée (+1), ou tape son numéro puis Entrée. Idéal pour noter l’ouverture d’un booster ou d’un display.'],
-  ['📒','Grille, liste ou classeur','Dans Filtres : la grille (grandes, moyennes ou petites cartes), la liste avec les noms, ou les pages de classeur de 9.'],
-  ['💎','Trier par rareté','Nouveau tri : les cartes les plus rares d’abord (ou l’inverse).'],
-  ['👉','Fiche : carte suivante','Dans la fiche d’une carte, les flèches ‹ › (ou glisser le doigt) passent à la carte suivante de la liste.'],
-  ['📋','Copier la liste','Avec un filtre (par exemple Manquantes ou Doubles), « Copier » garde la liste pour l’envoyer à un ami. Les manquantes affichent aussi le prix pour compléter la série.'],
-  ['🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand. Touche une case pour voir ses séries.'],
-  ['🗂️','Nouveau « Choisir la série »','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters FB, Decks FS, Masters, Draft Box…), puis toutes les anciennes collections à la suite.'],
-  ['🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.'],
-  ['🎲','Boosters dans la barre du bas','Le mode hasard (ouvrir des boosters) remplace « Scanner » dans la barre du bas. Le scanner reste dans le menu ＋. Merci YoHaki pour l’idée !'],
-  ['🟢','Qui est en ligne ?','Touche « en ligne » sur l’accueil pour voir les pseudos des joueurs connectés en ce moment.'],
-  ['📚','Toute la série d’un coup','Dans Collection, le bouton « Série » (à côté de Trier) ajoute 1 exemplaire de chaque carte qui te manque, ou remet toute la série à 0.'],
-  ['🐉','Nouvelles séries Fusion World','FS12, SB01 et SB02 (Manga Booster), ST01 (Story Booster 01), 1st Anniversary Set et PROMO, avec leurs photos (en HD quand tu agrandis). Drapeau japonais → Choisir la série → case « Dragon Ball Super Fusion World ».'],
-  ['🃏','Photos des decks FS01 à FS11','Toutes les cartes des decks ont maintenant leur photo, et en HD quand tu agrandis une carte. Les versions ★ qui manquaient dans FS06, FS07, FS08 et FS10 sont ajoutées.'],
-  ['🖥️','Téléphone, tablette ou PC','L’appli s’adapte toute seule à ton écran : sur PC, le menu passe sur le côté, les cartes s’affichent sur plus de colonnes et l’accueil sur deux colonnes. Sur tablette, tout s’élargit.'],
-  ['💬','Messages privés réparés','Les messages d’une discussion s’affichent de nouveau (ils étaient bien envoyés, mais restaient invisibles).'],
-  ['🟠','Nouveau bouton ＋','Le bouton du milieu, en bas, est maintenant une boule de cristal.'],
-  ['🛒','Boutique','Dans le menu ＋ : une sélection de produits Dragon Ball Super (boosters, displays, accessoires) sur Amazon.'],
-  ['🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.'],
-  ['🔒','Plus de zoom','L’écran ne zoome plus par erreur avec deux doigts ou un double appui.'],
-  ['🚩','Drapeaux corrigés','Le drapeau français ramène toujours à tes séries françaises, et on ne voit plus de cartes japonaises ou américaines dans le menu français.'],
-  ['🏆','Série complète','Une petite fête quand tu termines le Full Set ou le Master Set d’une série.'],
-  ['📷','Scanner : toutes les séries','Le scanner reconnaît maintenant toutes les cartes (Fusion World, Masters, Le Grand Combat et les anciennes collections) sans avoir à choisir le jeu ou la série.'],
-  ['🗃️','Anciennes collections','10 collections françaises avec leurs photos : Dragon Ball Z, GT Cards, Carddass, Carddass Jumbo, Anthologie, Skill Card, JCC, Digital Carddass, Dorothée Mag et le calendrier de l’Avent, avec leurs boosters et displays. Drapeau français → « Anciennes collections ».'],
-  ['📚','Draft Box DB1, DB2 et DB3','Dragon Brawl, Divine Multiverse et Giant Force en français : 424 cartes avec leur nom et leur rareté. Drapeau français, puis touche le logo de la catégorie : BT, Draft Box ou Le Grand Combat.'],
-  ['🃏','Carddass Le Grand Combat','Toutes les cartes du Grand Combat (Part 2 à 9, hors-séries et cartes Flash) avec leurs photos : drapeau français → onglet « Le Grand Combat ».'],
-  ['🗂️','3 drapeaux dans Collection','En haut de Collection : Japonais, Français et Anglais. Un appui ouvre directement la liste des séries de cette édition.'],
-  ['🌍','Collection anglaise','Les cartes Fusion World en édition anglaise, avec des quantités séparées de ta collection japonaise.'],
-  ['⚔️','Le Grand Combat','Les Carddass Le Grand Combat (Part 2 à 9, hors-séries et cartes Flash) dans l’édition française, avec leurs photos et un onglet « Séries BT01 à BT31 / Le Grand Combat » dans le choix des séries.'],
-  ['🃏','Decks FS01 à FS11','Les 11 decks de démarrage Fusion World dans la collection (onglet « Decks » du choix des séries) et dans les scellés.'],
-  ['📱','Sondage Android / iPhone','Tout en haut de l’accueil : dis sur quoi tu joues et vois le résultat de tout le monde.'],
-  ['💶','Carnet de ventes refait','Le résultat en haut, un bouton « Nouvelle vente » et des onglets Ventes, Stock, Dépenses et Bilan. Touche une vente pour la modifier ou la supprimer.'],
-  ['📤','Retirer du stock','Dans l’onglet Stock : Vendre ou Retirer (ouvert, donné, perdu…). Ce qui est retiré ne compte plus nulle part. Un achat noté par erreur peut être supprimé.'],
-  ['🛒','Stock de la boutique visible','Les boosters, displays et cases achetés restent affichés sur l’écran Mode hasard, avec un bouton « Ouvrir 1 ».'],
-  ['📷','Un seul bouton Scanner','Les 3 boutons du scanner sont fusionnés en un seul. Photo, galerie, vidéo et page de classeur se choisissent dans la barre du bas du scanner.'],
-  ['⚡','Onglet Scanner direct','Appuyer sur « Scanner » dans la barre du bas ouvre tout de suite la caméra.'],
-  ['📖','Page de classeur : caméra','Le bouton « 📖 Page » du scanner ouvre directement la caméra pour photographier la page.'],
-  ['🔄','Menu des mises à jour refait','Tout ce qui a changé dans l’appli, rangé par rubrique, avec une pastille « nouveau » tant que tu ne l’as pas ouvert.'],
-  ['💶','Prix Cardmarket automatiques','Les prix se mettent à jour tout seuls chaque nuit (sans recharger l’appli).'],
-  ['🏠','Accueil Fusion World + Masters','Une seule page d’accueil et des stats pour les deux jeux.'],
-  ['📊','Stats fusionnées','Fusion World et Masters comptés ensemble, avec le relevé du scouter, ton rang et les séries qui se chargent.'],
-  ['📦','Mes scellés','Tous les produits scellés (booster, display, case) des deux jeux dans une seule liste, avec leur prix.'],
-  ['⚙️','Réglages en pages','Un accueil des réglages et une page par sujet : compte, prix, affichage, sons, scanner, données, aide.']]},
- {ic:'📷',t:'Ajouter des cartes',i:[
-  ['📷','Scanner 2','Reconnaît la carte par son illustration avec la caméra, lit aussi le numéro, et tout se calcule dans le téléphone.'],
-  ['🧠','Le scanner apprend','Une carte saisie à la main est mémorisée sur l’appareil ; tu peux tout réinitialiser dans les réglages.'],
-  ['🎞️','Scan par vidéo ou photo','Filme tes cartes (chacune n’est ajoutée qu’une fois) ou prends une photo ; une page de classeur entière se découpe en grille, une analyse par case.'],
-  ['⚡','Saisie en rafale','Ajoute vite beaucoup de cartes d’affilée avec le pavé de chiffres et le choix de la série.'],
-  ['🔎','Recherche de carte','Chercher une carte du catalogue et l’ajouter, avec ses versions (Normal, Alt Art).'],
-  ['➕','Menu « + »','« Que veux-tu faire ? » : des rubriques et des tuiles pour tout atteindre en un geste.']]},
- {ic:'🔥',t:'Masters',i:[
-  ['🃏','Série d’origine Masters','Un onglet Masters dans la Collection, avec le choix Fusion World / Masters.'],
-  ['🎯','Cartes complètes','Fiche de carte, recherchées, doublons, stats et classeurs pour Masters comme pour Fusion World.'],
-  ['🔢','Scanner par codes','Saisie par codes Masters (bt22-9, bt1-5, bt31-12x2, bt22-9spr…).'],
-  ['🎲','Mode hasard Masters','Paquets de 12 cartes, display de 24 paquets, case de 12 displays.'],
-  ['💶','Ventes et impression','Carnet de ventes et liste à imprimer avec Masters (cartes BT et scellés BT).']]},
- {ic:'🎁',t:'Ouvertures de boosters',i:[
-  ['🌀','Booster en vraie 3D','Ouverture en 3D maison (sans bibliothèque) : tu déchires le booster et les cartes sortent.'],
-  ['🎁','Display et case en 3D','On soulève le couvercle : les boosters (ou les displays) sortent un par un.'],
-  ['✨','Animations v2','Halo, rayons, ombres, déchirure du booster et révélation carte par carte.'],
-  ['🌊','Tout ouvrir','Une vague d’ouverture pour ouvrir d’un coup tout ce que tu as.'],
-  ['⏳','Temps d’attente','1 booster par jour (00 h), 1 display par semaine (lundi 00 h), 1 case par mois (le 1er, 00 h).']]},
- {ic:'📒',t:'Collection et classeurs',i:[
-  ['📒','Classeurs v2','Emplacements et pages, glisser-déposer, modèles pour créer vite, anciens classeurs convertis, et proposition des nouvelles cartes du catalogue.'],
-  ['↕️','Tri de la collection','Par numéro, nom, exemplaires, ajout récent, prix ou évolution du prix, dans les deux sens ; ton choix est gardé.'],
-  ['🟦','Cases de collection','Les cartes s’affichent en cases, façon classeur.'],
-  ['🐉','Les 7 Dragon Balls','Collecte les boules et monte de rang : de Terrien à Ultra Instinct.'],
-  ['🎴','Devine la carte','Un détail de carte zoomé, 4 noms au choix, 10 cartes par partie.'],
-  ['🗓️','Prochaines séries','Ce qui arrive bientôt.'],
-  ['🗑️','Corbeille','Retrouve ce que tu as supprimé.'],
-  ['🖨️','Liste à imprimer','Choix du jeu et de la série, mêmes listes pour Fusion World et Masters.'],
-  ['📤','Carte de partage','Une image de ta collection à partager.']]},
- {ic:'💰',t:'Prix et argent',i:[
-  ['📈','Tendance et moyennes','Prix Cardmarket avec la tendance et les moyennes 30 j / 7 j / 1 j (édition non anglaise pour FB01 à FB05).'],
-  ['📉','Courbe du prix d’une carte','L’historique de la tendance des prix, carte par carte.'],
-  ['🔔','Alertes de prix','Un seuil par carte recherchée ; l’appli te prévient à l’ouverture.'],
-  ['📦','Prix des scellés','Premier prix Cardmarket de chaque série pour booster, display et case.'],
-  ['💰','Budget et gestion','Résultat de gestion, stock, trésorerie et contrôle de cohérence.'],
-  ['💶','Carnet de ventes v2','Suivi de tes achats et ventes, avec Masters.'],
-  ['⚖️','Calculateur d’échange','Je donne / je reçois au prix Cardmarket (ou au tien), avec l’écart de valeur.'],
-  ['🔍','Vérifier une annonce','Rapport avant achat à partir des photos du vendeur : centrage, état, questions à poser. Tout est calculé dans le téléphone.']]},
- {ic:'👥',t:'Compte, amis et communauté',i:[
-  ['☁️','Compte en ligne','Ta collection est sauvegardée et se synchronise entre tes appareils.'],
-  ['🪪','Profil public','Choisis ce que tu publies ; les autres peuvent voir ton profil.'],
-  ['💬','Messagerie entre amis','Discussions privées, messages non lus, notifications, vibration.'],
-  ['🗨️','Chat général v2','Temps réel, bulles groupées, réponses (glisse un message), réactions, @pseudos, cartes dans les messages, message épinglé, modération.'],
-  ['🟢','Personnes en ligne','Voir combien de joueurs sont connectés.'],
-  ['🏟️','Tournoi de la semaine','Un tirage par semaine et par série, avec classement.'],
-  ['🔁','Échanges','Une collection virtuelle pour préparer tes échanges avec tes amis.'],
-  ['🖼️','Photos partagées','Les photos de cartes sont partagées entre joueurs.']]},
- {ic:'🎨',t:'Confort et réglages',i:[
-  ['🎨','Thèmes','14 couleurs au choix et mode clair / sombre.'],
-  ['🔊','Sons et retours','Sons et vibrations réglables.'],
-  ['📴','Hors ligne','L’appli s’installe et marche sans connexion.'],
-  ['💾','Mes données','Export de ta collection et gestion de tes données.'],
-  ['👋','Tutoriel','À revoir quand tu veux depuis l’aide.'],
-  ['💡','Idée ou bug','Boutons vers le Discord ; pour un bug, les infos techniques sont copiées pour que tu les colles.']]}
+'use strict';
+const VER=(()=>{const m=/·\s*(\d+)/.exec(typeof BUILD!=='undefined'?BUILD:'');return m?+m[1]:0})();
+const K_SEEN='fb_clgseen',K_TRY='fb_majtry',K_BN='fb_mjbn',SITE='https://riomanoff.github.io/appel-des-cartes/';
+const lsG=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsS=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const ssG=k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},ssS=(k,v)=>{try{sessionStorage.setItem(k,v)}catch(e){}},ssD=k=>{try{sessionStorage.removeItem(k)}catch(e){}};
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const N=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[’'«»]/g,' ');
+const RMx=()=>{try{return !!RM}catch(e){return false}};
+const tst=m=>{try{toast(m)}catch(e){}};
+const orb=n=>{try{return dbOrb(n,true)}catch(e){return ''}};
+const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
+
+/* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
+const MJV=[
+ {v:52,d:'2026-10-30',it:[
+  ['n','🆕','Mises à jour refaites','Chaque version avec sa date, ce qui est nouveau pour toi depuis ta dernière visite, une recherche, et un bouton « Voir » qui t’emmène tout de suite à la nouveauté.'],
+  ['n','📣','Prévenu des nouvelles versions','Dès qu’une nouvelle version sort, un bandeau te le dit : un appui pour l’installer, sans rien perdre.'],
+  ['n','🧭','Toutes les fonctions','Le deuxième onglet range tout ce que l’appli sait faire, par thème, avec un raccourci vers chaque écran.']]},
+ {v:51,d:'2026-10-30',by:'YoHaki',it:[
+  ['a','🎲','Boosters dans la barre du bas','Le mode hasard (ouvrir des boosters) remplace « Scanner » dans la barre du bas. Le scanner reste dans le menu ＋.','luck']]},
+ {v:50,d:'2026-10-30',it:[
+  ['n','🟢','Qui est en ligne ?','Touche « en ligne » sur l’accueil pour voir les pseudos des joueurs connectés en ce moment.','online']]},
+ {v:49,d:'2026-10-30',it:[
+  ['a','📱','Sondage avec ton pseudo','Quand tu es connecté, ton vote au sondage est enregistré avec ton pseudo. Seul l’administrateur voit qui a voté.','home']]},
+ {v:47,d:'2026-10-29',it:[
+  ['c','💬','Chat général sur PC','La bulle du chat général est de nouveau visible sur PC.','chat']]},
+ {v:46,d:'2026-10-29',it:[
+  ['n','📚','Toute la série d’un coup','Dans Collection, le bouton « Série » (à côté de Trier) ajoute 1 exemplaire de chaque carte qui te manque, ou remet toute la série à 0.','serie']]},
+ {v:45,d:'2026-10-29',it:[
+  ['a','🗃️','Case « Autres » en premier','Drapeau japonais → Choisir la série : la case « Dragon Ball Super Fusion World » regroupe SB01, SB02, ST01, FS12 et PROMO, avec le code de chaque série.','autres']]},
+ {v:41,d:'2026-10-29',it:[
+  ['n','🐉','Nouvelles séries Fusion World','FS12, Manga Booster 01 et 02 (SB01, SB02), Story Booster 01 (ST01), 1st Anniversary Set et PROMO : 645 cartes avec leur photo, en HD quand tu agrandis.','autres']]},
+ {v:40,d:'2026-10-29',it:[
+  ['n','🃏','Photos des decks FS01 à FS11','Toutes les cartes des decks ont leur photo, en HD quand tu agrandis une carte. Les 17 versions ★ qui manquaient (FS06, FS07, FS08 et FS10) sont ajoutées.','deck']]},
+ {v:39,d:'2026-10-29',it:[
+  ['n','🖥️','Téléphone, tablette ou PC','L’appli s’adapte toute seule à ton écran : sur PC, le menu passe sur le côté, les cartes s’affichent sur plus de colonnes et l’accueil sur deux colonnes. Sur tablette, tout s’élargit.']]},
+ {v:38,d:'2026-10-29',it:[
+  ['c','✉️','Messages privés réparés','Les messages d’une discussion s’affichent de nouveau : ils étaient bien envoyés, mais restaient invisibles.','comm']]},
+ {v:37,d:'2026-10-28',it:[
+  ['a','🟠','Bouton ＋ en Dragon Ball','Le bouton du milieu, en bas, est maintenant une boule de cristal.','plus']]},
+ {v:36,d:'2026-10-28',it:[
+  ['n','🛒','Boutique','Dans le menu ＋, à la place de « Saisir en rafale » : une sélection de protège-cartes et de toploaders sur Amazon.','shop']]},
+ {v:34,d:'2026-10-27',it:[
+  ['n','🔔','Notifications des messages','Un interrupteur dans Réglages et dans Messages pour recevoir ou couper les alertes quand on t’envoie un message, même quand le site est fermé.','notif']]},
+ {v:33,d:'2026-10-27',it:[
+  ['c','🔒','Plus de zoom par erreur','L’écran ne zoome plus avec deux doigts ou un double appui.']]},
+ {v:31,d:'2026-10-27',it:[
+  ['n','🎌','Anciennes cartes japonaises et françaises','181 collections japonaises (Carddass, PP Card, Super Battle, Card Game…) et 5 collections françaises en plus, avec les photos des cartes en grand.','pickjp'],
+  ['a','🖼️','« Choisir la série » en images','Même présentation pour les 3 drapeaux : des grandes cases avec image (Boosters, Decks, Masters, Draft Box…), puis toutes les anciennes collections à la suite.','pickjp'],
+  ['n','🔎','Chercher une série','Une barre de recherche en haut de « Choisir la série » retrouve n’importe quelle série en tapant son nom.','pickq'],
+  ['c','🚩','Drapeaux corrigés','Le drapeau français ramène toujours à tes séries françaises, et on ne voit plus de cartes japonaises ou américaines dans le menu français.','flags']]},
+ {v:24,d:'2026-10-27',it:[
+  ['a','🗂️','Collection refaite de A à Z','Un nouvel en-tête par série (affiche, jauge, pourcentage, valeur) et les cartes visibles tout de suite. Les + et − sont instantanés. Même présentation pour le japonais, le français et l’anglais.','coll'],
+  ['a','🔎','Recherche et filtres','La barre de recherche reste en haut quand tu descends. Toutes, Possédées, Manquantes et Doubles en un appui ; « Filtres » regroupe version, rareté, type et tes listes.','coll'],
+  ['n','⚡','Ajout rapide','Active ⚡ Rapide : chaque carte touchée est ajoutée (+1), ou tape son numéro puis Entrée. Idéal pour noter l’ouverture d’un booster ou d’un display.','coll'],
+  ['n','📒','Grille, liste ou classeur','Dans Filtres : la grille (grandes, moyennes ou petites cartes), la liste avec les noms, ou les pages de classeur de 9.','coll'],
+  ['n','💎','Trier par rareté','Nouveau tri : les cartes les plus rares d’abord, ou l’inverse.','coll'],
+  ['n','👉','Fiche : carte suivante','Dans la fiche d’une carte, les flèches ‹ › (ou glisser le doigt) passent à la carte suivante de la liste.','coll'],
+  ['n','📋','Copier la liste','Avec un filtre (Manquantes, Doubles…), « Copier » garde la liste pour l’envoyer à un ami. Les manquantes affichent aussi le prix pour compléter la série.','coll'],
+  ['n','🏆','Série complète','Une petite fête quand tu termines le Full Set ou le Master Set d’une série.'],
+  ['c','💾','Quantités Masters gardées','Les quantités des séries Masters (DB1, LG2, anciennes collections…) ne disparaissent plus quand tu recharges l’appli.']]}
 ];
-function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function seen(){try{return localStorage.getItem(SEEN_KEY)===(BUILD_||'1')}catch(e){return false}}
-function mark(){var n=!seen();document.querySelectorAll('[data-clog]').forEach(function(b){if(b.classList.contains('new')!==n)b.classList.toggle('new',n)})}
-function close(){var o=document.getElementById('clg');if(o)o.remove();document.removeEventListener('keydown',key)}
-function key(e){if(e.key==='Escape')close()}
-function open(){close();
- var tot=CHANGELOG.reduce(function(a,g){return a+g.i.length},0),nw=!seen();
- var h='<div class="clg" id="clg"><div role="dialog" aria-label="Mises à jour"><div class="clgh"><h2>🆕 Mises à jour</h2><div class="sub">Tout ce qui a été ajouté ou changé dans l’appli'+(BUILD_?' · version du '+esc(BUILD_):'')+'.</div><div class="clgc"><span>'+tot+' nouveautés</span><span>'+CHANGELOG.length+' rubriques</span></div></div><div class="clgl">';
- CHANGELOG.forEach(function(g,k){
-  h+='<details'+(k===0?' open':'')+'><summary><span class="gi">'+g.ic+'</span><span class="gt">'+esc(g.t)+'</span>'+(k===0&&nw?'<span class="gnew">NOUVEAU</span>':'')+'<span class="gn">'+g.i.length+'</span></summary><ul>'+g.i.map(function(x){return '<li><i aria-hidden="true">'+x[0]+'</i><div><b>'+esc(x[1])+'</b><span>'+esc(x[2])+'</span></div></li>'}).join('')+'</ul></details>'});
- h+='</div><div class="clgb"><button type="button" class="btn alt" data-act="upd">🔄 Mettre à jour</button><button type="button" class="btn" data-clgx>Fermer</button></div></div></div>';
- document.body.insertAdjacentHTML('beforeend',h);document.addEventListener('keydown',key);
- try{localStorage.setItem(SEEN_KEY,BUILD_||'1')}catch(e){}mark()}
-document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;
- if(t.closest('[data-clog]')){e.preventDefault();open();return}
- if(t.closest('[data-clgx]')||t.id==='clg')close()},true);
-var mt=0;try{new MutationObserver(function(){clearTimeout(mt);mt=setTimeout(mark,60)}).observe(document.body,{childList:true,subtree:true})}catch(e){}
+/* ce qui existait déjà avant la version 24 */
+const MJOLD=[
+ ['📷','Scanner : toutes les séries','Le scanner reconnaît toutes les cartes (Fusion World, Masters, Le Grand Combat et les anciennes collections) sans avoir à choisir le jeu ou la série.','scan'],
+ ['🗃️','Anciennes collections françaises','Dragon Ball Z, GT Cards, Carddass, Carddass Jumbo, Anthologie, Skill Card, JCC, Digital Carddass, Dorothée Mag et le calendrier de l’Avent, avec leurs photos, boosters et displays.','ms'],
+ ['📚','Draft Box DB1, DB2 et DB3','Dragon Brawl, Divine Multiverse et Giant Force en français : 424 cartes avec leur nom et leur rareté.','ms'],
+ ['⚔️','Carddass Le Grand Combat','Part 2 à 9, hors-séries et cartes Flash, avec leurs photos, dans l’édition française.','ms'],
+ ['🗂️','3 drapeaux dans Collection','Japonais, Français et Anglais en haut de Collection : un appui ouvre la liste des séries de cette édition.','flags'],
+ ['🌍','Collection anglaise','Les cartes Fusion World en édition anglaise, avec des quantités séparées de ta collection japonaise.','pick_en'],
+ ['🃏','Decks FS01 à FS11','Les 11 decks de démarrage Fusion World dans la collection et dans les scellés.','deck'],
+ ['📱','Sondage Android / iPhone','Tout en haut de l’accueil : dis sur quoi tu joues et vois le résultat de tout le monde.','home'],
+ ['💶','Carnet de ventes refait','Le résultat en haut, un bouton « Nouvelle vente » et des onglets Ventes, Stock, Dépenses et Bilan.','trade'],
+ ['📤','Retirer du stock','Dans l’onglet Stock : Vendre ou Retirer (ouvert, donné, perdu…). Ce qui est retiré ne compte plus nulle part.','trade'],
+ ['🛍️','Stock de la boutique visible','Les boosters, displays et cases achetés restent affichés sur l’écran Boosters, avec un bouton « Ouvrir 1 ».','luck'],
+ ['📷','Un seul bouton Scanner','Photo, galerie, vidéo et page de classeur se choisissent dans la barre du bas du scanner.','scan'],
+ ['📖','Page de classeur : caméra','Le bouton « 📖 Page » du scanner ouvre directement la caméra pour photographier la page.','scan'],
+ ['💶','Prix Cardmarket automatiques','Les prix se mettent à jour tout seuls chaque nuit, sans recharger l’appli.'],
+ ['🏠','Accueil Fusion World + Masters','Une seule page d’accueil et des stats pour les deux jeux.','home'],
+ ['📊','Stats fusionnées','Fusion World et Masters comptés ensemble, avec le relevé du scouter, ton rang et les séries qui se chargent.','stats'],
+ ['📦','Mes scellés','Tous les produits scellés (booster, display, case) des deux jeux dans une seule liste, avec leur prix.','sealed'],
+ ['⚙️','Réglages en pages','Un accueil des réglages et une page par sujet : compte, prix, affichage, sons, scanner, données, aide.','set']
+];
+/* ---------- le guide : tout ce que sait faire l'appli, par thème ---------- */
+const MJF=[
+ ['🗂️','Ta collection',[
+  ['🚩','Trois éditions','En haut de Collection, les drapeaux choisissent l’édition japonaise, française ou anglaise. Chacune garde ses propres quantités.','flags'],
+  ['🖼️','Choisir la série','Des grandes cases avec image (Boosters, Decks, Masters, Draft Box…), puis toutes les anciennes collections. La barre de recherche retrouve une série par son nom.','pickjp'],
+  ['🔎','Recherche et filtres','Toutes, Possédées, Manquantes et Doubles en un appui. « Filtres » regroupe version, rareté, type et tes listes.','coll'],
+  ['↕️','Trier','Par numéro, nom, exemplaires, ajout récent, rareté, prix ou évolution du prix, dans les deux sens. Ton choix est gardé.','coll'],
+  ['⚡','Ajout rapide','Active ⚡ Rapide : chaque carte touchée est ajoutée (+1), ou tape son numéro puis Entrée.','coll'],
+  ['📚','Toute la série d’un coup','Le bouton « Série » ajoute 1 exemplaire de chaque carte qui te manque, ou remet la série à 0.','serie'],
+  ['📋','Copier la liste','Avec un filtre (Manquantes, Doubles…), « Copier » garde la liste pour l’envoyer à un ami, avec le prix pour compléter la série.','coll'],
+  ['📒','Classeurs','Emplacements et pages, glisser-déposer, modèles pour créer vite, et proposition des nouvelles cartes du catalogue.','bind'],
+  ['🎯','Cartes recherchées','La liste des cartes que tu veux, avec une alerte de prix pour chacune.','want'],
+  ['🔁','Doublons','Tes cartes en plusieurs exemplaires, prêtes pour un échange.','dup'],
+  ['📦','Mes scellés','Boosters, displays et cases des deux jeux dans une seule liste, avec leur prix.','sealed'],
+  ['📊','Stats','Fusion World et Masters comptés ensemble, avec le relevé du scouter et ton rang.','stats'],
+  ['🐉','Les 7 Dragon Balls','Collecte les boules et monte de rang : de Terrien à Ultra Instinct.','dball'],
+  ['🗓️','Prochaines séries','Ce qui sort bientôt.','soon'],
+  ['🖨️','Liste à imprimer','Choisis le jeu et la série, puis imprime ta liste.','print'],
+  ['📤','Partager ma collection','Une image de ta collection à envoyer.','share'],
+  ['🗑️','Corbeille','Retrouve ce que tu as supprimé.','trash']]],
+ ['📷','Ajouter des cartes',[
+  ['📷','Scanner','Reconnaît la carte par son illustration avec la caméra et lit aussi le numéro, pour toutes les séries. Tout se calcule dans le téléphone.','scan'],
+  ['🎞️','Vidéo, photo ou page de classeur','Filme tes cartes (chacune n’est ajoutée qu’une fois), prends une photo, ou photographie une page de classeur entière.','scan'],
+  ['🧠','Le scanner apprend','Une carte corrigée à la main est retenue sur ton appareil. Tu peux tout effacer dans Réglages.','scnset'],
+  ['🔢','Saisie par codes Masters','Tape des codes comme bt22-9, bt1-5, bt31-12x2 ou bt22-9spr dans le scanner.','scan'],
+  ['🔎','Chercher une carte','Trouve une carte du catalogue et ajoute-la, avec ses versions (Normal, Alt Art).','find'],
+  ['➕','Menu ＋','La boule du milieu, en bas : tout ce que tu peux faire, en un geste.','menu']]],
+ ['🎲','Boosters et jeux',[
+  ['🎲','Ouvrir des boosters','Mode hasard : paquets, displays et cases, en Fusion World comme en Masters.','luck'],
+  ['🌀','Ouverture en 3D','Tu déchires le booster et les cartes sortent une par une, avec halo et rayons. Pour un display ou une case, le couvercle se soulève.','luck'],
+  ['⏳','Temps d’attente','1 booster par jour (à minuit), 1 display par semaine (le lundi), 1 case par mois (le 1er).','luck'],
+  ['🌊','Tout ouvrir','Une vague d’ouverture pour ouvrir d’un coup tout ce que tu as.','luck'],
+  ['🛍️','Stock de la boutique','Les boosters, displays et cases achetés restent sur l’écran Boosters, avec un bouton « Ouvrir 1 ».','luck'],
+  ['🎴','Devine la carte','Un détail de carte zoomé, 4 noms au choix, 10 cartes par partie.','dev'],
+  ['🏟️','Tournoi de la semaine','Un tirage par semaine et par série, avec classement.','tour']]],
+ ['🔥','Masters',[
+  ['🃏','Collection Masters','Le drapeau français ouvre les séries Masters BT, les Draft Box, Le Grand Combat et les anciennes collections françaises.','ms'],
+  ['🎯','Comme Fusion World','Fiche de carte, recherchées, doublons, stats et classeurs marchent aussi pour Masters.','ms'],
+  ['🎲','Boosters Masters','Paquets de 12 cartes, display de 24 paquets, case de 12 displays.','luck']]],
+ ['💶','Prix et argent',[
+  ['📈','Prix Cardmarket','La tendance et les moyennes sur 30, 7 et 1 jour, mises à jour chaque nuit.','prix'],
+  ['📉','Courbe du prix','L’historique du prix de chaque carte, dans sa fiche.','coll'],
+  ['🔔','Alertes de prix','Un seuil par carte recherchée : l’appli te prévient à l’ouverture.','al'],
+  ['📦','Prix des scellés','Le premier prix Cardmarket de chaque série pour booster, display et case.','sealed'],
+  ['💶','Carnet de ventes','Ventes, stock, dépenses et bilan. Touche une vente pour la modifier.','trade'],
+  ['💰','Budget','Résultat, stock, trésorerie et contrôle de cohérence.','budget'],
+  ['⚖️','Calculateur d’échange','Je donne / je reçois au prix Cardmarket (ou au tien), avec l’écart de valeur.','swap'],
+  ['🔍','Vérifier une annonce','Un rapport avant d’acheter, à partir des photos du vendeur : centrage, état, questions à poser.','vr'],
+  ['🛒','Boutique','Protège-cartes et toploaders sur Amazon, dans le menu ＋.','shop']]],
+ ['👥','Amis et communauté',[
+  ['☁️','Compte en ligne','Ta collection est sauvegardée et synchronisée entre tes appareils.','compte'],
+  ['🪪','Profil public','Choisis ce que tu publies ; les autres peuvent voir ton profil.','me'],
+  ['✉️','Messages privés','Discussions avec tes amis, messages non lus et notifications.','comm'],
+  ['🗨️','Chat général','En temps réel : réponses, réactions, @pseudos et cartes dans les messages.','chat'],
+  ['🟢','Qui est en ligne','Touche « en ligne » sur l’accueil pour voir les pseudos des joueurs connectés.','online'],
+  ['📱','Sondage','En haut de l’accueil : dis sur quoi tu joues et vois le résultat.','home'],
+  ['🖼️','Photos partagées','Les photos de cartes ajoutées par les joueurs servent à tout le monde.']]],
+ ['🎨','Confort et réglages',[
+  ['🖥️','Téléphone, tablette ou PC','L’écran s’adapte tout seul : menu sur le côté sur PC, plus de colonnes de cartes.'],
+  ['🎨','Thèmes et couleurs','Sombre, noir pur, clair ou automatique, et la couleur de l’appli.','aff'],
+  ['🔊','Sons et vibrations','À régler comme tu veux, avec les animations réduites pour un vieux téléphone.','son'],
+  ['🔔','Notifications des messages','Reçois ou coupe les alertes de messages, même site fermé.','notif'],
+  ['📴','Hors ligne','L’appli s’installe sur l’écran d’accueil et marche sans connexion.'],
+  ['💾','Mes données','Exporte ou importe ta collection.','data'],
+  ['👋','Tutoriel','Revois la visite guidée de l’appli.','tut'],
+  ['💡','Idée ou bug','Propose une idée ou signale un bug sur le Discord.','aide']]]
+];
+
+/* ---------- état ---------- */
+const MJ={st:'',srv:0,t:0,busy:false,q:'',tab:'n',last:0,just:0,tries:0,op:null};
+const lastSeen=()=>{const s=lsG(K_SEEN),m=s&&/(\d+)\s*$/.exec(s),n=m?+m[1]:0;return n>0?Math.min(n,VER):Math.max(0,VER-1)};
+const fresh=l=>MJV.reduce((a,x)=>a+(x.v>l&&x.v<=VER?x.it.length:0),0);
+const busy=()=>{try{return !!(document.getElementById('splash')||document.querySelector('.sheet,#dbs,div.cs,.aff-sh')||(typeof S!=='undefined'&&S.op))}catch(e){return false}};
+
+/* ---------- dates ---------- */
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function dayName(s){try{return new Date(s+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}catch(e){return s}}
+function rel(s){const t=ymd(new Date()),y=ymd(new Date(Date.now()-864e5));return s===t?'aujourd’hui':s===y?'hier':''}
+function days(){const m=new Map();MJV.forEach(x=>{if(!m.has(x.d))m.set(x.d,[]);m.get(x.d).push(x)});return [...m.entries()]}
+
+/* ---------- aller voir une nouveauté ---------- */
+function clk(a){const b=document.createElement('button');b.type='button';b.hidden=true;Object.keys(a).forEach(k=>b.setAttribute('data-'+k,a[k]));(document.getElementById('app')||document.body).appendChild(b);try{b.click()}catch(e){}b.remove()}
+function spot(sel,d){setTimeout(()=>{const el=document.querySelector(sel);if(!el)return;
+ try{const r=el.getBoundingClientRect();if(r.top<64||r.bottom>innerHeight-96)el.scrollIntoView({block:'center'})}catch(e){}
+ el.classList.add('mj-spot');setTimeout(()=>el.classList.remove('mj-spot'),3600)},d||450)}
+const GO={
+ flags:()=>{clk({go:'coll'});spot('.cx-ed')},
+ pickjp:()=>clk({game:'fw'}),
+ pick_en:()=>clk({game:'en'}),
+ autres:()=>{clk({game:'fw'});spot('[data-dzc="330"]',600)},
+ pickq:()=>{clk({game:'fw'});spot('#dzq',600)},
+ deck:()=>{clk({game:'fw'});clk({ext:'FS01'})},
+ serie:()=>{clk({go:'coll'});spot('[data-alopen]')},
+ ms:()=>clk({game:'ms'}),
+ sealed:()=>clk({hgo:'sealed'}),
+ share:()=>clk({share:''}),
+ menu:()=>clk({menu:''}),
+ plus:()=>spot('#nav .mid',120),
+ luck:()=>{clk({go:'luck'});spot('#nav [data-go="luck"]')},
+ shop:()=>{if(typeof affOpen==='function')affOpen()},
+ chat:()=>{if(typeof gcOpen==='function')gcOpen()},
+ online:()=>{clk({go:'home'});let ok=false;try{ok=!!ONL.ok}catch(e){}if(ok){ONL.sh=true;render()}else{spot('[data-onl]');tst('Connexion en cours : réessaie dans un instant')}},
+ notif:()=>{clk({go:'set'});spot('.pn-st')},
+ compte:()=>clk({setp:'compte'}),aff:()=>clk({setp:'aff'}),son:()=>clk({setp:'son'}),data:()=>clk({setp:'data'}),prix:()=>clk({setp:'prix'}),aide:()=>clk({setp:'aide'}),scnset:()=>clk({setp:'scn'}),
+ al:()=>{try{S.menu=false;S.alnew=[];S.alsh=true;render()}catch(e){}},
+ me:()=>{try{if(SBS&&SBS.pseudo&&typeof ppOpen==='function'){ppOpen(SBS.pseudo);return}}catch(e){}clk({go:'comm'})},
+ vr:()=>{if(typeof window.vrOpen==='function')window.vrOpen()},
+ tut:()=>clk({tut:''})
+};
+function go(k){close();setTimeout(()=>{try{(GO[k]||(()=>clk({go:k})))()}catch(e){}},40)}
+
+/* ---------- affichage ---------- */
+const SRCH='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+const goBtn=(k,t)=>k?`<button type="button" class="mj-go" data-mjgo="${E(k)}" aria-label="Voir : ${E(t)}"><span>Voir</span></button>`:'';
+const row=(ic,t,tx,k,tag,s)=>`<li class="mj-i" data-s="${E(N(s))}"><span class="mj-ic" aria-hidden="true">${ic}</span><div class="mj-tx"><div class="mj-tl"><b>${E(t)}</b>${tag?`<span class="mj-tg t-${tag}">${TG[tag]}</span>`:''}</div><p>${E(tx)}</p></div>${goBtn(k,t)}</li>`;
+function verT(v,last){const nw=v.v>last;
+ return `<article class="mj-v${nw?' is-new':''}" aria-label="Version ${v.v}"><div class="mj-vh"><span class="mj-cap">V${v.v}</span>${nw?'<span class="mj-nt">Nouveau pour toi</span>':''}${v.by?`<span class="mj-by">💡 Idée de ${E(v.by)}</span>`:''}</div>`
+  +`<ul class="mj-it">${v.it.map(x=>row(x[1],x[2],x[3],x[4],x[0],x[2]+' '+x[3]+' '+TG[x[0]]+' v'+v.v+' version '+v.v+(v.by?' '+v.by:''))).join('')}</ul></article>`}
+function dayT(d,vs,last){const nm=dayName(d),r=rel(d),n=vs.length;
+ return `<section class="mj-day" aria-label="${E(cap(nm))}"><div class="mj-dh"><span class="mj-orb">${orb(Math.max(1,Math.min(7,n)))}</span><div class="mj-dw"><h3 class="mj-dt">${E(r?cap(r):cap(nm))}</h3><span class="mj-dd">${r?E(nm)+' · ':''}${n} version${n>1?'s':''}</span></div>`
+  +`<button type="button" class="mj-cp" data-mjcp="${d}" aria-label="Copier les nouveautés du ${E(nm)} pour Discord"><span>Copier</span></button></div><div class="mj-vs">${vs.map(v=>verT(v,last)).join('')}</div></section>`}
+function oldT(){return `<details class="mj-old"><summary><span class="mj-oi" aria-hidden="true">🗃️</span><span class="mj-ot"><b>Avant la version 24</b><small>${MJOLD.length} fonctions déjà là</small></span><span class="mj-oc" aria-hidden="true">›</span></summary>`
+ +`<ul class="mj-it">${MJOLD.map(x=>row(x[0],x[1],x[2],x[3],'',x[1]+' '+x[2])).join('')}</ul></details>`}
+function guideT(){return `<div class="mj-jump" role="navigation" aria-label="Thèmes">${MJF.map((g,i)=>`<button type="button" class="chip" data-mjj="${i}">${g[0]} ${E(g[1])}</button>`).join('')}</div>`
+ +MJF.map((g,i)=>`<section class="mj-g" id="mj-g${i}"><h3 class="mj-gt"><span aria-hidden="true">${g[0]}</span> ${E(g[1])}</h3><ul class="mj-gl">${g[2].map(x=>row(x[0],x[1],x[2],x[3],'',x[1]+' '+x[2]+' '+g[1])).join('')}</ul></section>`).join('')}
+function stT(){const v=MJ.srv;
+ if(MJ.just)return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Version ${VER} installée</b>`;
+ switch(MJ.st){
+  case 'new':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>La version ${v} est sortie</b>`;
+  case 'wait':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>La version ${v} arrive</b><small>${MJ.tries>1?'Elle met plus de temps que prévu : réessaie dans quelques minutes.':'Elle est en route : réessaie dans une minute.'}</small>`;
+  case 'inst':return `<span class="mj-sd s-chk" aria-hidden="true"></span><b>Installation…</b>`;
+  case 'chk':return `<span class="mj-sd s-chk" aria-hidden="true"></span><b>Recherche d’une nouvelle version…</b>`;
+  case 'ok':return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Tu as la dernière version</b>`;
+  case 'off':return `<span class="mj-sd s-off" aria-hidden="true"></span><b>Hors connexion</b><small>Impossible de vérifier s’il y a une nouvelle version.</small>`;
+  case 'err':return `<span class="mj-sd s-off" aria-hidden="true"></span><b>Vérification impossible</b><small>Réessaie dans un moment.</small>`}
+ return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Version ${VER}</b>`}
+function actT(){if(MJ.just)return '';const v=MJ.srv;
+ if(MJ.st==='new')return `<button type="button" class="btn mj-in" data-mjup><span>Installer la version ${v}</span></button>`;
+ if(MJ.st==='wait')return `<button type="button" class="btn alt mj-in" data-mjup><span>Réessayer</span></button>`;
+ if(MJ.st==='off'||MJ.st==='err')return `<button type="button" class="chip mj-re" data-mjre>Vérifier</button>`;
+ return ''}
+const pend=()=>!MJ.just&&(MJ.st==='new'||MJ.st==='wait'||MJ.st==='inst');
+function heroT(last,n){const top=MJV[0]&&MJV[0].v===VER?MJV[0]:null,r=top?rel(top.d):'',hd=pend()?' hidden':'';
+ return `<div class="mj-hero" id="mj-hero"><div class="mj-hl"><span class="mj-vl">Version</span><span class="mj-num" id="mj-num"><span id="mj-n">${last<VER&&!RMx()?last:VER}</span></span></div>`
+  +`<div class="mj-hr"><div class="mj-st" id="mj-st" role="status" aria-live="polite">${stT()}</div>${top?`<p class="mj-hd" id="mj-hd"${hd}>Sortie ${r?E(r):'le '+E(dayName(top.d))}</p>`:''}`
+  +`<p class="mj-hn" id="mj-hn"${hd}>${n>0?`<b>${n} nouveauté${n>1?'s':''}</b> pour toi depuis la version ${last}`:'Tu as déjà vu toutes ses nouveautés.'}</p></div><div class="mj-ha" id="mj-ha">${actT()}</div></div>`}
+function barT(n){const nf=MJF.reduce((a,g)=>a+g[2].length,0),tb=(k,id,lab,c)=>`<button type="button" role="tab" id="${id}" class="mj-tab" aria-selected="${MJ.tab===k}" aria-controls="mj-p${k==='n'?1:2}" data-mjtab="${k}"${MJ.tab===k?'':' tabindex="-1"'}><span>${lab}<i class="mj-c" data-d="${c}"${c?'':' hidden'}>${c}</i></span></button>`;
+ return `<div class="mj-bar" id="mj-bar"><div class="mj-tabs" role="tablist" aria-label="Mises à jour">${tb('n','mj-t1','Nouveautés',n>0?n:'')}${tb('f','mj-t2','Toutes les fonctions',nf)}</div>`
+  +`<label class="mj-q"><span class="mj-qi">${SRCH}</span><input type="search" id="mj-q" placeholder="Chercher : booster, prix, chat…" autocomplete="off" enterkeyhint="search" spellcheck="false" aria-label="Chercher dans les nouveautés et les fonctions"></label></div>`}
+function footT(){let D='';try{D=DISC}catch(e){}
+ return `<div class="mj-ft">${D?`<a class="mj-fb" href="${E(D)}" target="_blank" rel="noopener noreferrer" data-bug="idee"><span aria-hidden="true">💡</span> Proposer une idée</a><a class="mj-fb" href="${E(D)}" target="_blank" rel="noopener noreferrer" data-bug="bug"><span aria-hidden="true">🐞</span> Signaler un bug</a>`:''}`
+  +`<button type="button" class="mj-fx" data-mjfix>L’appli ne se met pas à jour ? Forcer la mise à jour</button></div>`}
+
+/* ---------- ouvrir / fermer ---------- */
+function open(){if(document.getElementById('mj'))return;
+ MJ.op=document.activeElement;MJ.last=lastSeen();const last=MJ.last,n=fresh(last);
+ document.body.insertAdjacentHTML('beforeend',`<div class="mj" id="mj"><div class="mj-d" role="dialog" aria-modal="true" aria-labelledby="mj-h"><div class="mj-top"><h2 id="mj-h">Mises à jour</h2><button type="button" class="sr-x mj-x" data-mjx aria-label="Fermer">✕</button></div>`
+  +`<div class="mj-sc" id="mj-sc">${heroT(last,n)}${barT(n)}`
+  +`<div class="mj-p" id="mj-p1" role="tabpanel" aria-labelledby="mj-t1"${MJ.tab==='n'?'':' hidden'}>${days().map(([d,vs])=>dayT(d,vs,last)).join('')}${oldT()}<div class="mj-empty" hidden></div></div>`
+  +`<div class="mj-p" id="mj-p2" role="tabpanel" aria-labelledby="mj-t2"${MJ.tab==='f'?'':' hidden'}>${guideT()}<div class="mj-empty" hidden></div></div>${footT()}</div></div></div>`);
+ document.documentElement.classList.add('mj-lock');
+ lsS(K_SEEN,String(VER));mark();bnPaint();
+ const x=document.querySelector('#mj .mj-x');if(x)try{x.focus({preventScroll:true})}catch(e){}
+ if(last<VER)countUp(last,VER);
+ if(Date.now()-MJ.t>60000)check(true)}
+function close(){const o=document.getElementById('mj');if(!o)return;o.remove();document.documentElement.classList.remove('mj-lock');MJ.just=0;MJ.q='';bnPaint();
+ const f=MJ.op;MJ.op=null;if(f&&f.isConnected&&f.focus)try{f.focus({preventScroll:true})}catch(e){}}
+function countUp(a,b){const el=document.getElementById('mj-n');if(!el)return;if(RMx()){el.textContent=b;return}
+ const dur=Math.min(1400,420+110*(b-a));let t0=0;
+ const f=t=>{if(!el.isConnected)return;if(!t0)t0=t;const p=Math.min(1,(t-t0)/dur),v=Math.round(a+(b-a)*(1-Math.pow(1-p,3)));if(el.textContent!==String(v))el.textContent=v;
+  if(p<1)requestAnimationFrame(f);else{const nm=document.getElementById('mj-num'),h=document.getElementById('mj-hero');if(nm)nm.classList.add('mj-pop');if(h)h.classList.add('mj-flash')}};
+ setTimeout(()=>requestAnimationFrame(f),280)}
+function tab(k,focus){MJ.tab=k;const o=document.getElementById('mj');if(!o)return;
+ o.querySelectorAll('[role=tab]').forEach(b=>{const on=b.dataset.mjtab===k;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;if(on&&focus)b.focus()});
+ o.querySelector('#mj-p1').hidden=k!=='n';o.querySelector('#mj-p2').hidden=k!=='f';
+ const sc=o.querySelector('#mj-sc'),bar=o.querySelector('#mj-bar');if(sc&&bar&&sc.scrollTop>bar.offsetTop)sc.scrollTop=bar.offsetTop}
+function jump(i){const s=document.getElementById('mj-g'+i),sc=document.getElementById('mj-sc'),bar=document.getElementById('mj-bar');if(!s||!sc)return;
+ sc.scrollTo({top:Math.max(0,s.offsetTop-(bar?bar.offsetHeight:0)-10),behavior:RMx()?'auto':'smooth'})}
+function filter(){const o=document.getElementById('mj');if(!o)return;const raw=MJ.q.trim(),ws=N(raw).split(/\s+/).filter(Boolean),c={n:0,f:0};
+ o.querySelectorAll('.mj-p [data-s]').forEach(li=>{const ok=!ws.length||ws.every(w=>li.dataset.s.indexOf(w)>=0);li.hidden=!ok;if(ok)c[li.closest('#mj-p2')?'f':'n']++});
+ o.querySelectorAll('.mj-v').forEach(v=>{v.hidden=!v.querySelector('[data-s]:not([hidden])')});
+ o.querySelectorAll('.mj-day').forEach(d=>{d.hidden=!d.querySelector('.mj-v:not([hidden])')});
+ o.querySelectorAll('.mj-g').forEach(g=>{g.hidden=!g.querySelector('[data-s]:not([hidden])')});
+ const od=o.querySelector('.mj-old');if(od){const has=!!od.querySelector('[data-s]:not([hidden])');od.hidden=!has;if(ws.length&&has)od.open=true}
+ const jp=o.querySelector('.mj-jump');if(jp)jp.hidden=!!ws.length;
+ o.querySelectorAll('.mj-tab .mj-c').forEach(i=>{const k=i.closest('[data-mjtab]').dataset.mjtab,v=ws.length?c[k]:i.dataset.d;i.textContent=v;i.hidden=v===''||v===undefined});
+ [['n','#mj-p1','f','Toutes les fonctions'],['f','#mj-p2','n','Nouveautés']].forEach(([k,s,ok2,lab])=>{const p=o.querySelector(s+' > .mj-empty');if(!p)return;
+  if(ws.length&&!c[k]){const m=c[ok2];p.hidden=false;p.innerHTML=`<p><b>Rien trouvé pour « ${E(raw)} »</b></p>`+(m?`<button type="button" class="chip" data-mjtab="${ok2}">Voir ${m} résultat${m>1?'s':''} dans « ${lab} »</button>`:'<p class="sub">Essaie un autre mot. Une idée de fonction ? Propose-la sur le Discord.</p>')}
+  else{p.hidden=true;p.innerHTML=''}})}
+function copyDay(d){const vs=MJV.filter(v=>v.d===d);if(!vs.length)return;
+ const L=[`**🐉 L’Appel des Cartes : les nouveautés du ${dayName(d)}**`,''];
+ vs.forEach(v=>v.it.forEach(x=>L.push(`${x[1]} **${x[2]}** : ${x[3]}${v.by?` (idée de ${v.by})`:''}`)));
+ L.push('','👉 '+SITE);const t=L.join('\n'),done=ok=>tst(ok?'Copié : colle-le sur Discord':'Copie impossible sur cet appareil');
+ try{const p=typeof copyText==='function'?copyText(t):navigator.clipboard.writeText(t).then(()=>true);p.then(done,()=>done(false))}catch(e){done(false)}}
+
+/* ---------- nouvelle version : vérifier, prévenir, installer ---------- */
+function clean(){try{if(!window.caches)return;const u=new URL('version.json',location.href).href;caches.keys().then(ks=>ks.forEach(k=>caches.open(k).then(c=>c.delete(u,{ignoreSearch:true})))).catch(()=>{})}catch(e){}}
+async function check(force){if(MJ.busy)return;if(!/^https?:$/.test(location.protocol)){MJ.st='';return}
+ if(!force&&Date.now()-MJ.t<6e5)return;
+ if(navigator.onLine===false){if(MJ.st!=='new')MJ.st='off';paint();return}
+ MJ.busy=true;const was=MJ.st;if(was!=='new'&&was!=='wait'&&!MJ.just)MJ.st='chk';paint();
+ let st='err',v=0;
+ try{const ac=typeof AbortController==='function'?new AbortController():null,tm=setTimeout(()=>{try{ac&&ac.abort()}catch(e){}},9000);
+  try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store',signal:ac?ac.signal:undefined});
+   if(r.status===404)st='';else if(r.ok){const j=await r.json();v=Math.floor(+(j&&j.v))||0;st=v>VER?'new':v?'ok':'err'}}
+  finally{clearTimeout(tm)}}
+ catch(e){st=navigator.onLine===false?'off':'err'}
+ MJ.busy=false;MJ.t=Date.now();
+ if(st==='new'){if(!(was==='wait'&&v<=MJ.srv))MJ.st='new';MJ.srv=Math.max(v,MJ.srv)}
+ else if(st==='ok'){MJ.srv=VER;MJ.st='ok'}
+ else MJ.st=was==='new'?'new':st;
+ setTimeout(clean,1500);paint();mark()}
+function paint(){const s=document.getElementById('mj-st'),a=document.getElementById('mj-ha'),p=pend();if(s)s.innerHTML=stT();if(a)a.innerHTML=actT();
+ ['mj-hd','mj-hn'].forEach(id=>{const e=document.getElementById(id);if(e&&e.hidden!==p)e.hidden=p});bnPaint()}
+function bnPaint(){let b=document.getElementById('mj-bn');
+ const show=(MJ.st==='new'||MJ.st==='wait')&&MJ.srv>VER&&!document.getElementById('mj')&&ssG(K_BN)!==String(MJ.srv);
+ if(!show){if(b)b.remove();return}
+ const w=MJ.st==='wait',k=MJ.st+MJ.srv;
+ if(!b){b=document.createElement('div');b.id='mj-bn';b.className='mj-bn';b.setAttribute('role','status');document.body.appendChild(b)}
+ if(b.dataset.k!==k){b.dataset.k=k;b.innerHTML=`<span class="mj-bo" aria-hidden="true">${orb(1)}</span><span class="mj-bt"><b>${w?'La version '+MJ.srv+' arrive':'Version '+MJ.srv+' disponible'}</b><small>${w?'Elle est en route : réessaie dans une minute.':'Un appui pour avoir les nouveautés.'}</small></span>`
+  +`<button type="button" class="mj-bu" data-mjup><span>${w?'Réessayer':'Mettre à jour'}</span></button><button type="button" class="mj-bx" data-mjbx aria-label="Plus tard">✕</button>`}}
+const wait=ms=>new Promise(z=>setTimeout(z,ms));
+async function install(){if(navigator.onLine===false){tst('Pas de connexion : mise à jour impossible');return}
+ const to=Math.max(MJ.srv,VER+1);let pr=null;try{pr=JSON.parse(ssG(K_TRY)||'null')}catch(e){}
+ MJ.st='inst';MJ.srv=to;paint();
+ try{if('serviceWorker' in navigator){const r=await Promise.race([navigator.serviceWorker.getRegistration(),wait(2500)]);if(r&&r.update)await Promise.race([r.update(),wait(4000)])}}catch(e){}
+ ssS(K_TRY,JSON.stringify({to,t:Date.now(),n:pr&&pr.to===to?(pr.n||1)+1:1}));
+ /* adresse unique : la page arrive du serveur, jamais d'un cache */
+ location.replace(location.pathname+'?maj='+to+'-'+Date.now().toString(36)+location.hash)}
+async function hard(){if(navigator.onLine===false){tst('Pas de connexion : mise à jour impossible');return}tst('Mise à jour…');
+ try{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}catch(e){}
+ try{for(const k of await caches.keys())await caches.delete(k)}catch(e){}
+ location.replace(location.pathname+'?maj=f'+Date.now().toString(36))}
+/* la page chargée par ?maj= remplace l'ancienne dans le cache (pour l'appli hors connexion) */
+function fixCache(from,to,n){if(!window.caches)return;setTimeout(async()=>{let hit=false;
+ try{for(const k of await caches.keys()){const c=await caches.open(k),r=await c.match(from);if(r){hit=true;await c.put(to,r);await c.delete(from)}}}catch(e){}
+ if(!hit&&n>0)fixCache(from,to,n-1)},3000)}
+function mark(){const n=fresh(lastSeen()),up=(MJ.st==='new'||MJ.st==='wait')&&MJ.srv>VER,lab=n>0?(n>99?'99+':String(n)):up?'MAJ':'';
+ document.querySelectorAll('[data-clog]').forEach(b=>{const on=!!lab;if(b.classList.contains('new')!==on)b.classList.toggle('new',on);
+  if(on){if(b.dataset.nw!==lab)b.dataset.nw=lab}else if(b.hasAttribute('data-nw'))b.removeAttribute('data-nw');
+  if(b.classList.contains('hmgu')){const al='Voir toutes les mises à jour'+(n>0?' ('+n+' nouveauté'+(n>1?'s':'')+')':up?' (nouvelle version disponible)':'');if(b.getAttribute('aria-label')!==al)b.setAttribute('aria-label',al)}})}
+
+/* ---------- au démarrage ---------- */
+if(/[?&]maj=/.test(location.search)){try{const u=new URL(location.href),from=u.href.replace(/#.*$/,'');u.searchParams.delete('maj');const to=u.pathname+u.search;
+ history.replaceState(history.state,'',to+u.hash);fixCache(from,new URL(to,location.href).href,2)}catch(e){}}
+{let tr=null;try{tr=JSON.parse(ssG(K_TRY)||'null')}catch(e){}
+ if(tr&&Date.now()-tr.t<3e5){
+  if(VER>=tr.to){ssD(K_TRY);MJ.just=VER;MJ.st='ok';MJ.srv=VER;MJ.t=Date.now();tst('✓ Version '+VER+' installée');
+   let n=0;const t=setInterval(()=>{if(++n>60||document.getElementById('mj')){clearInterval(t);return}if(!busy()){clearInterval(t);open()}},250)}
+  else{MJ.st='wait';MJ.srv=tr.to;MJ.tries=tr.n||1;setTimeout(bnPaint,0)}}
+ else if(tr)ssD(K_TRY)}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;let b;
+ if(t.closest('[data-clog]')){e.preventDefault();e.stopPropagation();open();return}
+ if(t.closest('[data-mjup]')){e.preventDefault();e.stopPropagation();install();return}
+ if(t.closest('[data-mjbx]')){e.preventDefault();e.stopPropagation();ssS(K_BN,String(MJ.srv));bnPaint();return}
+ const o=document.getElementById('mj');if(!o||!o.contains(t))return;
+ if(t===o||t.closest('[data-mjx]')){e.preventDefault();e.stopPropagation();close();return}
+ if((b=t.closest('[data-mjtab]'))){e.stopPropagation();tab(b.dataset.mjtab);return}
+ if((b=t.closest('[data-mjgo]'))){e.stopPropagation();go(b.dataset.mjgo);return}
+ if((b=t.closest('[data-mjcp]'))){e.stopPropagation();copyDay(b.dataset.mjcp);return}
+ if((b=t.closest('[data-mjj]'))){e.stopPropagation();jump(+b.dataset.mjj);return}
+ if(t.closest('[data-mjre]')){e.stopPropagation();check(true);return}
+ if(t.closest('[data-mjfix]')){e.stopPropagation();hard()}},true);
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='mj-q'){MJ.q=e.target.value;clearTimeout(filter.t);filter.t=setTimeout(filter,90)}});
+document.addEventListener('keydown',e=>{const o=document.getElementById('mj');if(!o)return;
+ if(e.key==='Escape'){e.preventDefault();e.stopPropagation();const q=e.target&&e.target.id==='mj-q'?e.target:null;if(q&&q.value){q.value='';MJ.q='';filter();return}close();return}
+ if(e.key==='Tab'){const f=[...o.querySelectorAll('button,a[href],input,summary')].filter(x=>!x.disabled&&x.tabIndex!==-1&&x.getClientRects().length);if(!f.length)return;
+  const a=f[0],z=f[f.length-1],c=document.activeElement;if(!o.contains(c)){e.preventDefault();a.focus()}else if(e.shiftKey&&c===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&c===z){e.preventDefault();a.focus()}return}
+ if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target&&e.target.getAttribute&&e.target.getAttribute('role')==='tab'){e.preventDefault();tab(MJ.tab==='n'?'f':'n',true)}},true);
+{const r0=render;render=function(){const x=r0.apply(this,arguments);try{mark()}catch(e){}return x}}
 mark();
+setTimeout(()=>check(false),7000);
+setInterval(()=>{if(!document.hidden)check(false)},12e5);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)check(false)});
+addEventListener('online',()=>check(true));
+window.majOpen=open;window.majState=()=>({VER,st:MJ.st,srv:MJ.srv,last:lastSeen(),fresh:fresh(lastSeen()),tries:MJ.tries,just:MJ.just});
+})();
 /* appui sur l'onglet « Scanner » : on ouvre directement le scanner (caméra) */
 document.addEventListener('click',function(e){var t=e.target;if(!t||!t.closest)return;var b=t.closest('#nav [data-go="scan"]');if(!b||document.querySelector('.cs'))return;
  setTimeout(function(){if(document.querySelector('.cs'))return;var c=document.querySelector('main [data-cam], #app [data-cam], [data-cam]:not(#nav [data-cam])');if(c)c.click()},150)},true);
-})();
+
 </script>
 </body>
 </html>

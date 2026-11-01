@@ -2405,6 +2405,30 @@ html.calm .st-hm i.l4{box-shadow:none}
 .hv-f small{min-width:0;color:var(--mu);font-size:12.5px}
 .hv-go{display:inline-flex;align-items:center;gap:3px;flex:none;color:var(--gold);font-weight:600;font-size:14px}
 .hv-go svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* succès */
+.ach-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.ach-h>b{font:900 34px/1 'Big Shoulders Display',Impact,sans-serif;font-style:italic;color:var(--gold)}
+.ach-h .bar{flex-basis:100%;margin-top:10px}
+.ach-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.ach{display:flex;gap:10px;min-width:0;padding:12px 12px 12px 10px;background:var(--sf);border:1px solid var(--ln);border-radius:2px 12px 2px 12px}
+.ach-i{flex:none;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;font-size:21px;background:color-mix(in srgb,var(--mu) 14%,transparent);filter:grayscale(1);opacity:.55}
+.ach.on{border-color:color-mix(in srgb,var(--gold) 60%,transparent);background:linear-gradient(150deg,color-mix(in srgb,var(--gold) 16%,transparent),transparent 65%),var(--sf)}
+.ach.on .ach-i{filter:none;opacity:1;background:color-mix(in srgb,var(--gold) 22%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--gold) 45%,transparent)}
+.ach-t{min-width:0;display:flex;flex-direction:column;gap:2px}
+.ach-t b{font-weight:700;font-size:14.5px;line-height:1.25}
+.ach-t small{color:var(--mu);font-size:12px;line-height:1.3}
+.ach-ok{margin-top:3px;color:var(--ok);font-weight:600;font-size:12px}
+.ach-k{position:relative;display:block;height:6px;margin-top:6px;overflow:hidden;border-radius:999px;background:var(--ln)}
+.ach-k i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--gold)}
+.ach-v{color:var(--mu);font-size:12px;font-variant-numeric:tabular-nums}
+@media (max-width:359px){.ach-g{grid-template-columns:1fr}}
+html:is([data-ly=tab],[data-ly=pc]) .ach-g{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* ventes de l'accueil : total depuis le début */
+.hmm0{margin-bottom:8px}
+.hmtt{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--ln);font-size:13px;color:var(--mu)}
+.hmtt span{flex-basis:100%}
+.hmtt b{color:var(--tx);font-weight:600}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -7282,7 +7306,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='31 oct. 2026 · 54';
+const BUILD='1 nov. 2026 · 55';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8506,6 +8530,80 @@ function hmVal(){const D=stData();stHistLoad();if(!(D.val>0))return '';const h=s
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-hv]');if(!b)return;e.stopPropagation();ST.tab='r';try{localStorage.setItem('fb_stt','r')}catch(_){}
  S.tab='stats';S.menu=false;S.sel=null;apT0=Date.now();render();window.scrollTo(0,0)},true);
 
+/* ===== DBX : Derniers ajouts réparés, Dragon Balls qui comptent aussi Masters, 24 succès, ventes de l'accueil ===== */
+/* --- 1. Derniers ajouts : du plus récent au plus ancien, toutes éditions mélangées dans le bon ordre --- */
+let ENP={};try{ENP=Object.assign({},X.en||{})}catch(e){}
+function enTrack(){try{const E=X.en||{},t=Date.now();let ch=false;if(!X.added)X.added={};for(const k in E){if((+E[k]||0)>(+ENP[k]||0)){X.added[k]=t;ch=true}}ENP=Object.assign({},E);if(ch)saveX()}catch(e){}}
+hmHand=function(){const mode=S.hf||(S.last.length||Object.keys(X.added||{}).length?'last':'best');
+ if(mode!=='last'){const A=hmHandFw(),B=hmHandMs(A.mode),l=[];for(let i=0;l.length<5&&(i<A.l.length||i<B.l.length);i++){if(A.l[i])l.push(A.l[i]);if(l.length<5&&B.l[i])l.push(B.l[i])}return{mode:A.mode,l}}
+ const l=[],seen=new Set(),mk=c=>({id:c[0],name:msShort(c),own:msOwn(c[0]),ms:true,arr:c}),
+  put=id=>{if(seen.has(id)||l.length>=5)return;const f=cards.find(x=>x.id===id);
+   if(f){if(f.own>0||enOwn(id)>0){seen.add(id);l.push(f.own>0?f:Object.assign({},f,{own:enOwn(id)}))}return}
+   if(msOwn(id)>0){const c=msFind(id);if(c){seen.add(id);l.push(mk(c))}}};
+ Object.entries(X.added||{}).sort((a,b)=>b[1]-a[1]).forEach(([id])=>put(id));
+ for(const id of S.last)put(id);
+ return{mode,l}};
+/* --- 2. Dragon Balls et rang : les cartes Masters comptent aussi (comme dans Stats) --- */
+dbStats=function(){const ser={};let d=0,alt=0;
+ for(const c of cards){const s=ser[c.ext]||(ser[c.ext]={n:0,o:0,nn:0,on:0}),has=c.own>0;s.n++;if(has){s.o++;d++}if(c.ver==='Normal'){s.nn++;if(has)s.on++}else if(has)alt++}
+ for(const t of MS_SETS){const s=ser[t.id]||(ser[t.id]={n:0,o:0,nn:0,on:0});for(const c of t.c){const has=msOwn(c[0])>0,sp=msIsSpr(c);s.n++;if(has){s.o++;d++}if(!sp){s.nn++;if(has)s.on++}else if(has)alt++}}
+ return{ser,d,alt}};
+dbBest=function(s,f){let b=null;for(const e in s.ser){const x=s.ser[e];if(!x||x.n<50)continue;const [cur,goal]=f(x);if(!goal)continue;const r=cur/goal;if(!b||r>b.r)b={r,cur,goal,lab:'Meilleure série : '+e}}return b?{cur:b.cur,goal:b.goal,lab:b.lab}:{cur:0,goal:1,lab:'Aucune série à compléter'}};
+/* --- 3. Succès : 24 défis en plus des 7 Dragon Balls --- */
+function achData(){const D=stData(),A=stAct(),s=dbStats(),ed=D.ed;let full=0;for(const k in s.ser){const x=s.ser[k];if(x.n>=50&&x.nn&&x.on>=x.nn)full++}
+ const act=X.act||{};let days=0,best=0;for(const k in act){const v=+((act[k]||{}).c)||0;if(v>0)days++;if(v>best)best=v}
+ return{u:D.uniq,cp:D.copies,alt:D.aOwn,bo:D.bo,se:D.sealN,ed:['jp','en','fr','old'].filter(k=>ed[k][0]>0).length,ma:D.mO.length,st:A.st,days,best,sales:(X.sales||[]).length,val:D.val,top:D.top.length?D.top[0].p:0,full,bind:(typeof BIND!=='undefined'?BIND.length:0),want:D.W.length,fav:Object.keys(X.fav||{}).filter(k=>X.fav[k]).length}}
+const ACH=[
+ ['c250','🃏','Collectionneur','Possède 250 cartes différentes.',a=>[a.u,250]],
+ ['c500','🗂️','Archiviste','Possède 500 cartes différentes.',a=>[a.u,500]],
+ ['c1000','🏛️','Musée vivant','Possède 1 000 cartes différentes.',a=>[a.u,1000]],
+ ['cp500','📚','Montagne de cartes','Atteins 500 exemplaires au total.',a=>[a.cp,500]],
+ ['alt50','✨','Amateur d’Alt Art','Possède 50 Alt Art différentes.',a=>[a.alt,50]],
+ ['alt100','🌈','Galerie d’art','Possède 100 Alt Art différentes.',a=>[a.alt,100]],
+ ['ma50','🇫🇷','Vétéran Masters','Possède 50 cartes Masters différentes.',a=>[a.ma,50]],
+ ['ed3','🌍','Polyglotte','Collectionne dans 3 éditions (japonaise, anglaise, française ou anciennes).',a=>[a.ed,3]],
+ ['full3','🏆','Triple série','Complète 3 Full Sets.',a=>[a.full,3]],
+ ['top50','💎','Pépite','Possède une carte qui vaut 50 € ou plus.',a=>[Math.min(a.top,50),50,1]],
+ ['v100','💰','Trésor','Ta collection vaut 100 €.',a=>[Math.min(a.val,100),100,1]],
+ ['v1000','👑','Fortune','Ta collection vaut 1 000 €.',a=>[Math.min(a.val,1000),1000,1]],
+ ['bo1','🎲','Premier booster','Ouvre ton premier booster dans le mode hasard.',a=>[a.bo,1]],
+ ['bo100','🎰','Accro aux boosters','Ouvre 100 boosters dans le mode hasard.',a=>[a.bo,100]],
+ ['se1','🎁','Gardien du scellé','Note un produit scellé.',a=>[a.se,1]],
+ ['se10','🧳','Réserve secrète','Possède 10 produits scellés.',a=>[a.se,10]],
+ ['st7','🔥','Une semaine d’affilée','Ajoute des cartes 7 jours de suite.',a=>[a.st,7]],
+ ['d30','📅','Assidu','Ajoute des cartes pendant 30 jours (pas forcément de suite).',a=>[a.days,30]],
+ ['b50','⚡','Grosse séance','Ajoute 50 cartes en une journée.',a=>[a.best,50]],
+ ['s1','💶','Premier deal','Note ta première vente.',a=>[a.sales,1]],
+ ['s25','🤝','Marchand','Note 25 ventes.',a=>[a.sales,25]],
+ ['bd1','📒','Relieur','Crée ton premier classeur.',a=>[a.bind,1]],
+ ['w10','🎯','Chasseur','Ajoute 10 cartes à tes recherchées.',a=>[a.want,10]],
+ ['f5','⭐','Coups de cœur','Mets 5 cartes en favori.',a=>[a.fav,5]]];
+const achGot=()=>{if(!X.db)return {};if(!X.db.ach)X.db.ach={};return X.db.ach};
+function achEval(a){a=a||achData();const g=achGot();return ACH.map(([k,ic,t,d,f])=>{const r=f(a),cur=r[0],goal=r[1],ok=cur>=goal;return{k,ic,t,d,cur,goal,eur:!!r[2],ok,lit:ok||!!g[k],at:g[k]||0}})}
+let ACHT=0;
+function achWatch(){if(Date.now()-ACHT<4000)return;ACHT=Date.now();try{const g=achGot(),first=!X.db.achi,L=achEval(),nw=L.filter(x=>x.ok&&!g[x.k]);
+ if(!nw.length&&!first)return;const t=Date.now();nw.forEach(x=>{g[x.k]=first?1:t});X.db.achi=1;saveX();
+ if(!first&&nw.length)setTimeout(()=>{try{toast('🏆 Succès débloqué : '+nw[0].t+(nw.length>1?' (+'+(nw.length-1)+')':''))}catch(e){}},400)}catch(e){}}
+{const r0=render;render=function(){enTrack();const x=r0.apply(this,arguments);if(S.tab==='home'||S.tab==='dball'||S.tab==='stats'||S.tab==='coll')setTimeout(achWatch,50);return x}}
+function achV(){const L=achEval(),n=L.filter(x=>x.lit).length;
+ const v=x=>x.eur?eur(x.cur).replace(/,00/,''):apNf(x.cur);
+ return `<h2>🏆 Succès</h2><div class="panel ach-h"><b>${n}</b> / ${L.length} débloqués<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="${L.length}" aria-valuenow="${n}" aria-label="Succès débloqués"><i style="width:${pct(n,L.length)}%"></i></div></div>`
+ +`<div class="ach-g">${L.map(x=>`<div class="ach${x.lit?' on':''}"><span class="ach-i" aria-hidden="true">${x.ic}</span><div class="ach-t"><b>${x.t}</b><small>${x.d}</small>${x.lit?`<span class="ach-ok">✓ ${x.at>1?'Débloqué le '+fmtD(x.at):'Débloqué'}</span>`:`<span class="ach-k"><i style="width:${apW(x.cur,x.goal).toFixed(1)}%"></i></span><span class="ach-v">${v(x)} / ${x.eur?eur(x.goal).replace(/,00/,''):apNf(x.goal)}</span>`}</div></div>`).join('')}</div>`}
+{const d0=dballV;dballV=function(){const h=d0.apply(this,arguments),k='<div class="panel sxl" style="margin-top:12px">',i=h.indexOf(k);return i<0?h+achV():h.slice(0,i)+achV()+h.slice(i)}}
+{const h0=dbHomeCard;dbHomeCard=function(){const h=h0.apply(this,arguments);let n=0;try{n=achEval().filter(x=>x.lit).length}catch(e){}return h.replace(/(<span class="dbh2">[^<]*)<\/span>/,'$1 · 🏆 '+n+'/'+ACH.length+'</span>')}}
+/* --- 4. Ventes de l'accueil : le dernier mois avec des ventes, et le total depuis le début --- */
+{const m0=hmMoney;hmMoney=function(){const sp=spendAll();if(!X.sales.length&&!sp.length)return m0();
+ const opx=X.exp.filter(x=>finExpT(x)==='op'),mon=k=>{const s=X.sales.filter(x=>hmLd(x.d).slice(0,7)===k),v=s.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),c=s.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),d=opx.filter(x=>String(x.d).slice(0,7)===k).reduce((a,x)=>a+finN(x.a),0);return{k,n:s.length,v,c,d,r:v-c-d}};
+ let cur=mon(today().slice(0,7)),note='';
+ if(!cur.n&&!cur.d){const ks=[...new Set(X.sales.map(x=>hmLd(x.d).slice(0,7)).concat(opx.map(x=>String(x.d).slice(0,7))))].filter(k=>/^\d{4}-\d{2}$/.test(k)&&k<cur.k).sort();if(ks.length){note=`<div class="sub hmm0">Rien de noté en ${fmtM(cur.k)} pour l’instant : voici ${fmtM(ks[ks.length-1])}.</div>`;cur=mon(ks[ks.length-1])}}
+ const tv=X.sales.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),tc=X.sales.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),td=opx.reduce((a,x)=>a+finN(x.a),0),tr=tv-tc-td,nq=X.sales.reduce((a,x)=>a+vnQ(x),0);
+ let h=m0();
+ h=h.replace(/<div class="sub">Résultat de gestion · [^<]*<\/div><div class="hmbig" style="color:[^"]*">[^<]*<\/div><div class="hmkv">[\s\S]*?<\/div>/,
+  `${note}<div class="sub">Résultat de gestion · ${fmtM(cur.k)}</div><div class="hmbig" style="color:${cur.r>=0?'var(--ok)':'#ff5a5a'}">${cur.r>0?'+':''}${eur(cur.r)}</div><div class="hmkv"><span><b>${eur(cur.v)}</b>ventes</span><span><b>${eur(cur.c)}</b>coût des ventes</span><span><b>${eur(cur.d)}</b>frais</span></div>`
+  +`<div class="hmtt"><span>Depuis le début</span><b>${apNf(nq)} vente${apS(nq)} · ${eur(tv)}</b><b style="color:${tr>=0?'var(--ok)':'#ff5a5a'}">${tr>0?'+':''}${eur(tr)} de bénéfice</b></div>`);
+ return h}}
+/* ===== DBX:END ===== */
+
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
 <script>/*scan2*/(function(){
@@ -9365,6 +9463,11 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:55,d:'2026-11-01',it:[
+  ['n','🏆','24 succès','Dans Dragon Balls : 24 défis en plus des 7 boules (250 cartes, 50 Alt Art, une semaine d’affilée, premier booster, première vente…), avec leur progression. Une alerte s’affiche quand tu en débloques un.','dball'],
+  ['c','🕒','Derniers ajouts réparés','Sur l’accueil, « Derniers ajouts » montre vraiment tes cartes les plus récentes, dans l’ordre, toutes éditions comprises (japonaise, anglaise, Masters).','home'],
+  ['c','🐉','Dragon Balls et rang','Les cartes Masters comptent maintenant pour les Dragon Balls et pour le rang, comme dans Stats.','dball'],
+  ['c','💶','Ventes sur l’accueil','En début de mois, l’accueil n’affiche plus 0 : il montre le dernier mois où tu as vendu, et ton total depuis le début.','home']]},
  {v:54,d:'2026-10-31',by:'MajinV',it:[
   ['n','💰','Valeur sur l’accueil','La valeur totale de ta collection en grand sur l’accueil, avec ce qu’elle a gagné ou perdu en 7 jours et sa petite courbe. Un appui ouvre tes stats.','home']]},
  {v:53,d:'2026-10-30',it:[

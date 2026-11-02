@@ -2447,6 +2447,8 @@ html:is([data-ly=tab],[data-ly=pc]) .ach-g{grid-template-columns:repeat(3,minmax
 .srx-sx span{font-size:13px;color:var(--mu);font-weight:600;flex:none}
 .srx-sx select{flex:1;min-width:0}
 @media (prefers-reduced-motion:reduce){.srx-c>summary::after{transition:none}}
+.srx-mh .srx-in .mspi{margin-top:6px}
+.cs-sel{display:block;width:100%;margin:8px 0 4px}
 
 /* ===== PR-GEN : généré par pr/gen.py (ne pas modifier à la main) ===== */
 .ap-hv{transform:none}
@@ -4427,15 +4429,15 @@ document.addEventListener('change',e=>{const t=e.target;if(!(t&&t.dataset&&t.dat
  if(k==='price'){v=v.replace(',','.');if(v&&!(/^\d+(\.\d{1,2})?$/.test(v)&&+v>0)){toast('Prix invalide');t.value='';v=''}}
  if(k==='note')v=v.slice(0,200);msdS(S.msel,k,v)});
 /* ===== Mode hasard · Masters : paquets de 12 cartes, display de 24 paquets, case de 12 displays ===== */
-const MH_N=12,HZM=()=>!!S.hzm&&S.tab==='luck',HX=()=>HZM()?(S.hxm&&MS_SETS.some(s=>s.id===S.hxm)?S.hxm:MS_SETS[0].id):S.ext,mhIs=e=>MS_SETS.some(s=>s.id===e);
+const MH_N=12,HZM=()=>!!S.hzm&&S.tab==='luck',HX=()=>HZM()?(S.hxm&&(MS_SETS.some(s=>s.id===S.hxm)||!!dzSet(S.hxm))?S.hxm:MS_SETS[0].id):S.ext,mhIs=e=>MS_SETS.some(s=>s.id===e)||!!dzSet(e);
 /* Taux par paquet pour l'emplacement « rare » (qui remplace la R garantie). Sources : seeding communautaire (4 SPR + 1 SCR par case pour BT01/BT02/BT03 ; 1 SR ou SPR garanti par display) ; BT22 et BT31 : estimations. */
 const MH_RATE={BT01:{spr:.0139,sr:.27},BT02:{scr:.0035,spr:.0139,sr:.27},BT03:{scr:.0035,spr:.0139,sr:.27},BT04:{scr:.0035,spr:.0139,sr:.27},BT05:{scr:.0035,spr:.0139,sr:.27},BT06:{scr:.0035,spr:.0139,sr:.27},BT07:{scr:.0035,spr:.0139,sr:.27},BT08:{scr:.0035,spr:.0139,sr:.27},BT09:{scr:.0035,spr:.0139,sr:.27},BT10:{scr:.0035,spr:.0139,sr:.27},BT11:{scr:.0035,spr:.0139,sr:.27},BT12:{scr:.0035,spr:.0139,sr:.27},BT13:{scr:.0035,spr:.0139,sr:.27},BT14:{scr:.0035,spr:.0139,sr:.27},BT15:{scr:.0035,spr:.0139,sr:.27},BT16:{scr:.0035,spr:.0139,sr:.27},BT17:{scr:.0035,spr:.0139,sr:.27},BT18:{scr:.0035,spr:.0139,sr:.27},BT19:{scr:.0035,spr:.0139,sr:.27},BT20:{scr:.0035,spr:.0139,sr:.27},BT21:{scr:.0035,spr:.0139,sr:.27},BT23:{scr:.007,gdr:.001,spr:.083,sr:.25},BT24:{scr:.007,gdr:.001,spr:.083,sr:.25},BT25:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT26:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT27:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT28:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT29:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT30:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04},BT22:{scr:.007,gdr:.001,spr:.083,sr:.25},BT31:{scr:.0104,gdr:.001,slr:.042,spr:.083,sr:.25,cr:.04}};
 const MH_ORD=['scr','gdr','slr','spr','sr','cr'],HM=new Map();
-function HC(id){if(!HM.size){cards.forEach(c=>{if(!HM.has(c.id))HM.set(c.id,c)});msBindInit();MS_ALL.forEach(c=>{if(!HM.has(c.id))HM.set(c.id,c)})}return HM.get(id)}
-const HMA=()=>{msBindInit();return MS_ALL},HS=e=>mhIs(e)?HMA().filter(c=>c.ext===e):cards.filter(c=>c.ext===e),HN=e=>(EXTS.find(x=>x[0]===e)||DECKS.find(x=>x[0]===e)||['',msSetName(e)])[1],HP=c=>c.ms?(nb(c.price)||0):pxv(c);
+function HC(id){if(!HM.size){cards.forEach(c=>{if(!HM.has(c.id))HM.set(c.id,c)});msBindInit();MS_ALL.forEach(c=>{if(!HM.has(c.id))HM.set(c.id,c)})}return HM.get(id)||srxDzCard(id)}
+const HMA=()=>{msBindInit();return MS_ALL},HS=e=>dzSet(e)?dzCards(dzSet(e)):mhIs(e)?HMA().filter(c=>c.ext===e):cards.filter(c=>c.ext===e),HN=e=>(EXTS.find(x=>x[0]===e)||DECKS.find(x=>x[0]===e)||['',msSetName(e)||srxName(e)])[1],HP=c=>c.ms?(nb(c.price)||0):pxv(c);
 function mhImgs(){MS_SETS.forEach(s=>{const m=MS_IMG[s.id];if(m){if(!PACKIMG[s.id])PACKIMG[s.id]=m.pk;if(!DISPIMG[s.id])DISPIMG[s.id]=m.box}})}
 const mhPools={};
-function mhPool(e){if(mhPools[e])return mhPools[e];const m={};HMA().filter(c=>c.ext===e).forEach(c=>{(m[c.rar]=m[c.rar]||[]).push(c.id)});return mhPools[e]=m}
+function mhPool(e){if(mhPools[e])return mhPools[e];const m={};HS(e).forEach(c=>{(m[c.rar]=m[c.rar]||[]).push(c.id)});return mhPools[e]=m}
 function mhKind(e){const R=MH_RATE[e]||MH_RATE.BT22,x=Math.random();let a=0;for(const k of MH_ORD){a+=R[k]||0;if(x<a)return k.toUpperCase()}return 'R'}
 function mhPack(e,force){const P=mhPool(e),R=MH_RATE[e]||MH_RATE.BT22,rnd=l=>l[Math.random()*l.length|0];
  const pick=(k,used)=>{let l=P[k]&&P[k].length?P[k]:(P.R||P.C);if(used){const f=l.filter(i=>!used.has(i));if(f.length)l=f}const id=rnd(l);if(used)used.add(id);return id};
@@ -4452,7 +4454,7 @@ function mhCase(e){const ids=[];for(let i=0;i<12;i++)ids.push(...mhBox(e).ids);r
 function mhStats(){const e=HX(),n=(VIRT.bs||{})[e]||0;if(!n)return '';const c={};HS(e).forEach(x=>{const q=VIRT.q[x.id]||0;if(q)c[x.rar]=(c[x.rar]||0)+q});const R=MH_RATE[e]||{};
  const per=(k)=>{if(!(R[k.toLowerCase()]>0)&&!c[k])return '';const q=c[k]||0;return `<div class="sub">${k} : <b>${q}</b> · ${(q/n*100).toFixed(1)} % des boosters (attendu ≈ ${((R[k.toLowerCase()]||0)*100).toFixed(1).replace('.',',')} %)</div>`};
  return `<div class="panel" style="margin-top:10px"><b>📊 Tes tirages ${e}</b><div class="sub">${n} booster${n>1?'s':''} ouvert${n>1?'s':''}</div>${['SR','SPR','SLR','SCR','GDR','CR'].map(per).join('')}<div class="sub">R : <b>${c.R||0}</b> · ${((c.R||0)/n).toFixed(1)} par booster</div><div class="sub">Plus tu ouvres de boosters, plus ton résultat se rapproche de la moyenne.</div></div>`}
-const mhSwitch=()=>`<div class="row" style="margin:10px 0;gap:6px"><button class="chip" data-hzg="fw" aria-pressed="${!HZM()}">Fusion World</button><button class="chip" data-hzg="ms" aria-pressed="${HZM()}">Masters</button></div>`;
+const mhSwitch=()=>`<div class="row" style="margin:10px 0;gap:6px"><button class="chip" data-hzg="fw" aria-pressed="${!HZM()}">Fusion World</button><button class="chip" data-hzg="ms" aria-pressed="${HZM()}">Masters et autres</button></div>`;
 const mhPick=()=>`<div class="row" style="margin:10px 0;flex-wrap:wrap;gap:6px">${MS_SETS.map(s=>{const a=HS(s.id),o=a.filter(c=>VIRT.q[c.id]>0).length;return `<button class="chip" data-hzx="${s.id}" aria-pressed="${s.id===HX()}">${s.id} · ${esc(s.n)} <small>${o}/${a.length}</small></button>`}).join('')}</div>`;
 function luck(){mhImgs();if(S.op&&mhIs(S.op.ext)&&S.tab==='luck')S.hzm=true;
  if(S.hzv)return virtView();if(S.op)return opView();
@@ -4524,10 +4526,10 @@ function msProp(){try{msBindInit();return MS_ALL.filter(c=>c.own>3).map(c=>({c,q
 const srt2=(a,b)=>a.c.id<b.c.id?-1:1;
 /* Mode hasard Masters = même page que Fusion World : barre de série, duel, boutique */
 const mhVs=id=>{const a=HS(id);return{o:a.filter(c=>VIRT.q[c.id]>0).length,n:a.length}};
-function mhBar(){const e=HX(),i=MS_SETS.findIndex(s=>s.id===e),n=MS_SETS.length,set=MS_SETS[i],pv=MS_SETS[(i+n-1)%n].id,nx=MS_SETS[(i+1)%n].id,v=mhVs(e),p=v.n?Math.round(100*v.o/v.n):0,col=MS_COL[e]||'229,9,20';
+function mhBar(){const L=srxMhList(),e=HX(),i=Math.max(0,L.findIndex(s=>s.id===e)),n=L.length,set=L[i],pv=L[(i+n-1)%n].id,nx=L[(i+1)%n].id,v=mhVs(e),p=v.n?Math.round(100*v.o/v.n):0,col=MS_COL[e]||'229,9,20';
  return `<div class="sr-bar" style="margin:10px 0;--c:rgb(${col});--cr:${col};--w:${p}%"><button type="button" class="sr-arr" data-hzx="${pv}" aria-label="Série précédente">${msAr('M15 5l-7 7 7 7')}</button><button type="button" class="sr-cur" data-mspick aria-haspopup="dialog" aria-label="Choisir la série. Actuellement ${e} ${esc(set.n)}">${msThumb(e)}<span class="sr-tx"><span class="sr-n"><b>${e}</b>${esc(set.n)}</span><span class="sr-ln"><i></i></span><span class="sr-st">Virtuelle · <b>${v.o}</b> / ${v.n} · ${p} %</span></span><span class="sr-dd">${msAr('M6 9l6 6 6-6')}</span></button><button type="button" class="sr-arr" data-hzx="${nx}" aria-label="Série suivante">${msAr('M9 5l7 7-7 7')}</button></div>`}
 function mhPickSheet(){if(!S.mspick||!HZM())return'';
- return `<div class="sheet" data-mhclose><div role="dialog" aria-label="Choisir la série"><h2 style="margin-top:0">Choisir la série</h2><div class="mspl">${MS_SETS.map(s=>{const v=mhVs(s.id);return `<button type="button" class="mspi" data-hzx="${s.id}" aria-pressed="${s.id===HX()}">${msThumb(s.id)}<span><b>${s.id}</b> ${esc(s.n)}<small>${v.o} / ${v.n} cartes · ${v.n?Math.round(100*v.o/v.n):0} %</small></span></button>`}).join('')}</div><button class="btn" style="margin-top:14px" data-mhclose>Fermer</button></div></div>`}
+ return `<div class="sheet" data-mhclose><div role="dialog" aria-label="Choisir la série"><h2 style="margin-top:0">Choisir la série</h2><div class="mspl">${MS_SETS.map(s=>{const v=mhVs(s.id);return `<button type="button" class="mspi" data-hzx="${s.id}" aria-pressed="${s.id===HX()}">${msThumb(s.id)}<span><b>${s.id}</b> ${esc(s.n)}<small>${v.o} / ${v.n} cartes · ${v.n?Math.round(100*v.o/v.n):0} %</small></span></button>`}).join('')}</div>${srxMhPick()}<button class="btn" style="margin-top:14px" data-mhclose>Fermer</button></div></div>`}
 document.addEventListener('click',ev=>{if(S.tab!=='luck')return;const t=ev.target;
  const p=t.closest&&t.closest('[data-mspick]');if(p){ev.stopPropagation();S.mspick=true;render();return}
  const c=t.closest&&t.closest('[data-mhclose]');if(c&&(!c.classList.contains('sheet')||t===c)){ev.stopPropagation();S.mspick=false;render()}},true);
@@ -7622,7 +7624,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='2 nov. 2026 · 57';
+const BUILD='2 nov. 2026 · 58';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8663,7 +8665,7 @@ function stData(){msBindInit();
 
 /* ---------- la courbe de la valeur (cartes Fusion World) ---------- */
 function stHistKey(){let k=(MKON?'1':'0')+(MKD||'');for(const c of cards)if(c.own>0)k+='|'+c.id+':'+c.own+':'+(c.price||'');for(const e in PXH){const o=PXH[e];if(o&&o.j)k+='#'+e+o.j.d.length}return k}
-function stHistLoad(){if(!MKON)return;const ex=new Set();for(const c of cards)if(c.own>0&&/^FB\d\d$/.test(c.ext))ex.add(c.ext);
+function stHistLoad(){if(!MKON)return;const ex=new Set();for(const c of cards)if(c.own>0&&/^F[BS]\d\d$/.test(c.ext))ex.add(c.ext);
  const ps=[];ex.forEach(e=>{const o=pxHist(e);if(o&&o.p)ps.push(o.p)});
  if(ps.length&&!ST.wait){ST.wait=true;Promise.all(ps).then(()=>{ST.wait=false;stRefresh()},()=>{ST.wait=false})}}
 function stHist(){const k=stHistKey();if(k===ST.hk)return ST.h;ST.hk=k;ST.h=null;if(!MKON)return null;
@@ -8935,17 +8937,17 @@ function srxName(e){const a=EXTS.find(x=>x[0]===e)||DECKS.find(x=>x[0]===e);if(a
 const srxIsMs=e=>MS_SETS.some(s=>s.id===e);
 function srxRow(attr,code,name,o,n){const p=pct(o,n),t=attr?'button':'div';
  return `<${t}${attr?' type="button"':''} class="ppsr${code?'':' srx-r'}"${attr?' '+attr:''}>${code?`<b class="ppsc">${esc(code)}</b>`:''}<span class="ppsn">${esc(name)}<span class="bar"><i style="width:${p}%"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></${t}>`}
-const srxRows=(list,own,link)=>list.map(s=>srxRow(link?`data-hms="${s.id}"`:'','',s.dz.ser||s.n,own[s.id]||0,s.dz.n)).join('');
-function srxColHtml(C,key,own,link,list,force){const id=key+'|'+C.idc,op=!!(force||SRXO[id]);let o=0,n=0;list.forEach(s=>{o+=own[s.id]||0;n+=s.dz.n});
- return `<details class="srx-c" data-srxc="${id}"${op?' open':''}><summary><span>${esc(C.n)}</span><small>${o} / ${n} · ${list.length} série${list.length>1?'s':''}</small></summary><div class="srx-in">${op?srxRows(list,own,link):''}</div></details>`}
+const srxRows=(list,own,link,mk)=>list.map(mk||(s=>srxRow(link?`data-hms="${s.id}"`:'','',s.dz.ser||s.n,own[s.id]||0,s.dz.n))).join('');
+function srxColHtml(C,key,own,link,list,force,mk){const id=key+'|'+C.idc,op=!!(force||SRXO[id]);let o=0,n=0;list.forEach(s=>{o+=own[s.id]||0;n+=s.dz.n});
+ return `<details class="srx-c" data-srxc="${id}"${op?' open':''}><summary><span>${esc(C.n)}</span><small>${o} / ${n} · ${list.length} série${list.length>1?'s':''}</small></summary><div class="srx-in">${op?srxRows(list,own,link,mk):''}</div></details>`}
 /* le bloc « Anciennes collections » ; q = recherche (déjà normalisée) */
-function srxOld(key,own,link,q){SRXR[key]={own,link};const N=s=>apNorm(s);let k=0,o=0,n=0,html='';
+function srxOld(key,own,link,q,mk){SRXR[key]={own,link,mk};const N=s=>apNorm(s);let k=0,o=0,n=0,html='';
  const cols=srxCols();
- if(q){let hit=0;['jp','us','frx'].forEach(cat=>{let h='';cols.filter(C=>C.cat===cat).forEach(C=>{const cm=N(C.n).includes(q),L=cm?C.s:C.s.filter(s=>N(s.dz.ser||s.n).includes(q));if(!L.length)return;hit+=L.length;h+=srxColHtml(C,key,own,link,L,true)});
+ if(q){let hit=0;['jp','us','frx'].forEach(cat=>{let h='';cols.filter(C=>C.cat===cat).forEach(C=>{const cm=N(C.n).includes(q),L=cm?C.s:C.s.filter(s=>N(s.dz.ser||s.n).includes(q));if(!L.length)return;hit+=L.length;h+=srxColHtml(C,key,own,link,L,true,mk)});
    if(h)html+=`<div class="srx-cat">${DZ_CAT[cat][0]} ${DZ_CAT[cat][1]}</div>`+h});
   return hit?`<div class="hmgn">📜 Anciennes collections</div>`+html:''}
  cols.forEach(C=>C.s.forEach(s=>{k++;o+=own[s.id]||0;n+=s.dz.n}));
- if(SRXT[key])['jp','us','frx'].forEach(cat=>{const h=cols.filter(C=>C.cat===cat).map(C=>srxColHtml(C,key,own,link,C.s)).join('');if(h)html+=`<div class="srx-cat">${DZ_CAT[cat][0]} ${DZ_CAT[cat][1]}</div>`+h});
+ if(SRXT[key])['jp','us','frx'].forEach(cat=>{const h=cols.filter(C=>C.cat===cat).map(C=>srxColHtml(C,key,own,link,C.s,false,mk)).join('');if(h)html+=`<div class="srx-cat">${DZ_CAT[cat][0]} ${DZ_CAT[cat][1]}</div>`+h});
  return `<div class="hmgn">📜 Anciennes collections</div><div class="srx-sum">${k.toLocaleString('fr-FR')} séries · ${o.toLocaleString('fr-FR')} / ${n.toLocaleString('fr-FR')} cartes</div>${html}<button type="button" class="chip hmmore" data-srxo="${key}">${SRXT[key]?'Réduire ▴':'Voir les '+k.toLocaleString('fr-FR')+' séries ▾'}</button>`}
 function srxDeckCount(){const tot={},own={};cards.forEach(c=>{if(/^FS\d{2}$/.test(c.ext)){tot[c.ext]=(tot[c.ext]||0)+1;if(c.own>0)own[c.ext]=(own[c.ext]||0)+1}});return {tot,own}}
 function srxFwxRows(own,link,q){return srxFwx().filter(s=>!q||apNorm(s.n).includes(q)).map(s=>{const [c,nm]=srxCode(s);return srxRow(link?`data-hms="${s.id}"`:'',c,nm,own[s.id]||0,s.dz.n)}).join('')}
@@ -8973,17 +8975,29 @@ function srxPP(P){const em=new Map(P.ex),exn=ppExN(),sec=(t,b)=>`<section class=
  return h}
 
 /* ---------- carnet de ventes : choisir n'importe quelle série ---------- */
-function srxSxSel(){const v=S.sx||'',o=(id,l)=>`<option value="${esc(id)}"${id===v?' selected':''}>${esc(l)}</option>`;
- let h=o('','Toutes les séries')+`<optgroup label="Fusion World">${EXTS.map(([e,n])=>o(e,e+' · '+n)).join('')}</optgroup><optgroup label="Decks Fusion World">${DECKS.map(([e,n])=>o(e,e+' · '+n)).join('')}</optgroup><optgroup label="Fusion World · autres séries">${srxFwx().map(s=>o(s.id,s.dz.ser||s.n)).join('')}</optgroup><optgroup label="Masters">${o('MS','Toutes les séries Masters')}${MS_SETS.map(s=>o(s.id,s.id+' · '+s.n)).join('')}</optgroup>`;
+function srxOpts(v,all){const o=(id,l)=>`<option value="${esc(id)}"${id===v?' selected':''}>${esc(l)}</option>`;
+ let h=(all?o('','Toutes les séries'):'')+`<optgroup label="Fusion World">${EXTS.map(([e,n])=>o(e,e+' · '+n)).join('')}</optgroup><optgroup label="Decks Fusion World">${DECKS.map(([e,n])=>o(e,e+' · '+n)).join('')}</optgroup><optgroup label="Fusion World · autres séries">${srxFwx().map(s=>o(s.id,s.dz.ser||s.n)).join('')}</optgroup><optgroup label="Masters">${all?o('MS','Toutes les séries Masters'):''}${MS_SETS.map(s=>o(s.id,s.id+' · '+s.n)).join('')}</optgroup>`;
  srxCols().forEach(C=>{h+=`<optgroup label="${esc(DZ_CAT[C.cat][0]+' '+C.n)}">${C.s.map(s=>o(s.id,s.dz.ser||s.n)).join('')}</optgroup>`});
- return `<label class="srx-sx"><span>Série</span><select class="fi" data-sxsel aria-label="Choisir une série">${h}</select></label>`}
+ return h}
+function srxSxSel(){return `<label class="srx-sx"><span>Série</span><select class="fi" data-sxsel aria-label="Choisir une série">${srxOpts(S.sx||'',true)}</select></label>`}
 
 document.addEventListener('change',e=>{const s=e.target;if(s&&s.matches&&s.matches('[data-sxsel]')){S.sx=s.value;render()}},true);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-srxd],[data-srxo]');if(!b)return;e.stopPropagation();
  if(b.dataset.srxd!==undefined)S.srxd=!S.srxd;else{const k=b.dataset.srxo;SRXT[k]=!SRXT[k]}render()},true);
 /* ouvrir une collection : ses séries s'affichent (et restent ouvertes au prochain affichage) */
 document.addEventListener('toggle',e=>{const d=e.target;if(!d||!d.dataset||!d.dataset.srxc)return;SRXO[d.dataset.srxc]=d.open;if(!d.open)return;
- const b=d.querySelector('.srx-in');if(!b||b.childElementCount)return;const [key,idc]=d.dataset.srxc.split('|'),R=SRXR[key],C=DZ_COL[idc];if(R&&C)b.innerHTML=srxRows(C.s,R.own,R.link)},true);
+ const b=d.querySelector('.srx-in');if(!b||b.childElementCount)return;const [key,idc]=d.dataset.srxc.split('|'),R=SRXR[key],C=DZ_COL[idc];if(R&&C)b.innerHTML=srxRows(C.s,R.own,R.link,R.mk)},true);
+
+/* ---------- scanner (saisie du numéro) et Mode hasard : toutes les séries ---------- */
+function srxDzCard(id){const m=/^(D\d+)-\d+$/.exec(id||'');if(!m)return undefined;const s=dzSet(m[1]);return s?dzCards(s).find(c=>c.id===id):undefined}
+const srxSerOk=e=>EXTS.some(x=>x[0]===e)||DECKS.some(x=>x[0]===e)||MS_SETS.some(s=>s.id===e)||!!dzSet(e);
+function srxManSel(v){return `<select class="fi cs-sel" aria-label="Choisir une autre série">${srxOpts(srxSerOk(v)?v:'',false)}</select>`}
+function srxVirtOwn(){const m={},q=VIRT.q||{};for(const k in q){if(k.charCodeAt(0)!==68||!(q[k]>0))continue;const r=/^(D\d+)-\d+$/.exec(k);if(r)m[r[1]]=(m[r[1]]||0)+1}return m}
+let SRXML=null;
+function srxMhList(){return SRXML||(SRXML=MS_SETS.map(s=>({id:s.id,n:s.n})).concat(srxFwx().map(s=>({id:s.id,n:s.dz.ser||s.n})),srxCols().flatMap(C=>C.s.map(s=>({id:s.id,n:C.n+' · '+(s.dz.ser||'')})))))}
+function srxMhPick(){const own=srxVirtOwn(),cur=HX(),mk=s=>{const fw=s.dz.idc===330,[c,nm]=fw?srxCode(s):['',s.dz.ser||s.n],o=own[s.id]||0;
+  return `<button type="button" class="mspi" data-hzx="${s.id}" aria-pressed="${s.id===cur}"><span class="sr-th"></span><span>${c?`<b>${esc(c)}</b> `:''}${esc(nm)}<small>${o} / ${s.dz.n} cartes · ${pct(o,s.dz.n)} %</small></span></button>`};
+ return `<div class="hmgn">✨ Fusion World · autres séries</div><div class="mspl">${srxFwx().map(mk).join('')}</div><div class="srx-mh">${srxOld('b',own,false,'',mk)}</div>`}
 
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
@@ -9310,7 +9324,7 @@ Promise.all([IMGP,MSTH,KALL]).then(()=>setTimeout(()=>{try{Eng.start()}catch(_){
 const clampn=(v,a,b)=>v<a?a:v>b?b:v,NOW=()=>performance.now(),dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 let ov=null,vid=null,stream=null,track=null,caps={},alive=false,photo=null,photoUrl=null,svgQ=null,gEl=null,tmr=0,ocrW=null,ocrFail=false,ocrBusy=false,kbOn=false;
 const $q=(s,r)=>(r||ov).querySelector(s);
-let CIDM=null;const msN_=id=>String(id).replace(/^BT0(\d)-/,'BT$1-');const cardOf=id=>{if(!CIDM||CIDM.size!==cards.length)CIDM=new Map(cards.map(c=>[c.id,c]));const f=CIDM.get(id);if(f)return f;if(!/^(BT\d|DB\d|LG|K[A-Z])/.test(id))return undefined;msBindInit();return MS_ALL.find(c=>c.id===msN_(id))};
+let CIDM=null;const msN_=id=>String(id).replace(/^BT0(\d)-/,'BT$1-');const cardOf=id=>{if(!CIDM||CIDM.size!==cards.length)CIDM=new Map(cards.map(c=>[c.id,c]));const f=CIDM.get(id);if(f)return f;{const z=srxDzCard(id);if(z)return z}if(!/^(BT\d|DB\d|LG|K[A-Z])/.test(id))return undefined;msBindInit();return MS_ALL.find(c=>c.id===msN_(id))};
 const variantsOf=id=>/^(BT\d|DB\d|LG|K[A-Z])/.test(id)?(msBindInit(),MS_ALL.filter(c=>c.id===msN_(id)||c.id.startsWith(msN_(id)+'-'))):cards.filter(c=>c.id===id||c.id.startsWith(id+'_ALT'));
 const baseOf=id=>msN_(String(id).replace(/_ALT\d*$/,'').replace(/^(BT\d+-\d+)-[A-Z]+$/,'$1'));
 const pref=(k,d)=>{try{const v=localStorage.getItem('fb_sc_'+k);return v===null?d:JSON.parse(v)}catch(_){return d}};
@@ -9491,6 +9505,7 @@ function close(fromPop){
  if(!fromPop){try{if(history.state&&history.state.cs)history.back()}catch(_){}}
  render();if(n)toast(n+' carte'+(n>1?'s':'')+' ajoutée'+(n>1?'s':'')+' ✓')}
 addEventListener('popstate',()=>{if(ov)close(true)});
+document.addEventListener('change',e=>{const t=e.target;if(!ov||!t||!t.matches||!t.matches('.cs-sel')||!t.value)return;st.serie=t.value;st.manQ='';st.manMsg=null;manUpdate()});
 document.addEventListener('keydown',e=>{if(!ov)return;
  if(e.key==='Escape'){close();return}
  if(st.mode==='man'){if(/^\d$/.test(e.key)){e.preventDefault();manKey(e.key)}else if(e.key==='Backspace'){e.preventDefault();manDel()}}});
@@ -9637,18 +9652,18 @@ function unkHTML(){return'<button class="cs-x" data-a="skip" aria-label="Fermer"
  +'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
 function candsHTML(){const an=st.lastAn&&st.lastAn.res,l=(an&&an.top||[]).slice(0,6);
  return'<button class="cs-x" data-a="skip" aria-label="Fermer">✕</button><div class="cs-h">Autres possibilités</div>'+(l.length?'<div class="cs-cands">'+candBtns(l)+'</div>':'')+'<div class="cs-act"><button class="main" data-a="man">⌨️ Saisir le numéro</button></div>'}
-function manHTML(){if(/^BT/.test(st.serie)!==(X.game==='ms'))st.serie=X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01');const ex=(X.game==='ms'?MS_SETS.map(s=>[s.id]):EXTS).map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
+function manHTML(){if(!srxSerOk(st.serie)||(!dzSet(st.serie)&&MS_SETS.some(s=>s.id===st.serie)!==(X.game==='ms')))st.serie=X.game==='ms'?MS_SETS[0].id:(S.ext||'FB01');const ex=(X.game==='ms'?MS_SETS.map(s=>[s.id]):EXTS.concat(DECKS)).map(e=>'<button class="cs-chip" data-a="ser" data-e="'+e[0]+'" aria-pressed="'+(st.serie===e[0])+'">'+e[0]+'</button>').join('');
  const dg=['1','2','3','4','5','6','7','8','9','0'].map(d=>'<button class="cs-k" data-a="dig" data-d="'+d+'">'+d+'</button>').join('');
- return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Saisir le numéro</div><div id="cs-mmsg"></div><div class="cs-chips" id="cs-chips">'+ex+'</div><div class="cs-in"><span id="cs-ser">'+st.serie+'-</span><b id="cs-numv"></b><button class="cs-bs" data-a="del" aria-label="Effacer le dernier chiffre">⌫</button></div><div class="cs-kp">'+dg+'</div><div class="cs-list" id="cs-mres"></div>'}
+ return'<button class="cs-x" data-a="back" aria-label="Fermer">✕</button><div class="cs-h">Saisir le numéro</div><div id="cs-mmsg"></div><div class="cs-chips" id="cs-chips">'+ex+'</div>'+srxManSel(st.serie)+'<div class="cs-in"><span id="cs-ser">'+st.serie+'-</span><b id="cs-numv"></b><button class="cs-bs" data-a="del" aria-label="Effacer le dernier chiffre">⌫</button></div><div class="cs-kp">'+dg+'</div><div class="cs-list" id="cs-mres"></div>'}
 function manUpdate(){if(!ov)return;const nv=$q('#cs-numv'),sr=$q('#cs-ser'),el=$q('#cs-mres'),mm=$q('#cs-mmsg');if(!nv||!el)return;
  nv.textContent=st.manQ||'···';nv.className=st.manQ?'':'e';sr.textContent=st.serie+'-';
- for(const b of ov.querySelectorAll('.cs-chip'))b.setAttribute('aria-pressed',String(b.dataset.e===st.serie));
+ for(const b of ov.querySelectorAll('.cs-chip'))b.setAttribute('aria-pressed',String(b.dataset.e===st.serie));{const sl=ov.querySelector('.cs-sel');if(sl&&sl.value!==st.serie)sl.value=srxSerOk(st.serie)?st.serie:''}
  if(mm){const e=st.manMsg&&cardOf(st.manMsg.id);mm.innerHTML=e?'<div class="cs-flashmsg"><span>✓ '+nmOf(e)+' · ×'+e.own+(st.learned===e.id?' · 🧠 mémorisée':'')+'</span><button data-a="again" aria-label="Ajouter un exemplaire de plus">+1</button><button data-a="undo">Annuler</button></div>':''}
  const n=parseInt(st.manQ,10)||0;
  if(!n){el.innerHTML='<div class="cs-sub">Tape les chiffres du numéro (ex. 35). La série se choisit au-dessus.</div>';return}
- msBindInit();const l=cards.concat(MS_ALL).filter(c=>c.ext===st.serie&&c.n===n);
+ msBindInit();const l=(dzSet(st.serie)?dzCards(dzSet(st.serie)):cards.concat(MS_ALL)).filter(c=>c.ext===st.serie&&c.n===n);
  el.innerHTML=l.length?l.map(v=>'<div class="cs-row"><div class="cs-th">'+art(v)+'</div><div><div class="nm">'+nmOf(v)+'</div><div class="sb">'+esc(v.id)+' · '+esc(verLabel(v))+(v.rar?' · '+esc(v.rar):'')+' · ×'+v.own+'</div></div><button data-a="addman" data-id="'+v.id+'">+1</button></div>').join(''):'<div class="cs-sub">Aucune carte '+st.serie+'-'+String(n).padStart(3,'0')+' dans la liste.</div>'}
-function manKey(d){if(st.manQ.length>=3)st.manQ='';st.manQ+=d;st.manMsg=null;manUpdate()}
+function manKey(d){if(st.manQ.length>=(dzSet(st.serie)&&dzSet(st.serie).dz.n>999?4:3))st.manQ='';st.manQ+=d;st.manMsg=null;manUpdate()}
 function manDel(){st.manQ=st.manQ.slice(0,-1);manUpdate()}
 function trayHTML(){const g=new Map();st.sess.forEach(e=>g.set(e.id,(g.get(e.id)||0)+e.q));
  const rows=[...g.entries()].reverse().map(([id,q])=>{const c=cardOf(id);return c?'<div class="cs-row"><div class="cs-th">'+art(c)+'</div><div><div class="nm">'+nmOf(c)+'</div><div class="sb">'+esc(id)+' · ajoutée ×'+q+' · total ×'+c.own+'</div></div><button class="g" data-a="rm" data-id="'+id+'" aria-label="Retirer un exemplaire">−1</button></div>':''}).join('');
@@ -9844,6 +9859,10 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:58,d:'2026-11-02',it:[
+  ['n','💶','Prix des decks et des autres séries','Les cartes des decks FS01 à FS11 et des séries SB01, SB02, ST01, FS12 et promo ont maintenant leur prix Cardmarket, mis à jour chaque nuit.','stats'],
+  ['n','⌨️','Scanner : toutes les séries','« Saisir le numéro » marche pour toutes les séries : un menu permet de choisir les decks, les autres séries Fusion World, Masters et les anciennes collections.'],
+  ['n','🎲','Boosters : toutes les séries','En Mode hasard, « Masters et autres » ouvre aussi des boosters des séries SB01, SB02, ST01, FS12 et de toutes les anciennes collections (cartes tirées au hasard).','luck']]},
  {v:57,d:'2026-11-02',it:[
   ['a','📚','Toutes les séries partout','Sur l’accueil, dans Stats et sur les profils : les decks FS, les autres séries Fusion World (SB01, SB02, ST01, FS12…), toutes les séries Masters et les 738 séries des anciennes collections, rangées par collection.','home'],
   ['a','💶','Ventes : n’importe quelle série','Dans le carnet de ventes, un menu « Série » permet de filtrer sur n’importe quelle série. « Masters » compte aussi les Draft Box, Le Grand Combat et les Carddass.','trade']]},

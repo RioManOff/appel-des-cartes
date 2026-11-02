@@ -203,7 +203,7 @@ jobs:
               date = m.group(1)
 
               # série -> extension -> numéro -> [idProduct] (l'ordre des idProduct donne l'ordre des versions)
-              rx = re.compile(r'\((FB\d\d)-(\d+)\)')
+              rx = re.compile(r'\((F[BS]\d\d)-(\d+)\)')   # FB = boosters, FS = decks de démarrage
               par = collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
               for p in liste:
                   mm = rx.search(html.unescape(p.get('name', '')))
@@ -342,6 +342,91 @@ jobs:
           with open('docs/prix_ms.json', 'w', encoding='utf-8') as f:
               f.write(json.dumps(sortie, ensure_ascii=False, separators=(',', ':')) + '\n')
           print('OK Masters : %d prix (%d trouvés par le nom), prix du %s' % (len(t), len(vus), date))
+          PYEOF
+
+      - name: Prix des autres séries Fusion World (SB01, SB02, ST01, FS12, promos) -> ajoutés à docs/prix_ms.json
+        env:
+          PYTHONUTF8: '1'
+        run: |
+          python3 - <<'PYEOF'
+          # -*- coding: utf-8 -*-
+          """docs/fwx_noms.json donne le code de chaque carte de ces séries (« SB01-012 », « FB04-051 (2) »…).
+          Chaque code est cherché dans les extensions Cardmarket qui contiennent le plus de codes de la série
+          (jamais dans les boosters FB01 à FB11) ; « (2) » = 2e version du produit. Les prix sont ajoutés à
+          docs/prix_ms.json avec l'identifiant de la carte dans l'appli (D1480-012…)."""
+          import collections, html, json, re, sys, time, urllib.request
+          BASE = 'https://downloads.s3.cardmarket.com/productCatalog/'
+          ORDRE = ('trend', 'trend-foil', 'avg30', 'avg30-foil', 'avg7', 'avg7-foil', 'avg', 'avg-foil', 'low', 'low-foil')
+          BOOSTERS = {5731, 5552, 5767, 5730, 5903, 5847, 5906, 5905, 6076, 6027, 6132, 6183, 6410, 6502, 6594, 6785}
+          def lire(url):
+              for essai in range(1, 5):
+                  try:
+                      req = urllib.request.Request(url, headers={'User-Agent': 'appel-des-cartes-prix/1.0'})
+                      with urllib.request.urlopen(req, timeout=120) as r:
+                          return json.loads(r.read().decode('utf-8'))
+                  except Exception as e:
+                      print('Essai %d/4 : %s -> %s' % (essai, url, e)); time.sleep(5 * essai)
+              print('Autres séries : téléchargement impossible, je ne change rien.'); sys.exit(0)
+          def meilleur(g, bas):
+              if g:
+                  for k in ORDRE:
+                      if not bas and k.startswith('low'):
+                          continue
+                      v = g.get(k)
+                      if isinstance(v, (int, float)) and not isinstance(v, bool) and 0 < v < 1e5:
+                          return v, k
+              return None, None
+          try:
+              noms = json.load(open('docs/fwx_noms.json', encoding='utf-8'))
+              sortie = json.load(open('docs/prix_ms.json', encoding='utf-8'))
+              assert isinstance(sortie.get('t'), dict)
+          except Exception as e:
+              print('fichiers absents ou illisibles (%s) : je ne change rien.' % e); sys.exit(0)
+          guide = lire(BASE + 'priceGuide/price_guide_13.json')
+          G = {g['idProduct']: g for g in guide.get('priceGuides', []) if isinstance(g, dict) and 'idProduct' in g}
+          produits = lire(BASE + 'productList/products_singles_13.json').get('products', [])
+          rxc = re.compile(r'\(((?:FB|FS|SB|ST)\d\d-\d{2,3}|FP-\d{3}|E-\d{2,3})\)')
+          par = collections.defaultdict(lambda: collections.defaultdict(list))   # extension -> code -> [idProduct]
+          for p in produits:
+              mm = rxc.search(html.unescape(p.get('name', '')))
+              if mm and 'idProduct' in p and p.get('idExpansion') not in BOOSTERS:
+                  par[p['idExpansion']][mm.group(1)].append(p['idProduct'])
+          rxn = re.compile(r'^((?:FB|FS|SB|ST)\d\d-\d{2,3}|FP-\d{3}|E-\d{2,3})(?: \((\d+)\))?$')
+          t, a, nb = {}, {}, 0
+          for sid, info in noms.items():
+              cartes = []
+              for i, nm in enumerate(info.get('n', [])):
+                  mm = rxn.match(nm.strip())
+                  if mm:
+                      cartes.append(('%s-%s' % (sid, str(i + 1).zfill(info.get('w', 3))), mm.group(1), int(mm.group(2) or 1) - 1))
+              codes = {c for _, c, _ in cartes}
+              if not codes:
+                  continue
+              score = sorted(((sum(1 for c in codes if c in par[e]), e) for e in par), reverse=True)
+              exts = [e for s, e in score if s >= max(3, 0.3 * len(codes))]
+              for cid, code, k in cartes:
+                  for e in exts:
+                      ids = sorted(par[e].get(code, []))
+                      if len(ids) > k:
+                          g = G.get(ids[k])
+                          v, src = meilleur(g, k == 0)
+                          if v is not None:
+                              t[cid] = round(v, 2)
+                              if src in ('trend', 'trend-foil'):
+                                  f = '-foil' if src.endswith('-foil') else ''
+                                  a[cid] = [round(g.get(x + f) or 0, 2) for x in ('avg30', 'avg7', 'avg1')]
+                          break
+              print('%s : %d cartes avec un prix sur %d (extensions %s)' % (sid, sum(1 for c in t if c.startswith(sid + '-')), len(cartes), exts[:3]))
+          if not t:
+              print('aucun prix trouvé : je ne change rien.'); sys.exit(0)
+          sortie['t'].update(t)
+          if isinstance(sortie.get('a'), dict):
+              sortie['a'].update(a)
+          sortie['n'] = len(sortie['t'])
+          sortie['t'] = {k: sortie['t'][k] for k in sorted(sortie['t'])}
+          with open('docs/prix_ms.json', 'w', encoding='utf-8') as f:
+              f.write(json.dumps(sortie, ensure_ascii=False, separators=(',', ':')) + '\n')
+          print('OK autres séries : %d prix ajoutés' % len(t))
           PYEOF
 
       - name: Enregistrer les nouveaux prix

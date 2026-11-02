@@ -2886,7 +2886,7 @@ function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[
   ledger,issues,checks,
   nSales:sales.length,nUnknown:nUnk,unknownCA:finR2(unkCA),dup,dupBuy,dupSale,warn}}
 /* ===== FIN-CALC:END ===== */
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},adj:v.adj&&typeof v.adj==='object'&&!Array.isArray(v.adj)?v.adj:{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw',en:v.en&&typeof v.en==='object'&&!Array.isArray(v.en)?v.en:{},fwed:v.fwed==='en'?'en':'jp'});
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},adj:v.adj&&typeof v.adj==='object'&&!Array.isArray(v.adj)?v.adj:{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw',en:v.en&&typeof v.en==='object'&&!Array.isArray(v.en)?v.en:{},ens:v.ens&&typeof v.ens==='object'&&!Array.isArray(v.ens)?v.ens:{},fwed:v.fwed==='en'?'en':'jp'});
 let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v){if(!(v.fin&&v.fin.v>=FIN_VER)){try{if(!localStorage.getItem('fb_x_bak_v1'))localStorage.setItem('fb_x_bak_v1',localStorage.getItem('fb_x'));if(!localStorage.getItem('fb_x_bak_v2')&&v.fin&&v.fin.v===2)localStorage.setItem('fb_x_bak_v2',localStorage.getItem('fb_x'))}catch(e){}}X=mkX(v)}}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -7624,7 +7624,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='2 nov. 2026 · 59';
+const BUILD='2 nov. 2026 · 60';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8134,7 +8134,7 @@ function cxCtx(){
   own:en?(c=>enOwn(c.id)):(c=>c.own||0),isAlt:c=>c.ver!=='Normal',want:en?(()=>0):(c=>c.want||0),px:en?(()=>0):pxv,
   altLab:'Alt Art',
   F:{own:S.own||'',ver:S.ver==='Alternative Art'?'alt':S.ver==='Normal'?'norm':'',rar:S.rar||'',fx:en?'':(S.fx||''),typ:S.typ||''},
-  q:S.q||'',sealed:!en&&S.mode==='sealed',pool:()=>cards}}
+  q:S.q||'',sealed:en?(isDeck(e)&&!!S.ensm):S.mode==='sealed',pool:()=>cards}}
 
 function cxPass(x,c,skipOwn){const F=x.F,o=x.own(c);
  if(!skipOwn&&F.own&&(F.own==='y'?o<1:F.own==='n'?o>0:F.own==='d'?o<2:false))return false;
@@ -8187,7 +8187,7 @@ function cxHero(x,s){
   +`<div class="cx-pw"><div class="cx-hp" role="progressbar" aria-valuemin="0" aria-valuemax="${s.n}" aria-valuenow="${s.o}" aria-label="Cartes possédées dans la série"><i style="width:${s.n?Math.max(s.o?2:0,s.o/s.n*100).toFixed(1):0}%"></i></div><b class="cx-pc">${pc}<small>%</small></b></div>`
   +`<div class="cx-hs">${badge}<b>${s.o}</b> / ${s.n} carte${s.n>1?'s':''}${val}</div></div>`
   +(tags?`<div class="cx-tags" role="group" aria-label="Filtrer par rareté">${tags}</div>`:'')+part+`</section>`}
-function cxTabs(x,s){if(x.ed==='en')return '';
+function cxTabs(x,s){if(x.ed==='en')return enSealTabs(x,s);
  const ms=x.ed==='ms',sc=ms?msSealQ(x.set).reduce((a,b)=>a+b,0):sealTs(x.id).reduce((a,t)=>a+Math.max(0,+(cxSl(x.id,t[0]).own)||0),0),at=v=>ms?`data-msmode="${v}"`:`data-mode="${v}"`;
  return `<div class="cx-tabs" role="group" aria-label="Cartes ou produits scellés"><button type="button" ${at('cards')} aria-pressed="${!x.sealed}">${cxSp('Cartes')}<small>${s.o}/${s.n}</small></button><button type="button" ${at('sealed')} aria-pressed="${x.sealed}">${cxSp('Scellés')}<small>${sc}</small></button></div>`}
 
@@ -8239,7 +8239,7 @@ function cxCards(x,s){
 function cxSealCard(img,t,sub,n,px,want,open,dec,inc){
  return `<div class="cx-sp${n?' own':''}">${open?`<button type="button" class="cx-spa" ${open} aria-label="${t} : acheter, prix, vendre">${img}</button>`:`<div class="cx-spa">${img}</div>`}<div class="cx-spt"><b>${t}</b><small>${sub}</small>${px?`<span class="cx-px">${eur(px)}</span>`:''}${want?`<em>Recherché × ${want}</em>`:''}</div>`
   +`<span class="cx-st big${n?'':' z'}">${n?`<button type="button" class="cx-m" ${dec} aria-label="Retirer : ${t}">−</button><b>${n}</b>`:''}<button type="button" class="cx-p" ${inc} aria-label="Ajouter : ${t}">+</button></span></div>`}
-function cxSealed(x){
+function cxSealed(x){if(x.ed==='en')return enSealed(x);
  if(x.ed==='ms'){const set=x.set,q=msSealQ(set),tot=q.reduce((a,b)=>a+b,0);
   return `<div class="cx-sls">${tot?`<b>${tot}</b> produit${cxS(tot,'')} scellé${cxS(tot,'')} non ouvert${cxS(tot,'')}`:'Aucun produit scellé noté pour cette série.'} Ils sont comptés à part de tes cartes.</div><div class="cx-sg" style="--cr:${x.rgb}">${MS_SEAL.map((t,k)=>{const id=set.id+'-'+t[0],im=t[3]?msImg(set.id,t[3],'cx-spi'):'';
    return cxSealCard(im||`<span class="cx-spe">${{booster:'🎴',display:'📦',case:'🗃️'}[t[0]]}</span>`,t[1],t[2],q[k],msCm(id),0,'',`data-ms="dec" data-id="${id}"`,`data-ms="inc" data-id="${id}"`)}).join('')}</div>`}
@@ -8998,6 +8998,18 @@ function srxMhList(){return SRXML||(SRXML=MS_SETS.map(s=>({id:s.id,n:s.n})).conc
 function srxMhPick(){const own=srxVirtOwn(),cur=HX(),mk=s=>{const fw=s.dz.idc===330,[c,nm]=fw?srxCode(s):['',s.dz.ser||s.n],o=own[s.id]||0;
   return `<button type="button" class="mspi" data-hzx="${s.id}" aria-pressed="${s.id===cur}"><span class="sr-th"></span><span>${c?`<b>${esc(c)}</b> `:''}${esc(nm)}<small>${o} / ${s.dz.n} cartes · ${pct(o,s.dz.n)} %</small></span></button>`};
  return `<div class="hmgn">✨ Fusion World · autres séries</div><div class="mspl">${srxFwx().map(mk).join('')}</div><div class="srx-mh">${srxOld('b',own,false,'',mk)}</div>`}
+
+/* ===== EN-SEAL : decks scellés de l'édition anglaise (quantités à part, dans X.ens) ===== */
+const enSealQ=e=>Math.max(0,+((X.ens||{})[e+'-deck'])||0);
+function enSealTabs(x,s){if(!isDeck(x.id))return '';const sc=enSealQ(x.id);
+ return `<div class="cx-tabs" role="group" aria-label="Cartes ou produits scellés"><button type="button" data-ensm="0" aria-pressed="${!x.sealed}">${cxSp('Cartes')}<small>${s.o}/${s.n}</small></button><button type="button" data-ensm="1" aria-pressed="${x.sealed}">${cxSp('Scellés')}<small>${sc}</small></button></div>`}
+function enSealed(x){const q=enSealQ(x.id);
+ return `<div class="cx-sls">${q?`<b>${q}</b> deck${q>1?'s':''} scellé${q>1?'s':''} non ouvert${q>1?'s':''} · édition anglaise.`:'Aucun deck scellé anglais noté pour cette série.'} Il est compté à part de tes cartes.</div>`
+  +`<div class="cx-sg" style="--cr:${x.rgb}">${cxSealCard(`<span class="cx-spe">${SEALI.deck}</span>`,'Deck','1 deck de démarrage · anglais',q,0,0,'','data-ens="-1"','data-ens="1"')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ensm],[data-ens]');if(!b||S.tab!=='coll')return;e.stopPropagation();
+ if(b.dataset.ensm!==undefined)S.ensm=b.dataset.ensm==='1';
+ else{const k=S.ext+'-deck',n=Math.max(0,Math.min(99,enSealQ(S.ext)+(+b.dataset.ens||0)));if(!X.ens)X.ens={};if(n)X.ens[k]=n;else delete X.ens[k];saveX()}
+ render()},true);
 
 phLoad();pxCache();msPxCache();render();pxNet();msPxLoad();
 </script>
@@ -9859,6 +9871,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:60,d:'2026-11-02',it:[
+  ['n','📦','Decks scellés en anglais','En édition anglaise, chaque deck FS01 à FS12 a maintenant son onglet « Scellés » pour noter tes decks anglais encore fermés.','deck']]},
  {v:59,d:'2026-11-02',it:[
   ['n','🃏','Deck FS12','Le 12e deck, FS12 « The Beat of Ki », rejoint les decks FS01 à FS11 : 18 cartes et leurs versions ★, avec photos et prix Cardmarket, en édition japonaise, française et anglaise.','deck']]},
  {v:58,d:'2026-11-02',it:[

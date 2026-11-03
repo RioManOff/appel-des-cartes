@@ -1,22 +1,55 @@
 name: diag-prix
 on: push
+permissions:
+  contents: write
 jobs:
   d:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
-      - run: |
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Versos des cartes (leaders) -> docs/back/ sur main
+        run: |
+          cp back_list.json /tmp/back_list.json
+          git checkout -q main
+          pip install -q pillow
           python3 - <<'PY'
-          import urllib.request,re
-          def get(u,n=0):
-            try:
-              r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);b=r.read();return r.status,len(b),b
-            except Exception as e:return str(e)[:60],0,b''
-          for u in ['https://www.dbs-cardgame.com/images/cardlist/cardimg/BT1-001.png','https://www.dbs-cardgame.com/images/cardlist/cardimg/BT1-001_b.png',
-                    'https://www.dbs-cardgame.com/images/cardlist/cardimg/BT25-001_SPR.png','https://www.dbs-cardgame.com/images/cardlist/cardimg/BT25-001_SLR.png','https://www.dbs-cardgame.com/images/cardlist/cardimg/BT25-001_SLR_b.png',
-                    'https://www.dbs-cardgame.com/fw/images/cards/card/en/FB01-001.webp','https://www.dbs-cardgame.com/fw/images/cards/card/en/FB01-001_b.webp','https://www.dbs-cardgame.com/fw/images/cards/card/en/FB01-001_f.webp',
-                    'https://www.dbs-cardgame.com/fw/images/cards/card/ja/FB01-001_f.webp','https://www.dbs-cardgame.com/fw/images/cards/card/ja/FB01-001_b.webp','https://www.dbs-cardgame.com/fw/images/cards/card/en/FB01-001_p1_f.webp','https://www.dbs-cardgame.com/fw/images/cards/card/en/FB01-001_p1_b.webp']:
-            s,n,_=get(u);print(s,n,u)
-          for u in ['https://www.dbs-cardgame.com/fw/en/cardlist/?search=true&q=FB01-001','https://www.dbs-cardgame.com/us-en/cardlist/?search=true&q=BT25-001','https://www.dbs-cardgame.com/us-en/cardlist/?search=true&category=428025']:
-            s,n,b=get(u);t=b.decode('utf-8','ignore');print('PAGE',s,n,u)
-            print(sorted(set(re.findall(r'(?:src|data-src)="([^"]*(?:cardimg|cards/card)[^"]*)"',t)))[:20])
+          import json,os,io,time,urllib.request
+          from PIL import Image
+          L=json.load(open('/tmp/back_list.json'))
+          M='https://www.dbs-cardgame.com/images/cardlist/cardimg/';F='https://www.dbs-cardgame.com/fw/images/cards/card/en/'
+          os.makedirs('docs/back',exist_ok=True);ok=[];miss=[]
+          def get(u):
+            for k in range(3):
+              try:
+                r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);return r.read()
+              except urllib.error.HTTPError as e:
+                if e.code==404:return None
+              except Exception:pass
+              time.sleep(2)
+            return None
+          for cid,v in L.items():
+            if 'ms' in v:
+              c=[v['ms']+'_b.png'] if not v['v'] else [v['ms']+'_PR_b.png',v['ms']+'_SLR_b.png',v['ms']+'_SPR_b.png']
+              c=[M+x for x in c]
+            else:
+              p=v['p'];c=[v['fw']+'_b.webp'] if not p else [v['fw']+'_b_p%d.webp'%p,v['fw']+'_p%d_b.webp'%p]
+              c=[F+x for x in c]
+            b=None
+            for u in c:
+              b=get(u)
+              if b:break
+            if not b:miss.append(cid);continue
+            im=Image.open(io.BytesIO(b)).convert('RGB')
+            if im.width>im.height:im=im.rotate(90,expand=True)
+            im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS)
+            im.save('docs/back/%s.webp'%cid,'WEBP',quality=80,method=6);ok.append(cid)
+          json.dump(sorted(ok),open('docs/back/index.json','w'),separators=(',',':'))
+          print('versos',len(ok),'manquants',len(miss),miss[:40])
           PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/back
+          git commit -q -m "Versos des cartes leader (photos du site officiel)" && git pull -q --rebase origin main && git push -q origin main || echo rien

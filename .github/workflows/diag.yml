@@ -1,19 +1,53 @@
 name: diag-prix
 on: push
+permissions:
+  contents: write
 jobs:
   d:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
-      - run: |
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Photos officielles anglaises BT01-BT31 -> docs/msen/ sur main
+        run: |
+          cp msen_list.json /tmp/msen_list.json
+          git fetch -q --depth=1 origin main && git checkout -q -B main origin/main
+          pip install -q pillow
           python3 - <<'PY'
-          import urllib.request
-          def st(u):
-            try:
-              r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);return r.status,len(r.read())
-            except Exception as e:return str(e)[:30],0
-          for reg in ['europe-fr','fr','eu-fr','europe']:
-            for c in ['BT1-004','BT10-001','BT20-001','BT25-001','BT31-001']:
-              u='https://www.dbs-cardgame.com/%s/images/cardlist/cardimg/%s.png'%(reg,c);print(st(u),u)
-          for c in ['BT1-011_SPR','BT1-011_PR','BT16-147_GDR','BT16-147_PR','BT16-147_SPR','BT25-001_PR','BT31-001']:
-            u='https://www.dbs-cardgame.com/images/cardlist/cardimg/%s.png'%c;print(st(u),u)
+          import json,os,io,time,urllib.request
+          from concurrent.futures import ThreadPoolExecutor
+          from PIL import Image
+          L=json.load(open('/tmp/msen_list.json'));M='https://www.dbs-cardgame.com/images/cardlist/cardimg/'
+          os.makedirs('docs/msen',exist_ok=True)
+          def get(u):
+            for k in range(3):
+              try:
+                return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=40).read()
+              except urllib.error.HTTPError as e:
+                if e.code==404:return None
+              except Exception:pass
+              time.sleep(2+k*3)
+            return None
+          def one(item):
+            cid,c=item
+            for f in c:
+              b=get(M+f)
+              if b:
+                im=Image.open(io.BytesIO(b)).convert('RGB')
+                if im.width>im.height:im=im.rotate(90,expand=True)
+                im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS)
+                im.save('docs/msen/%s.webp'%cid,'WEBP',quality=76,method=6);return cid,True
+            return cid,False
+          with ThreadPoolExecutor(8) as ex:R=list(ex.map(one,L.items()))
+          ok=sorted(c for c,o in R if o);miss=[c for c,o in R if not o]
+          json.dump(ok,open('docs/msen/index.json','w'),separators=(',',':'))
+          print('photos',len(ok),'manquantes',len(miss),miss[:60])
           PY
+          du -sh docs/msen
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/msen
+          git commit -q -m "Photos officielles anglaises des cartes Masters BT01 à BT31"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin main && break; sleep 10; done

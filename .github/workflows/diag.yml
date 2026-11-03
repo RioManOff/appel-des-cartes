@@ -1,55 +1,19 @@
 name: diag-prix
 on: push
-permissions:
-  contents: write
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Versos des cartes (leaders) -> docs/back/ sur main
-        run: |
-          cp back_list.json /tmp/back_list.json
-          git checkout -q main
-          pip install -q pillow
+      - run: |
           python3 - <<'PY'
-          import json,os,io,time,urllib.request
-          from PIL import Image
-          L=json.load(open('/tmp/back_list.json'))
-          M='https://www.dbs-cardgame.com/images/cardlist/cardimg/';F='https://www.dbs-cardgame.com/fw/images/cards/card/en/'
-          os.makedirs('docs/back',exist_ok=True);ok=[];miss=[]
-          def get(u):
-            for k in range(3):
-              try:
-                r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);return r.read()
-              except urllib.error.HTTPError as e:
-                if e.code==404:return None
-              except Exception:pass
-              time.sleep(2)
-            return None
-          for cid,v in L.items():
-            if 'ms' in v:
-              c=[v['ms']+'_b.png'] if not v['v'] else [v['ms']+'_PR_b.png',v['ms']+'_SLR_b.png',v['ms']+'_SPR_b.png']
-              c=[M+x for x in c]
-            else:
-              p=v['p'];c=[v['fw']+'_b.webp'] if not p else [v['fw']+'_b_p%d.webp'%p,v['fw']+'_p%d_b.webp'%p]
-              c=[F+x for x in c]
-            b=None
-            for u in c:
-              b=get(u)
-              if b:break
-            if not b:miss.append(cid);continue
-            im=Image.open(io.BytesIO(b)).convert('RGB')
-            if im.width>im.height:im=im.rotate(90,expand=True)
-            im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS)
-            im.save('docs/back/%s.webp'%cid,'WEBP',quality=80,method=6);ok.append(cid)
-          json.dump(sorted(ok),open('docs/back/index.json','w'),separators=(',',':'))
-          print('versos',len(ok),'manquants',len(miss),miss[:40])
+          import urllib.request
+          def st(u):
+            try:
+              r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);return r.status,len(r.read())
+            except Exception as e:return str(e)[:30],0
+          for reg in ['europe-fr','fr','eu-fr','europe']:
+            for c in ['BT1-004','BT10-001','BT20-001','BT25-001','BT31-001']:
+              u='https://www.dbs-cardgame.com/%s/images/cardlist/cardimg/%s.png'%(reg,c);print(st(u),u)
+          for c in ['BT1-011_SPR','BT1-011_PR','BT16-147_GDR','BT16-147_PR','BT16-147_SPR','BT25-001_PR','BT31-001']:
+            u='https://www.dbs-cardgame.com/images/cardlist/cardimg/%s.png'%c;print(st(u),u)
           PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/back
-          git commit -q -m "Versos des cartes leader (photos du site officiel)" && git pull -q --rebase origin main && git push -q origin main || echo rien

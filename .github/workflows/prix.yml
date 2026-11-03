@@ -234,6 +234,22 @@ jobs:
                                   a[cid] = [round(g.get(k + f) or 0, 2) for k in ('avg30', 'avg7', 'avg1')]
                               break
 
+              # édition anglaise : FB01 à FB05 ont une extension anglaise à part sur Cardmarket (la 2e de EXTENSIONS)
+              en = {}
+              for serie, lst in EXTENSIONS.items():
+                  if len(lst) < 2 or lst[1] not in par.get(serie, {}):
+                      continue
+                  ex = par[serie][lst[1]]
+                  for num, ids in ex.items():
+                      for i, suf in enumerate(SUFFIXES):
+                          ids2 = sorted(ids)
+                          if len(ids2) <= i:
+                              break
+                          v, src = meilleur(G.get(ids2[i]))
+                          if v is not None:
+                              en['%s-%s%s' % (serie, num, suf)] = round(v, 2)
+              print('Édition anglaise : %d prix' % len(en))
+
               if len(t) < 1000:
                   echec('trop peu de prix reconnus (%d) : je n’écris rien' % len(t))
               try:
@@ -245,7 +261,7 @@ jobs:
               if avant and len(t) < 0.9 * avant:
                   echec('seulement %d prix reconnus contre %d dans le fichier actuel : je n’écrase rien' % (len(t), avant))
 
-              sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}}
+              sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}, 'en': {k: en[k] for k in sorted(en)}}
               texte = json.dumps(sortie, ensure_ascii=False, separators=(',', ':')) + '\n'
               dossier = os.path.dirname(SORTIE)
               if dossier:

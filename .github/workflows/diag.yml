@@ -1,30 +1,23 @@
 name: diag-prix
 on: push
-permissions:
-  contents: write
 jobs:
   d:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - run: |
-          pip install -q pillow
           python3 - <<'PY'
-          import urllib.request,re,os,io
-          from PIL import Image
-          os.makedirs('packs',exist_ok=True)
+          import urllib.request,re,json
           def get(u,b=False):
             try:
               r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read();return r if b else r.decode('utf-8','ignore')
             except Exception as e:return None
-          for n in range(1,32):
-            t=get('https://www.dbs-cardgame.com/us-en/product/dbs-b%02d.php'%n) or ''
-            c=[x for x in sorted(set(re.findall(r'images/product/dbs-b%02d/(img_(?:item|dbs-b%02d|01)\.png)'%(n,n),t)))]
-            for f in c:
-              b=get('https://www.dbs-cardgame.com/images/product/dbs-b%02d/%s'%(n,f),True)
-              if not b:continue
-              im=Image.open(io.BytesIO(b));im.thumbnail((500,500));im.save('packs/b%02d_%s'%(n,f.replace('.png','.webp')),'WEBP',quality=80)
-            print(n,c)
+          for u in ['https://product-images.s3.cardmarket.com/1050/2082/316784/316784.jpg','https://product-images.s3.cardmarket.com/1050/2082/316784/316784.png','https://product-images.s3.cardmarket.com/13/2082/316784/316784.jpg']:
+            b=get(u,True);print('CM',u,len(b) if b else None)
+          S=json.loads(get('https://downloads.s3.cardmarket.com/productCatalog/productList/products_nonsingles_13.json'))['products']
+          for p in S:
+            if re.search(r'Booster$',p['name']) and p.get('idCategory')==1050:print('P',p['idProduct'],p['idExpansion'],p['name'])
+          for n in ['10','25']:
+            for reg in ['jp','japan']:
+              t=get('https://www.dbs-cardgame.com/%s/product/dbs-b%s.php'%(reg,n)) or ''
+              print('JP',reg,n,len(t),sorted(set(re.findall(r'[\w./-]*images/product/[\w./-]+',t)))[:10])
           PY
-          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add packs && git commit -q -m packs && git push -q

@@ -3192,7 +3192,7 @@ document.addEventListener('keydown',e=>{const t=e.target;if(e.key!=='Enter'||!t|
   if(t.id==='sw-q-g'||t.id==='sw-q-r'){const b=document.querySelector('#sw-sg-'+t.id.slice(-1)+' .vnsg');if(b){e.preventDefault();b.click()}return}
   if((t.dataset&&t.dataset.swp!==undefined)||t.id==='sw-c-g'||t.id==='sw-c-r'){e.preventDefault();t.blur()}});
 /* ===== Une idée ? Un bug ? Boutons vers le Discord (pour un bug, les infos techniques sont copiées : il suffit de les coller) ===== */
-const DISC='https://discord.gg/QM2JwsSYpx';
+const DISC='https://discord.gg/8MWRPSGbWF';
 function bugInfo(){const ua=(navigator.userAgent||'').replace(/^Mozilla\/5\.0 /,'').slice(0,140);
   return `🐞 Bug sur L’Appel des Cartes\n\nCe qui ne va pas :\n\n\n— infos techniques —\nVersion : ${BUILD}\nPage : ${S.tab}${S.tab==='coll'||S.tab==='scan'?' ('+S.ext+')':''}\nAppareil : ${ua}\nTaille d’écran : ${innerWidth}×${innerHeight}\nPrix du : ${MKDF}`}
 const discRow=(k,ic,t)=>`<a class="set" href="${DISC}" target="_blank" rel="noopener noreferrer" data-bug="${k}" aria-label="${t} sur Discord (s’ouvre dans un nouvel onglet)"><span class="sti" aria-hidden="true">${ic}</span><span class="stt">${t}</span><span class="str">Discord ›</span></a>`;
@@ -7628,7 +7628,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='4 nov. 2026 · 64';
+const BUILD='5 nov. 2026 · 65';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9920,6 +9920,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:65,d:'2026-11-05',it:[
+  ['a','💬','Nouveau Discord','Le lien vers le serveur Discord de l’appli a changé : il mène maintenant au nouveau serveur.']]},
  {v:64,d:'2026-11-04',it:[
   ['a','🔄','Verso en un appui','Dans la fiche d’une carte leader, le bouton « Verso » montre directement l’autre face, aussi en édition anglaise.']]},
  {v:63,d:'2026-11-04',it:[

@@ -10,9 +10,11 @@ jobs:
           def get(u):
             try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf-8','ignore')
             except Exception as e:return 'ERR '+str(e)
-          for n in ['01','02','10','25','31']:
-            for reg in ['asia','us-en','europe']:
-              u='https://www.dbs-cardgame.com/%s/product/dbs-b%s.php'%(reg,n);t=get(u)
-              imgs=sorted(set(re.findall(r'(?:src|href|data-src)="([^"]+\.(?:png|jpg|webp))"',t)))
-              print('==',u,t[:40] if t.startswith('ERR') else len(t),[i for i in imgs if not re.search(r'common|logo|icon|btn|sns|bnr',i)][:12])
+          for n in ['02','10','25']:
+            t=get('https://www.dbs-cardgame.com/us-en/product/dbs-b%s.php'%n)
+            print('==',n,sorted(set(re.findall(r'[\w./-]*images/product/[\w./-]+',t)))[:20])
+            print('og',re.findall(r'og:image"\s+content="([^"]+)',t))
+          for u in ['https://www.dbs-cardgame.com/images/product/dbs-b02/img_01.png','https://www.dbs-cardgame.com/images/product/dbs-b02/img_pack.png','https://www.dbs-cardgame.com/images/product/dbs-b02/img_main.png','https://www.dbs-cardgame.com/images/product/dbs-b25/img_01.png']:
+            try:r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30);print('OK',len(r.read()),u)
+            except Exception as e:print('NO',u,e)
           PY

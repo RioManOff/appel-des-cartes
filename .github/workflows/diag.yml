@@ -8,24 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          pip install -q pillow
-          python3 - <<'PY'
-          import urllib.request,urllib.parse,json,io,os
-          from PIL import Image
-          def post(u,d):
-            r=urllib.request.Request(u,data=json.dumps(d).encode(),headers={'User-Agent':'Mozilla/5.0','Content-Type':'application/json'})
-            return json.loads(urllib.request.urlopen(r,timeout=30).read())
-          os.makedirs('packs3',exist_ok=True)
-          for sid,q in [('BT21','Wild Resurgence'),('DB1','Dragon Brawl')]:
-            d=post('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',{"algorithm":"","from":0,"size":15,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"filters":{"term":{},"range":{},"exclude":{"channelExclusion":0}},"context":{"cart":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":True,"didYouMean":{}},"sort":{}})
-            for r in d['results'][0]['results']:
-              n=r['productName']
-              if not any(w in n.lower() for w in ('pack','booster')) or 'box' in n.lower() or 'case' in n.lower():continue
-              pid=int(r['productId'])
-              try:
-                b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
-                im=Image.open(io.BytesIO(b)).convert('RGB');im.thumbnail((360,600));im.save('packs3/%s_%d.webp'%(sid,pid),'WEBP',quality=82);print('OK',sid,pid,n)
-              except Exception as e:print('IMG',sid,pid,n,e)
-          PY
+          pip install -q edge-tts
+          mkdir -p voix2
+          V=fr-FR-HenriNeural
+          edge-tts -v $V --rate=+8% -t "Tu collectionnes les cartes Dragon Ball ?" --write-media voix2/a1.mp3
+          edge-tts -v $V --rate=+8% -t "L'Appel des Cartes, c'est l'appli pour gérer toute ta collection : Fusion World, Masters, et même les anciennes séries." --write-media voix2/a2.mp3
+          edge-tts -v $V --rate=+8% -t "Les prix, le scanner, les boosters, tes stats : tout est dedans." --write-media voix2/a3.mp3
+          edge-tts -v $V --rate=+8% -t "Elle arrive sur le Play Store, et j'ai besoin de testeurs !" --write-media voix2/a4.mp3
+          edge-tts -v $V --rate=+8% -t "Envoie-moi ton adresse Gmail en message privé, et teste l'appli en avant-première !" --write-media voix2/a5.mp3
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add packs3 && git commit -q -m packs3 && git push -q
+          git add voix2 && git commit -q -m voix2 && git push -q

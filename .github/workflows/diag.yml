@@ -5,50 +5,25 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 1
-          sparse-checkout: |
-            docs/fwx_noms.json
-            docs/fwx
-      - name: Photos anglaises SB01 / SB02 -> docs/fwx/en/ sur main
+          sparse-checkout: docs/back
+      - name: Versos des leaders promo anglais
         run: |
           pip install -q pillow
           python3 - <<'PY'
-          import json,os,io,re,time,urllib.request
+          import json,io,urllib.request
           from PIL import Image
-          N=json.load(open('docs/fwx_noms.json'));B='https://www.dbs-cardgame.com/fw/images/cards/card/en/'
-          os.makedirs('docs/fwx/en',exist_ok=True);ok=[];miss=[]
-          def get(u):
-            for k in range(3):
-              try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
-              except urllib.error.HTTPError as e:
-                if e.code==404:return None
-              except Exception:pass
-              time.sleep(2)
-          for did in ('D1480','D1510'):
-            w=N[did]['w']
-            for i,nm in enumerate(N[did]['n']):
-              m=re.match(r'^((?:SB|FB|FS|ST)\d\d-\d{2,3}|E-\d{2,3})( ★)?(?: \((\d+)\))?$',nm.strip())
-              eid='E'+did[1:]+'-'+str(i+1).zfill(w)
-              if not m:miss.append((eid,nm));continue
-              code,star,k=m.group(1),m.group(2),int(m.group(3) or 1)
-              if star:c=[code+'_f_p1.webp',code+'_p1.webp']
-              elif k==1:c=[code+'_f.webp',code+'.webp']
-              else:c=[code+'_f_p%d.webp'%(k-1),code+'_p%d.webp'%(k-1)]
-              b=None
-              for f in c:
-                b=get(B+f)
-                if b:break
-              if not b:miss.append((eid,nm));continue
-              im=Image.open(io.BytesIO(b)).convert('RGB')
-              if im.width>im.height:im=im.rotate(90,expand=True)
-              im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS);im.save('docs/fwx/en/%s.webp'%eid,'WEBP',quality=78,method=6);ok.append(eid)
-          json.dump(sorted(ok),open('docs/fwx/en/index.json','w'),separators=(',',':'))
-          print('ok',len(ok),'manquantes',len(miss),miss[:50])
+          B=json.loads('''{"E9001-152": "FS06-01_b_p1.webp", "E9001-153": "FS07-01_b_p1.webp", "E9001-169": "FS01-01_b_p1.webp", "E9001-170": "FS02-01_b_p1.webp", "E9001-171": "FS03-01_b_p1.webp", "E9001-172": "FS04-01_b_p1.webp", "E9001-173": "FS05-01_b_p1.webp", "E9001-174": "FP-030_b.webp"}''');ok=[]
+          for cid,f in B.items():
+            try:
+              b=urllib.request.urlopen(urllib.request.Request('https://www.dbs-cardgame.com/fw/images/cards/card/en/'+f,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+            except Exception as e:print('manque',f,e);continue
+            im=Image.open(io.BytesIO(b)).convert('RGB');im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS);im.save('docs/back/%s.webp'%cid,'WEBP',quality=80,method=6);ok.append(cid)
+          print('versos',ok)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/fwx/en && git commit -q -m "Photos anglaises SB01 et SB02" && git push -q origin HEAD:main
+          git add docs/back && git commit -q -m "Versos des leaders promo anglais" && git push -q origin HEAD:main

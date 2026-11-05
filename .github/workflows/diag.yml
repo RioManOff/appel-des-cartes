@@ -11,13 +11,6 @@ jobs:
         run: |
           pip install -q edge-tts
           mkdir -p voix
-          i=0
-          while IFS= read -r line; do i=$((i+1)); for v in fr-FR-HenriNeural fr-FR-RemyMultilingualNeural; do edge-tts --voice $v --rate=+12% --text "$line" --write-media voix/$v-$i.mp3; done; done <<'TXT'
-          Mon bot repère les cartes Pokémon sur Vinted.
-          Prix, rareté, gradée, langue : tout s'affiche direct.
-          Un clic, et l'annonce s'ouvre.
-          Mise en ligne il y a six minutes… et déjà dans mon Discord !
-          TXT
-          ls -la voix
+          edge-tts --voice fr-FR-HenriNeural --rate=+12% --text "Mon bote repère les cartes Pokémon sur Vintaide." --write-media voix/fr-FR-HenriNeural-1b.mp3
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add voix && git commit -q -m "voix" && git push -q origin HEAD:diag-prix
+          git add voix && git commit -q -m "voix 1b" && git push -q origin HEAD:diag-prix

@@ -11,19 +11,22 @@ jobs:
           ref: main
           fetch-depth: 1
           sparse-checkout: docs/back
-      - name: Versos des leaders promo anglais
+      - name: Versos des leaders promo japonais
         run: |
           pip install -q pillow
           python3 - <<'PY'
           import json,io,urllib.request
           from PIL import Image
-          B=json.loads('''{"E9001-152": "FS06-01_b_p1.webp", "E9001-153": "FS07-01_b_p1.webp", "E9001-169": "FS01-01_b_p1.webp", "E9001-170": "FS02-01_b_p1.webp", "E9001-171": "FS03-01_b_p1.webp", "E9001-172": "FS04-01_b_p1.webp", "E9001-173": "FS05-01_b_p1.webp", "E9001-174": "FP-030_b.webp"}''');ok=[]
+          B=json.loads('''{"E9002-085": "FS06-01_b_p1.webp", "E9002-086": "FS07-01_b_p1.webp", "E9002-243": "FP-030_b.webp", "E9002-246": "FS01-01_b_p1.webp", "E9002-247": "FS02-01_b_p1.webp", "E9002-248": "FS03-01_b_p1.webp", "E9002-249": "FS04-01_b_p1.webp", "E9002-250": "FS05-01_b_p1.webp"}''');ok=[]
+          R=['https://www.dbs-cardgame.com/fw/images/cards/card/jp/','https://www.dbs-cardgame.com/fw/images/cards/card/ja/','https://www.dbs-cardgame.com/fw/jp/images/cards/card/jp/','https://www.dbs-cardgame.com/fw/images/cards/card/en/']
           for cid,f in B.items():
-            try:
-              b=urllib.request.urlopen(urllib.request.Request('https://www.dbs-cardgame.com/fw/images/cards/card/en/'+f,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
-            except Exception as e:print('manque',f,e);continue
+            b=None
+            for r in R:
+              try:b=urllib.request.urlopen(urllib.request.Request(r+f,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read();print('trouvé',r,f);break
+              except Exception as e:pass
+            if not b:print('manque',f);continue
             im=Image.open(io.BytesIO(b)).convert('RGB');im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS);im.save('docs/back/%s.webp'%cid,'WEBP',quality=80,method=6);ok.append(cid)
           print('versos',ok)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/back && git commit -q -m "Versos des leaders promo anglais" && git push -q origin HEAD:main
+          git add docs/back && git commit -q -m "Versos des leaders promo japonais" && git push -q origin HEAD:main

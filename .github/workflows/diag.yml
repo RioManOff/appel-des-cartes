@@ -5,12 +5,50 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Voix
+        with:
+          ref: main
+          fetch-depth: 1
+          sparse-checkout: |
+            docs/fwx_noms.json
+            docs/fwx
+      - name: Photos anglaises SB01 / SB02 -> docs/fwx/en/ sur main
         run: |
-          pip install -q edge-tts
-          mkdir -p voix
-          edge-tts --voice fr-FR-HenriNeural --rate=+12% --text "Mon bote repère les cartes Pokémon sur Vinnetède." --write-media voix/fr-FR-HenriNeural-1c.mp3
+          pip install -q pillow
+          python3 - <<'PY'
+          import json,os,io,re,time,urllib.request
+          from PIL import Image
+          N=json.load(open('docs/fwx_noms.json'));B='https://www.dbs-cardgame.com/fw/images/cards/card/en/'
+          os.makedirs('docs/fwx/en',exist_ok=True);ok=[];miss=[]
+          def get(u):
+            for k in range(3):
+              try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+              except urllib.error.HTTPError as e:
+                if e.code==404:return None
+              except Exception:pass
+              time.sleep(2)
+          for did in ('D1480','D1510'):
+            w=N[did]['w']
+            for i,nm in enumerate(N[did]['n']):
+              m=re.match(r'^((?:SB|FB|FS|ST)\d\d-\d{2,3}|E-\d{2,3})( ★)?(?: \((\d+)\))?$',nm.strip())
+              eid='E'+did[1:]+'-'+str(i+1).zfill(w)
+              if not m:miss.append((eid,nm));continue
+              code,star,k=m.group(1),m.group(2),int(m.group(3) or 1)
+              if star:c=[code+'_f_p1.webp',code+'_p1.webp']
+              elif k==1:c=[code+'_f.webp',code+'.webp']
+              else:c=[code+'_f_p%d.webp'%(k-1),code+'_p%d.webp'%(k-1)]
+              b=None
+              for f in c:
+                b=get(B+f)
+                if b:break
+              if not b:miss.append((eid,nm));continue
+              im=Image.open(io.BytesIO(b)).convert('RGB')
+              if im.width>im.height:im=im.rotate(90,expand=True)
+              im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS);im.save('docs/fwx/en/%s.webp'%eid,'WEBP',quality=78,method=6);ok.append(eid)
+          json.dump(sorted(ok),open('docs/fwx/en/index.json','w'),separators=(',',':'))
+          print('ok',len(ok),'manquantes',len(miss),miss[:50])
+          PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add voix && git commit -q -m "voix 1c" && git push -q origin HEAD:diag-prix
+          git add docs/fwx/en && git commit -q -m "Photos anglaises SB01 et SB02" && git push -q origin HEAD:main

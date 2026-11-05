@@ -10,8 +10,9 @@ jobs:
           def get(u):
             try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf-8','ignore')
             except Exception as e:return 'ERR '+str(e)
-          for u in ['https://www.dbs-cardgame.com/us-en/products/','https://www.dbs-cardgame.com/us-en/products/?category=booster','https://www.dbs-cardgame.com/us-en/products/boosterpack.php','https://www.dbs-cardgame.com/us-en/products/index.php']:
-            t=get(u);print('==',u,len(t),t[:80] if t.startswith('ERR') else '')
-            imgs=sorted(set(re.findall(r'(?:src|href)="([^"]+\.(?:png|jpg|webp)|[^"]*products/[^"]+)"',t)))
-            print(len(imgs));print('\n'.join(imgs[:120]))
+          for n in ['01','02','10','25','31']:
+            for reg in ['asia','us-en','europe']:
+              u='https://www.dbs-cardgame.com/%s/product/dbs-b%s.php'%(reg,n);t=get(u)
+              imgs=sorted(set(re.findall(r'(?:src|href|data-src)="([^"]+\.(?:png|jpg|webp))"',t)))
+              print('==',u,t[:40] if t.startswith('ERR') else len(t),[i for i in imgs if not re.search(r'common|logo|icon|btn|sns|bnr',i)][:12])
           PY

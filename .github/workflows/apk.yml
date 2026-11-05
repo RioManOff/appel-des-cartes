@@ -16,6 +16,12 @@ jobs:
           distribution: temurin
           java-version: 21
       - run: npm install
+      - name: "Appli légère (elle ouvre le site en ligne, inutile d'y mettre les 2 Go de photos)"
+        run: |
+          mkdir -p www && cp docs/manifest.json www/ 2>/dev/null || true
+          printf '<!doctype html><meta charset="utf-8"><title>L%sAppel des Cartes</title><meta http-equiv="refresh" content="0;url=https://riomanoff.github.io/appel-des-cartes/">' "'" > www/index.html
+          python3 -c "import json;p='capacitor.config.json';c=json.load(open(p));c['webDir']='www';json.dump(c,open(p,'w'),ensure_ascii=False)"
+          cat capacitor.config.json; du -sh www
       - run: npx cap add android
       - name: Autoriser l'appareil photo (sinon le scanner ne marche pas dans l'APK)
         run: |

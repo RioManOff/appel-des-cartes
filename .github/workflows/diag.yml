@@ -10,29 +10,22 @@ jobs:
       - run: |
           pip install -q pillow
           python3 - <<'PY'
-          import urllib.request,urllib.parse,json,io,os,re
+          import urllib.request,urllib.parse,json,io,os
           from PIL import Image
-          N=json.loads('''{"BT01": "Galactic Battle", "BT02": "Union Force", "BT03": "Crossed Worlds", "BT04": "Colossal Warfare", "BT05": "Miraculous Revival", "BT06": "Destroyer Kings", "BT07": "Assault of the Saiyans", "BT08": "Malicious Machinations", "BT09": "Universal Onslaught", "BT10": "Rise of the Unison Warrior", "BT11": "Vermilion Bloodline", "BT12": "Vicious Rejuvenation", "BT13": "Supreme Rivalry", "BT14": "Cross Spirits", "BT15": "Saiyan Showdown", "BT16": "Realm of the Gods", "BT17": "Ultimate Squad", "BT18": "Dawn of the Z Legends", "BT19": "Fighters Ambition", "BT20": "Power Absorbed", "BT21": "Wild Resurgence", "BT22": "Critical Blow", "BT23": "Perfect Combination", "BT24": "Beyond Generations", "BT25": "Legend of the Dragon Balls", "BT26": "Ultimate Advent", "BT27": "History of Z", "BT28": "Prismatic Clash", "BT29": "Fearsome Rivals", "BT30": "Three Glorious Fighters", "BT31": "Impact Beyond Dimensions", "DB1": "Dragon Brawl", "DB2": "Divine Multiverse", "DB3": "Giant Force"}''')
           def post(u,d):
             r=urllib.request.Request(u,data=json.dumps(d).encode(),headers={'User-Agent':'Mozilla/5.0','Content-Type':'application/json'})
             return json.loads(urllib.request.urlopen(r,timeout=30).read())
-          os.makedirs('packs2',exist_ok=True);rep={}
-          for sid,nm in N.items():
-            q=nm+' Booster Pack'
-            try:
-              d=post('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',{"algorithm":"","from":0,"size":10,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"filters":{"term":{},"range":{},"exclude":{"channelExclusion":0}},"context":{"cart":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":True,"didYouMean":{}},"sort":{}})
-              R=d['results'][0]['results']
-            except Exception as e:print('ERR',sid,e);continue
-            key=re.sub(r'[^a-z]','',nm.lower())[:12]
-            c=[r for r in R if re.search(r'booster pack$',r['productName'],re.I) and 'second' not in r['productName'].lower() and key in re.sub(r'[^a-z]','',r['productName'].lower())]
-            if not c:print('MANQUE',sid,[r['productName'] for r in R[:5]]);continue
-            pid=int(c[0]['productId']);rep[sid]=[pid,c[0]['productName']]
-            try:
-              b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
-              im=Image.open(io.BytesIO(b)).convert('RGB');im.thumbnail((360,600));im.save('packs2/%s.webp'%sid,'WEBP',quality=82)
-              print('OK',sid,pid,c[0]['productName'],im.size)
-            except Exception as e:print('IMG',sid,e)
-          json.dump(rep,open('packs2/index.json','w'))
+          os.makedirs('packs3',exist_ok=True)
+          for sid,q in [('BT21','Wild Resurgence'),('DB1','Dragon Brawl')]:
+            d=post('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',{"algorithm":"","from":0,"size":15,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"filters":{"term":{},"range":{},"exclude":{"channelExclusion":0}},"context":{"cart":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":True,"didYouMean":{}},"sort":{}})
+            for r in d['results'][0]['results']:
+              n=r['productName']
+              if not any(w in n.lower() for w in ('pack','booster')) or 'box' in n.lower() or 'case' in n.lower():continue
+              pid=int(r['productId'])
+              try:
+                b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+                im=Image.open(io.BytesIO(b)).convert('RGB');im.thumbnail((360,600));im.save('packs3/%s_%d.webp'%(sid,pid),'WEBP',quality=82);print('OK',sid,pid,n)
+              except Exception as e:print('IMG',sid,pid,n,e)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add packs2 && git commit -q -m packs2 && git push -q
+          git add packs3 && git commit -q -m packs3 && git push -q

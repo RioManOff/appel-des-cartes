@@ -6,18 +6,15 @@ jobs:
     steps:
       - run: |
           python3 - <<'PY'
-          import urllib.request,re,json
-          def get(u,b=False):
-            try:
-              r=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read();return r if b else r.decode('utf-8','ignore')
-            except Exception as e:return None
-          for u in ['https://product-images.s3.cardmarket.com/1050/2082/316784/316784.jpg','https://product-images.s3.cardmarket.com/1050/2082/316784/316784.png','https://product-images.s3.cardmarket.com/13/2082/316784/316784.jpg']:
-            b=get(u,True);print('CM',u,len(b) if b else None)
-          S=json.loads(get('https://downloads.s3.cardmarket.com/productCatalog/productList/products_nonsingles_13.json'))['products']
-          for p in S:
-            if re.search(r'Booster$',p['name']) and p.get('idCategory')==1050:print('P',p['idProduct'],p['idExpansion'],p['name'])
-          for n in ['10','25']:
-            for reg in ['jp','japan']:
-              t=get('https://www.dbs-cardgame.com/%s/product/dbs-b%s.php'%(reg,n)) or ''
-              print('JP',reg,n,len(t),sorted(set(re.findall(r'[\w./-]*images/product/[\w./-]+',t)))[:10])
+          import urllib.request,json
+          def post(u,d):
+            r=urllib.request.Request(u,data=json.dumps(d).encode(),headers={'User-Agent':'Mozilla/5.0','Content-Type':'application/json'})
+            return json.loads(urllib.request.urlopen(r,timeout=30).read())
+          try:
+            for q in ['Galactic Battle Booster Pack','Colossal Warfare Booster Pack','Rise of the Unison Warrior Booster Pack','Legend of the Dragon Balls Booster Pack']:
+              d=post('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',{"algorithm":"","from":0,"size":5,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"filters":{"term":{},"range":{},"exclude":{"channelExclusion":0}},"context":{"cart":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":True,"didYouMean":{}},"sort":{}})
+              for r in d['results'][0]['results'][:5]:print('T',q,'|',int(r['productId']),r['productName'],r.get('setName'))
+          except Exception as e:print('ERR',e)
+          for u in ['https://tcgplayer-cdn.tcgplayer.com/product/0_in_1000x1000.jpg']:
+            pass
           PY

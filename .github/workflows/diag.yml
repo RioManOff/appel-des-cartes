@@ -5,16 +5,51 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - run: |
-          pip install -q edge-tts
-          mkdir -p voix2
-          V=fr-FR-HenriNeural
-          edge-tts -v $V --rate=+8% -t "Tu collectionnes les cartes Dragon Ball ?" --write-media voix2/a1.mp3
-          edge-tts -v $V --rate=+8% -t "L'Appel des Cartes, c'est l'appli pour gérer toute ta collection : Fusion World, Masters, et même les anciennes séries." --write-media voix2/a2.mp3
-          edge-tts -v $V --rate=+8% -t "Les prix, le scanner, les boosters, tes stats : tout est dedans." --write-media voix2/a3.mp3
-          edge-tts -v $V --rate=+8% -t "Elle arrive sur le Play Store, et j'ai besoin de testeurs !" --write-media voix2/a4.mp3
-          edge-tts -v $V --rate=+8% -t "Envoie-moi ton adresse Gmail en message privé, et teste l'appli en avant-première !" --write-media voix2/a5.mp3
+          pip install -q pillow
+          python3 - <<'PY'
+          import json,os,io,re,time,urllib.request
+          from PIL import Image
+          NM=json.loads('''["E-148 ★", "E-148", "E-149 ★", "E-149", "E-150 ★", "E-150", "E-151 ★", "E-151", "E-152 ★", "E-152", "E-153 ★", "E-153", "E-154 ★", "E-154", "E-155 ★", "E-155", "E-156 ★", "E-156", "E-157 ★", "E-157", "E-158 ★", "E-158", "E-159 ★", "E-159", "FB05-025", "FB05-025 (2)", "FB08-073", "FB08-073 (2)", "ST01-001", "ST01-001 (2)", "ST01-002", "ST01-002 (2)", "ST01-003", "ST01-003 (2)", "ST01-004", "ST01-004 (2)", "ST01-005", "ST01-005 (2)", "ST01-006", "ST01-006 (2)", "ST01-007", "ST01-007 (2)", "ST01-008", "ST01-008 (2)", "ST01-009", "ST01-009 (2)", "ST01-010", "ST01-010 (2)", "ST01-011", "ST01-011 (2)", "ST01-012", "ST01-012 (2)", "ST01-013", "ST01-013 (2)", "ST01-014", "ST01-014 (2)", "ST01-015", "ST01-015 (2)", "ST01-016", "ST01-016 (2)", "ST01-017", "ST01-017 (2)", "ST01-018", "ST01-018 (2)", "ST01-019", "ST01-019 (2)", "ST01-020", "ST01-020 (2)", "ST01-021", "ST01-021 (2)", "ST01-022", "ST01-022 (2)", "ST01-023", "ST01-023 (2)", "ST01-024", "ST01-024 (2)", "ST01-025", "ST01-025 (2)", "ST01-026", "ST01-026 (2)", "ST01-027", "ST01-027 (2)", "ST01-028", "ST01-028 (2)", "ST01-029", "ST01-029 (2)", "ST01-030", "ST01-030 (2)", "ST01-031", "ST01-031 (2)", "ST01-032", "ST01-032 (2)", "ST01-033", "ST01-033 (2)", "ST01-034", "ST01-034 (2)", "ST01-035", "ST01-035 (2)", "ST01-036", "ST01-036 (2)", "ST01-037", "ST01-037 (2)", "ST01-038", "ST01-038 (2)", "ST01-039", "ST01-039 (2)", "ST01-040", "ST01-040 (2)", "ST01-041", "ST01-041 (2)", "ST01-042", "ST01-042 (2)", "ST01-043", "ST01-043 (2)", "ST01-044", "ST01-044 (2)", "ST01-045", "ST01-045 (2)", "ST01-046", "ST01-046 (2)", "ST01-047", "ST01-047 (2)", "ST01-048", "ST01-048 (2)", "ST01-049", "ST01-049 (2)", "ST01-050", "ST01-050 (2)", "ST01-051", "ST01-051 (2)", "ST01-052", "ST01-052 (2)", "ST01-053", "ST01-053 (2)", "ST01-054", "ST01-054 (2)", "ST01-055", "ST01-055 (2)", "ST01-056", "ST01-056 (2)", "ST01-057", "ST01-057 (2)", "ST01-058", "ST01-058 (2)", "ST01-059", "ST01-059 (2)", "ST01-060", "ST01-060 (2)", "ST01-061", "ST01-061 (2)", "ST01-062", "ST01-062 (2)", "ST01-063", "ST01-063 (2)", "ST01-064", "ST01-064 (2)", "ST01-065", "ST01-065 (2)", "ST01-066", "ST01-066 (2)", "ST01-067", "ST01-067 (2)", "ST01-068", "ST01-068 (2)", "ST01-069", "ST01-069 (2)", "ST01-070", "ST01-070 (2)", "ST01-070 (3)", "ST01-071", "ST01-071 (2)", "ST01-071 (3)"]''')
+          def get(u):
+            for k in range(3):
+              try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+              except urllib.error.HTTPError as e:
+                if e.code==404:return None
+              except Exception:pass
+              time.sleep(2)
+          def save(b,p):
+            im=Image.open(io.BytesIO(b)).convert('RGB')
+            if im.width>im.height:im=im.rotate(90,expand=True)
+            im=im.resize((400,round(im.height*400/im.width)),Image.LANCZOS);im.save(p,'WEBP',quality=80,method=6)
+          for L,pre,d in (('ja','D','st01/jp'),('en','E','st01/en')):
+            B='https://www.dbs-cardgame.com/fw/images/cards/card/%s/'%L
+            os.makedirs(d,exist_ok=True);os.makedirs(d+'_b',exist_ok=True);ok=[];miss=[]
+            for i,nm in enumerate(NM):
+              m=re.match(r'^((?:SB|FB|FS|ST)\d\d-\d{2,3}|E-\d{2,3})( ★)?(?: \((\d+)\))?$',nm.strip())
+              cid=pre+'1547-'+str(i+1).zfill(3)
+              if not m:miss.append((cid,nm));continue
+              code,star,k=m.group(1),m.group(2),int(m.group(3) or 1)
+              if code.startswith('FB'):
+                for p in range(0,6):
+                  f=code+('_f' if p==0 else '_f_p%d'%p)+'.webp'
+                  b=get(B+f)
+                  if b:save(b,'%s/cand_%s_%s'%(d,cid,f));print('cand',L,cid,nm,f)
+                continue
+              v=1 if star else k-1
+              c=[code+'_f.webp',code+'.webp'] if v==0 else [code+'_f_p%d.webp'%v,code+'_p%d.webp'%v]
+              b=None
+              for f in c:
+                b=get(B+f)
+                if b:break
+              if not b:miss.append((cid,nm));continue
+              save(b,'%s/%s.webp'%(d,cid));ok.append(cid)
+              bb=get(B+code+('_b.webp' if v==0 else '_b_p%d.webp'%v))
+              if bb:save(bb,'%s_b/%s.webp'%(d,cid));print('verso',L,cid,nm)
+            print(L,'ok',len(ok),'manquantes',len(miss),miss)
+          PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add voix2 && git commit -q -m voix2 && git push -q
+          git add st01 && git commit -q -m "photos ST01" && git push -q

@@ -407,14 +407,14 @@ jobs:
               mm = rxc.search(html.unescape(p.get('name', '')))
               if mm and 'idProduct' in p and p.get('idExpansion') not in BOOSTERS:
                   par[p['idExpansion']][mm.group(1)].append(p['idProduct'])
-          rxn = re.compile(r'^((?:FB|FS|SB|ST)\d\d-\d{2,3}|FP-\d{3}|E-\d{2,3})(?: \((\d+)\))?$')
+          rxn = re.compile(r'^((?:FB|FS|SB|ST)\d\d-\d{2,3}|FP-\d{3}|E-\d{2,3})( ★)?(?: \((\d+)\))?$')
           t, a, nb = {}, {}, 0
           for sid, info in noms.items():
               cartes = []
               for i, nm in enumerate(info.get('n', [])):
                   mm = rxn.match(nm.strip())
                   if mm:
-                      cartes.append(('%s-%s' % (sid, str(i + 1).zfill(info.get('w', 3))), mm.group(1), int(mm.group(2) or 1) - 1))
+                      cartes.append(('%s-%s' % (sid, str(i + 1).zfill(info.get('w', 3))), mm.group(1), 1 if mm.group(2) else int(mm.group(3) or 1) - 1))
               codes = {c for _, c, _ in cartes}
               if not codes:
                   continue

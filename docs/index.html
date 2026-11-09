@@ -4572,7 +4572,7 @@ document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.clos
  if(b.dataset.hzg!==undefined){S.hzm=b.dataset.hzg==='ms';if(S.hzm&&!S.hxm)S.hxm=MS_SETS[0].id}else{S.hzm=true;S.hxm=b.dataset.hzx}
  S.celeb=null;S.mspick=false;render()},true);
 /* Menu « + » court : 6 actions en grand, le reste derrière « Plus… » */
-const MN6=[['📷','Scanner une carte','data-cam','pri'],['🛒','Boutique','data-affshop'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
+const MN6=[['📷','Scanner une carte','data-cam','pri'],['👥','Amis','data-go="comm"'],['🔎','Chercher une carte','data-go="find"'],['📒','Mes classeurs','data-go="bind"'],['🎲','Ouvrir des boosters','data-go="luck"'],['📦','Mes scellés','data-hgo="sealed"']];
 const MN6X=['Scanner une carte','Saisir en rafale','Chercher une carte','Mes classeurs','Ouvrir des boosters','Mes scellés'];
 function mnBig(t,i){return `<button type="button" class="mn-b${t[3]?' '+t[3]:''}" ${t[2]} style="--i:${i}"><i aria-hidden="true">${t[0]}</i><span>${t[1]}</span></button>`}
 function mnSheet(){let i=0;
@@ -6286,7 +6286,7 @@ let curCol='';function serTheme(e){const h=(goldOn()?'#F5B400':ACFIX)||SERCOL[e]
 serTheme('FB01');
 const EXTS=[['FB01','Awakened Pulse'],['FB02','Blazing Aura'],['FB03','Raging Roar'],['FB04','Ultra Limit'],['FB05','New Adventure'],['FB06','Rivals Clash'],['FB07',"Wish for Shenron"],['FB08',"Saiyan's Pride"],['FB09',"Dual Evolution"],['FB10',"Cross Force"],['FB11',"Brightness of Hope"]],S={dl:false,shop:false,tut:HELP?null:0,zoom:false,sx:'',pr:'missing',pal:false,fx:'',bpg:0,bre:false,timg:null,hzv:false,hzo:false,hz:null,burst:false,balt:false,menu:false,fq:'',bsel:null,bpick:false,bq:'',bx:'',bnew:'',cf:null,cfd:null,mode:'cards',ssel:null,pick:false,ext:'FB01',sc:'',last:[],tab:START,q:'',own:'',ver:'',col:'',rar:'',sel:null};
 const $=s=>document.querySelector(s),pct=(a,b)=>b?Math.round(a/b*100):0;
-const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['luck','🎲','Boosters'],['mid'],['comm','👥','Amis'],['stats','📊','Stats'],['set','⚙️','Réglages']];
+const tabs=[['home','🏠','Accueil'],['coll','🗂️','Collection'],['luck','🎲','Boosters'],['mid'],['shop','🛒','Boutique'],['stats','📊','Stats'],['set','⚙️','Réglages']];
 const nrm=(e)=>cards.filter(c=>c.ver==='Normal'&&(!e||c.ext===e)),alt=(e)=>cards.filter(c=>c.ver!=='Normal'&&(!e||c.ext===e));
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
 let PH={},ARTMODE='';
@@ -7730,7 +7730,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='9 nov. 2026 · 71';
+const BUILD='9 nov. 2026 · 72';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7923,7 +7923,7 @@ if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scroll
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}try{cxAfter()}catch(e){}}
 function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]()+(S.tab==='set'?FANNOTE:'');$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
-$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button data-go="${t[0]}" ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
+$('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button ${t[0]==='shop'?'data-affshop':`data-go="${t[0]}"`} ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
 const fq=$('#fq');if(fq){fq.oninput=e=>{S.fq=e.target.value;const p=e.target.selectionStart;render();const n=$('#fq');n.focus();n.setSelectionRange(p,p)}}
@@ -10238,6 +10238,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:72,d:'2026-11-09',it:[
+  ['a','🔄','Boutique et Amis échangés','La 🛒 Boutique est maintenant dans la barre du bas, à la place d’Amis. 👥 Amis est dans le menu ＋, en haut avec les autres actions.','autres']]},
  {v:71,d:'2026-11-09',it:[
   ['n','🛍️','Une vraie boutique','Le bouton 🛒 Boutique du menu + ouvre une boutique avec des produits : photos, description, prix, panier et commande. Tu suis tes commandes dans « Mes commandes ».','autres'],
   ['a','🛒','La sélection Amazon reste là','Les liens Amazon sont toujours dans la boutique, dans l’onglet « Sélection Amazon ».','autres']]},

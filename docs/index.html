@@ -2768,6 +2768,9 @@ html.calm #app.enter>*{animation:none!important}
 .sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .sh-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:0 0 10px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);text-align:left;overflow:hidden}
 .sh-card.off{opacity:.55}
+.sh-cw{position:relative;display:flex}.sh-cw>.sh-card{flex:1;min-width:0}
+.sh-trash{position:absolute;z-index:2;top:6px;right:6px;min-width:36px;height:36px;padding:0 8px;border:0;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font:700 14px/1 Barlow,sans-serif}
+.sh-trash.ok{background:#d11;padding:0 12px}
 .sh-ci{width:100%;aspect-ratio:1;object-fit:cover;background:#fff;display:grid;place-items:center;font-size:40px}
 .sh-noimg{background:color-mix(in srgb,var(--gold,#F5B82E) 16%,var(--sf))}
 .sh-ct{padding:4px 10px 0;font-weight:600;font-size:14px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -7730,7 +7733,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='9 nov. 2026 · 72';
+const BUILD='9 nov. 2026 · 73';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8663,11 +8666,11 @@ function shTabs(){const b=(v,l,n)=>`<button type="button" class="sh-tab${SHP.v==
 function shPhoto(p,cls){const u=shImg(p.photos&&p.photos[0]);return u?`<img class="${cls}" src="${esc(u)}" alt="" loading="lazy">`:`<span class="${cls} sh-noimg" aria-hidden="true">🛍️</span>`}
 function shList(){const s=SHP.set,L=SHP.prods,cats=[...new Set(L.map(p=>p.categorie||'Produits'))];if(SHP.cat&&!cats.includes(SHP.cat))SHP.cat='';
   const V=L;
-  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button></div>`:'';
+  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button>${sh3dMissing().length?`<button type="button" class="btn" data-sh3d ${SHP.busy?'disabled':''}>${SHP.imp?'⏳ Mise en vente… '+SHP.imp:'🖨️ Ajouter mes impressions 3D ('+sh3dMissing().length+')'}</button>`:''}</div>`:'';
   const head=`<div class="sh-hero"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
   if(!L.length)return head+adm+`<p class="sub sh-empty">${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour ajouter ta première annonce.':'Les premiers produits arrivent bientôt ici.'}</p>`;
   return head+adm+
-   `<div class="sh-grid">${V.map(p=>`<button type="button" class="sh-card${p.actif?'':' off'}" data-shp="${p.id}">${shPhoto(p,'sh-ci')}<span class="sh-ct">${esc(p.titre)}</span><span class="sh-cp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</span>${!p.actif?'<em>Masqué</em>':shOut(p)?'<em>Épuisé</em>':''}</button>`).join('')}</div>`}
+   `<div class="sh-grid">${V.map(p=>`<div class="sh-cw">${SHP.admin?(SHP.del==='p'+p.id?`<button type="button" class="sh-trash ok" data-shpdel="${p.id}">Supprimer ?</button>`:`<button type="button" class="sh-trash" data-shdel="p${p.id}" aria-label="Supprimer ${esc(p.titre)}">🗑️</button>`):''}<button type="button" class="sh-card${p.actif?'':' off'}" data-shp="${p.id}">${shPhoto(p,'sh-ci')}<span class="sh-ct">${esc(p.titre)}</span><span class="sh-cp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</span>${!p.actif?'<em>Masqué</em>':shOut(p)?'<em>Épuisé</em>':''}</button></div>`).join('')}</div>`}
 function shProdView(){const p=shProd(SHP.cur);if(!p){SHP.v='list';return shList()}
   const ph=(p.photos||[]).map(shImg).filter(Boolean),i=Math.min(SHP.img,Math.max(0,ph.length-1)),out=shOut(p);
   const gal=ph.length?`<div class="sh-gal"><img src="${esc(ph[i])}" alt="${esc(p.titre)}">${ph.length>1?`<div class="sh-th">${ph.map((u,k)=>`<button type="button" class="${k===i?'on':''}" data-shimg="${k}" aria-label="Photo ${k+1}"><img src="${esc(u)}" alt=""></button>`).join('')}</div>`:''}</div>`:`<div class="sh-gal sh-noimg big" aria-hidden="true">🛍️</div>`;
@@ -8781,6 +8784,7 @@ async function shClick(e){const t=e.target.closest&&e.target.closest('button,[da
   if('shset' in d)return shGo('edit',{ed:Object.assign({set:1},SHP.set)});
   if(d.shpm){const a=SHP.ed.photos,k=+d.shpm;a.unshift(a.splice(k,1)[0]);return shDraw(1)}
   if(d.shpx){SHP.ed.photos.splice(+d.shpx,1);return shDraw(1)}
+  if('sh3d' in d)return sh3dImport();
   if('shsave' in d)return shSave();
   if(d.shpdel){try{await shApi('/rest/v1/shop_products?id=eq.'+(+d.shpdel),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Produit supprimé');SHP.prods=SHP.prods.filter(p=>p.id!==+d.shpdel);shGo('list');shLoad(true)}catch(er){toast(shErr(er))}}}
 async function shOrder(){if(!SBS)return;SHP.busy=true;shDraw(1);try{const id=await shApi('/rest/v1/rpc/shop_commander',{method:'POST',body:JSON.stringify({p_articles:SHP.cart.map(x=>({id:x.id,qte:x.qte}))})});
@@ -8803,6 +8807,35 @@ async function shUpload(files){if(!SHP.ed||!files||!files.length)return;SHP.up=1
     const r=await fetch(SBC.url+'/storage/v1/object/shop/'+n,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'false'},body:b});
     if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi impossible');SHP.ed.photos.push(SH_PUB()+n)}catch(e){toast(shErr(e));break}}
   SHP.up=0;shDraw(1)}
+/* ===== SHOP-3D : mes impressions 3D, à mettre en vente en une touche (gérant) + poubelle sur chaque produit ===== */
+const SH3D=[
+ {titre:'Protection display Fusion World (japonaise)',prix:17.9,prix_barre:22.9,ordre:1,ph:['protection_jp_fermee_plexi','protection_jp_ouverte_plexi','protection_jp_fermee_sans_plexi','protection_jp_ouverte_sans_plexi'],
+  description:'Protection sur mesure pour une display japonaise Dragon Ball Super Fusion World (70 × 70 × 140 mm).\n\n• Couvercle plat aimanté (aimants cachés), il s’ouvre par le haut\n• Façade en plexi transparent qui glisse dans une rainure (7,7 × 14,5 cm, inclus)\n• Imprimée en 3D en PLA blanc\n• Ta display reste visible et à l’abri de la poussière\n\nDisplay non fournie.'},
+ {titre:'Protection display US / Masters',prix:22.9,prix_barre:27.9,ordre:2,ph:['protection_us_fermee_plexi','protection_us_ouverte_plexi','protection_us_fermee_sans_plexi','protection_us_ouverte_sans_plexi'],
+  description:'Protection sur mesure pour une display Dragon Ball Super Masters / version US (jusqu’à 144 × 126 × 60 mm).\n\n• Couvercle plat aimanté (aimants cachés), il s’ouvre par le haut\n• Façade en plexi transparent qui glisse dans une rainure (inclus)\n• Imprimée en 3D en PLA blanc\n• Ta display reste visible et à l’abri de la poussière\n\nDisplay non fournie.'},
+ {titre:'Nid d’abeille mural – display Fusion World',prix:9.9,prix_barre:12.9,ordre:3,ph:['nid_abeille_jp'],
+  description:'Module hexagonal à accrocher au mur pour ranger une display japonaise Fusion World dans sa protection.\n\n• Fond fermé, profondeur pile celle de la protection\n• Les modules s’assemblent entre eux pour faire un mur en nid d’abeille\n• Imprimé en 3D en PLA blanc\n• Prix pour 1 module\n\nProtection display non fournie (vendue à part). Display non fournie.'},
+ {titre:'Nid d’abeille mural – display US / Masters',prix:12.9,prix_barre:15.9,ordre:4,ph:['nid_abeille_us'],
+  description:'Module hexagonal à accrocher au mur pour ranger une display US / Masters dans sa protection.\n\n• Fond fermé, profondeur pile celle de la protection\n• Les modules s’assemblent entre eux pour faire un mur en nid d’abeille\n• Imprimé en 3D en PLA blanc\n• Prix pour 1 module\n\nProtection display non fournie (vendue à part). Display non fournie.'},
+ {titre:'Cadre magnet pour carte (35 pt)',prix:9.9,prix_barre:12.9,ordre:5,ph:['cadre_magnet','cadre_magnet_socle'],
+  description:'Cadre en 2 parties qui se ferment par aimants, pour une carte dans un étui magnétique 35 pt.\n\n• Se colle sur le frigo ou se pose sur son socle de bureau (inclus)\n• Imprimé en 3D en PLA blanc\n\nCarte et étui non fournis.'},
+ {titre:'Présentoir PRO 30 cartes',prix:19.9,prix_barre:24.9,ordre:6,ph:['presentoir_pro_30'],
+  description:'Présentoir à gradins pour exposer jusqu’à 30 cartes en sleeves.\n\n• Une seule pièce, imprimée en 3D en PLA blanc\n• Cartes inclinées pour bien les voir de face\n• Patins sous le présentoir pour qu’il ne glisse pas\n\nCartes non fournies.'},
+ {titre:'Présentoir vitrine 18 cartes',prix:16.9,prix_barre:19.9,ordre:7,ph:['presentoir_vitrine_18'],
+  description:'Présentoir à gradins plus compact pour exposer jusqu’à 18 cartes en sleeves.\n\n• Une seule pièce, imprimée en 3D en PLA blanc\n• Idéal pour une vitrine ou un bureau\n\nCartes non fournies.'}];
+const sh3dMissing=()=>SH3D.filter(x=>!SHP.prods.some(p=>p.titre===x.titre));
+async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;SHP.busy=true;SHP.imp='0/'+L.length;shDraw(1);let n=0;
+  try{const t=await sbTok();
+    for(const x of L){const photos=[];
+      for(const f of x.ph){const b=await (await fetch('boutique3d/'+f+'.jpg')).blob(),nm=Date.now().toString(36)+Math.random().toString(36).slice(2,8)+'.jpg';
+        const r=await fetch(SBC.url+'/storage/v1/object/shop/'+nm,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'false'},body:b});
+        if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi des photos impossible');photos.push(SH_PUB()+nm)}
+      await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({titre:x.titre,prix:x.prix,prix_barre:x.prix_barre,categorie:'Impression 3D',description:x.description,photos,stock:null,actif:true,ordre:x.ordre,updated_at:new Date().toISOString()})});
+      n++;SHP.imp=n+'/'+L.length;shDraw(1)}
+    toast(n+' impression'+(n>1?'s':'')+' 3D mise'+(n>1?'s':'')+' en vente 🎉')}
+  catch(e){toast(shErr(e))}
+  SHP.busy=false;SHP.imp='';await shLoad(true)}
+/* ===== SHOP-3D:END ===== */
 /* gérant : petit rappel des nouvelles commandes à l'ouverture de l'appli */
 setTimeout(async()=>{if(!SBS)return;try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});const n=+(i&&i.nouvelles)||0,m=+(i&&i.messages)||0;if(i&&i.admin&&n>0)toast(`🛒 ${n} nouvelle${n>1?'s':''} commande${n>1?'s':''} dans la boutique`);else if(m>0)toast(`💬 ${m} nouveau${m>1?'x':''} message${m>1?'s':''} dans la boutique`)}catch(e){}},5000);
 
@@ -10238,7 +10271,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
- {v:72,d:'2026-11-09',it:[
+ {v:73,d:'2026-11-09',it:[['a','🖨️','Impressions 3D dans la Boutique','Le gérant peut mettre en vente toutes ses impressions 3D (protections de display, nids d’abeille, cadre magnet, présentoirs) en une seule touche, avec photos et descriptions.','autres'],['a','🗑️','Supprimer un produit plus vite','Une poubelle sur chaque produit de la Boutique permet au gérant de le supprimer (deuxième touche pour confirmer).','autres']]},
+{v:72,d:'2026-11-09',it:[
   ['a','🔄','Boutique et Amis échangés','La 🛒 Boutique est maintenant dans la barre du bas, à la place d’Amis. 👥 Amis est dans le menu ＋, en haut avec les autres actions.','autres']]},
  {v:71,d:'2026-11-09',it:[
   ['n','🛍️','Une vraie boutique','Le bouton 🛒 Boutique du menu + ouvre une boutique avec des produits : photos, description, prix, panier et commande. Tu suis tes commandes dans « Mes commandes ».','autres'],

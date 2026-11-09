@@ -2748,6 +2748,108 @@ html:is([data-ly=tab],[data-ly=pc]) .mj-d{border-width:1px;border-radius:22px;bo
 html.calm #app.enter>*{animation:none!important}
 @media (prefers-reduced-motion:reduce){#app.enter>*{animation:none!important}}
 /* ===== PR:END ===== */
+/* ===== SHOP ===== */
+.aff-sh .aff-d{width:min(640px,100%)}
+.sh-tabs{position:sticky;top:-18px;z-index:2;background:var(--bg,#0b0b0b);display:flex;flex-wrap:wrap;gap:6px;margin:12px -2px 4px;padding:2px;scrollbar-width:none}
+.sh-tabs::-webkit-scrollbar{display:none}
+.sh-tab{flex:none;padding:7px 11px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-weight:700;font-size:14px;white-space:nowrap}
+.sh-tab.on{background:var(--gold,#F5B82E);border-color:var(--gold,#F5B82E);color:#111}
+.sh-tab i{font-style:normal;display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--ac);color:#fff;font-size:12px;line-height:20px;text-align:center}
+.sh-tab.on i{background:#111;color:var(--gold,#F5B82E)}
+.sh-b{padding-top:6px}
+.sh-hero h3{margin:8px 0 2px;font:400 24px/1.1 'Big Shoulders Display',Barlow,sans-serif;color:var(--gold,#F5B82E)}
+.sh-hero p{margin:0 0 10px;color:var(--mu)}
+.sh-adm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}
+.sh-adm .btn{padding:11px 8px;font-size:14px}
+.sh-cats{display:flex;gap:6px;overflow-x:auto;margin:6px 0 12px;scrollbar-width:none}
+.sh-cats::-webkit-scrollbar{display:none}
+.sh-cats button{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--ln);background:transparent;color:var(--mu);font-size:13px;font-weight:600}
+.sh-cats button.on{color:var(--tx);border-color:var(--tx)}
+.sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.sh-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:0 0 10px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);text-align:left;overflow:hidden}
+.sh-card.off{opacity:.55}
+.sh-ci{width:100%;aspect-ratio:1;object-fit:cover;background:#fff;display:grid;place-items:center;font-size:40px}
+.sh-noimg{background:color-mix(in srgb,var(--gold,#F5B82E) 16%,var(--sf))}
+.sh-ct{padding:4px 10px 0;font-weight:600;font-size:14px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sh-cp{padding:0 10px;font-weight:800;font-size:16px}
+.sh-cp s,.sh-pp s{color:var(--mu);font-weight:400;font-size:.8em}
+.sh-card em{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:999px;background:#111;color:#fff;font:700 12px/1.2 Barlow,sans-serif}
+.sh-back{border:0;background:none;color:var(--mu);padding:6px 0;font-weight:600}
+.sh-gal img{display:block;width:100%;max-height:52vh;object-fit:contain;border-radius:14px;background:#fff}
+.sh-gal.big{height:220px;border-radius:14px;display:grid;place-items:center;font-size:64px}
+.sh-th{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+.sh-th button{flex:none;width:58px;height:58px;padding:0;border-radius:10px;border:2px solid transparent;overflow:hidden;background:#fff}
+.sh-th button.on{border-color:var(--gold,#F5B82E)}
+.sh-th img{width:100%;height:100%;object-fit:cover}
+.sh-pt{margin:14px 0 4px;font:700 21px/1.2 Barlow,sans-serif}
+.sh-pp{font-weight:800;font-size:24px;margin-bottom:2px}
+.sh-ko{color:var(--ki)}
+.sh-buy{display:flex;gap:10px;align-items:center;margin:14px 0}
+.sh-buy .btn{flex:1}
+.sh-q{display:flex;align-items:center;gap:4px;border:1px solid var(--ln);border-radius:12px;padding:3px;background:var(--sf)}
+.sh-q button{width:38px;height:38px;border:0;border-radius:9px;background:transparent;font-size:20px}
+.sh-q b{min-width:22px;text-align:center}
+.sh-q.sm{display:inline-flex;margin-top:6px}
+.sh-q.sm button{width:30px;height:30px;font-size:17px}
+.sh-q .sh-rm{width:auto;padding:0 10px;font-size:13px;color:var(--mu)}
+.sh-desc{white-space:pre-wrap;line-height:1.55;margin:6px 0 12px}
+.sh-info{margin:12px 0}
+.sh-info p{margin:4px 0 0;color:var(--mu);white-space:pre-wrap}
+.sh-info .btn{margin-top:10px}
+.sh-empty{margin:18px 0}
+.sh-lines{display:grid;gap:10px}
+.sh-line{display:flex;gap:12px;align-items:flex-start}
+.sh-li{flex:none;width:64px;height:64px;border-radius:10px;object-fit:cover;background:#fff;display:grid;place-items:center;font-size:28px}
+.sh-line b{display:block;line-height:1.25}
+.sh-line span{color:var(--mu);font-size:14px}
+.sh-tot{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--ln)}
+.sh-tot b{font-size:22px}
+.sh-l{display:block;margin:10px 0 0;font-size:13px;color:var(--mu)}
+.sh-l input,.sh-l textarea,.sh-l select{display:block;width:100%;margin-top:4px;padding:11px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:16px}
+.sh-l textarea{resize:vertical}
+.sh-ck{display:flex;gap:10px;align-items:center;margin:14px 0;font-weight:600}
+.sh-ck input{width:22px;height:22px}
+.sh-b>.btn,.sh-od .btn{margin-top:12px}
+.sh-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sh-ok{text-align:center;padding:16px 0}
+.sh-ok div{font-size:54px}
+.sh-ok h3{margin:6px 0}
+.sh-ok p{color:var(--mu);white-space:pre-wrap}
+.sh-o{border:1px solid var(--ln);border-left:4px solid var(--mu);border-radius:14px;background:var(--sf);padding:10px 12px;margin:0 0 10px}
+.sh-o.st-nouvelle{border-left-color:var(--gold,#F5B82E)}
+.sh-o.st-payée,.sh-o.st-envoyée,.sh-o.st-acceptée{border-left-color:#4DA3FF}
+.sh-o.st-terminée{border-left-color:var(--ok)}
+.sh-o.st-annulée{opacity:.6}
+.sh-oh{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;border:0;background:none;padding:0;text-align:left;color:var(--tx)}
+.sh-oh small{grid-column:1/-1;color:var(--mu)}
+.sh-st{font-size:13px;font-weight:700}
+.sh-o ul{margin:8px 0 0;padding:0;list-style:none;font-size:14px}
+.sh-o li{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.sh-o li span{color:var(--mu)}
+.sh-o .btn.sm{margin-top:8px;padding:9px;font-size:14px}
+.sh-od{margin-top:10px;padding-top:10px;border-top:1px dashed var(--ln)}
+.sh-od p{margin:0 0 8px}
+.sh-nt{padding:8px 10px;border-radius:10px;background:var(--bg)}
+.sh-phs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.sh-phs>div{position:relative;width:88px;height:88px;border-radius:12px;overflow:hidden;background:#fff}
+.sh-phs img{width:100%;height:100%;object-fit:cover}
+.sh-phs button{position:absolute;top:4px;width:28px;height:28px;border:0;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:13px;padding:0}
+.sh-phs button[data-shpx]{right:4px}
+.sh-phs button[data-shpm]{left:4px}
+.sh-phs em{position:absolute;left:0;right:0;bottom:0;padding:2px;background:rgba(0,0,0,.7);color:#fff;font:700 11px/1.3 Barlow,sans-serif;text-align:center}
+.sh-add{width:88px;height:88px;display:grid;place-items:center;padding:6px;border:2px dashed var(--ln);border-radius:12px;text-align:center;font-size:12px;font-weight:700;color:var(--mu);cursor:pointer}
+.sh-how{margin:12px 0 0}
+.sh-chat{display:flex;align-items:center;gap:6px;width:100%;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);font-weight:700;text-align:left}
+.sh-chat.on{border-color:var(--gold,#F5B82E)}
+.sh-chat i{font-style:normal;min-width:20px;padding:0 6px;border-radius:999px;background:var(--ac);color:#fff;font-size:12px;line-height:20px;text-align:center}
+.sh-msgs{max-height:300px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding:8px;border-radius:12px;background:var(--bg)}
+.sh-m{max-width:85%;align-self:flex-start;padding:7px 10px;border-radius:14px 14px 14px 4px;background:var(--sf);border:1px solid var(--ln)}
+.sh-m.me{align-self:flex-end;border-radius:14px 14px 4px 14px;background:color-mix(in srgb,var(--gold,#F5B82E) 22%,var(--sf));border-color:transparent}
+.sh-m p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.sh-m small{display:block;margin-top:2px;color:var(--mu);font-size:11px;text-align:right}
+.sh-send{display:flex;gap:8px;align-items:flex-end;margin-top:8px}
+.sh-send textarea{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:16px;resize:none}
+.sh-send .btn{width:auto;margin:0;padding:12px 14px}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -7628,7 +7730,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='8 nov. 2026 · 70';
+const BUILD='9 nov. 2026 · 71';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8530,6 +8632,180 @@ async function affOpen(){affClose();if(!AFF)await affLoad();
  document.body.appendChild(o);document.addEventListener('keydown',affKey);const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-affshop]');if(!t)return;e.stopPropagation();S.menu=false;S.mnmore=false;render();affOpen()},true);
 /* ===== AFF-SHOP:END ===== */
+/* ===== SHOP : vraie boutique (produits avec fiche, panier, commandes) — gérée par le gérant seul ; liens Amazon dans un onglet à part ===== */
+const SHP={ok:0,admin:false,nouv:0,set:{},prods:[],busy:false,err:'',v:'list',cat:'',cur:null,img:0,qty:1,
+  cart:[],orders:null,aOrders:null,aFil:'nouvelle',open:{},ed:null,done:0,del:'',up:0,t:0,msgs:0,unr:{},th:null};
+try{const c=JSON.parse(localStorage.getItem('fb_shcart')||'[]');if(Array.isArray(c))SHP.cart=c.filter(x=>x&&+x.id>0).map(x=>({id:+x.id,qte:Math.max(1,Math.min(99,+x.qte||1))}))}catch(e){}
+const shSaveCart=()=>{try{localStorage.setItem('fb_shcart',JSON.stringify(SHP.cart))}catch(e){}};
+const SH_PUB=()=>SBC.url+'/storage/v1/object/public/shop/';
+const shImg=u=>typeof u==='string'&&u.startsWith(SH_PUB())&&/^[\w\-./%]+$/.test(u.slice(SH_PUB().length))?u:'';
+const shEur=n=>(Math.round((+n||0)*100)/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+const SH_ST=[['nouvelle','🆕 Nouvelle'],['acceptée','👍 Acceptée'],['payée','💶 Payée'],['envoyée','📦 Envoyée'],['terminée','✅ Terminée'],['annulée','✖️ Annulée']];
+const shStL=s=>(SH_ST.find(x=>x[0]===s)||[s,s])[1];
+async function shApi(path,o){o=o||{};const h=Object.assign({},o.headers||{});if(SBS){try{h.Authorization='Bearer '+await sbTok()}catch(e){}}
+  const r=await sbFetch(path,Object.assign({},o,{headers:h}));if(!r.ok){const j=await r.json().catch(()=>({}));const e=new Error(j.message||j.error||('Erreur '+r.status));e.status=r.status;throw e}
+  if(r.status===204)return null;const t=await r.text();return t?JSON.parse(t):null}
+const shErr=e=>{const m=String(e&&e.message||'');return /Failed to fetch|NetworkError/i.test(m)?'Pas de connexion internet':/JWT|token/i.test(m)?'Reconnecte-toi dans Réglages':m||'Erreur'};
+async function shLoad(force){if(SHP.busy||(!force&&SHP.ok&&Date.now()-SHP.t<60000))return;SHP.busy=true;SHP.err='';
+  try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});SHP.ok=1;SHP.admin=!!(i&&i.admin);SHP.nouv=+(i&&i.nouvelles)||0;SHP.msgs=+(i&&i.messages)||0;
+    const [st,pr]=await Promise.all([shApi('/rest/v1/shop_settings?id=eq.1&select=data'),shApi('/rest/v1/shop_products?select=*&order=ordre.asc,id.desc')]);
+    SHP.set=(st&&st[0]&&st[0].data)||{};SHP.prods=Array.isArray(pr)?pr:[];SHP.t=Date.now();
+    const ids=new Set(SHP.prods.map(p=>p.id));const n=SHP.cart.length;SHP.cart=SHP.cart.filter(x=>ids.has(x.id));if(n!==SHP.cart.length)shSaveCart()}
+  catch(e){SHP.ok=e&&e.status===404?-1:SHP.ok||0;if(SHP.ok!==-1)SHP.err=shErr(e)}
+  SHP.busy=false;shDraw()}
+const shProd=id=>SHP.prods.find(p=>p.id===+id);
+const shCartN=()=>SHP.cart.reduce((a,x)=>a+x.qte,0);
+const shCartTot=()=>SHP.cart.reduce((a,x)=>{const p=shProd(x.id);return a+(p?p.prix*x.qte:0)},0);
+const shOut=p=>p.stock!=null&&p.stock<=0;
+/* ---------- écrans ---------- */
+function shTabs(){const b=(v,l,n)=>`<button type="button" class="sh-tab${SHP.v===v||(v==='list'&&SHP.v==='prod')?' on':''}" data-shv="${v}">${l}${n?` <i>${n}</i>`:''}</button>`;
+  return `<nav class="sh-tabs" aria-label="Boutique">${SHP.ok===1?b('list','Boutique')+b('cart','🛒 Panier',shCartN())+(SBS?b('mine','Mes commandes',SHP.admin?0:SHP.msgs):''):''}${b('amz','Sélection Amazon')}${SHP.admin?b('adm','📋 Commandes',SHP.nouv+SHP.msgs):''}</nav>`}
+function shPhoto(p,cls){const u=shImg(p.photos&&p.photos[0]);return u?`<img class="${cls}" src="${esc(u)}" alt="" loading="lazy">`:`<span class="${cls} sh-noimg" aria-hidden="true">🛍️</span>`}
+function shList(){const s=SHP.set,L=SHP.prods,cats=[...new Set(L.map(p=>p.categorie||'Produits'))];if(SHP.cat&&!cats.includes(SHP.cat))SHP.cat='';
+  const V=L;
+  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button></div>`:'';
+  const head=`<div class="sh-hero"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
+  if(!L.length)return head+adm+`<p class="sub sh-empty">${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour ajouter ta première annonce.':'Les premiers produits arrivent bientôt ici.'}</p>`;
+  return head+adm+
+   `<div class="sh-grid">${V.map(p=>`<button type="button" class="sh-card${p.actif?'':' off'}" data-shp="${p.id}">${shPhoto(p,'sh-ci')}<span class="sh-ct">${esc(p.titre)}</span><span class="sh-cp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</span>${!p.actif?'<em>Masqué</em>':shOut(p)?'<em>Épuisé</em>':''}</button>`).join('')}</div>`}
+function shProdView(){const p=shProd(SHP.cur);if(!p){SHP.v='list';return shList()}
+  const ph=(p.photos||[]).map(shImg).filter(Boolean),i=Math.min(SHP.img,Math.max(0,ph.length-1)),out=shOut(p);
+  const gal=ph.length?`<div class="sh-gal"><img src="${esc(ph[i])}" alt="${esc(p.titre)}">${ph.length>1?`<div class="sh-th">${ph.map((u,k)=>`<button type="button" class="${k===i?'on':''}" data-shimg="${k}" aria-label="Photo ${k+1}"><img src="${esc(u)}" alt=""></button>`).join('')}</div>`:''}</div>`:`<div class="sh-gal sh-noimg big" aria-hidden="true">🛍️</div>`;
+  const q=Math.max(1,Math.min(SHP.qty,p.stock!=null?Math.max(1,p.stock):99));
+  return `<button type="button" class="sh-back" data-shv="list">← Tous les produits</button>${gal}<h3 class="sh-pt">${esc(p.titre)}</h3><div class="sh-pp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</div>`+
+   `<div class="sub">${esc(p.categorie||'Produits')}${p.stock!=null?` · ${out?'<b class="sh-ko">Épuisé</b>':p.stock<=3?`<b class="sh-ko">Plus que ${p.stock}</b>`:'En stock'}`:''}</div>`+
+   (out?'':`<div class="sh-buy"><div class="sh-q"><button type="button" data-shq="-1" aria-label="Moins">−</button><b>${q}</b><button type="button" data-shq="1" aria-label="Plus">+</button></div><button type="button" class="btn" data-shadd="${p.id}">Ajouter au panier</button></div>`)+
+   (p.description?`<div class="sh-desc">${esc(p.description)}</div>`:'')+(SHP.set.livraison?`<div class="panel sh-info"><b>📦 Livraison</b><p>${esc(SHP.set.livraison)}</p></div>`:'')+
+   (SHP.admin?`<button type="button" class="btn alt" style="margin-top:12px" data-shedit="${p.id}">✏️ Modifier ce produit</button>`:'')}
+function shCart(){if(SHP.done)return `<div class="sh-ok"><div>✅</div><h3>Commande n° ${SHP.done} envoyée !</h3><p>Je t’écris très vite dans la discussion de ta commande pour le paiement et la livraison.</p><button type="button" class="btn" data-shv="mine">Voir ma commande</button></div>`;
+  if(!SHP.cart.length)return `<p class="sub sh-empty">Ton panier est vide.</p><button type="button" class="btn alt" data-shv="list">Voir les produits</button>`;
+  return `<div class="sh-lines">${SHP.cart.map(x=>{const p=shProd(x.id);if(!p)return '';return `<div class="sh-line">${shPhoto(p,'sh-li')}<div><b>${esc(p.titre)}</b><span>${shEur(p.prix)}</span><div class="sh-q sm"><button type="button" data-shcq="${p.id}:-1" aria-label="Moins">−</button><b>${x.qte}</b><button type="button" data-shcq="${p.id}:1" aria-label="Plus">+</button><button type="button" class="sh-rm" data-shcq="${p.id}:0">Retirer</button></div></div></div>`}).join('')}</div>`+
+   `<div class="sh-tot"><span>Total</span><b>${shEur(shCartTot())}</b></div>`+
+   (!SBS?`<div class="panel sh-info"><b>🔐 Connecte-toi pour commander</b><p>Crée ton compte ou connecte-toi dans Réglages, puis reviens ici : ton panier est gardé.</p><button type="button" class="btn" data-shlogin>Aller dans Réglages</button></div>`:
+   `<p class="sub sh-how">Tu n’as rien à remplir : après ta commande, on se met d’accord dans la discussion de la commande (paiement, livraison).</p>`+(SHP.set.paiement?`<div class="panel sh-info"><b>💶 Paiement</b><p>${esc(SHP.set.paiement)}</p></div>`:'')+`<button type="button" class="btn" data-shorder ${SHP.busy?'disabled':''}>Commander · ${shEur(shCartTot())}</button>`)}
+function shOrderCard(o,adm){const it=(Array.isArray(o.articles)?o.articles:[]).map(a=>`<li>${esc(a.qte)} × ${esc(a.titre)} <span>${shEur(a.prix*a.qte)}</span></li>`).join('');
+  const d=new Date(o.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});const op=adm&&SHP.open[o.id];
+  let h=`<div class="sh-o st-${esc(o.statut)}"><button type="button" class="sh-oh" ${adm?`data-shopen="${o.id}" aria-expanded="${!!op}"`:'tabindex="-1"'}><b>N° ${o.id}${adm&&o.pseudo?' · '+esc(o.pseudo):''}</b><span class="sh-st">${esc(shStL(o.statut))}</span><small>${d} · ${shEur(o.total)}</small></button><ul>${it}</ul>`;
+  if(o.suivi)h+=`<p class="sub">📦 Suivi : ${esc(o.suivi)}</p>`;
+  h+=shThread(o);
+  if(!adm){if(o.statut==='nouvelle')h+=SHP.del==='o'+o.id?`<button type="button" class="btn alt sm" data-shcancel="${o.id}">Confirmer l'annulation</button>`:`<button type="button" class="btn alt sm" data-shdel="o${o.id}">Annuler la commande</button>`;return h+'</div>'}
+  if(!op)return h+'</div>';
+  h+=`<div class="sh-od">${o.nom||o.adresse?`<p><b>${esc(o.nom)}</b><br>${esc(o.adresse).replace(/\n/g,'<br>')}<br>${esc(o.contact)}</p>`:''}${o.note?`<p class="sh-nt">💬 ${esc(o.note)}</p>`:''}
+   <label class="sh-l">Statut<select data-sho="statut:${o.id}">${SH_ST.map(([v,l])=>`<option value="${v}"${v===o.statut?' selected':''}>${l}</option>`).join('')}</select></label>
+   <label class="sh-l">Numéro de suivi (le client le voit)<input data-sho="suivi:${o.id}" value="${esc(o.suivi||'')}" maxlength="120"></label>
+   <label class="sh-l">Note pour toi (le client ne la voit pas)<textarea data-sho="note_admin:${o.id}" rows="2" maxlength="1000">${esc(o.note_admin||'')}</textarea></label>
+   <div class="sh-row"><button type="button" class="btn" data-shosave="${o.id}">Enregistrer</button>${SHP.del==='a'+o.id?`<button type="button" class="btn alt" data-shodel="${o.id}">Confirmer la suppression</button>`:`<button type="button" class="btn alt" data-shdel="a${o.id}">Supprimer</button>`}</div></div>`;
+  return h+'</div>'}
+function shThread(o){const n=SHP.unr[o.id]||0,on=SHP.th&&SHP.th.id===o.id;
+  let h=`<button type="button" class="sh-chat${on?' on':''}" data-shth="${o.id}" aria-expanded="${on}">💬 ${on?'Fermer la discussion':SHP.admin&&o.user_id!==(SBS&&SBS.uid)?'Écrire à '+esc(o.pseudo||'l’acheteur'):'Discussion avec le vendeur'}${n&&!on?` <i>${n}</i>`:''}</button>`;
+  if(!on)return h;const T=SHP.th,me=SBS&&SBS.uid;
+  h+=`<div class="sh-msgs" id="sh-msgs">${T.msgs===null?'<p class="sub">Chargement…</p>':T.msgs.length?T.msgs.map(m=>`<div class="sh-m${m.sender===me?' me':''}"><p>${esc(m.body)}</p><small>${new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</small></div>`).join(''):`<p class="sub">${SHP.admin&&o.user_id!==me?'Écris à l’acheteur pour le paiement et la livraison.':'Pas encore de message. Tu peux écrire au vendeur ici.'}</p>`}</div>
+   <div class="sh-send"><textarea data-shtxt rows="2" maxlength="1000" placeholder="Ton message…">${esc(T.txt)}</textarea><button type="button" class="btn" data-shsend ${T.busy?'disabled':''}>Envoyer</button></div>`;
+  return h}
+async function shThLoad(quiet){const T=SHP.th;if(!T)return;const id=T.id;
+  try{const r=await shApi('/rest/v1/shop_msgs?select=id,sender,body,created_at,lu&order_id=eq.'+id+'&order=id.asc&limit=300');if(!SHP.th||SHP.th.id!==id)return;
+    const sig=JSON.stringify(r.map(m=>m.id));if(quiet&&sig===T.sig)return;T.sig=sig;T.msgs=r;
+    const me=SBS&&SBS.uid;if(r.some(m=>!m.lu&&m.sender!==me)){shApi('/rest/v1/shop_msgs?order_id=eq.'+id+'&lu=is.false&sender=neq.'+encodeURIComponent(me),{method:'PATCH',headers:{Prefer:'return=minimal'},body:'{"lu":true}'}).catch(()=>{});
+      SHP.msgs=Math.max(0,SHP.msgs-(SHP.unr[id]||0));SHP.unr[id]=0}}
+  catch(e){if(!quiet)toast(shErr(e));if(SHP.th&&SHP.th.msgs===null)SHP.th.msgs=[]}
+  const ta=document.querySelector('#aff-sh [data-shtxt]'),f=ta&&document.activeElement===ta;shDraw(1);const l=document.getElementById('sh-msgs');if(l)l.scrollTop=l.scrollHeight;if(f){const t2=document.querySelector('#aff-sh [data-shtxt]');if(t2){t2.focus();t2.selectionStart=t2.selectionEnd=t2.value.length}}}
+async function shThSend(){const T=SHP.th;if(!T||T.busy)return;const txt=String(T.txt||'').trim().slice(0,1000);if(!txt)return;T.busy=true;
+  try{await shApi('/rest/v1/shop_msgs',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:T.id,body:txt})});T.txt='';T.busy=false;await shThLoad()}catch(e){T.busy=false;toast(shErr(e));shDraw(1)}}
+setInterval(()=>{if(SHP.th&&document.getElementById('aff-sh')&&!document.hidden)shThLoad(true)},8000);
+async function shLoadUnr(){if(!SBS)return;try{const r=await shApi('/rest/v1/shop_msgs?select=order_id&lu=is.false&sender=neq.'+encodeURIComponent(SBS.uid)+'&limit=1000');const u={};(r||[]).forEach(m=>{u[m.order_id]=(u[m.order_id]||0)+1});SHP.unr=u;SHP.msgs=(r||[]).length}catch(e){}}
+function shMine(){if(!SBS)return '<p class="sub sh-empty">Connecte-toi dans Réglages pour voir tes commandes.</p>';if(SHP.orders===null){shLoadMine();return '<p class="sub sh-empty">Chargement…</p>'}
+  return SHP.orders.length?SHP.orders.map(o=>shOrderCard(o,false)).join(''):'<p class="sub sh-empty">Tu n’as pas encore passé de commande.</p>'}
+async function shLoadMine(){if(!SBS)return;await shLoadUnr();try{SHP.orders=await shApi('/rest/v1/shop_orders?select=id,user_id,articles,total,statut,suivi,created_at&user_id=eq.'+encodeURIComponent(SBS.uid)+'&order=id.desc&limit=50')||[]}catch(e){SHP.orders=[];toast(shErr(e))}shDraw()}
+function shAdm(){if(SHP.aOrders===null){shLoadAdm();return '<p class="sub sh-empty">Chargement…</p>'}
+  const L=SHP.aOrders,n=s=>L.filter(o=>o.statut===s).length,F=L.filter(o=>SHP.aFil==='tout'?true:SHP.aFil==='cours'?['acceptée','payée','envoyée'].includes(o.statut):o.statut===SHP.aFil);
+  const fil=[['nouvelle','🆕 Nouvelles',n('nouvelle')],['cours','⏳ En cours',n('acceptée')+n('payée')+n('envoyée')],['terminée','✅ Terminées',n('terminée')],['annulée','✖️ Annulées',n('annulée')],['tout','Toutes',L.length]];
+  return `<div class="sh-cats">${fil.map(([v,l,c])=>`<button type="button" class="${SHP.aFil===v?'on':''}" data-shfil="${v}">${l} ${c}</button>`).join('')}</div>`+(F.length?F.map(o=>shOrderCard(o,true)).join(''):'<p class="sub sh-empty">Aucune commande ici.</p>')}
+async function shLoadAdm(){await shLoadUnr();try{SHP.aOrders=await shApi('/rest/v1/shop_orders?select=*&order=id.desc&limit=300')||[];SHP.nouv=SHP.aOrders.filter(o=>o.statut==='nouvelle').length}catch(e){SHP.aOrders=[];toast(shErr(e))}shDraw()}
+function shEdit(){const e=SHP.ed;if(!e)return shList();
+  if(e.set){const f=(k,l,ta)=>`<label class="sh-l">${l}${ta?`<textarea data-she="${k}" rows="3" maxlength="600">${esc(e[k]||'')}</textarea>`:`<input data-she="${k}" value="${esc(e[k]||'')}" maxlength="80">`}</label>`;
+    return `<button type="button" class="sh-back" data-shv="list">← Annuler</button><h3 class="aff-h">⚙️ Textes de la boutique</h3>${f('titre','Nom de la boutique')}${f('intro','Texte d’accueil',1)}${f('paiement','Comment payer (montré au moment de commander)',1)}${f('livraison','Livraison (montré sur chaque produit)',1)}<button type="button" class="btn" data-shsave ${SHP.busy?'disabled':''}>Enregistrer</button>`}
+  const f=(k,l,ty,ph)=>`<label class="sh-l">${l}<input data-she="${k}" ${ty?`inputmode="${ty==='int'?'numeric':'decimal'}"`:''} value="${esc(e[k]==null?'':e[k])}" placeholder="${esc(ph||'')}" maxlength="120"></label>`;
+  const cats=[...new Set(SHP.prods.map(p=>p.categorie).filter(Boolean))];
+  return `<button type="button" class="sh-back" data-shv="${e.id?'prod':'list'}">← Annuler</button><h3 class="aff-h">${e.id?'✏️ Modifier le produit':'➕ Nouveau produit'}</h3>
+   <div class="sh-phs">${(e.photos||[]).map((u,k)=>`<div><img src="${esc(u)}" alt="">${k?`<button type="button" data-shpm="${k}" aria-label="Mettre en premier">⭐</button>`:'<em>Principale</em>'}<button type="button" data-shpx="${k}" aria-label="Retirer la photo">✕</button></div>`).join('')}<label class="sh-add">${SHP.up?'⏳ Envoi…':'📷 Ajouter des photos'}<input type="file" accept="image/*" multiple data-shup hidden></label></div>
+   ${f('titre','Nom du produit *','','ex. Boîtier pour display FB')}<div class="sh-row">${f('prix','Prix (€) *','number','12.90')}${f('prix_barre','Ancien prix barré (€)','number','facultatif')}</div>
+   <div class="sh-row"><label class="sh-l">Catégorie<input data-she="categorie" value="${esc(e.categorie||'')}" list="sh-cats" placeholder="ex. Impression 3D" maxlength="40"></label>${f('stock','Stock (vide = illimité)','int','')}</div><datalist id="sh-cats">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+   <label class="sh-l">Description (ce qu’on voit quand on clique sur le produit)<textarea data-she="description" rows="7" maxlength="5000" placeholder="Matière, dimensions, contenu, conseils…">${esc(e.description||'')}</textarea></label>
+   <label class="sh-l">Ordre d’affichage (plus petit = plus haut)<input data-she="ordre" type="number" inputmode="numeric" value="${esc(e.ordre||0)}"></label>
+   <label class="sh-ck"><input type="checkbox" data-she="actif" ${e.actif!==false?'checked':''}> Visible dans la boutique</label>
+   <button type="button" class="btn" data-shsave ${SHP.busy||SHP.up?'disabled':''}>${e.id?'Enregistrer':'Mettre en vente'}</button>
+   ${e.id?(SHP.del==='p'+e.id?`<button type="button" class="btn alt" style="margin-top:8px" data-shpdel="${e.id}">Confirmer : supprimer ce produit</button>`:`<button type="button" class="btn alt" style="margin-top:8px" data-shdel="p${e.id}">Supprimer le produit</button>`):''}`}
+function shAmz(){const L=(AFF&&AFF.items||[]).filter(x=>x&&affUrl(x.url));const g={};L.forEach(x=>{const c=x.cat||'Produits';(g[c]=g[c]||[]).push(x)});
+  const card=x=>`<a class="aff-i" href="${esc(affUrl(x.url))}" target="_blank" rel="noopener sponsored nofollow">${x.img&&/^(https:\/\/|boutique\/[\w.-]+\.(jpe?g|png|webp)$)/.test(x.img)?`<img src="${esc(x.img)}" alt="" loading="lazy">`:'<span class="aff-ph" aria-hidden="true">🛒</span>'}<span class="aff-t"><b>${esc(x.nom||'Voir sur Amazon')}</b>${x.info?`<small>${esc(x.info)}</small>`:''}</span><span class="aff-go">Voir</span></a>`;
+  return (L.length?Object.keys(g).map(c=>`<h3 class="aff-h">${esc(c)}</h3><div class="aff-l">${g[c].map(card).join('')}</div>`).join(''):'<p class="sub aff-e">Bientôt ici : une sélection de boosters, displays et accessoires Dragon Ball Super.</p>')+
+   '<p class="aff-n">En tant que Partenaire Amazon, L’Appel des Cartes réalise un bénéfice sur les achats remplissant les conditions requises. Le prix ne change pas pour toi.</p>'}
+function shBody(){if(SHP.ok!==1&&SHP.v!=='amz'){if(SHP.ok===-1)SHP.v='amz';else return SHP.err?`<p class="sub sh-empty">${esc(SHP.err)}</p><button type="button" class="btn alt" data-shretry>Réessayer</button>`:'<p class="sub sh-empty">Chargement de la boutique…</p>'}
+  return SHP.v==='prod'?shProdView():SHP.v==='cart'?shCart():SHP.v==='mine'?shMine():SHP.v==='adm'&&SHP.admin?shAdm():SHP.v==='edit'&&SHP.admin?shEdit():SHP.v==='amz'?shAmz():shList()}
+function shDraw(keep){const o=document.getElementById('aff-sh');if(!o)return;const d=o.querySelector('.aff-d'),y=d?d.scrollTop:0;
+  d.innerHTML=`<div class="aff-top"><h2>🛒 Boutique</h2><button type="button" class="sr-x" data-affx aria-label="Fermer">✕</button></div>${shTabs()}<div class="sh-b">${shBody()}</div>`;if(keep)d.scrollTop=y}
+const shGo=(v,extra)=>{const o=document.getElementById('aff-sh');Object.assign(SHP,{v,del:'',th:null},extra||{});shDraw();const d=o&&o.querySelector('.aff-d');if(d)d.scrollTop=0};
+async function affOpen(){affClose();if(!AFF)affLoad().then(()=>{if(SHP.v==='amz')shDraw(1)});SHP.done=0;if(SHP.v==='edit')SHP.v='list';
+  const o=document.createElement('div');o.id='aff-sh';o.className='sheet in aff-sh';o.innerHTML='<div role="dialog" aria-modal="true" aria-label="Boutique" class="aff-d"></div>';
+  o.addEventListener('click',e=>{if(e.target===o||(e.target.closest&&e.target.closest('[data-affx]')))affClose()});
+  o.addEventListener('click',shClick);o.addEventListener('input',shInput);o.addEventListener('change',shChange);
+  document.body.appendChild(o);document.addEventListener('keydown',affKey);shDraw();const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}
+  shLoad(true)}
+/* ---------- actions ---------- */
+function shInput(e){const t=e.target;if(t.matches&&t.matches('[data-shtxt]')){if(SHP.th)SHP.th.txt=t.value}else if(t.dataset.she&&SHP.ed&&t.type!=='checkbox'){SHP.ed[t.dataset.she]=t.value}
+  else if(t.dataset.sho){const [k,id]=t.dataset.sho.split(':'),o=(SHP.aOrders||[]).find(x=>x.id===+id);if(o){o._e=o._e||{};o._e[k]=t.value}}}
+function shChange(e){const t=e.target;if(t.dataset.she==='actif'&&SHP.ed)SHP.ed.actif=t.checked;else if(t.dataset.sho)shInput(e);else if(t.matches('[data-shup]'))shUpload(t.files)}
+async function shClick(e){const t=e.target.closest&&e.target.closest('button,[data-shv]');if(!t)return;const d=t.dataset;
+  if(d.shv){if(d.shv==='mine')SHP.orders=null;if(d.shv==='adm')SHP.aOrders=null;if(d.shv==='list')shLoad();return shGo(d.shv,d.shv==='prod'?{}:{done:d.shv==='cart'?SHP.done:0})}
+  if('shretry' in d)return shLoad(true);
+  if(d.shcat!==undefined){SHP.cat=d.shcat;return shDraw(1)}
+  if(d.shp)return shGo('prod',{cur:+d.shp,img:0,qty:1});
+  if(d.shimg){SHP.img=+d.shimg;return shDraw(1)}
+  if(d.shq){SHP.qty=Math.max(1,Math.min(99,SHP.qty+ +d.shq));return shDraw(1)}
+  if(d.shadd){const p=shProd(d.shadd);if(!p)return;const c=SHP.cart.find(x=>x.id===p.id),max=p.stock!=null?p.stock:99,q=Math.min(max,(c?c.qte:0)+SHP.qty);
+    if(c)c.qte=q;else SHP.cart.push({id:p.id,qte:Math.max(1,q)});shSaveCart();toast('Ajouté au panier 🛒');SHP.qty=1;return shDraw(1)}
+  if(d.shcq){const [id,dl]=d.shcq.split(':').map(Number),c=SHP.cart.find(x=>x.id===id),p=shProd(id);if(!c)return;
+    if(dl===0)SHP.cart=SHP.cart.filter(x=>x!==c);else{c.qte=Math.max(1,Math.min(p&&p.stock!=null?p.stock:99,c.qte+dl))}shSaveCart();return shDraw(1)}
+  if('shlogin' in d){affClose();S.tab='set';S.menu=false;render();try{window.scrollTo(0,0)}catch(_){}return}
+  if('shorder' in d)return shOrder();
+  if(d.shdel){SHP.del=d.shdel;return shDraw(1)}
+  if(d.shcancel){try{await shApi('/rest/v1/rpc/shop_annuler',{method:'POST',body:JSON.stringify({p_id:+d.shcancel})});toast('Commande annulée');SHP.orders=null;SHP.del='';SHP.t=0;shLoad()}catch(er){toast(shErr(er))}return shDraw(1)}
+  if(d.shth){const id=+d.shth;if(SHP.th&&SHP.th.id===id)SHP.th=null;else{SHP.th={id,msgs:null,txt:'',sig:''};shThLoad()}return shDraw(1)}
+  if('shsend' in d)return shThSend();
+  if(d.shopen){SHP.open[d.shopen]=!SHP.open[d.shopen];SHP.del='';return shDraw(1)}
+  if(d.shfil){SHP.aFil=d.shfil;return shDraw(1)}
+  if(d.shosave){const o=(SHP.aOrders||[]).find(x=>x.id===+d.shosave);if(!o)return;const b=Object.assign({},o._e||{},{updated_at:new Date().toISOString()});
+    try{await shApi('/rest/v1/shop_orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});Object.assign(o,o._e||{});delete o._e;toast('Commande enregistrée');SHP.nouv=SHP.aOrders.filter(x=>x.statut==='nouvelle').length}catch(er){toast(shErr(er))}return shDraw(1)}
+  if(d.shodel){try{await shApi('/rest/v1/shop_orders?id=eq.'+(+d.shodel),{method:'DELETE',headers:{Prefer:'return=minimal'}});SHP.aOrders=SHP.aOrders.filter(x=>x.id!==+d.shodel);SHP.del='';toast('Commande supprimée')}catch(er){toast(shErr(er))}return shDraw(1)}
+  if('shnew' in d)return shGo('edit',{ed:{titre:'',prix:'',prix_barre:'',categorie:'',stock:'',description:'',photos:[],actif:true,ordre:0}});
+  if(d.shedit){const p=shProd(d.shedit);if(p)shGo('edit',{ed:Object.assign({},p,{photos:(p.photos||[]).map(shImg).filter(Boolean),prix_barre:p.prix_barre==null?'':p.prix_barre,stock:p.stock==null?'':p.stock})});return}
+  if('shset' in d)return shGo('edit',{ed:Object.assign({set:1},SHP.set)});
+  if(d.shpm){const a=SHP.ed.photos,k=+d.shpm;a.unshift(a.splice(k,1)[0]);return shDraw(1)}
+  if(d.shpx){SHP.ed.photos.splice(+d.shpx,1);return shDraw(1)}
+  if('shsave' in d)return shSave();
+  if(d.shpdel){try{await shApi('/rest/v1/shop_products?id=eq.'+(+d.shpdel),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Produit supprimé');SHP.prods=SHP.prods.filter(p=>p.id!==+d.shpdel);shGo('list');shLoad(true)}catch(er){toast(shErr(er))}}}
+async function shOrder(){if(!SBS)return;SHP.busy=true;shDraw(1);try{const id=await shApi('/rest/v1/rpc/shop_commander',{method:'POST',body:JSON.stringify({p_articles:SHP.cart.map(x=>({id:x.id,qte:x.qte}))})});
+    SHP.cart=[];shSaveCart();SHP.done=+id||1;SHP.orders=null;SHP.t=0;toast('Commande envoyée ✅')}catch(e){toast(shErr(e))}SHP.busy=false;shDraw();shLoad()}
+const shNum=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?Math.round(n*100)/100:null};
+async function shSave(){const e=SHP.ed;if(!e)return;SHP.busy=true;shDraw(1);
+  try{if(e.set){const data={titre:String(e.titre||'').slice(0,80),intro:String(e.intro||'').slice(0,600),paiement:String(e.paiement||'').slice(0,600),livraison:String(e.livraison||'').slice(0,600)};
+      await shApi('/rest/v1/shop_settings?id=eq.1',{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({data,updated_at:new Date().toISOString()})});SHP.set=data;toast('Textes enregistrés');SHP.busy=false;return shGo('list')}
+    const prix=shNum(e.prix);if(!String(e.titre||'').trim()||prix===null||prix<0){toast('Il faut un nom et un prix');SHP.busy=false;return shDraw(1)}
+    const st=String(e.stock).trim()===''?null:Math.max(0,parseInt(e.stock,10)||0),pb=String(e.prix_barre).trim()===''?null:shNum(e.prix_barre);
+    const b={titre:String(e.titre).trim().slice(0,120),prix,prix_barre:pb,categorie:String(e.categorie||'').trim().slice(0,40)||'Produits',description:String(e.description||'').slice(0,5000),photos:e.photos.slice(0,12),stock:st,actif:e.actif!==false,ordre:parseInt(e.ordre,10)||0,updated_at:new Date().toISOString()};
+    let id=e.id;if(id)await shApi('/rest/v1/shop_products?id=eq.'+id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});
+    else{const r=await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b)});id=r&&r[0]&&r[0].id}
+    toast(e.id?'Produit enregistré':'Produit mis en vente 🎉');SHP.busy=false;SHP.ed=null;await shLoad(true);return shGo(id?'prod':'list',{cur:id,img:0,qty:1})}
+  catch(er){toast(shErr(er))}SHP.busy=false;shDraw(1)}
+function shJpeg(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const m=1600,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+  c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(new Error('Photo illisible')),'image/jpeg',.86)};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Photo illisible'))};im.src=u})}
+async function shUpload(files){if(!SHP.ed||!files||!files.length)return;SHP.up=1;shDraw(1);
+  for(const f of [...files].slice(0,12-SHP.ed.photos.length)){try{const b=await shJpeg(f),n=Date.now().toString(36)+Math.random().toString(36).slice(2,8)+'.jpg',t=await sbTok();
+    const r=await fetch(SBC.url+'/storage/v1/object/shop/'+n,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'false'},body:b});
+    if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi impossible');SHP.ed.photos.push(SH_PUB()+n)}catch(e){toast(shErr(e));break}}
+  SHP.up=0;shDraw(1)}
+/* gérant : petit rappel des nouvelles commandes à l'ouverture de l'appli */
+setTimeout(async()=>{if(!SBS)return;try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});const n=+(i&&i.nouvelles)||0,m=+(i&&i.messages)||0;if(i&&i.admin&&n>0)toast(`🛒 ${n} nouvelle${n>1?'s':''} commande${n>1?'s':''} dans la boutique`);else if(m>0)toast(`💬 ${m} nouveau${m>1?'x':''} message${m>1?'s':''} dans la boutique`)}catch(e){}},5000);
+
 
 /* ===== LAYOUT : téléphone · tablette · PC, choisi tout seul selon la largeur de l'écran =====
    < 700 px : téléphone (rien ne change) · 700 à 1099 px : tablette · 1100 px et plus : PC (menu sur le côté) */
@@ -9962,6 +10238,9 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:71,d:'2026-11-09',it:[
+  ['n','🛍️','Une vraie boutique','Le bouton 🛒 Boutique du menu + ouvre une boutique avec des produits : photos, description, prix, panier et commande. Tu suis tes commandes dans « Mes commandes ».','autres'],
+  ['a','🛒','La sélection Amazon reste là','Les liens Amazon sont toujours dans la boutique, dans l’onglet « Sélection Amazon ».','autres']]},
  {v:70,d:'2026-11-08',it:[
   ['a','🔢','Le vrai code sous chaque carte','Story Booster ST01, Manga Booster SB01 / SB02 et Promo : on voit le code officiel (ST01-001, E-148 ★, ST01-001 ALT…) au lieu d’un simple numéro. Merci tontonphil !','serie'],
   ['a','📸','ST01 en photos officielles','Les 172 cartes de ST01 ont les photos du site officiel, en japonais et en anglais ; les 3 leaders ont leur verso.','serie'],

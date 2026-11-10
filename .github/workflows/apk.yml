@@ -29,6 +29,12 @@ jobs:
           sed -i 's#<application#<uses-permission android:name="android.permission.CAMERA" />\n    <uses-feature android:name="android.hardware.camera" android:required="false" />\n    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />\n    <application#' "$F"
           grep -c "permission.CAMERA" "$F"
           sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.VIBRATE" />\n    <application#' "$F"
+      - name: "Notifications appli fermée (Firebase : android-config/google-services.json)"
+        env:
+          GS: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -z "$GS" ] && [ -f android-config/google-services.json ]; then GS="$(cat android-config/google-services.json)"; fi
+          if [ -n "$GS" ]; then printf '%s' "$GS" > android/app/google-services.json && python3 -c "import json;d=json.load(open('android/app/google-services.json'));print('Firebase :',d['project_info']['project_id'])"; else echo "::warning::secret GOOGLE_SERVICES_JSON absent : pas de notifications quand l'appli est fermée"; npm uninstall --no-save @capacitor/push-notifications; fi
       - run: npx cap sync android
       - name: Mettre le logo de l'appli (icône et écran de lancement)
         continue-on-error: true

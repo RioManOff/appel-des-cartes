@@ -7733,7 +7733,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='9 nov. 2026 · 73';
+const BUILD='10 nov. 2026 · 74';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8635,6 +8635,22 @@ async function affOpen(){affClose();if(!AFF)await affLoad();
  document.body.appendChild(o);document.addEventListener('keydown',affKey);const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-affshop]');if(!t)return;e.stopPropagation();S.menu=false;S.mnmore=false;render();affOpen()},true);
 /* ===== AFF-SHOP:END ===== */
+/* ===== FCM : notifications de l'appli Play Store (Firebase), même appli fermée ===== */
+const FCM={on:false,tok:'',uid:''};
+const fcmPlug=()=>{try{const C=window.Capacitor;if(!C||!C.isNativePlatform||!C.isNativePlatform())return null;if(C.isPluginAvailable&&!C.isPluginAvailable('PushNotifications'))return null;return C.registerPlugin?C.registerPlugin('PushNotifications'):(C.Plugins&&C.Plugins.PushNotifications)||null}catch(e){return null}};
+async function fcmInit(){const P=fcmPlug();if(!P||!SBS||FCM.uid===SBS.uid)return;FCM.uid=SBS.uid;
+  try{if(!FCM.on){FCM.on=true;
+      await P.addListener('registration',async t=>{if(!t||!t.value||!SBS)return;FCM.tok=t.value;try{await frApi('/rest/v1/rpc/push_save_fcm',{method:'POST',body:JSON.stringify({p_token:t.value})})}catch(e){FCM.uid=''}});
+      await P.addListener('registrationError',()=>{FCM.uid=''});
+      await P.addListener('pushNotificationReceived',n=>{try{if(n&&n.title)toast((n.title+(n.body?' · '+n.body:'')).slice(0,120))}catch(e){}});
+      await P.addListener('pushNotificationActionPerformed',a=>{const d=(a&&a.notification&&a.notification.data)||{};try{if(/^shop/.test(d.k||''))affOpen();else if(d.k==='msg'&&d.u&&typeof chatOpen==='function')chatOpen(d.u)}catch(e){}});
+      try{await P.createChannel({id:'adc',name:'Messages et commandes',description:'Messages privés et boutique',importance:5,visibility:1,vibration:true})}catch(e){}}
+    let p=await P.checkPermissions();if(p.receive==='prompt'||p.receive==='prompt-with-rationale')p=await P.requestPermissions();
+    if(p.receive==='granted')await P.register();else FCM.uid=''}
+  catch(e){FCM.uid=''}}
+setTimeout(fcmInit,3000);setInterval(()=>{if(!document.hidden)fcmInit()},15000);
+{const _o=sbLogout;sbLogout=async function(){if(FCM.tok&&SBS){try{await frApi('/rest/v1/rpc/push_del',{method:'POST',body:JSON.stringify({p_endpoint:'fcm:'+FCM.tok})})}catch(e){}}FCM.uid='';return _o.apply(this,arguments)}}
+
 /* ===== SHOP : vraie boutique (produits avec fiche, panier, commandes) — gérée par le gérant seul ; liens Amazon dans un onglet à part ===== */
 const SHP={ok:0,admin:false,nouv:0,set:{},prods:[],busy:false,err:'',v:'list',cat:'',cur:null,img:0,qty:1,
   cart:[],orders:null,aOrders:null,aFil:'nouvelle',open:{},ed:null,done:0,del:'',up:0,t:0,msgs:0,unr:{},th:null};
@@ -10271,6 +10287,9 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:74,d:'2026-11-10',it:[
+  ['a','🔔','Notifications dans l’appli Play Store','L’appli du Play Store peut maintenant te prévenir d’un message privé, même fermée (après sa mise à jour sur le Play Store).','autres'],
+  ['n','🛒','Notifications de la boutique','Tu es prévenu d’une nouvelle commande et des messages de tes commandes.','autres']]},
  {v:73,d:'2026-11-09',it:[['a','🖨️','Impressions 3D dans la Boutique','Le gérant peut mettre en vente toutes ses impressions 3D (protections de display, nids d’abeille, cadre magnet, présentoirs) en une seule touche, avec photos et descriptions.','autres'],['a','🗑️','Supprimer un produit plus vite','Une poubelle sur chaque produit de la Boutique permet au gérant de le supprimer (deuxième touche pour confirmer).','autres']]},
 {v:72,d:'2026-11-09',it:[
   ['a','🔄','Boutique et Amis échangés','La 🛒 Boutique est maintenant dans la barre du bas, à la place d’Amis. 👥 Amis est dans le menu ＋, en haut avec les autres actions.','autres']]},

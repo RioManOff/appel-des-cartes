@@ -9,12 +9,10 @@ jobs:
     steps:
       - run: |
           J=/tmp/cj; UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36'
-          curl -s -L -c $J -b $J -A "$UA" 'http://www.dbzcollection.fr/2v2/cartes.php?idc=99' -o /tmp/a.html; echo "a $(wc -c </tmp/a.html)"
-          curl -s -L -c $J -b $J -A "$UA" -e 'http://www.dbzcollection.fr/2v2/cartes.php?idc=99' 'http://www.dbzcollection.fr/2v2/cartes.php?idc=34&ids=146' -o /tmp/b.html -w '%{url_effective}\n'; echo "b $(wc -c </tmp/b.html)"
-          cat $J
+          curl -s -L -c $J -b $J -A "$UA" 'http://www.dbzcollection.fr/2v2/cartes.php?idc=99' -o /dev/null
+          curl -s -L -c $J -b $J -A "$UA" 'http://www.dbzcollection.fr/2v2/cartes.php?idc=34&ids=146' -o /tmp/b.html
           python3 - <<'PY'
-          import re,html
+          import re
           t=open('/tmp/b.html',encoding='latin-1').read()
-          print(re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',t))[:3000])
-          print(re.findall(r'<img[^>]+>',t)[:8])
+          i=t.find("id=\"img_");print(t[i-2500:i+3500])
           PY

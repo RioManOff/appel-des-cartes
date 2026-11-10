@@ -7733,7 +7733,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='10 nov. 2026 · 75';
+const BUILD='10 nov. 2026 · 76';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8635,6 +8635,21 @@ async function affOpen(){affClose();if(!AFF)await affLoad();
  document.body.appendChild(o);document.addEventListener('keydown',affKey);const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-affshop]');if(!t)return;e.stopPropagation();S.menu=false;S.mnmore=false;render();affOpen()},true);
 /* ===== AFF-SHOP:END ===== */
+
+/* ===== NOTIF-GO : toucher une notification ouvre le bon endroit (message privé, chat général, boutique) ===== */
+function notifGo(k,u){k=String(k||'');u=String(u||'').toLowerCase();let n=0;
+  const go=()=>{if(++n>60)return;if(document.getElementById('splash')||S.op){setTimeout(go,300);return}
+    try{if(k==='msg'){if(!SBS)return;if(!/^[0-9a-f-]{36}$/.test(u)){S.tab='chat';render();return}
+        if(!FR.loaded){if(!FR.busy)frLoad();setTimeout(go,400);return}chatOpen(u)}
+      else if(k==='general'){if(document.querySelector('.sheet'))document.querySelectorAll('.sheet').forEach(x=>x.remove());gcOpen()}
+      else if(/^shop/.test(k)){affOpen();let t=0;const w=()=>{if(++t>40)return;if(SHP.ok!==1){setTimeout(w,250);return}shGo(SHP.admin?'adm':'mine',SHP.admin?{aFil:'tout',aOrders:null}:{orders:null})};w()}}
+    catch(e){}};
+  go()}
+/* lien d'une notification du site : ?nk=…&nu=… */
+setTimeout(()=>{let k='',u='';try{const q=new URLSearchParams(location.search);k=q.get('nk')||'';u=q.get('nu')||''}catch(e){}if(!k)return;
+  try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}notifGo(k,u)},600);
+try{navigator.serviceWorker&&navigator.serviceWorker.addEventListener('message',e=>{const d=e.data||{};if(d&&d.t==='notif')notifGo(d.k,d.u)})}catch(e){}
+
 /* ===== FCM : notifications de l'appli Play Store (Firebase), même appli fermée ===== */
 const FCM={on:false,tok:'',uid:''};
 const fcmPlug=()=>{try{const C=window.Capacitor;if(!C||!C.isNativePlatform||!C.isNativePlatform())return null;if(C.isPluginAvailable&&!C.isPluginAvailable('PushNotifications'))return null;return C.registerPlugin?C.registerPlugin('PushNotifications'):(C.Plugins&&C.Plugins.PushNotifications)||null}catch(e){return null}};
@@ -8643,7 +8658,7 @@ async function fcmInit(){const P=fcmPlug();if(!P||!SBS||FCM.uid===SBS.uid)return
       await P.addListener('registration',async t=>{if(!t||!t.value||!SBS)return;FCM.tok=t.value;try{await frApi('/rest/v1/rpc/push_save_fcm',{method:'POST',body:JSON.stringify({p_token:t.value})})}catch(e){FCM.uid=''}});
       await P.addListener('registrationError',()=>{FCM.uid=''});
       await P.addListener('pushNotificationReceived',n=>{try{if(n&&n.title)toast((n.title+(n.body?' · '+n.body:'')).slice(0,120))}catch(e){}});
-      await P.addListener('pushNotificationActionPerformed',a=>{const d=(a&&a.notification&&a.notification.data)||{};try{if(/^shop/.test(d.k||''))affOpen();else if(d.k==='msg'&&d.u&&typeof chatOpen==='function')chatOpen(d.u)}catch(e){}});
+      await P.addListener('pushNotificationActionPerformed',a=>{const d=(a&&a.notification&&a.notification.data)||{};notifGo(d.k,d.u)});
       try{await P.createChannel({id:'adc',name:'Messages et commandes',description:'Messages privés et boutique',importance:5,visibility:1,vibration:true})}catch(e){}}
     let p=await P.checkPermissions();if(p.receive==='prompt'||p.receive==='prompt-with-rationale')p=await P.requestPermissions();
     if(p.receive==='granted')await P.register();else FCM.uid=''}
@@ -10287,6 +10302,9 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:76,d:'2026-11-10',it:[
+  ['a','👆','Notification → bon endroit','Toucher une notification ouvre directement la conversation, le chat général ou ta commande dans la boutique.','autres'],
+  ['n','💬','Notifications du chat général','Tu es prévenu quand quelqu’un écrit dans le général (au plus une fois toutes les 15 minutes).','autres']]},
  {v:75,d:'2026-11-10',it:[
   ['a','☁️','Plus de rappel de sauvegarde','Quand tu es connecté, ta collection est gardée dans ton compte : l’appli ne te demande plus d’exporter une sauvegarde.','compte'],
   ['a','📱','Sondage retiré','Le sondage Android / iPhone n’est plus sur l’accueil.','home']]},

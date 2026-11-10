@@ -1,8 +1,9 @@
-const C='adc-v9';
+const C='adc-v10';
 self.addEventListener('install',e=>{self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||!e.request.url.startsWith(self.location.origin))return;if(/\/(ms-(hi-)?BT\d+(-\d+)?|ms-ci-[A-Za-z0-9]+|ms-th|ot-[A-Z]+-\d+)\.json/.test(e.request.url)){const net=fetch(e.request,{cache:'no-cache'}).then(r=>{if(r.ok){const cp=r.clone();caches.open(C).then(c=>c.put(e.request,cp))}return r});e.respondWith(caches.match(e.request).then(m=>m||net));e.waitUntil(net.catch(()=>{}));return}e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const cp=r.clone();caches.open(C).then(c=>c.put(e.request,cp));return r}).catch(()=>caches.match(e.request).then(m=>m||caches.match('index.html'))))});
-self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l){if('focus' in c)return c.focus()}return self.clients.openWindow('./')}))});
+self.addEventListener('notificationclick',e=>{e.notification.close();const url=(e.notification.data&&e.notification.data.url)||'./';let k='',u='';try{const q=new URL(url,self.location.href).searchParams;k=q.get('nk')||'';u=q.get('nu')||''}catch(_){}
+ e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l){if('focus' in c){if(k)c.postMessage({t:'notif',k,u});return c.focus()}}return self.clients.openWindow(url)}))});
 self.addEventListener('push',e=>{let d={};try{d=e.data?e.data.json():{}}catch(_){d={body:e.data?e.data.text():''}}
  e.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{if(l.some(c=>c.visibilityState==='visible'&&c.focused))return;
   return self.registration.showNotification(d.title||'Nouveau message',{body:d.body||'Ouvre l’appli pour le lire.',tag:d.tag||'adc-msg',renotify:true,icon:'icon-192.png',badge:'icon-192.png',vibrate:[120,60,120],data:{url:d.url||'./'}})}))});

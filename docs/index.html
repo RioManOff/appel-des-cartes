@@ -7314,7 +7314,7 @@ const pollDev=()=>{let d='';try{d=localStorage.getItem('fb_pdev')||'';if(!d){d='
 function pollLoad(){if(POLL.st==='load')return;POLL.st='load';sbFetch('/rest/v1/sondage_tel_res?select=choix,n').then(r=>r.ok?r.json():Promise.reject()).then(a=>{const r={android:0,ios:0};(a||[]).forEach(x=>{if(x.choix in r)r[x.choix]=+x.n||0});POLL={st:'ok',r};if(S.tab==='home')render()}).catch(()=>{POLL.st='off';if(S.tab==='home')render()})}
 function pollVote(v){const was=pollMine();if(was===v)return;try{localStorage.setItem('fb_poll',v)}catch(e){}if(POLL.st==='ok'){if(was&&POLL.r[was]>0)POLL.r[was]--;POLL.r[v]++}render();
  sbFetch('/rest/v1/sondage_tel?on_conflict=device',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({device:pollDev(),choix:v,updated_at:new Date().toISOString()})}).then(r=>{if(!r.ok)throw 0;POLL.st='';toast('Merci pour ton vote ✓');pollLoad()}).catch(()=>toast('Vote impossible pour le moment'))}
-function pollBox(){let hid=false;try{hid=localStorage.getItem('fb_pollx')==='1'}catch(e){}if(hid)return '';if(!POLL.st)pollLoad();if(POLL.st==='off')return '';
+function pollBox(){return '';let hid=false;try{hid=localStorage.getItem('fb_pollx')==='1'}catch(e){}if(hid)return '';if(!POLL.st)pollLoad();if(POLL.st==='off')return '';
  const m=pollMine(),a=POLL.r.android,i=POLL.r.ios,t=a+i,pa=t?Math.round(a*100/t):0,pi=t?100-pa:0,b=(v,l)=>`<button type="button" class="pl-b" data-poll="${v}" aria-pressed="${m===v}">${l}</button>`,bar=(l,p,n,v)=>`<div class="pl-r${m===v?' me':''}"><span>${l}</span><div class="pl-t"><i style="width:${p}%"></i></div><b>${p} %</b><small>${n}</small></div>`;
  return `<section class="panel pl" aria-label="Sondage"><div class="pl-h"><b>📱 Sondage : tu joues sur quoi ?</b><button type="button" class="pl-x" data-pollx aria-label="Masquer le sondage">✕</button></div><div class="pl-bs">${b('android','🤖 Android')}${b('ios','🍎 iPhone')}</div>${POLL.st==='ok'?bar('🤖 Android',pa,a,'android')+bar('🍎 iPhone',pi,i,'ios')+`<div class="sub">${t} vote${t>1?'s':''}${m?' · ton choix est surligné, tu peux le changer':''}</div>`:'<div class="sub">Chargement des résultats…</div>'}</section>`}
 document.addEventListener('click',e=>{const p=e.target.closest&&e.target.closest('[data-poll],[data-pollx]');if(!p)return;e.stopPropagation();if(p.dataset.poll)pollVote(p.dataset.poll);else{try{localStorage.setItem('fb_pollx','1')}catch(_){}render()}},true);
@@ -7552,7 +7552,7 @@ function dbShareDraw(g,FT){try{const ev=dbEval(),n=ev.balls.filter(b=>b.lit).len
 function dbShareLine(){try{const ev=dbEval(),n=ev.balls.filter(b=>b.lit).length;return n?'\n🐉 '+n+' / 7 Dragon Balls · rang '+dbRank(ev.st.d).name:''}catch(e){return ''}}
 function menuSheet(){return S.menu?mnSheet():''}
 function cfSheet(){return S.cf?`<div class="sheet" data-close><div role="dialog"><p style="font-size:16px">${S.cf.msg}</p><button class="btn" data-cfy>${S.cf.yes||'Oui'}</button><div style="height:8px"></div>${S.cf.alt?`<button class="btn alt" data-cfx>${S.cf.alt}</button><div style="height:8px"></div>`:''}<button class="btn alt" data-cfn>${S.cf.no||'Annuler'}</button></div></div>`:''}
-const remBanner=()=>{const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
+const remBanner=()=>{if(SBS)return '';const has=cards.some(c=>c.own>0)||BIND.length||X.sales.length;if(REM==='0'||!has)return '';const now=Date.now();if(now-SNZ<2*864e5)return '';const last=LASTEXP,days=last?Math.floor((now-last)/864e5):null;if(last&&now-last<REM*7*864e5)return '';return `<div class="panel" style="margin-bottom:10px;border:2px solid var(--ac)">⏰ <b>Pense à sauvegarder ta collection</b><div class="sub">${last?'Dernier export il y a '+days+' jour'+(days>1?'s':''):'Tu n\'as encore jamais exporté de sauvegarde.'}</div><div class="row" style="flex-wrap:wrap"><button class="chip" data-act="export">⬇️ Exporter maintenant</button><button class="chip" data-rx>Plus tard</button></div></div>`};
 const greet=()=>{const h=new Date().getHours(),g=h>=5&&h<12?'Bonjour':h<18&&h>=12?'Bon après-midi':h>=18&&h<23?'Bonsoir':'Encore debout ?',N=cards.filter(c=>c.ext===S.ext),o=N.filter(c=>c.own>0).length,p=pct(o,N.length),k=Math.floor(Date.now()/864e5)%3,t=(X.act[today()]||{}).c||0;
  const m=p===0?['Ta série '+S.ext+' attend ses premières cartes.','Une carte à la fois : tout commence ici.','Prêt à lancer la chasse à la série '+S.ext+' ?'][k]:p<25?['Beau début sur '+S.ext+' : '+o+' cartes déjà !','Ça se remplit : '+o+' / '+N.length+' sur '+S.ext+'.','Continue, '+S.ext+' commence à prendre forme.'][k]:p<50?['Presque la moitié de '+S.ext+' ! Plus que '+(N.length-o)+' cartes.','Tu avances bien sur '+S.ext+' : '+p+' %.','Plus de '+p+' % de '+S.ext+', ça roule.'][k]:p<75?['Plus de la moitié de '+S.ext+' est à toi !','Le plus dur est fait sur '+S.ext+' : '+p+' %.','Tu as passé la moitié de '+S.ext+', bravo.'][k]:p<100?['Il ne te manque que '+(N.length-o)+' carte'+(N.length-o>1?'s':'')+' pour finir '+S.ext+' !','Dernière ligne droite sur '+S.ext+' : '+p+' %.','Tu y es presque : plus que '+(N.length-o)+' pour '+S.ext+'.'][k]:'Série '+S.ext+' complète, félicitations ! 🏆';
  return `<div class="hmgw"><div class="hmg">${g}${g.endsWith('?')?'':' !'}</div><div class="sub hmgs">${m}</div><div class="hmgr"><span class="onl" data-onl role="status"${onlTxt()?'':' hidden'}>${onlTxt()}</span><button type="button" class="hmgu" data-clog aria-haspopup="dialog" aria-label="Voir toutes les mises à jour">🆕 Mises à jour</button></div></div>`};
@@ -7733,7 +7733,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='10 nov. 2026 · 74';
+const BUILD='10 nov. 2026 · 75';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -7758,8 +7758,8 @@ const on=sbOn(),lg=!!SBS;if(lg)S.sacc=false;
 /* résumé : compte + sauvegarde */
 const has=cards.some(c=>c.own>0)||BIND.length>0||X.sales.length>0;
 const late=REM!=='0'&&LASTEXP&&(Date.now()-LASTEXP)>=REM*7*864e5;
-const bkc=LASTEXP?(late?'warn':'ok'):has?'bad':'off';
-const bkt=LASTEXP?'Dernier export '+agoFr(LASTEXP):has?'Jamais exportée : pense à le faire':'Rien à sauvegarder pour l’instant';
+const bkc=lg?'ok':LASTEXP?(late?'warn':'ok'):has?'bad':'off';
+const bkt=lg?'Ta collection est gardée dans ton compte':LASTEXP?'Dernier export '+agoFr(LASTEXP):has?'Jamais exportée : pense à le faire':'Rien à sauvegarder pour l’instant';
 const srow=(lead,t,sub,btn)=>`<div class="stl">${lead}<div class="stx"><b>${t}</b><small>${sub}</small></div>${btn||''}</div>`;
 const status=`<div class="panel stc">${on?srow(`<span class="stb" aria-hidden="true">${lg?esc((SBS.pseudo||SBS.email||'?').slice(0,1).toUpperCase()):'👤'}</span>`,lg?esc(SBS.pseudo||'Compte connecté'):'Mode local',lg?(SBAUTO?'Synchronisation automatique activée':'Synchronisation en pause'):'Ta collection reste sur cet appareil.',lg?'':`<button class="chip" data-sacc>${S.sacc?'Fermer':'Se connecter'}</button>`):''}${srow(`<span class="sdt ${bkc}" aria-hidden="true"></span>`,'Sauvegarde',bkt,`<button class="chip" data-act="export">Exporter</button>`)}</div>`;
 /* compte (formulaire seulement si demandé) */
@@ -10287,6 +10287,9 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:75,d:'2026-11-10',it:[
+  ['a','☁️','Plus de rappel de sauvegarde','Quand tu es connecté, ta collection est gardée dans ton compte : l’appli ne te demande plus d’exporter une sauvegarde.','compte'],
+  ['a','📱','Sondage retiré','Le sondage Android / iPhone n’est plus sur l’accueil.','home']]},
  {v:74,d:'2026-11-10',it:[
   ['a','🔔','Notifications dans l’appli Play Store','L’appli du Play Store peut maintenant te prévenir d’un message privé, même fermée (après sa mise à jour sur le Play Store).','autres'],
   ['n','🛒','Notifications de la boutique','Tu es prévenu d’une nouvelle commande et des messages de tes commandes.','autres']]},

@@ -5,14 +5,33 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
+      - uses: actions/checkout@v4
       - run: |
-          J=/tmp/cj; UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36'
-          curl -s -L -c $J -b $J -A "$UA" 'http://www.dbzcollection.fr/2v2/cartes.php?idc=99' -o /dev/null
-          curl -s -L -c $J -b $J -A "$UA" 'http://www.dbzcollection.fr/2v2/cartes.php?idc=34&ids=146' -o /tmp/b.html
           python3 - <<'PY'
-          import re
-          t=open('/tmp/b.html',encoding='latin-1').read()
-          i=t.find('n°1</div>');print(t[i-1500:i+1800])
+          import re,json,time,http.cookiejar,urllib.request
+          cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
+          B='http://www.dbzcollection.fr/2v2/'
+          def get(u):
+            for k in range(3):
+              try:return op.open(B+u,timeout=60).read().decode('latin-1')
+              except Exception as e:time.sleep(3)
+            return ''
+          get('cartes.php?idc=99')
+          # collections menu: look for Grand Combat
+          home=get('index.php')+get('cartes.php?idc=99')
+          for m in re.finditer(r'idc=(\d+)[^>]*>([^<]{0,80})',home):
+            if re.search(r'grand|combat|battle|power',m.group(2),re.I):print('COL',m.group(1),m.group(2).strip())
+          def parse(t):
+            out=[]
+            for m in re.finditer(r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>',t):
+              out.append([m.group(1),m.group(3).strip(),m.group(2)])
+            return out
+          R={}
+          for ids in [146,147,148,149,151,152,153,154,155,156,157,158,159,160,161,163,169,171,172,173]:
+            t=get('cartes.php?idc=34&ids=%d'%ids);c=parse(t);R[ids]=c;print(ids,len(c),c[:3],c[-2:])
+          json.dump(R,open('sb_numeros.json','w'),ensure_ascii=False)
           PY
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sb_numeros.json && git commit -q -m sb && git push -q

@@ -14,5 +14,5 @@ jobs:
           python3 - <<'PY'
           import re
           t=open('/tmp/b.html',encoding='latin-1').read()
-          i=t.find("id=\"img_");print(t[i-2500:i+3500])
+          i=t.find('n°1</div>');print(t[i-1500:i+1800])
           PY

@@ -8095,7 +8095,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 90';
+const BUILD='11 nov. 2026 · 91';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9334,10 +9334,10 @@ const SH3D=[
   description:'Présentoir pour 9 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Livré en 3 plaques à assembler (4 clés à coller au dos) + 2 socles\n• Imprimé en 3D en PLA blanc\n• 240 × 366 mm\n\nBoîtiers magnétiques et cartes non fournis.'},
  {titre:'Magnet frigo 1 carte',prix:3.99,ordre:7,maj:86,ph:['magnet_frigo_carte_face','magnet_frigo_carte_biais','magnet_frigo_carte_dos'],
   description:'Magnet pour frigo qui protège et montre une carte.\n\n• La carte (en sleeve ou nue) glisse par le haut, grande fenêtre devant\n• 6 aimants 6 × 3 mm cachés dans le dos\n• Un trou au dos pour pousser la carte et la ressortir\n• Imprimé en 3D en PLA blanc\n• 80 × 106 × 7 mm\n\nCarte non fournie.'},
- {titre:'Protection 1 booster Fusion World japonais',prix:10.99,ordre:8,ph:['booster_jp_1_biais','booster_jp_1_face','booster_jp_1_eclatee'],
-  description:'Protection pour 1 booster Dragon Ball Fusion World japonais.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant le booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 74 × 23 × 125 mm\n\nIndique la série voulue (FB01 à FB12) dans le message de ta commande. Booster non fourni.'},
- {titre:'Protection 1 booster Dragon Ball Masters',prix:10.99,ordre:9,ph:['booster_masters_1_biais','booster_masters_1_face','booster_masters_1_eclatee'],
-  description:'Protection pour 1 booster Dragon Ball Super Card Game Masters.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant le booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : B01 à B30, ou sans gravure\n• Imprimé en 3D en PLA blanc\n• 76 × 24 × 128 mm\n\nIndique la série voulue dans le message de ta commande. Booster non fourni.'},
+ {titre:'Protection 1 booster Fusion World japonais',prix:10.99,ordre:8,maj:91,ph:['booster_jp_1_biais','booster_jp_1_face','booster_jp_1_cote','booster_jp_1_eclatee'],
+  description:'Protection pour 1 booster Dragon Ball Fusion World japonais.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant le booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 74 × 23 × 125 mm\n\nIndique la série voulue (FB01 à FB12) dans le message de ta commande.\n\nOption : 4 trous d’aimants sur les côtés (2 de chaque côté) pour coller plusieurs protections côte à côte. Demande-le dans le message de ta commande.\n\nBooster non fourni.'},
+ {titre:'Protection 1 booster Dragon Ball Masters',prix:10.99,ordre:9,maj:91,ph:['booster_masters_1_biais','booster_masters_1_face','booster_masters_1_cote','booster_masters_1_eclatee'],
+  description:'Protection pour 1 booster Dragon Ball Super Card Game Masters.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant le booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : B01 à B30, ou sans gravure\n• Imprimé en 3D en PLA blanc\n• 76 × 24 × 128 mm\n\nIndique la série voulue dans le message de ta commande.\n\nOption : 4 trous d’aimants sur les côtés (2 de chaque côté) pour coller plusieurs protections côte à côte. Demande-le dans le message de ta commande.\n\nBooster non fourni.'},
  {titre:'Commande personnalisée',prix:5,ordre:13,ph:['commande_perso'],
   description:'Tu veux un objet imprimé en 3D qui n’est pas dans la Boutique ? Une protection à la taille de ton scellé, un présentoir, un cadre, un nom gravé…\n\n• Décris ton idée (et les mesures si tu les as) dans le message de ta commande\n• Je te réponds avec le prix final et le délai avant de lancer l’impression\n• Ces 5 € sont un acompte, déduit du prix final\n• Imprimé en 3D en PLA'},
 ];
@@ -10871,6 +10871,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:91,d:'2026-11-11',it:[['a','🧲','Protections 1 booster (FW japonais et Masters)','Les fiches indiquent l’option aimants sur les côtés pour coller plusieurs protections côte à côte, avec une photo de côté. Elles se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:90,d:'2026-11-11',it:[['n','📦','Protection 1 booster Dragon Ball Masters','Nouveau produit dans la Boutique : protection pour 1 booster Masters (10,99 €). Elle s’ajoute toute seule quand le gérant ouvre la Boutique.','autres']]},
  {v:89,d:'2026-11-11',it:[['n','📦','Protection 1 booster Fusion World japonais','La protection 1 booster FW japonais revient dans la Boutique (10,99 €). Les versions 2, 3, 4 et 9 restent retirées.','autres']]},
  {v:88,d:'2026-11-11',it:[['c','📦','Protections boosters Fusion World japonais','Les protections boosters FW japonais sont retirées de la Boutique (trop chères). La commande personnalisée reste.','autres']]},

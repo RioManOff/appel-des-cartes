@@ -5,7 +5,7 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -18,19 +18,17 @@ jobs:
               try:return op.open(B+u,timeout=60).read().decode('latin-1')
               except Exception as e:time.sleep(3)
             return ''
-          get('cartes.php?idc=99')
-          def parse(t):
-            return [[m.group(1),m.group(3).strip(),m.group(2)] for m in re.finditer(r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>',t)]
-          R=json.load(open('sb_numeros.json'))
-          t=get('cartes.php?idc=53')
-          sets=sorted(set(int(x) for x in re.findall(r'cartes\.php\?idc=53&(?:amp;)?ids=(\d+)',t)))
-          print('LG sets',sets)
-          for m in re.finditer(r'idc=53&(?:amp;)?ids=(\d+)[^>]*>([^<]{0,60})',t):print('  ',m.group(1),m.group(2).strip())
-          for ids in sets:
-            c=parse(get('cartes.php?idc=53&ids=%d'%ids));R['lg%d'%ids]=c;print('lg',ids,len(c),[x[1] for x in c][:60])
-          for ids in [1202,1203,1204,1205,1206,1225]:
-            c=parse(get('cartes.php?idc=292&ids=%d'%ids));R['p%d'%ids]=c;print('p',ids,len(c),[x[1] for x in c][:12])
-          json.dump(R,open('sb_numeros.json','w'),ensure_ascii=False)
+          R={}
+          for u in ['cartes.php?idc=99','index.php','cartes.php','collections.php','cartes.php?cat=jp']:
+            t=get(u);L=sorted(set((int(a),re.sub(r'\s+',' ',b).strip()) for a,b in re.findall(r'idc=(\d+)[^>]*>([^<]{2,80})<',t)))
+            R[u]=L;print(u,len(t),len(L))
+            for a,b in L:
+              if re.search(r'hero|diver|h.ros',b,re.I):print('   ',a,b)
+          for idc in [335]:
+            t=get('cartes.php?idc=%d'%idc)
+            L=[(m.group(1),re.sub(r'\s+',' ',m.group(2)).strip()) for m in re.finditer(r'idc=%d&(?:amp;)?ids=(\d+)[^>]*>([^<]{0,80})'%idc,t)]
+            print('idc',idc,L)
+          json.dump(R,open('dz_index.json','w'),ensure_ascii=False)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sb_numeros.json && git commit -q -m sb2 && git push -q
+          git add dz_index.json && git commit -q -m idx && git push -q

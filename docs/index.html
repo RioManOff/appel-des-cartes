@@ -2853,6 +2853,347 @@ html.calm #app.enter>*{animation:none!important}
 .sh-send{display:flex;gap:8px;align-items:flex-end;margin-top:8px}
 .sh-send textarea{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:16px;resize:none}
 .sh-send .btn{width:auto;margin:0;padding:12px 14px}
+/* ===== SHOP v2 : vitrine plein écran =====
+   Idée : chaque produit est posé dans une petite vitrine sombre, derrière une vitre (reflet net en haut à gauche),
+   comme les protections en plexi qu’on y vend. Le reste reste sobre : noir mat de l’appli, prix en or, étiquettes de remise rouges. */
+.shx{--shx-w:760px;--shx-pad:16px;--shx-st:#101116;--shx-sale:#E0262F;--shx-ko:#FF5F5F;--shx-lo:#F0A030}
+.sheet.shx{align-items:stretch;justify-content:center;padding:0}
+.sheet.shx>.aff-d{position:relative;display:flex;flex-direction:column;width:100%;max-width:none;height:100%;max-height:none;padding:0;border:0;border-radius:0;background:var(--bg);overflow-y:auto;overflow-x:hidden;box-shadow:none;scroll-padding-top:120px}
+.sheet.shx>.aff-d::before{display:none}
+.shx-vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.shx button{-webkit-tap-highlight-color:transparent;cursor:pointer}
+.shx button:disabled{cursor:default}
+
+/* ---------- en-tête collant ---------- */
+.shx-hd{position:sticky;top:0;z-index:6;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--hl)}
+.shx-top{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;max-width:calc(var(--shx-w) + 2 * var(--shx-pad));margin:0 auto;padding:6px calc(var(--shx-pad) - 6px) 0}
+.shx .shx-top h2{margin:0;justify-content:center;font-size:22px;line-height:1}
+.shx .shx-top h2::before{display:none}
+.shx-x,.shx-cartb{position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:12px;background:transparent;color:var(--tx);font-size:19px}
+.shx-x:active,.shx-cartb:active{background:var(--hl)}
+.shx-cartb.on{color:var(--gold)}
+.shx-cartb svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.shx-cartb i{position:absolute;top:3px;right:0;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--gold);color:#17120A;font:700 13px/20px 'Barlow Condensed',Barlow,sans-serif;font-style:normal;text-align:center;box-shadow:0 0 0 2px var(--bg)}
+.shx-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;max-width:calc(var(--shx-w) + 2 * var(--shx-pad));margin:0 auto;padding:0 calc(var(--shx-pad) - 10px)}
+.shx-tabs::-webkit-scrollbar{display:none}
+.shx-tab{position:relative;flex:none;padding:11px 10px 13px;border:0;background:none;color:var(--mu);font:600 15px/1.1 Barlow,system-ui,sans-serif;white-space:nowrap}
+.shx-tab.on{color:var(--tx)}
+.shx-tab.on::after{content:'';position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:var(--gold)}
+.shx-tab i{display:inline-block;min-width:19px;margin-left:3px;padding:0 5px;border-radius:999px;background:var(--ac);color:#fff;font:700 12px/19px Barlow,sans-serif;font-style:normal;text-align:center;vertical-align:1px}
+
+/* ---------- contenu ---------- */
+.shx-in{flex:1 0 auto;width:100%;max-width:calc(var(--shx-w) + 2 * var(--shx-pad));margin:0 auto;padding:0 var(--shx-pad) 36px}
+.shx .btn{width:100%}
+.shx .btn+.btn{margin-top:10px}
+.shx-h1{margin:22px 0 16px;color:var(--tx);font:800 30px/1.05 'Big Shoulders Display',Barlow,sans-serif;letter-spacing:.005em}
+.shx-h{margin:34px 0 14px;color:var(--tx);font:800 23px/1.1 'Big Shoulders Display',Barlow,sans-serif;letter-spacing:.005em}
+.shx-fine{margin:10px 0 0;color:var(--mu);font-size:13px;line-height:1.45;text-align:center}
+.shx-wait{margin:28px 0;text-align:center}
+.shx-back{display:inline-flex;align-items:center;min-height:42px;margin:6px 0 2px -4px;padding:0 4px;border:0;background:none;color:var(--mu);font:600 15px/1 Barlow,sans-serif}
+.shx-back:active{color:var(--tx)}
+
+/* ---------- la vitrine : support sombre + vitre ---------- */
+.shx-stage{position:relative;isolation:isolate;display:block;width:100%;aspect-ratio:1;overflow:hidden;border-radius:14px;background:radial-gradient(120% 80% at 50% -10%,#30323B 0%,#17181D 55%,#0C0D10 100%)}
+.shx-stage img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.shx-stage::after{content:'';position:absolute;inset:0;z-index:1;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(128deg,rgba(255,255,255,.15) 0%,rgba(255,255,255,.045) 23%,transparent 23.3%),linear-gradient(128deg,transparent 27%,rgba(255,255,255,.075) 27.3%,rgba(255,255,255,.075) 29.6%,transparent 29.9%);
+  background-size:150% 150%;background-position:0 0;background-repeat:no-repeat;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -40px 46px -34px rgba(0,0,0,.6);
+  transition:background-position .7s cubic-bezier(.2,.8,.2,1)}
+@media (hover:hover){.shx-cb:hover .shx-stage::after,.shx-hb:hover .shx-stage::after,.shx-rc:hover .shx-stage::after{background-position:40% 40%}}
+.shx-noimg{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;opacity:.75}
+.shx-stage.big{border-radius:18px}
+.shx-stage.sm{border-radius:10px}
+.shx-stage.xs{border-radius:8px}
+.shx-stage.xs::after{background:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.shx-stage.xs .shx-noimg,.shx-stage.sm .shx-noimg{font-size:20px}
+/* étiquette de remise, avec son petit trou */
+.shx-off{position:absolute;z-index:3;top:10px;left:10px;display:flex;align-items:center;height:25px;padding:0 9px 0 16px;background:var(--shx-sale);color:#fff;font:700 15px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em;clip-path:polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%);pointer-events:none}
+.shx-off::before{content:'';position:absolute;left:8px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:var(--shx-st)}
+.shx-off.big{top:14px;left:14px;height:30px;padding:0 12px 0 19px;font-size:18px;clip-path:polygon(12px 0,100% 0,100% 100%,12px 100%,0 50%)}
+.shx-off.big::before{left:9px}
+
+/* ---------- prix ---------- */
+.shx-pr{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:6px}
+.shx-pr b{color:var(--gold);font:700 21px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.01em}
+.shx-pr s{color:var(--mu);font:500 15px/1 'Barlow Condensed',Barlow,sans-serif;text-decoration-thickness:1.5px}
+.shx-pr.big b{font-size:38px}
+.shx-pr.big s{font-size:20px}
+
+/* ---------- accueil de la boutique ---------- */
+.shx-intro{padding:26px 0 0}
+.shx-intro h3{margin:0;color:var(--tx);font:900 40px/.95 'Big Shoulders Display',Barlow,sans-serif;letter-spacing:.004em;text-wrap:balance}
+.shx-intro p{max-width:56ch;margin:12px 0 0;color:var(--mu);font-size:15.5px;line-height:1.5;white-space:pre-line}
+.shx-adm{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.shx .shx-adm .btn{width:auto;min-height:42px;margin:0;padding:9px 14px;font-size:14.5px}
+.shx-hero{position:relative;margin:24px 0 0}
+.shx-hb{display:block;width:100%;padding:0;border:0;background:none}
+.shx-hero .shx-stage.big{aspect-ratio:5/4}
+.shx-hi{padding:16px 2px 0}
+.shx-hi h4{margin:0;color:var(--tx);font:800 31px/1.02 'Big Shoulders Display',Barlow,sans-serif;letter-spacing:.005em;text-wrap:balance}
+.shx-hi p{max-width:50ch;margin:10px 0 0;color:var(--mu);font-size:15px;line-height:1.5}
+.shx-hi .shx-pr{margin-top:14px}
+.shx .shx-hi .btn{margin-top:16px}
+.shx-prom{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:14px;margin:28px 0 30px;padding:16px 0;border-block:1px solid var(--hl);list-style:none}
+.shx-prom li{display:flex;flex-direction:column;gap:7px;color:var(--tx);font:600 13.5px/1.3 Barlow,sans-serif}
+.shx-prom li span{font-size:21px;line-height:1}
+
+/* ---------- grille de produits ---------- */
+.shx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:26px 12px}
+.shx-card{position:relative;min-width:0}
+.shx-cb{display:block;width:100%;padding:0;border:0;border-radius:14px;background:none;color:inherit;font:inherit;text-align:left}
+.shx-cap{display:block;padding:11px 0 0 2px}
+.shx-cap .shx-pr{min-height:30px;padding-right:50px}
+.shx-ct{display:-webkit-box;overflow:hidden;color:var(--tx);font:600 15px/1.25 Barlow,sans-serif;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.shx-flag{display:block;margin-bottom:4px;color:var(--mu);font:700 13px/1.2 Barlow,sans-serif}
+.shx-flag.lo{color:var(--shx-lo)}
+.shx-flag.ko{color:var(--shx-ko)}
+.shx-card.off .shx-stage{opacity:.45}
+.shx-card.out .shx-stage img{filter:grayscale(.9) brightness(.65)}
+.shx-qa{position:absolute;right:0;bottom:-6px;display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid var(--hl2);border-radius:50%;background:var(--sf);color:var(--tx);font:400 26px/1 Barlow,sans-serif}
+.shx-qa:active{transform:scale(.92)}
+.shx-qa.in{border-color:var(--gold);background:var(--gold);color:#17120A;font:700 18px/1 'Barlow Condensed',Barlow,sans-serif}
+.shx-trash{position:absolute;z-index:3;top:8px;right:8px;min-width:38px;height:38px;padding:0 10px;border:0;border-radius:999px;background:rgba(10,10,12,.72);color:#fff;font:700 14px/1 Barlow,sans-serif;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.shx-trash.ok{background:#C8102E}
+@keyframes shxpop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.shx-qa.pop,.shx-cartb i.pop{animation:shxpop .38s cubic-bezier(.3,1.6,.5,1)}
+
+/* ---------- fiche produit ---------- */
+.shx-pv{display:grid;gap:18px}
+.shx-gw{position:relative;margin:4px calc(var(--shx-pad) * -1) 0}
+.shx-gal{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none}
+.shx-gal::-webkit-scrollbar{display:none}
+.shx-sl{flex:0 0 100%;padding:0;border:0;background:none;scroll-snap-align:center;cursor:zoom-in}
+.shx-gw .shx-stage.big{border-radius:0}
+.shx-dots{position:absolute;left:0;right:0;bottom:14px;z-index:2;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.shx-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.45);transition:width .25s,background-color .25s}
+.shx-dots i.on{width:20px;background:#fff}
+.shx-th{display:flex;gap:8px;overflow-x:auto;margin:10px 0 0;padding:0 var(--shx-pad);scrollbar-width:none}
+.shx-th::-webkit-scrollbar{display:none}
+.shx-th button{flex:none;width:62px;height:62px;padding:0;border:2px solid transparent;border-radius:11px;overflow:hidden;background:var(--shx-st);opacity:.62;transition:opacity .2s,border-color .2s}
+.shx-th button.on{border-color:var(--gold);opacity:1}
+.shx-th img{display:block;width:100%;height:100%;object-fit:cover}
+.shx-pi .shx-flag{margin:0 0 8px}
+.shx-pt{margin:0;color:var(--tx);font:800 33px/1.02 'Big Shoulders Display',Barlow,sans-serif;letter-spacing:.005em;text-wrap:balance}
+.shx-pi .shx-pr{margin-top:12px}
+.shx-save{margin:7px 0 0;color:var(--ok);font-size:14.5px;font-weight:600}
+.shx-stk{display:flex;align-items:center;gap:8px;margin:12px 0 0;font-size:14.5px;font-weight:600}
+.shx-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.shx-dot.lo{background:var(--shx-lo)}
+.shx-dot.ko{background:var(--shx-ko)}
+.shx-inc{margin:6px 0 0;color:var(--gold);font-size:14px;font-weight:700}
+.shx-acts{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.shx-acts button{min-height:38px;padding:0 15px;border:1px solid var(--hl2);border-radius:999px;background:transparent;color:var(--tx);font:600 14px/1 Barlow,sans-serif}
+.shx-acts button:active{background:var(--hl)}
+.shx-desc{max-width:62ch;margin-top:22px;padding-top:20px;border-top:1px solid var(--hl);font-size:15.5px;line-height:1.6}
+.shx-desc p{margin:0 0 12px}
+.shx-ck{display:grid;gap:10px;margin:2px 0 16px;padding:0;list-style:none}
+.shx-ck li{position:relative;padding-left:30px}
+.shx-ck li::before{content:'';position:absolute;left:0;top:.18em;width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--gold) 20%,transparent)}
+.shx-ck li::after{content:'';position:absolute;left:7px;top:calc(.18em + 4px);width:4px;height:8px;border:solid var(--gold);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.shx-desc .shx-note{padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--tx) 6%,transparent);color:var(--mu);font-size:14px;line-height:1.45}
+.shx-info{display:grid;margin:20px 0 0;border-top:1px solid var(--hl)}
+.shx-info div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:13px 0;border-bottom:1px solid var(--hl)}
+.shx-info dt{color:var(--tx);font-size:14px;font-weight:700}
+.shx-info dd{margin:0;color:var(--mu);font-size:14px;line-height:1.45;white-space:pre-line}
+.shx-rel{display:grid;grid-auto-columns:144px;grid-auto-flow:column;gap:12px;overflow-x:auto;margin:0 calc(var(--shx-pad) * -1);padding:0 var(--shx-pad) 6px;scroll-snap-type:x proximity;scroll-padding-inline:var(--shx-pad);scrollbar-width:none}
+.shx-rel::-webkit-scrollbar{display:none}
+.shx-rc{padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;scroll-snap-align:start}
+.shx-rc .shx-ct{margin-top:9px;font-size:14px}
+.shx-rc .shx-pr b{font-size:18px}
+.shx-rc .shx-pr s{font-size:14px}
+
+/* ---------- barre du bas (ajouter / voir le panier) ---------- */
+.shx-bar{position:sticky;bottom:0;z-index:6;display:flex;align-items:center;gap:10px;padding:10px max(var(--shx-pad),calc((100% - var(--shx-w)) / 2)) calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);border-top:1px solid var(--hl)}
+.shx .shx-bar .btn{flex:1;min-width:0;margin:0}
+.shx-go{display:flex;align-items:center;gap:12px;text-align:left}
+.shx-go span:not(.shx-gn){flex:1}
+.shx-gn{display:grid;place-items:center;min-width:28px;height:28px;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.2);font:700 15px/1 'Barlow Condensed',Barlow,sans-serif}
+.shx-go b{font:700 20px/1 'Barlow Condensed',Barlow,sans-serif}
+.shx-q{display:flex;flex:none;align-items:center;height:52px;border:1px solid var(--hl2);border-radius:14px;background:var(--sf)}
+.shx-q button{width:44px;height:100%;padding:0;border:0;background:none;color:var(--tx);font:400 24px/1 Barlow,sans-serif}
+.shx-q button:disabled{opacity:.28}
+.shx-q b{min-width:24px;color:var(--tx);font:700 19px/1 'Barlow Condensed',Barlow,sans-serif;text-align:center}
+.shx-q.sm{display:inline-flex;height:36px;margin-top:10px;border-radius:10px}
+.shx-q.sm button{width:34px;font-size:19px}
+.shx-q.sm b{min-width:20px;font-size:16px}
+.shx-q .shx-rm,.shx-q.sm .shx-rm{width:auto;padding:0 12px;border-left:1px solid var(--hl);color:var(--mu);font:600 13.5px/1 Barlow,sans-serif}
+
+/* ---------- agrandissement des photos ---------- */
+.shx-lb{position:fixed;inset:0;z-index:30;display:flex;align-items:center;background:#000}
+.shx-lbs{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.shx-lbs::-webkit-scrollbar{display:none}
+.shx-lbi{flex:0 0 100%;display:grid;place-items:center;height:100%;scroll-snap-align:center}
+.shx-lbi img{max-width:100%;max-height:100%;object-fit:contain}
+.shx-lbx,.shx-lbn{position:absolute;display:grid;place-items:center;width:46px;height:46px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:20px}
+.shx-lbx{top:calc(12px + env(safe-area-inset-top,0px));right:12px}
+.shx-lbn{top:50%;margin-top:-23px;font-size:30px;line-height:1}
+.shx-lbn.p{left:14px}
+.shx-lbn.n{right:14px}
+@media (hover:none){.shx-lbn{display:none}}
+
+/* ---------- panier ---------- */
+.shx-lines{display:grid;border-top:1px solid var(--hl)}
+.shx-line{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 0;border-bottom:1px solid var(--hl)}
+.shx-lt{display:block;padding:0;border:0;background:none}
+.shx-ln{display:block;padding:0;border:0;background:none;color:var(--tx);font:600 15px/1.25 Barlow,sans-serif;text-align:left}
+.shx-lb2 .shx-pr{margin-top:5px}
+.shx-lb2 .shx-pr b{font-size:17px}
+.shx-lb2 .shx-pr s{font-size:13.5px}
+.shx-lp{padding-top:1px;color:var(--tx);font:700 19px/1 'Barlow Condensed',Barlow,sans-serif;white-space:nowrap}
+.shx-sum{display:grid;gap:9px;margin:18px 0 0}
+.shx-sum div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15px}
+.shx-sum dt{color:var(--mu)}
+.shx-sum dd{margin:0;color:var(--tx);font-weight:600;text-align:right}
+.shx-sum .sv dd{color:var(--ok)}
+.shx-sum .tt{margin-top:6px;padding-top:13px;border-top:1px solid var(--hl)}
+.shx-sum .tt dt{color:var(--tx);font-size:17px;font-weight:700}
+.shx-sum .tt dd{color:var(--gold);font:700 32px/1 'Barlow Condensed',Barlow,sans-serif}
+.shx-steps{display:grid;margin:0;padding:0;list-style:none;counter-reset:shx}
+.shx-steps li{position:relative;display:grid;gap:3px;min-height:48px;padding:3px 0 18px 46px;counter-increment:shx}
+.shx-steps li::before{content:counter(shx);position:absolute;z-index:1;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;border:1.5px solid var(--hl2);border-radius:50%;background:var(--bg);color:var(--tx);font:700 16px/1 'Barlow Condensed',Barlow,sans-serif}
+.shx-steps li:not(:last-child)::after{content:'';position:absolute;left:14.5px;top:30px;bottom:0;width:1.5px;background:var(--hl2)}
+.shx-steps li.done::before{content:'✓';border-color:var(--gold);background:var(--gold);color:#17120A}
+.shx-steps b{color:var(--tx);font-size:15.5px}
+.shx-steps span{color:var(--mu);font-size:14px;line-height:1.4}
+.shx .shx-order{margin-top:6px}
+.shx-panel{margin-top:20px;padding:16px;border:1px solid var(--hl);border-radius:16px;background:var(--sf)}
+.shx-panel b{display:block;font-size:16px}
+.shx-panel p{margin:6px 0 14px;color:var(--mu);font-size:14.5px;line-height:1.45}
+.shx-ok{display:grid;justify-items:center;padding:40px 0 12px;text-align:center}
+.shx-okc svg{display:block;width:88px;height:88px}
+.shx-okc circle{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-dasharray:151;stroke-dashoffset:151;animation:shxdraw .6s .12s cubic-bezier(.65,0,.35,1) forwards}
+.shx-okc path{fill:none;stroke:var(--gold);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:shxdraw .35s .62s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes shxdraw{to{stroke-dashoffset:0}}
+.shx-ok h3{margin:20px 0 8px;color:var(--tx);font:800 30px/1.05 'Big Shoulders Display',Barlow,sans-serif}
+.shx-ok>p{max-width:40ch;margin:0 0 24px;color:var(--mu);font-size:15px;line-height:1.5}
+.shx-ok .shx-steps{width:100%;max-width:420px;margin:0 0 14px;text-align:left}
+.shx .shx-ok .btn{max-width:420px}
+@media (prefers-reduced-motion:reduce){.shx-okc circle,.shx-okc path{animation:none;stroke-dashoffset:0}.shx-stage::after,.shx-dots i,.shx-th button{transition:none}.shx-qa.pop,.shx-cartb i.pop{animation:none}}
+
+/* ---------- commandes ---------- */
+.shx-o{margin:0 0 14px;padding:16px;border:1px solid var(--hl);border-radius:16px;background:var(--sf)}
+.shx-o.st-annulée{opacity:.62}
+.shx-oh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.shx-oh b{display:block;color:var(--tx);font:700 16.5px/1.2 Barlow,sans-serif}
+.shx-oh small{display:block;margin-top:3px;color:var(--mu);font-size:13.5px}
+.shx-oh em{color:var(--tx);font-style:normal;font-weight:600}
+.shx-oh strong{color:var(--gold);font:700 23px/1 'Barlow Condensed',Barlow,sans-serif;white-space:nowrap}
+.shx-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:18px 0 2px;padding:0;list-style:none}
+.shx-track li{position:relative;display:grid;justify-items:center;gap:7px;text-align:center}
+.shx-track li::before{content:'';position:absolute;top:6px;left:-50%;right:50%;height:2px;background:var(--hl2)}
+.shx-track li:first-child::before{display:none}
+.shx-track li.done::before,.shx-track li.now::before{background:var(--gold)}
+.shx-track i{position:relative;z-index:1;width:14px;height:14px;border:2px solid var(--hl2);border-radius:50%;background:var(--sf)}
+.shx-track li.done i{border-color:var(--gold);background:var(--gold)}
+.shx-track li.now i{border-color:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 24%,transparent)}
+.shx-track span{color:var(--mu);font-size:11.5px;font-weight:600;line-height:1.2}
+.shx-track li.now span,.shx-track li.done span{color:var(--tx)}
+.shx-cancel{margin:14px 0 0;color:var(--shx-ko);font-size:14px;font-weight:700}
+.shx-oi{display:grid;gap:8px;margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--hl);list-style:none}
+.shx-oi li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14.5px}
+.shx-oi .shx-stage{width:40px}
+.shx-oi b{color:var(--tx);font-weight:600;white-space:nowrap}
+.shx-suivi{margin-top:14px;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.shx-suivi p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0}
+.shx-suivi span{color:var(--mu);font-size:13.5px}
+.shx-suivi b{color:var(--tx);font:700 18px/1.2 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.05em;overflow-wrap:anywhere}
+.shx-suivi div{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.shx-suivi button,.shx-suivi a{min-height:34px;padding:0 13px;border:1px solid var(--hl2);border-radius:999px;background:var(--sf);color:var(--tx);font:600 13.5px/32px Barlow,sans-serif;text-decoration:none}
+.shx-chat{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;margin-top:12px;padding:0 14px;border:1px solid var(--hl2);border-radius:12px;background:transparent;color:var(--tx);font:600 14.5px/1.2 Barlow,sans-serif;text-align:left}
+.shx-chat.on{border-color:var(--gold)}
+.shx-chat i{margin-left:auto;padding:3px 8px;border-radius:999px;background:var(--ac);color:#fff;font-size:12px;font-style:normal;font-weight:700}
+.shx-lnk{display:inline-block;margin-top:10px;padding:6px 0;border:0;background:none;color:var(--mu);font:600 13.5px/1.2 Barlow,sans-serif;text-decoration:underline;text-underline-offset:3px}
+.shx .shx-next{margin-top:14px}
+.shx-ship{margin-top:14px}
+.shx .sh-row>.btn{margin:0}
+.shx .shx-ship .sh-row,.shx .sh-od .sh-row{margin-top:12px}
+.shx .sh-msgs{background:var(--bg)}
+.shx .btn.alt.sm{width:auto;min-height:40px;margin-top:12px;padding:8px 14px;font-size:14px}
+
+/* ---------- gérer ---------- */
+.shx-seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:18px 0 16px;padding:4px;border:1px solid var(--hl);border-radius:14px;background:var(--sf)}
+.shx-seg button{min-height:42px;border:0;border-radius:10px;background:none;color:var(--mu);font:700 15px/1 Barlow,sans-serif}
+.shx-seg button[aria-pressed="true"]{background:var(--bg);color:var(--tx);box-shadow:0 1px 0 var(--hl2),0 4px 10px -6px rgba(0,0,0,.6)}
+.shx-seg i{margin-left:4px;padding:2px 7px;border-radius:999px;background:var(--ac);color:#fff;font-size:12px;font-style:normal}
+.shx-seg small{margin-left:3px;color:var(--mu);font-size:13px;font-weight:600}
+.shx-kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.shx-kpi div{padding:13px 14px;border:1px solid var(--hl);border-radius:14px;background:var(--sf)}
+.shx-kpi div.hot{border-color:color-mix(in srgb,var(--gold) 55%,transparent);background:color-mix(in srgb,var(--gold) 8%,var(--sf))}
+.shx-kpi b{display:block;color:var(--tx);font:700 29px/1 'Barlow Condensed',Barlow,sans-serif;white-space:nowrap}
+.shx-kpi .hot b{color:var(--gold)}
+.shx-kpi span{display:block;margin-top:5px;color:var(--mu);font-size:13px}
+.shx-fil{display:flex;gap:8px;overflow-x:auto;margin:0 calc(var(--shx-pad) * -1) 16px;padding:0 var(--shx-pad);scrollbar-width:none}
+.shx-fil::-webkit-scrollbar{display:none}
+.shx-fil button{flex:none;min-height:38px;padding:0 14px;border:1px solid var(--hl2);border-radius:999px;background:var(--sf);color:var(--tx);font:600 14px/1 Barlow,sans-serif}
+.shx-fil button.on{border-color:var(--gold);background:var(--gold);color:#17120A}
+.shx-fil i{margin-left:3px;font-style:normal;opacity:.6}
+.shx-plist{display:grid;border-top:1px solid var(--hl)}
+.shx-prow{display:grid;gap:10px;padding:12px 0;border-bottom:1px solid var(--hl)}
+.shx-prow.off .shx-prm{opacity:.5}
+.shx-prm{display:flex;align-items:center;gap:12px;min-width:0;padding:0;border:0;background:none;color:inherit;text-align:left}
+.shx-prm .shx-stage{flex:none;width:52px}
+.shx-prm>span:last-child{min-width:0}
+.shx-prm b{display:block;overflow:hidden;color:var(--tx);font:600 15px/1.25 Barlow,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.shx-prm small{color:var(--mu);font-size:13px}
+.shx-pctl{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.shx-pctl>:first-child{margin-right:auto}
+.shx-pctl .shx-q.sm{margin:0 auto 0 0}
+.shx-pctl>button{width:38px;height:38px;padding:0;border:1px solid var(--hl);border-radius:10px;background:var(--sf);color:var(--tx);font-size:15px}
+.shx-pctl>button:disabled{opacity:.28}
+.shx-inf{color:var(--mu);font-size:12.5px}
+@media (min-width:620px){.shx-kpi{grid-template-columns:repeat(4,minmax(0,1fr))}.shx-prow{display:flex;align-items:center}.shx-prm{flex:1}.shx-pctl>:first-child{margin-right:6px}}
+
+/* ---------- édition (gérant) ---------- */
+.v-edit .shx-fine{text-align:left}
+.shx .sh-phs>div{background:var(--shx-st)}
+.shx .sh-l{font-weight:600}
+
+/* ---------- vide, erreur, chargement ---------- */
+.shx-empty{display:grid;justify-items:center;gap:6px;padding:56px 12px;text-align:center}
+.shx-empty>span{font-size:42px;line-height:1}
+.shx-empty p{max-width:36ch;margin:6px 0 12px;color:var(--mu);font-size:15px;line-height:1.5}
+.shx .shx-empty .btn{width:auto;padding-inline:26px}
+.shx-skel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px;padding-top:30px}
+.shx-skel i{display:block;aspect-ratio:1;border-radius:14px;background:linear-gradient(100deg,var(--sf) 40%,color-mix(in srgb,var(--tx) 7%,var(--sf)) 50%,var(--sf) 60%) 0 0/300% 100%;animation:shxsk 1.3s linear infinite}
+@keyframes shxsk{to{background-position:-150% 0}}
+
+/* ---------- la boutique au-dessus des messages « Ajouté au panier » ---------- */
+body:has(#aff-sh.shx) #toast{z-index:95;top:auto;bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+
+/* ---------- tablette et ordinateur ---------- */
+html[data-ly=tab] .shx{--shx-w:880px;--shx-pad:24px}
+html[data-ly=pc] .shx{--shx-w:1040px;--shx-pad:32px}
+html[data-ly=pc] .sheet.shx{align-items:center;padding:24px 24px 24px calc(var(--side,0px) + 24px)}
+html[data-ly=pc] .sheet.shx>.aff-d{max-width:1120px;height:calc(100vh - 48px);border:1px solid var(--hl2);border-radius:20px;box-shadow:0 40px 90px -30px #000}
+html[data-ly=pc] .shx-hd{border-radius:20px 20px 0 0}
+html[data-ly=pc] body:has(#aff-sh.shx) #toast{bottom:110px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 18px}
+html[data-ly=pc] .shx-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:34px 20px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-skel{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-intro{padding-top:36px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-intro h3{font-size:54px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center;margin-top:30px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-hi{padding:0}
+html:is([data-ly=tab],[data-ly=pc]) .shx-hi h4{font-size:44px}
+html:is([data-ly=tab],[data-ly=pc]) .shx .shx-hi .btn{width:auto;padding-inline:30px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-prom{margin:36px 0 38px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-prom li{flex-direction:row;align-items:center;gap:10px;font-size:14.5px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-pv{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:start;margin-top:6px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-pvg{position:sticky;top:116px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-gw{margin:0}
+html:is([data-ly=tab],[data-ly=pc]) .shx-gw .shx-stage.big,html:is([data-ly=tab],[data-ly=pc]) .shx-gal{border-radius:18px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-th{padding:0}
+html:is([data-ly=tab],[data-ly=pc]) .shx-pt{font-size:40px}
+html:is([data-ly=tab],[data-ly=pc]) .shx-rel{grid-auto-columns:180px}
+html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) .v-mine,html:is([data-ly=tab],[data-ly=pc]) .v-edit{max-width:calc(680px + 2 * var(--shx-pad))}
+.shx-imp{flex-basis:100%;margin:2px 0 0;color:var(--mu);font-size:13.5px}
+.shx .sh-send .btn{flex:none;width:auto;margin:0;padding:12px 16px}
+.shx .sh-send textarea{min-width:0}
+.shx-stl{display:inline-block;margin:12px 0 0;padding:5px 12px;border-radius:999px;background:var(--hl);color:var(--tx);font-size:13.5px;font-weight:700}
+.shx-stl.st-nouvelle{background:color-mix(in srgb,var(--gold) 20%,transparent)}
+.shx-stl.st-terminée{background:color-mix(in srgb,var(--ok) 20%,transparent)}
+.shx-stl.st-annulée{color:var(--shx-ko)}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -7733,7 +8074,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 78';
+const BUILD='11 nov. 2026 · 79';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8666,20 +9007,23 @@ async function fcmInit(){const P=fcmPlug();if(!P||!SBS||FCM.uid===SBS.uid)return
 setTimeout(fcmInit,3000);setInterval(()=>{if(!document.hidden)fcmInit()},15000);
 {const _o=sbLogout;sbLogout=async function(){if(FCM.tok&&SBS){try{await frApi('/rest/v1/rpc/push_del',{method:'POST',body:JSON.stringify({p_endpoint:'fcm:'+FCM.tok})})}catch(e){}}FCM.uid='';return _o.apply(this,arguments)}}
 
-/* ===== SHOP : vraie boutique (produits avec fiche, panier, commandes) — gérée par le gérant seul ; liens Amazon dans un onglet à part ===== */
-const SHP={ok:0,admin:false,nouv:0,set:{},prods:[],busy:false,err:'',v:'list',cat:'',cur:null,img:0,qty:1,
-  cart:[],orders:null,aOrders:null,aFil:'nouvelle',open:{},ed:null,done:0,del:'',up:0,t:0,msgs:0,unr:{},th:null};
+/* ===== SHOP : vraie boutique v2 — vitrine plein écran, fiche produit, panier, suivi des commandes, gestion (gérant seul) ; liens Amazon dans un onglet à part ===== */
+const SHP={ok:0,admin:false,nouv:0,set:{},prods:[],busy:false,err:'',v:'list',cur:null,img:0,qty:1,
+  cart:[],orders:null,aOrders:null,aFil:'nouvelle',aTab:'cmd',open:{},ed:null,edFrom:'list',auto3d:0,done:0,del:'',up:0,t:0,msgs:0,unr:{},th:null,imp:'',lb:null,ship:{}};
 try{const c=JSON.parse(localStorage.getItem('fb_shcart')||'[]');if(Array.isArray(c))SHP.cart=c.filter(x=>x&&+x.id>0).map(x=>({id:+x.id,qte:Math.max(1,Math.min(99,+x.qte||1))}))}catch(e){}
 const shSaveCart=()=>{try{localStorage.setItem('fb_shcart',JSON.stringify(SHP.cart))}catch(e){}};
 const SH_PUB=()=>SBC.url+'/storage/v1/object/public/shop/';
+const SH_URL='https://riomanoff.github.io/appel-des-cartes/';
 const shImg=u=>typeof u==='string'&&u.startsWith(SH_PUB())&&/^[\w\-./%]+$/.test(u.slice(SH_PUB().length))?u:'';
 const shEur=n=>(Math.round((+n||0)*100)/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-const SH_ST=[['nouvelle','🆕 Nouvelle'],['acceptée','👍 Acceptée'],['payée','💶 Payée'],['envoyée','📦 Envoyée'],['terminée','✅ Terminée'],['annulée','✖️ Annulée']];
+const SH_ST=[['nouvelle','🆕 Nouvelle'],['acceptée','👍 Acceptée'],['payée','💶 Payée'],['envoyée','📦 Expédiée'],['terminée','✅ Terminée'],['annulée','✖️ Annulée']];
 const shStL=s=>(SH_ST.find(x=>x[0]===s)||[s,s])[1];
+const SH_FLOW=['nouvelle','acceptée','payée','envoyée','terminée'],SH_FLOWL=['Commandée','Acceptée','Payée','Expédiée','Reçue'];
+const SH_NEXT={nouvelle:['acceptée','👍 Accepter la commande'],acceptée:['payée','💶 Paiement reçu'],payée:['envoyée','📦 Marquer expédiée'],envoyée:['terminée','✅ Terminer']};
 async function shApi(path,o){o=o||{};const h=Object.assign({},o.headers||{});if(SBS){try{h.Authorization='Bearer '+await sbTok()}catch(e){}}
   const r=await sbFetch(path,Object.assign({},o,{headers:h}));if(!r.ok){const j=await r.json().catch(()=>({}));const e=new Error(j.message||j.error||('Erreur '+r.status));e.status=r.status;throw e}
   if(r.status===204)return null;const t=await r.text();return t?JSON.parse(t):null}
-const shErr=e=>{const m=String(e&&e.message||'');return /Failed to fetch|NetworkError/i.test(m)?'Pas de connexion internet':/JWT|token/i.test(m)?'Reconnecte-toi dans Réglages':m||'Erreur'};
+const shErr=e=>{const m=String(e&&e.message||'');return /Failed to fetch|NetworkError|Load failed/i.test(m)?'Pas de connexion internet : vérifie ton réseau puis réessaie':/JWT|token/i.test(m)?'Reconnecte-toi dans Réglages':e&&e.status>=500?'La boutique ne répond pas pour le moment : réessaie dans un instant':m||'Erreur inconnue : réessaie'};
 async function shLoad(force){if(SHP.busy||(!force&&SHP.ok&&Date.now()-SHP.t<60000))return;SHP.busy=true;SHP.err='';
   try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});SHP.ok=1;SHP.admin=!!(i&&i.admin);SHP.nouv=+(i&&i.nouvelles)||0;SHP.msgs=+(i&&i.messages)||0;
     const [st,pr]=await Promise.all([shApi('/rest/v1/shop_settings?id=eq.1&select=data'),shApi('/rest/v1/shop_products?select=*&order=ordre.asc,id.desc')]);
@@ -8687,54 +9031,118 @@ async function shLoad(force){if(SHP.busy||(!force&&SHP.ok&&Date.now()-SHP.t<6000
     if(SHP.admin&&!SHP.auto3d&&sh3dMissing().length){SHP.auto3d=1;setTimeout(sh3dAuto,50)}
     const ids=new Set(SHP.prods.map(p=>p.id));const n=SHP.cart.length;SHP.cart=SHP.cart.filter(x=>ids.has(x.id));if(n!==SHP.cart.length)shSaveCart()}
   catch(e){SHP.ok=e&&e.status===404?-1:SHP.ok||0;if(SHP.ok!==-1)SHP.err=shErr(e)}
-  SHP.busy=false;shDraw()}
+  SHP.busy=false;shDraw(1)}
 const shProd=id=>SHP.prods.find(p=>p.id===+id);
 const shCartN=()=>SHP.cart.reduce((a,x)=>a+x.qte,0);
 const shCartTot=()=>SHP.cart.reduce((a,x)=>{const p=shProd(x.id);return a+(p?p.prix*x.qte:0)},0);
+const shCartOld=()=>SHP.cart.reduce((a,x)=>{const p=shProd(x.id);return a+(p?(p.prix_barre>p.prix?p.prix_barre:p.prix)*x.qte:0)},0);
 const shOut=p=>p.stock!=null&&p.stock<=0;
-/* ---------- écrans ---------- */
-function shTabs(){const b=(v,l,n)=>`<button type="button" class="sh-tab${SHP.v===v||(v==='list'&&SHP.v==='prod')?' on':''}" data-shv="${v}">${l}${n?` <i>${n}</i>`:''}</button>`;
-  return `<nav class="sh-tabs" aria-label="Boutique">${SHP.ok===1?b('list','Boutique')+b('cart','🛒 Panier',shCartN())+(SBS?b('mine','Mes commandes',SHP.admin?0:SHP.msgs):''):''}${b('amz','Sélection Amazon')}${SHP.admin?b('adm','📋 Commandes',SHP.nouv+SHP.msgs):''}</nav>`}
-function shPhoto(p,cls){const u=shImg(p.photos&&p.photos[0]);return u?`<img class="${cls}" src="${esc(u)}" alt="" loading="lazy">`:`<span class="${cls} sh-noimg" aria-hidden="true">🛍️</span>`}
-function shList(){const s=SHP.set,L=SHP.prods,cats=[...new Set(L.map(p=>p.categorie||'Produits'))];if(SHP.cat&&!cats.includes(SHP.cat))SHP.cat='';
-  const V=L;
-  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button>${SHP.imp?`<span class="sh-imp">⏳ Mise en vente des présentoirs… ${SHP.imp}</span>`:''}</div>`:'';
-  const head=`<div class="sh-hero"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
-  if(!L.length)return head+adm+`<p class="sub sh-empty">${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour ajouter ta première annonce.':'Les premiers produits arrivent bientôt ici.'}</p>`;
-  return head+adm+
-   `<div class="sh-grid">${V.map(p=>`<div class="sh-cw">${SHP.admin?(SHP.del==='p'+p.id?`<button type="button" class="sh-trash ok" data-shpdel="${p.id}">Supprimer ?</button>`:`<button type="button" class="sh-trash" data-shdel="p${p.id}" aria-label="Supprimer ${esc(p.titre)}">🗑️</button>`):''}<button type="button" class="sh-card${p.actif?'':' off'}" data-shp="${p.id}">${shPhoto(p,'sh-ci')}<span class="sh-ct">${esc(p.titre)}</span><span class="sh-cp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</span>${!p.actif?'<em>Masqué</em>':shOut(p)?'<em>Épuisé</em>':''}</button></div>`).join('')}</div>`}
+const shPct=p=>p.prix_barre>p.prix&&p.prix_barre>0?Math.round((1-p.prix/p.prix_barre)*100):0;
+const shPh=p=>(p.photos||[]).map(shImg).filter(Boolean);
+const shInCart=id=>(SHP.cart.find(x=>x.id===+id)||{}).qte||0;
+const shPl=(n,a,b)=>n>1?(b||a+'s'):a;
+const shDate=d=>{try{return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}catch(e){return ''}};
+function shCopy(t,ok){const done=()=>toast(ok||'Copié');try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>shCopy2(t,done));return}}catch(e){}shCopy2(t,done)}
+function shCopy2(t,done){try{const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done()}catch(e){toast('Copie impossible')}}
+/* texte de description : les lignes « • … » deviennent une liste cochée, la petite phrase « non fourni(e) » une note */
+function shDesc(t){return String(t||'').split(/\n\s*\n/).map(b=>{const L=b.split('\n').map(x=>x.trim()).filter(Boolean);if(!L.length)return '';let h='',ul=[];
+  const flush=()=>{if(ul.length){h+=`<ul class="shx-ck">${ul.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;ul=[]}};
+  L.forEach(l=>{const m=/^[•\-–*✓✔]\s*(.+)$/.exec(l);if(m)ul.push(m[1]);else{flush();h+=/non (fourni|inclus)/i.test(l)&&l.length<140?`<p class="shx-note">${esc(l)}</p>`:`<p>${esc(l)}</p>`}});flush();return h}).join('')}
+/* « ça va bien avec » : même catégorie et mots du titre en commun (japonaise, US, display…) */
+function shRel(p){const w=t=>new Set(String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/[^a-z0-9]+/).filter(x=>x.length>1&&!['pour','avec','une','des','les','par','the'].includes(x)));const A=w(p.titre);
+  return SHP.prods.filter(x=>x.id!==p.id&&x.actif).map(x=>{let s=(x.categorie===p.categorie?1:0);w(x.titre).forEach(k=>{if(A.has(k))s+=2});return[s,x]}).sort((a,b)=>b[0]-a[0]||a[1].ordre-b[1].ordre).slice(0,6).map(x=>x[1])}
+const SH_ATOUTS=['🖨️ Imprimé en 3D, en France','📦 Envoi soigné','💬 Paiement réglé ensemble, après ta commande'];
+const shCut=(t,n)=>{t=String(t||'').replace(/\s+/g,' ').trim();if(t.length<=n)return t;const c=t.slice(0,n),k=c.lastIndexOf(' ');return (k>n*.6?c.slice(0,k):c).replace(/[\s,;:.!?]+$/,'')+'…'};
+const shAtouts=()=>{const a=String(SHP.set.atouts||'').split('\n').map(x=>x.trim()).filter(Boolean);return (a.length?a.slice(0,4):SH_ATOUTS)
+  .map(x=>{const m=/^(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)\s*(.*)$/u.exec(x);return m?[m[1],m[2]]:['',x]})};
+const shExc=p=>{const l=String(p.description||'').split('\n').map(x=>x.trim()).find(x=>x&&!/^[•\-–*✓✔]/.test(x)&&!/non (fourni|inclus)/i.test(x));return l?l.slice(0,180):''};
+/* ---------- morceaux ---------- */
+function shStage(p,cls,lazy){const u=shPh(p)[0];return `<span class="shx-stage${cls?' '+cls:''}">${u?`<img src="${esc(u)}" alt="" ${lazy?'loading="lazy" ':''}decoding="async">`:'<span class="shx-noimg" aria-hidden="true">🛍️</span>'}</span>`}
+function shPrice(p,big){const pc=shPct(p);return `<span class="shx-pr${big?' big':''}"><b>${shEur(p.prix)}</b>${pc?`<s><span class="shx-vh">au lieu de </span>${shEur(p.prix_barre)}</s>`:''}</span>`}
+function shFlag(p){const out=shOut(p);return !p.actif?'<span class="shx-flag">Masqué</span>':out?'<span class="shx-flag ko">Épuisé</span>':p.stock!=null&&p.stock<=3?`<span class="shx-flag lo">Plus que ${p.stock}</span>`:''}
+function shCard(p){const pc=shPct(p),q=shInCart(p.id),out=shOut(p);
+  return `<article class="shx-card${p.actif?'':' off'}${out?' out':''}">`+
+   `<button type="button" class="shx-cb" data-shp="${p.id}">${shStage(p,'',1)}<span class="shx-cap">${shFlag(p)}<span class="shx-ct">${esc(p.titre)}</span>${shPrice(p)}</span></button>`+
+   (pc?`<span class="shx-off" aria-hidden="true">−${pc} %</span>`:'')+
+   (p.actif&&!out?`<button type="button" class="shx-qa${q?' in':''}" data-shquick="${p.id}" aria-label="Ajouter ${esc(p.titre)} au panier${q?' (déjà '+q+' dans ton panier)':''}">${q?`<b>${q}</b>`:'<span aria-hidden="true">+</span>'}</button>`:'')+
+   (SHP.admin?(SHP.del==='p'+p.id?`<button type="button" class="shx-trash ok" data-shpdel="${p.id}">Supprimer ?</button>`:`<button type="button" class="shx-trash" data-shdel="p${p.id}" aria-label="Supprimer ${esc(p.titre)}">🗑️</button>`):'')+
+   `</article>`}
+/* ---------- en-tête + onglets ---------- */
+function shTop(){const n=shCartN();
+  return `<div class="shx-hd"><div class="shx-top"><button type="button" class="shx-x" data-affx aria-label="Fermer la boutique">✕</button><h2>Boutique</h2>`+
+   (SHP.ok===1?`<button type="button" class="shx-cartb${SHP.v==='cart'?' on':''}" data-shv="cart" aria-label="Panier : ${n} ${shPl(n,'article')}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L20.6 8H6.1"/><circle cx="10" cy="19.6" r="1.4"/><circle cx="17" cy="19.6" r="1.4"/></svg>${n?`<i>${n}</i>`:''}</button>`:'<span class="shx-cartb" aria-hidden="true"></span>')+`</div>${shTabs()}</div>`}
+function shTabs(){const b=(v,l,n,on)=>`<button type="button" class="shx-tab${on?' on':''}" data-shv="${v}" ${on?'aria-current="page"':''}>${l}${n?` <i>${n}</i>`:''}</button>`,V=SHP.v;
+  return `<div class="shx-tabs" role="navigation" aria-label="Boutique">${SHP.ok===1?b('list','Produits',0,V==='list'||V==='prod'||(V==='edit'&&SHP.edFrom!=='adm'))+(SBS?b('mine','Mes commandes',SHP.admin?0:SHP.msgs,V==='mine'):''):''}${b('amz','Amazon',0,V==='amz')}${SHP.admin?b('adm','Gérer',SHP.nouv+SHP.msgs,V==='adm'||(V==='edit'&&SHP.edFrom==='adm')):''}</div>`}
+/* ---------- vitrine ---------- */
+function shList(){const s=SHP.set,L=SHP.prods,vis=L.filter(p=>p.actif||SHP.admin);
+  const head=`<div class="shx-intro"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
+  const adm=SHP.admin?`<div class="shx-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes</button>${SHP.imp?`<p class="shx-imp" role="status">⏳ Mise en vente des présentoirs… ${esc(SHP.imp)}</p>`:''}</div>`:'';
+  if(!vis.length)return head+adm+`<div class="shx-empty"><span aria-hidden="true">🛍️</span><p>${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour mettre ta première annonce.':'Les premiers produits arrivent très bientôt.'}</p></div>`;
+  const F=vis.find(p=>p.actif&&!shOut(p))||vis[0],rest=vis.length>2?vis.filter(p=>p!==F):vis,pc=shPct(F),ex=shExc(F);
+  const hero=vis.length>2?`<article class="shx-hero"><button type="button" class="shx-hb" data-shp="${F.id}" tabindex="-1" aria-hidden="true">${shStage(F,'big')}</button>${pc?`<span class="shx-off big" aria-hidden="true">−${pc} %</span>`:''}`+
+    `<div class="shx-hi"><h4>${esc(F.titre)}</h4>${ex?`<p>${esc(ex)}</p>`:''}${shPrice(F,1)}<button type="button" class="btn" data-shp="${F.id}">Voir le produit</button></div></article>`:'';
+  return head+adm+hero+`<ul class="shx-prom">${shAtouts().map(([i,t])=>`<li>${i?`<span aria-hidden="true">${i}</span>`:''}${esc(t)}</li>`).join('')}</ul>`+`<div class="shx-grid">${rest.map(shCard).join('')}</div>`}
+/* ---------- fiche produit ---------- */
 function shProdView(){const p=shProd(SHP.cur);if(!p){SHP.v='list';return shList()}
-  const ph=(p.photos||[]).map(shImg).filter(Boolean),i=Math.min(SHP.img,Math.max(0,ph.length-1)),out=shOut(p);
-  const gal=ph.length?`<div class="sh-gal"><img src="${esc(ph[i])}" alt="${esc(p.titre)}">${ph.length>1?`<div class="sh-th">${ph.map((u,k)=>`<button type="button" class="${k===i?'on':''}" data-shimg="${k}" aria-label="Photo ${k+1}"><img src="${esc(u)}" alt=""></button>`).join('')}</div>`:''}</div>`:`<div class="sh-gal sh-noimg big" aria-hidden="true">🛍️</div>`;
-  const q=Math.max(1,Math.min(SHP.qty,p.stock!=null?Math.max(1,p.stock):99));
-  return `<button type="button" class="sh-back" data-shv="list">← Tous les produits</button>${gal}<h3 class="sh-pt">${esc(p.titre)}</h3><div class="sh-pp">${shEur(p.prix)}${p.prix_barre>p.prix?` <s>${shEur(p.prix_barre)}</s>`:''}</div>`+
-   `<div class="sub">${esc(p.categorie||'Produits')}${p.stock!=null?` · ${out?'<b class="sh-ko">Épuisé</b>':p.stock<=3?`<b class="sh-ko">Plus que ${p.stock}</b>`:'En stock'}`:''}</div>`+
-   (out?'':`<div class="sh-buy"><div class="sh-q"><button type="button" data-shq="-1" aria-label="Moins">−</button><b>${q}</b><button type="button" data-shq="1" aria-label="Plus">+</button></div><button type="button" class="btn" data-shadd="${p.id}">Ajouter au panier</button></div>`)+
-   (p.description?`<div class="sh-desc">${esc(p.description)}</div>`:'')+(SHP.set.livraison?`<div class="panel sh-info"><b>📦 Livraison</b><p>${esc(SHP.set.livraison)}</p></div>`:'')+
-   (SHP.admin?`<button type="button" class="btn alt" style="margin-top:12px" data-shedit="${p.id}">✏️ Modifier ce produit</button>`:'')}
-function shCart(){if(SHP.done)return `<div class="sh-ok"><div>✅</div><h3>Commande n° ${SHP.done} envoyée !</h3><p>Je t’écris très vite dans la discussion de ta commande pour le paiement et la livraison.</p><button type="button" class="btn" data-shv="mine">Voir ma commande</button></div>`;
-  if(!SHP.cart.length)return `<p class="sub sh-empty">Ton panier est vide.</p><button type="button" class="btn alt" data-shv="list">Voir les produits</button>`;
-  return `<div class="sh-lines">${SHP.cart.map(x=>{const p=shProd(x.id);if(!p)return '';return `<div class="sh-line">${shPhoto(p,'sh-li')}<div><b>${esc(p.titre)}</b><span>${shEur(p.prix)}</span><div class="sh-q sm"><button type="button" data-shcq="${p.id}:-1" aria-label="Moins">−</button><b>${x.qte}</b><button type="button" data-shcq="${p.id}:1" aria-label="Plus">+</button><button type="button" class="sh-rm" data-shcq="${p.id}:0">Retirer</button></div></div></div>`}).join('')}</div>`+
-   `<div class="sh-tot"><span>Total</span><b>${shEur(shCartTot())}</b></div>`+
-   (!SBS?`<div class="panel sh-info"><b>🔐 Connecte-toi pour commander</b><p>Crée ton compte ou connecte-toi dans Réglages, puis reviens ici : ton panier est gardé.</p><button type="button" class="btn" data-shlogin>Aller dans Réglages</button></div>`:
-   `<p class="sub sh-how">Tu n’as rien à remplir : après ta commande, on se met d’accord dans la discussion de la commande (paiement, livraison).</p>`+(SHP.set.paiement?`<div class="panel sh-info"><b>💶 Paiement</b><p>${esc(SHP.set.paiement)}</p></div>`:'')+`<button type="button" class="btn" data-shorder ${SHP.busy?'disabled':''}>Commander · ${shEur(shCartTot())}</button>`)}
-function shOrderCard(o,adm){const it=(Array.isArray(o.articles)?o.articles:[]).map(a=>`<li>${esc(a.qte)} × ${esc(a.titre)} <span>${shEur(a.prix*a.qte)}</span></li>`).join('');
-  const d=new Date(o.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});const op=adm&&SHP.open[o.id];
-  let h=`<div class="sh-o st-${esc(o.statut)}"><button type="button" class="sh-oh" ${adm?`data-shopen="${o.id}" aria-expanded="${!!op}"`:'tabindex="-1"'}><b>N° ${o.id}${adm&&o.pseudo?' · '+esc(o.pseudo):''}</b><span class="sh-st">${esc(shStL(o.statut))}</span><small>${d} · ${shEur(o.total)}</small></button><ul>${it}</ul>`;
-  if(o.suivi)h+=`<p class="sub">📦 Suivi : ${esc(o.suivi)}</p>`;
+  const ph=shPh(p),pc=shPct(p),out=shOut(p),i=Math.min(SHP.img,Math.max(0,ph.length-1));
+  const gal=ph.length?`<div class="shx-gw"><div class="shx-gal" id="shx-gal" data-i="${i}">${ph.map((u,k)=>`<button type="button" class="shx-sl" data-shlb="${k}" aria-label="Agrandir la photo ${k+1} sur ${ph.length}"><span class="shx-stage big"><img src="${esc(u)}" alt="${k?'':esc(p.titre)}" ${k?'loading="lazy" ':''}decoding="async"></span></button>`).join('')}</div>`+
+     (pc?`<span class="shx-off big" aria-hidden="true">−${pc} %</span>`:'')+(ph.length>1?`<div class="shx-dots" aria-hidden="true">${ph.map((u,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>`:'')+`</div>`+
+     (ph.length>1?`<div class="shx-th">${ph.map((u,k)=>`<button type="button" class="${k===i?'on':''}" data-shimg="${k}" aria-label="Photo ${k+1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>`:''):`<div class="shx-gw"><span class="shx-stage big">${'<span class="shx-noimg" aria-hidden="true">🛍️</span>'}</span></div>`;
+  const st=p.stock==null?'<span class="shx-dot ok"></span>Disponible':out?'<span class="shx-dot ko"></span>Épuisé pour le moment':p.stock<=3?`<span class="shx-dot lo"></span>Plus que ${p.stock} en stock`:`<span class="shx-dot ok"></span>En stock`;
+  const rel=shRel(p),q=shInCart(p.id);
+  return `<button type="button" class="shx-back" data-shv="list">‹ Tous les produits</button><div class="shx-pv"><div class="shx-pvg">${gal}</div><div class="shx-pvi">`+
+   `<div class="shx-pi">${p.actif?'':'<span class="shx-flag">Masqué : seul toi le vois</span>'}<h3 class="shx-pt">${esc(p.titre)}</h3>${shPrice(p,1)}${pc?`<p class="shx-save">Tu économises ${shEur(p.prix_barre-p.prix)}</p>`:''}<p class="shx-stk">${st}</p>${q?`<p class="shx-inc">${q} dans ton panier</p>`:''}</div>`+
+   `<div class="shx-acts"><button type="button" data-shshare="${p.id}">Partager</button>${SHP.admin?`<button type="button" data-shedit="${p.id}">Modifier</button><button type="button" data-shvis="${p.id}">${p.actif?'Masquer':'Remettre en vente'}</button>`:''}</div>`+
+   (p.description?`<div class="shx-desc">${shDesc(p.description)}</div>`:'')+
+   (SHP.set.livraison||SHP.set.paiement?`<dl class="shx-info">${SHP.set.livraison?`<div><dt>Livraison</dt><dd>${esc(SHP.set.livraison)}</dd></div>`:''}${SHP.set.paiement?`<div><dt>Paiement</dt><dd>${esc(SHP.set.paiement)}</dd></div>`:''}</dl>`:'')+
+   `</div></div>`+
+   (rel.length?`<h4 class="shx-h">Ça va bien avec</h4><div class="shx-rel">${rel.map(x=>`<button type="button" class="shx-rc" data-shp="${x.id}">${shStage(x,'',1)}<span class="shx-ct">${esc(x.titre)}</span>${shPrice(x)}</button>`).join('')}</div>`:'')}
+function shBuyBar(){const p=shProd(SHP.cur);if(!p||!p.actif)return '';if(shOut(p))return `<div class="shx-bar"><button type="button" class="btn" disabled>Épuisé pour le moment</button></div>`;
+  const max=p.stock!=null?Math.max(1,p.stock):99,q=Math.max(1,Math.min(SHP.qty,max));
+  return `<div class="shx-bar"><div class="shx-q"><button type="button" data-shq="-1" aria-label="Un de moins" ${q<=1?'disabled':''}>−</button><b aria-live="polite" aria-label="Quantité ${q}">${q}</b><button type="button" data-shq="1" aria-label="Un de plus" ${q>=max?'disabled':''}>+</button></div>`+
+   `<button type="button" class="btn" data-shadd="${p.id}">Ajouter au panier&nbsp;·&nbsp;${shEur(p.prix*q)}</button></div>`}
+function shCartBar(){const n=shCartN();if(!n)return '';return `<div class="shx-bar"><button type="button" class="btn shx-go" data-shv="cart"><span class="shx-gn">${n}</span><span>Voir le panier</span><b>${shEur(shCartTot())}</b></button></div>`}
+/* agrandissement plein écran (on glisse d'une photo à l'autre) */
+function shLbHtml(){if(SHP.lb===null||SHP.v!=='prod')return '';const p=shProd(SHP.cur),ph=p?shPh(p):[];if(!ph.length)return '';
+  return `<div class="shx-lb" role="dialog" aria-modal="true" aria-label="Photos de ${esc(p.titre)}"><div class="shx-lbs" id="shx-lbs">${ph.map(u=>`<div class="shx-lbi"><img src="${esc(u)}" alt=""></div>`).join('')}</div><button type="button" class="shx-lbx" data-shlbx aria-label="Fermer les photos">✕</button>`+
+   (ph.length>1?`<button type="button" class="shx-lbn p" data-shlbn="-1" aria-label="Photo précédente">‹</button><button type="button" class="shx-lbn n" data-shlbn="1" aria-label="Photo suivante">›</button>`:'')+`</div>`}
+/* ---------- panier ---------- */
+function shCart(){if(SHP.done)return `<div class="shx-ok"><div class="shx-okc" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div><h3>Commande n° ${SHP.done} envoyée !</h3><p>Je t’écris très vite dans la discussion de ta commande pour le paiement et la livraison.</p>`+
+   `${shSteps(1)}<button type="button" class="btn" data-shv="mine">Voir ma commande</button><button type="button" class="btn alt" data-shv="list">Continuer mes achats</button></div>`;
+  if(!SHP.cart.length)return `<div class="shx-empty"><span aria-hidden="true">🛒</span><p>Ton panier est vide.</p><button type="button" class="btn" data-shv="list">Voir les produits</button></div>`;
+  const tot=shCartTot(),old=shCartOld();
+  return `<h3 class="shx-h1">Ton panier</h3><div class="shx-lines">${SHP.cart.map(x=>{const p=shProd(x.id);if(!p)return '';const max=p.stock!=null?p.stock:99;
+     return `<div class="shx-line"><button type="button" class="shx-lt" data-shp="${p.id}" tabindex="-1" aria-hidden="true">${shStage(p,'sm',1)}</button><div class="shx-lb2"><button type="button" class="shx-ln" data-shp="${p.id}">${esc(p.titre)}</button>${shPrice(p)}`+
+      `<div class="shx-q sm"><button type="button" data-shcq="${p.id}:-1" aria-label="Un de moins" ${x.qte<=1?'disabled':''}>−</button><b>${x.qte}</b><button type="button" data-shcq="${p.id}:1" aria-label="Un de plus" ${x.qte>=max?'disabled':''}>+</button><button type="button" class="shx-rm" data-shcq="${p.id}:0">Retirer</button></div></div><b class="shx-lp">${shEur(p.prix*x.qte)}</b></div>`}).join('')}</div>`+
+   `<dl class="shx-sum">${old>tot?`<div><dt>Prix normal</dt><dd><s>${shEur(old)}</s></dd></div><div class="sv"><dt>Tes économies</dt><dd>−${shEur(old-tot)}</dd></div>`:''}<div><dt>Livraison</dt><dd>On voit ça ensemble</dd></div><div class="tt"><dt>Total</dt><dd>${shEur(tot)}</dd></div></dl>`+
+   (!SBS?`<div class="shx-panel"><b>🔐 Connecte-toi pour commander</b><p>Crée ton compte ou connecte-toi dans Réglages, puis reviens ici : ton panier est gardé.</p><button type="button" class="btn" data-shlogin>Aller dans Réglages</button></div>`:
+   `<h4 class="shx-h">Comment ça se passe</h4>${shSteps(0)}<button type="button" class="btn shx-order" data-shorder ${SHP.busy?'disabled':''}>${SHP.busy?'Envoi…':'Commander · '+shEur(tot)}</button><p class="shx-fine">Rien à payer maintenant. Tu peux annuler tant que je n’ai pas accepté la commande.</p>`)}
+function shSteps(done){const S2=[['Tu commandes','En un clic, sans rien remplir.'],['Je te réponds','Dans la discussion de ta commande.'],['Paiement puis envoi',SHP.set.paiement?shCut(SHP.set.paiement,110):'On se met d’accord ensemble.']];
+  return `<ol class="shx-steps">${S2.map((s,k)=>`<li class="${done&&k===0?'done':''}"><b>${s[0]}</b><span>${esc(s[1])}</span></li>`).join('')}</ol>`}
+/* ---------- commandes (client + gérant) ---------- */
+function shTrack(o){return `<p class="shx-stl st-${esc(o.statut)}">${esc(shStL(o.statut))}</p>`;const i=Math.max(0,SH_FLOW.indexOf(o.statut));
+  return `<ol class="shx-track" aria-label="Avancement : ${esc(SH_FLOWL[i])}">${SH_FLOW.map((s,k)=>`<li class="${k<i||(k===i&&s==='terminée')?'done':k===i?'now':''}"${k===i?' aria-current="step"':''}><i></i><span>${SH_FLOWL[k]}</span></li>`).join('')}</ol>`}
+function shSuivi(o){return '';const c=String(o.suivi).trim(),lp=/^[A-Z0-9]{8,20}$/i.test(c.replace(/\s+/g,''));
+  return `<div class="shx-suivi"><p><span>📦 Numéro de suivi</span><b>${esc(c)}</b></p><div><button type="button" data-shcopy="${esc(c)}">Copier</button>${lp?`<a href="https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(c.replace(/\s+/g,''))}" target="_blank" rel="noopener">Suivre sur La Poste</a>`:''}</div></div>`}
+function shItems(o){return `<ul class="shx-oi">${(Array.isArray(o.articles)?o.articles:[]).map(a=>{const p=shProd(a.id);return `<li>${p?shStage(p,'xs',1):'<span class="shx-stage xs"><span class="shx-noimg">🛍️</span></span>'}<span>${esc(a.qte)} × ${esc(a.titre)}</span><b>${shEur(a.prix*a.qte)}</b></li>`}).join('')}</ul>`}
+function shOrderCard(o,adm){const op=adm&&SHP.open[o.id];
+  let h=`<article class="shx-o st-${esc(o.statut)}"><div class="shx-oh"><div><b>Commande n° ${o.id}</b><small>${adm&&o.pseudo?`de <em>${esc(o.pseudo)}</em>, `:''}le ${shDate(o.created_at)}</small></div><strong>${shEur(o.total)}</strong></div>`+shTrack(o)+shItems(o)+shSuivi(o);
+  if(adm){const nx=SH_NEXT[o.statut];
+    if(nx){if(nx[0]==='envoyée'&&SHP.ship[o.id])h+=`<div class="shx-ship"><label class="sh-l">Numéro de suivi (facultatif)<input data-shtrk="${o.id}" value="${esc(SHP.ship[o.id]===true?'':SHP.ship[o.id])}" maxlength="120" placeholder="ex. 6A12345678901" autocomplete="off"></label><div class="sh-row"><button type="button" class="btn" data-shshipok="${o.id}">Valider l’envoi</button><button type="button" class="btn alt" data-shshipx="${o.id}">Annuler</button></div></div>`;
+      else h+=`<button type="button" class="btn shx-next" data-shnext="${o.id}">${nx[1]}</button>`}}
   h+=shThread(o);
-  if(!adm){if(o.statut==='nouvelle')h+=SHP.del==='o'+o.id?`<button type="button" class="btn alt sm" data-shcancel="${o.id}">Confirmer l'annulation</button>`:`<button type="button" class="btn alt sm" data-shdel="o${o.id}">Annuler la commande</button>`;return h+'</div>'}
-  if(!op)return h+'</div>';
+  if(!adm){if(o.statut==='nouvelle')h+=SHP.del==='o'+o.id?`<button type="button" class="btn alt sm" data-shcancel="${o.id}">Confirmer l’annulation</button>`:`<button type="button" class="shx-lnk" data-shdel="o${o.id}">Annuler la commande</button>`;return h+'</article>'}
+  h+=`<button type="button" class="shx-lnk" data-shopen="${o.id}" aria-expanded="${!!op}">${op?'Masquer les détails':'Détails, statut, note perso…'}</button>`;
+  if(!op)return h+'</article>';
   h+=`<div class="sh-od">${o.nom||o.adresse?`<p><b>${esc(o.nom)}</b><br>${esc(o.adresse).replace(/\n/g,'<br>')}<br>${esc(o.contact)}</p>`:''}${o.note?`<p class="sh-nt">💬 ${esc(o.note)}</p>`:''}
    <label class="sh-l">Statut<select data-sho="statut:${o.id}">${SH_ST.map(([v,l])=>`<option value="${v}"${v===o.statut?' selected':''}>${l}</option>`).join('')}</select></label>
-   <label class="sh-l">Numéro de suivi (le client le voit)<input data-sho="suivi:${o.id}" value="${esc(o.suivi||'')}" maxlength="120"></label>
    <label class="sh-l">Note pour toi (le client ne la voit pas)<textarea data-sho="note_admin:${o.id}" rows="2" maxlength="1000">${esc(o.note_admin||'')}</textarea></label>
    <div class="sh-row"><button type="button" class="btn" data-shosave="${o.id}">Enregistrer</button>${SHP.del==='a'+o.id?`<button type="button" class="btn alt" data-shodel="${o.id}">Confirmer la suppression</button>`:`<button type="button" class="btn alt" data-shdel="a${o.id}">Supprimer</button>`}</div></div>`;
-  return h+'</div>'}
-function shThread(o){const n=SHP.unr[o.id]||0,on=SHP.th&&SHP.th.id===o.id;
-  let h=`<button type="button" class="sh-chat${on?' on':''}" data-shth="${o.id}" aria-expanded="${on}">💬 ${on?'Fermer la discussion':SHP.admin&&o.user_id!==(SBS&&SBS.uid)?'Écrire à '+esc(o.pseudo||'l’acheteur'):'Discussion avec le vendeur'}${n&&!on?` <i>${n}</i>`:''}</button>`;
-  if(!on)return h;const T=SHP.th,me=SBS&&SBS.uid;
-  h+=`<div class="sh-msgs" id="sh-msgs">${T.msgs===null?'<p class="sub">Chargement…</p>':T.msgs.length?T.msgs.map(m=>`<div class="sh-m${m.sender===me?' me':''}"><p>${esc(m.body)}</p><small>${new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</small></div>`).join(''):`<p class="sub">${SHP.admin&&o.user_id!==me?'Écris à l’acheteur pour le paiement et la livraison.':'Pas encore de message. Tu peux écrire au vendeur ici.'}</p>`}</div>
+  return h+'</article>'}
+function shThread(o){const n=SHP.unr[o.id]||0,on=SHP.th&&SHP.th.id===o.id,me=SBS&&SBS.uid,seller=SHP.admin&&o.user_id!==me;
+  let h=`<button type="button" class="shx-chat${on?' on':''}" data-shth="${o.id}" aria-expanded="${on}">💬 ${on?'Fermer la discussion':seller?'Écrire à '+esc(o.pseudo||'l’acheteur'):'Discussion avec le vendeur'}${n&&!on?` <i>${n} ${shPl(n,'nouveau','nouveaux')}</i>`:''}</button>`;
+  if(!on)return h;const T=SHP.th;
+  h+=`<div class="sh-msgs" id="sh-msgs">${T.msgs===null?'<p class="sub">Chargement…</p>':T.msgs.length?T.msgs.map(m=>`<div class="sh-m${m.sender===me?' me':''}"><p>${esc(m.body)}</p><small>${new Date(m.created_at).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</small></div>`).join(''):`<p class="sub">${seller?'Écris à l’acheteur pour le paiement et la livraison.':'Pas encore de message. Tu peux écrire au vendeur ici.'}</p>`}</div>
    <div class="sh-send"><textarea data-shtxt rows="2" maxlength="1000" placeholder="Ton message…">${esc(T.txt)}</textarea><button type="button" class="btn" data-shsend ${T.busy?'disabled':''}>Envoyer</button></div>`;
   return h}
 async function shThLoad(quiet){const T=SHP.th;if(!T)return;const id=T.id;
@@ -8748,58 +9156,94 @@ async function shThSend(){const T=SHP.th;if(!T||T.busy)return;const txt=String(T
   try{await shApi('/rest/v1/shop_msgs',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({order_id:T.id,body:txt})});T.txt='';T.busy=false;await shThLoad()}catch(e){T.busy=false;toast(shErr(e));shDraw(1)}}
 setInterval(()=>{if(SHP.th&&document.getElementById('aff-sh')&&!document.hidden)shThLoad(true)},8000);
 async function shLoadUnr(){if(!SBS)return;try{const r=await shApi('/rest/v1/shop_msgs?select=order_id&lu=is.false&sender=neq.'+encodeURIComponent(SBS.uid)+'&limit=1000');const u={};(r||[]).forEach(m=>{u[m.order_id]=(u[m.order_id]||0)+1});SHP.unr=u;SHP.msgs=(r||[]).length}catch(e){}}
-function shMine(){if(!SBS)return '<p class="sub sh-empty">Connecte-toi dans Réglages pour voir tes commandes.</p>';if(SHP.orders===null){shLoadMine();return '<p class="sub sh-empty">Chargement…</p>'}
-  return SHP.orders.length?SHP.orders.map(o=>shOrderCard(o,false)).join(''):'<p class="sub sh-empty">Tu n’as pas encore passé de commande.</p>'}
-async function shLoadMine(){if(!SBS)return;await shLoadUnr();try{SHP.orders=await shApi('/rest/v1/shop_orders?select=id,user_id,articles,total,statut,suivi,created_at&user_id=eq.'+encodeURIComponent(SBS.uid)+'&order=id.desc&limit=50')||[]}catch(e){SHP.orders=[];toast(shErr(e))}shDraw()}
-function shAdm(){if(SHP.aOrders===null){shLoadAdm();return '<p class="sub sh-empty">Chargement…</p>'}
-  const L=SHP.aOrders,n=s=>L.filter(o=>o.statut===s).length,F=L.filter(o=>SHP.aFil==='tout'?true:SHP.aFil==='cours'?['acceptée','payée','envoyée'].includes(o.statut):o.statut===SHP.aFil);
-  const fil=[['nouvelle','🆕 Nouvelles',n('nouvelle')],['cours','⏳ En cours',n('acceptée')+n('payée')+n('envoyée')],['terminée','✅ Terminées',n('terminée')],['annulée','✖️ Annulées',n('annulée')],['tout','Toutes',L.length]];
-  return `<div class="sh-cats">${fil.map(([v,l,c])=>`<button type="button" class="${SHP.aFil===v?'on':''}" data-shfil="${v}">${l} ${c}</button>`).join('')}</div>`+(F.length?F.map(o=>shOrderCard(o,true)).join(''):'<p class="sub sh-empty">Aucune commande ici.</p>')}
-async function shLoadAdm(){await shLoadUnr();try{SHP.aOrders=await shApi('/rest/v1/shop_orders?select=*&order=id.desc&limit=300')||[];SHP.nouv=SHP.aOrders.filter(o=>o.statut==='nouvelle').length}catch(e){SHP.aOrders=[];toast(shErr(e))}shDraw()}
+function shMine(){if(!SBS)return '<div class="shx-empty"><span aria-hidden="true">🔐</span><p>Connecte-toi dans Réglages pour voir tes commandes.</p></div>';if(SHP.orders===null){shLoadMine();return '<p class="sub shx-wait">Chargement…</p>'}
+  return `<h3 class="shx-h1">Mes commandes</h3>`+(SHP.orders.length?SHP.orders.map(o=>shOrderCard(o,false)).join(''):'<div class="shx-empty"><span aria-hidden="true">📦</span><p>Tu n’as pas encore passé de commande.</p><button type="button" class="btn" data-shv="list">Voir les produits</button></div>')}
+async function shLoadMine(){if(!SBS)return;await shLoadUnr();try{SHP.orders=await shApi('/rest/v1/shop_orders?select=id,user_id,articles,total,statut,suivi,created_at&user_id=eq.'+encodeURIComponent(SBS.uid)+'&order=id.desc&limit=50')||[]}catch(e){SHP.orders=[];toast(shErr(e))}shDraw(1)}
+/* ---------- gérer (gérant) ---------- */
+function shAdm(){const sw=`<div class="shx-seg"><button type="button" aria-pressed="${SHP.aTab==='cmd'}" data-shatab="cmd">Commandes${SHP.nouv?` <i>${SHP.nouv}</i>`:''}</button><button type="button" aria-pressed="${SHP.aTab==='prod'}" data-shatab="prod">Produits <small>${SHP.prods.length}</small></button></div>`;
+  if(SHP.aTab==='prod')return sw+shAdmProds();
+  if(SHP.aOrders===null){shLoadAdm();return sw+'<p class="sub shx-wait">Chargement…</p>'}
+  const L=SHP.aOrders,n=s=>L.filter(o=>o.statut===s).length,now=new Date(),mo=L.filter(o=>['payée','envoyée','terminée'].includes(o.statut)&&(d=>d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear())(new Date(o.created_at)));
+  const ca=Math.round(mo.reduce((a,o)=>a+(+o.total||0),0)).toLocaleString('fr-FR');
+  const kpi=`<div class="shx-kpi"><div class="${n('nouvelle')?'hot':''}"><b>${n('nouvelle')}</b><span>à traiter</span></div><div><b>${n('acceptée')+n('payée')+n('envoyée')}</b><span>en cours</span></div><div><b>${ca} €</b><span>payé ce mois</span></div><div class="${SHP.msgs?'hot':''}"><b>${SHP.msgs}</b><span>${shPl(SHP.msgs,'message')} non ${shPl(SHP.msgs,'lu')}</span></div></div>`;
+  const F=L.filter(o=>SHP.aFil==='tout'?true:SHP.aFil==='cours'?['acceptée','payée','envoyée'].includes(o.statut):o.statut===SHP.aFil);
+  const fil=[['nouvelle','Nouvelles',n('nouvelle')],['cours','En cours',n('acceptée')+n('payée')+n('envoyée')],['terminée','Terminées',n('terminée')],['annulée','Annulées',n('annulée')],['tout','Toutes',L.length]];
+  return sw+kpi+`<div class="shx-fil">${fil.map(([v,l,c])=>`<button type="button" class="${SHP.aFil===v?'on':''}" data-shfil="${v}">${l} <i>${c}</i></button>`).join('')}</div>`+(F.length?F.map(o=>shOrderCard(o,true)).join(''):'<p class="sub shx-wait">Aucune commande ici.</p>')}
+function shAdmProds(){const L=SHP.prods;if(!L.length)return '<div class="shx-empty"><span aria-hidden="true">🛍️</span><p>Aucun produit pour l’instant.</p><button type="button" class="btn" data-shnew>➕ Nouveau produit</button></div>';
+  return `<div class="shx-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button></div><div class="shx-plist">${L.map((p,k)=>`<div class="shx-prow${p.actif?'':' off'}">`+
+    `<button type="button" class="shx-prm" data-shp="${p.id}">${shStage(p,'xs',1)}<span><b>${esc(p.titre)}</b><small>${shEur(p.prix)}${p.actif?'':' · masqué'}</small></span></button>`+
+    `<div class="shx-pctl">${p.stock==null?'<span class="shx-inf">Stock illimité</span>':`<div class="shx-q sm"><button type="button" data-shstk="${p.id}:-1" aria-label="Stock moins un" ${p.stock<=0?'disabled':''}>−</button><b>${p.stock}</b><button type="button" data-shstk="${p.id}:1" aria-label="Stock plus un">+</button></div>`}`+
+    `<button type="button" data-shvis="${p.id}" aria-label="${p.actif?'Masquer':'Afficher'} ${esc(p.titre)}">${p.actif?'👁️':'🙈'}</button><button type="button" data-shmv="${p.id}:-1" aria-label="Monter" ${k?'':'disabled'}>↑</button><button type="button" data-shmv="${p.id}:1" aria-label="Descendre" ${k<L.length-1?'':'disabled'}>↓</button><button type="button" data-shedit="${p.id}" aria-label="Modifier ${esc(p.titre)}">✏️</button></div></div>`).join('')}</div>`}
+async function shLoadAdm(){await shLoadUnr();try{SHP.aOrders=await shApi('/rest/v1/shop_orders?select=*&order=id.desc&limit=300')||[];SHP.nouv=SHP.aOrders.filter(o=>o.statut==='nouvelle').length}catch(e){SHP.aOrders=[];toast(shErr(e))}shDraw(1)}
+async function shOrdPatch(o,b,msg){try{await shApi('/rest/v1/shop_orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({},b,{updated_at:new Date().toISOString()}))});Object.assign(o,b);
+    SHP.nouv=(SHP.aOrders||[]).filter(x=>x.statut==='nouvelle').length;if(msg)toast(msg);return true}catch(e){toast(shErr(e));return false}}
+async function shProdPatch(p,b){try{await shApi('/rest/v1/shop_products?id=eq.'+p.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({},b,{updated_at:new Date().toISOString()}))});Object.assign(p,b);return true}catch(e){toast(shErr(e));return false}}
+/* ---------- édition ---------- */
 function shEdit(){const e=SHP.ed;if(!e)return shList();
-  if(e.set){const f=(k,l,ta)=>`<label class="sh-l">${l}${ta?`<textarea data-she="${k}" rows="3" maxlength="600">${esc(e[k]||'')}</textarea>`:`<input data-she="${k}" value="${esc(e[k]||'')}" maxlength="80">`}</label>`;
-    return `<button type="button" class="sh-back" data-shv="list">← Annuler</button><h3 class="aff-h">⚙️ Textes de la boutique</h3>${f('titre','Nom de la boutique')}${f('intro','Texte d’accueil',1)}${f('paiement','Comment payer (montré au moment de commander)',1)}${f('livraison','Livraison (montré sur chaque produit)',1)}<button type="button" class="btn" data-shsave ${SHP.busy?'disabled':''}>Enregistrer</button>`}
+  if(e.set){const f=(k,l,ta,ph)=>`<label class="sh-l">${l}${ta?`<textarea data-she="${k}" rows="3" maxlength="600" placeholder="${esc(ph||'')}">${esc(e[k]||'')}</textarea>`:`<input data-she="${k}" value="${esc(e[k]||'')}" maxlength="80" placeholder="${esc(ph||'')}">`}</label>`;
+    return `<button type="button" class="shx-back" data-shv="${SHP.edFrom==='adm'?'adm':'list'}">‹ Annuler</button><h3 class="shx-h1">Textes de la boutique</h3>${f('titre','Nom de la boutique','','ex. La boutique de Rio')}${f('intro','Texte d’accueil',1)}${f('atouts','Tes points forts, sous la vitrine (un par ligne, 4 maximum ; vide = ceux de l’exemple)',1,SH_ATOUTS.join('\n'))}${f('paiement','Comment payer (montré au moment de commander)',1)}${f('livraison','Livraison (montré sur chaque produit)',1)}<button type="button" class="btn" data-shsave ${SHP.busy?'disabled':''}>Enregistrer</button>`}
   const f=(k,l,ty,ph)=>`<label class="sh-l">${l}<input data-she="${k}" ${ty?`inputmode="${ty==='int'?'numeric':'decimal'}"`:''} value="${esc(e[k]==null?'':e[k])}" placeholder="${esc(ph||'')}" maxlength="120"></label>`;
-  const cats=[...new Set(SHP.prods.map(p=>p.categorie).filter(Boolean))];
-  return `<button type="button" class="sh-back" data-shv="${e.id?'prod':'list'}">← Annuler</button><h3 class="aff-h">${e.id?'✏️ Modifier le produit':'➕ Nouveau produit'}</h3>
+  const cats=[...new Set(SHP.prods.map(p=>p.categorie).filter(Boolean))],pv=Object.assign({},e,{prix:shNum(e.prix)||0,prix_barre:shNum(e.prix_barre)}),pc=shPct(pv);
+  return `<button type="button" class="shx-back" data-shv="${SHP.edFrom==='prod'&&shProd(SHP.cur)?'prod':SHP.edFrom==='adm'?'adm':'list'}">‹ Annuler</button><h3 class="shx-h1">${e.id?'Modifier le produit':'Nouveau produit'}</h3>
    <div class="sh-phs">${(e.photos||[]).map((u,k)=>`<div><img src="${esc(u)}" alt="">${k?`<button type="button" data-shpm="${k}" aria-label="Mettre en premier">⭐</button>`:'<em>Principale</em>'}<button type="button" data-shpx="${k}" aria-label="Retirer la photo">✕</button></div>`).join('')}<label class="sh-add">${SHP.up?'⏳ Envoi…':'📷 Ajouter des photos'}<input type="file" accept="image/*" multiple data-shup hidden></label></div>
-   ${f('titre','Nom du produit *','','ex. Boîtier pour display FB')}<div class="sh-row">${f('prix','Prix (€) *','number','12.90')}${f('prix_barre','Ancien prix barré (€)','number','facultatif')}</div>
+   ${f('titre','Nom du produit *','','ex. Boîtier pour display FB')}<div class="sh-row">${f('prix','Prix (€) *','dec','12,90')}${f('prix_barre','Ancien prix barré (€)','dec','facultatif')}</div><p class="shx-fine" id="shx-pct" ${pc?'':'hidden'}>Affiché avec une réduction de <b>−${pc} %</b>.</p>
    <div class="sh-row"><label class="sh-l">Catégorie<input data-she="categorie" value="${esc(e.categorie||'')}" list="sh-cats" placeholder="ex. Impression 3D" maxlength="40"></label>${f('stock','Stock (vide = illimité)','int','')}</div><datalist id="sh-cats">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
-   <label class="sh-l">Description (ce qu’on voit quand on clique sur le produit)<textarea data-she="description" rows="7" maxlength="5000" placeholder="Matière, dimensions, contenu, conseils…">${esc(e.description||'')}</textarea></label>
-   <label class="sh-l">Ordre d’affichage (plus petit = plus haut)<input data-she="ordre" type="number" inputmode="numeric" value="${esc(e.ordre||0)}"></label>
+   <label class="sh-l">Description (ce qu’on voit quand on clique sur le produit)<textarea data-she="description" rows="8" maxlength="5000" placeholder="Une phrase pour présenter le produit.&#10;&#10;• Point fort 1&#10;• Point fort 2&#10;&#10;Display non fournie.">${esc(e.description||'')}</textarea></label>
+   <p class="shx-fine">Astuce : commence une ligne par « • » pour en faire une liste cochée.</p>
+   <label class="sh-l">Ordre d’affichage (plus petit = plus haut)<input data-she="ordre" inputmode="numeric" value="${esc(e.ordre||0)}"></label>
    <label class="sh-ck"><input type="checkbox" data-she="actif" ${e.actif!==false?'checked':''}> Visible dans la boutique</label>
    <button type="button" class="btn" data-shsave ${SHP.busy||SHP.up?'disabled':''}>${e.id?'Enregistrer':'Mettre en vente'}</button>
-   ${e.id?(SHP.del==='p'+e.id?`<button type="button" class="btn alt" style="margin-top:8px" data-shpdel="${e.id}">Confirmer : supprimer ce produit</button>`:`<button type="button" class="btn alt" style="margin-top:8px" data-shdel="p${e.id}">Supprimer le produit</button>`):''}`}
+   ${e.id?`<button type="button" class="btn alt" style="margin-top:8px" data-shdup="${e.id}">📄 Dupliquer ce produit</button>`+(SHP.del==='p'+e.id?`<button type="button" class="btn alt" style="margin-top:8px" data-shpdel="${e.id}">Confirmer : supprimer ce produit</button>`:`<button type="button" class="btn alt" style="margin-top:8px" data-shdel="p${e.id}">Supprimer le produit</button>`):''}`}
+/* ---------- Amazon ---------- */
 function shAmz(){const L=(AFF&&AFF.items||[]).filter(x=>x&&affUrl(x.url));const g={};L.forEach(x=>{const c=x.cat||'Produits';(g[c]=g[c]||[]).push(x)});
   const card=x=>`<a class="aff-i" href="${esc(affUrl(x.url))}" target="_blank" rel="noopener sponsored nofollow">${x.img&&/^(https:\/\/|boutique\/[\w.-]+\.(jpe?g|png|webp)$)/.test(x.img)?`<img src="${esc(x.img)}" alt="" loading="lazy">`:'<span class="aff-ph" aria-hidden="true">🛒</span>'}<span class="aff-t"><b>${esc(x.nom||'Voir sur Amazon')}</b>${x.info?`<small>${esc(x.info)}</small>`:''}</span><span class="aff-go">Voir</span></a>`;
-  return (L.length?Object.keys(g).map(c=>`<h3 class="aff-h">${esc(c)}</h3><div class="aff-l">${g[c].map(card).join('')}</div>`).join(''):'<p class="sub aff-e">Bientôt ici : une sélection de boosters, displays et accessoires Dragon Ball Super.</p>')+
+  return `<h3 class="shx-h1">Sélection Amazon</h3><p class="sub">Les accessoires que je conseille, à commander directement sur Amazon.</p>`+(L.length?Object.keys(g).map(c=>`<h4 class="shx-h">${esc(c)}</h4><div class="aff-l">${g[c].map(card).join('')}</div>`).join(''):'<p class="sub aff-e">Bientôt ici : une sélection de boosters, displays et accessoires Dragon Ball Super.</p>')+
    '<p class="aff-n">En tant que Partenaire Amazon, L’Appel des Cartes réalise un bénéfice sur les achats remplissant les conditions requises. Le prix ne change pas pour toi.</p>'}
-function shBody(){if(SHP.ok!==1&&SHP.v!=='amz'){if(SHP.ok===-1)SHP.v='amz';else return SHP.err?`<p class="sub sh-empty">${esc(SHP.err)}</p><button type="button" class="btn alt" data-shretry>Réessayer</button>`:'<p class="sub sh-empty">Chargement de la boutique…</p>'}
+/* ---------- affichage ---------- */
+function shBody(){if(SHP.ok!==1&&SHP.v!=='amz'){if(SHP.ok===-1)SHP.v='amz';else return SHP.err?`<div class="shx-empty"><span aria-hidden="true">📡</span><p>${esc(SHP.err)}</p><button type="button" class="btn alt" data-shretry>Réessayer</button></div>`:'<div class="shx-skel" role="status" aria-label="Chargement de la boutique"><i></i><i></i><i></i><i></i></div>'}
   return SHP.v==='prod'?shProdView():SHP.v==='cart'?shCart():SHP.v==='mine'?shMine():SHP.v==='adm'&&SHP.admin?shAdm():SHP.v==='edit'&&SHP.admin?shEdit():SHP.v==='amz'?shAmz():shList()}
+function shBars(){if(SHP.ok!==1)return '';return SHP.v==='prod'?shBuyBar():SHP.v==='list'?shCartBar():''}
 function shDraw(keep){const o=document.getElementById('aff-sh');if(!o)return;const d=o.querySelector('.aff-d'),y=d?d.scrollTop:0;
-  d.innerHTML=`<div class="aff-top"><h2>🛒 Boutique</h2><button type="button" class="sr-x" data-affx aria-label="Fermer">✕</button></div>${shTabs()}<div class="sh-b">${shBody()}</div>`;if(keep)d.scrollTop=y}
-const shGo=(v,extra)=>{const o=document.getElementById('aff-sh');Object.assign(SHP,{v,del:'',th:null},extra||{});shDraw();const d=o&&o.querySelector('.aff-d');if(d)d.scrollTop=0};
-async function affOpen(){affClose();if(!AFF)affLoad().then(()=>{if(SHP.v==='amz')shDraw(1)});SHP.done=0;if(SHP.v==='edit')SHP.v='list';
-  const o=document.createElement('div');o.id='aff-sh';o.className='sheet in aff-sh';o.innerHTML='<div role="dialog" aria-modal="true" aria-label="Boutique" class="aff-d"></div>';
+  /* on garde le focus clavier sur le même bouton après le nouvel affichage */
+  const a=document.activeElement;let fs='';if(keep&&a&&a!==d&&d.contains(a)&&a.tagName==='BUTTON'){const k=Object.keys(a.dataset)[0];if(k)fs=`[data-${k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())}="${String(a.dataset[k]).replace(/["\\]/g,'\\$&')}"]`}
+  d.innerHTML=`${shTop()}<div class="shx-in v-${esc(SHP.v)}">${shBody()}</div>${shBars()}${shLbHtml()}`;if(keep)d.scrollTop=y;shAfter();
+  if(fs){const n=d.querySelector(fs);if(n&&!n.disabled)try{n.focus({preventScroll:true})}catch(_){}}}
+function shAfter(){const g=document.getElementById('shx-gal');if(g){const i=+g.dataset.i||0;if(i)g.scrollLeft=i*g.clientWidth;
+    g.onscroll=()=>{clearTimeout(g._t);g._t=setTimeout(()=>{const k=Math.round(g.scrollLeft/Math.max(1,g.clientWidth));SHP.img=k;
+      document.querySelectorAll('#aff-sh .shx-dots i').forEach((x,j)=>x.classList.toggle('on',j===k));document.querySelectorAll('#aff-sh .shx-th button').forEach((x,j)=>x.classList.toggle('on',j===k))},60)}}
+  const l=document.getElementById('shx-lbs');if(l&&SHP.lb!==null){l.scrollLeft=SHP.lb*l.clientWidth;l.onscroll=()=>{SHP.lb=Math.round(l.scrollLeft/Math.max(1,l.clientWidth))}}}
+const shGo=(v,extra)=>{const o=document.getElementById('aff-sh');Object.assign(SHP,{v,del:'',th:null,lb:null},extra||{});shDraw();const d=o&&o.querySelector('.aff-d');if(d)d.scrollTop=0};
+function affKey(e){if(e.key!=='Escape')return;if(SHP.lb!==null){SHP.lb=null;shDraw(1);return}affClose()}
+async function affOpen(){affClose();if(!AFF)affLoad().then(()=>{if(SHP.v==='amz')shDraw(1)});SHP.done=0;SHP.lb=null;if(SHP.v==='edit')SHP.v='list';
+  const o=document.createElement('div');o.id='aff-sh';o.className='sheet in aff-sh shx';o.innerHTML='<div role="dialog" aria-modal="true" aria-label="Boutique" class="aff-d"></div>';
   o.addEventListener('click',e=>{if(e.target===o||(e.target.closest&&e.target.closest('[data-affx]')))affClose()});
   o.addEventListener('click',shClick);o.addEventListener('input',shInput);o.addEventListener('change',shChange);
   document.body.appendChild(o);document.addEventListener('keydown',affKey);shDraw();const x=o.querySelector('[data-affx]');if(x)try{x.focus({preventScroll:true})}catch(_){}
-  shLoad(true)}
+  await shLoad(true)}
 /* ---------- actions ---------- */
-function shInput(e){const t=e.target;if(t.matches&&t.matches('[data-shtxt]')){if(SHP.th)SHP.th.txt=t.value}else if(t.dataset.she&&SHP.ed&&t.type!=='checkbox'){SHP.ed[t.dataset.she]=t.value}
+function shInput(e){const t=e.target;if(t.matches&&t.matches('[data-shtxt]')){if(SHP.th)SHP.th.txt=t.value}else if(t.dataset.shtrk){SHP.ship[t.dataset.shtrk]=t.value||true}
+  else if(t.dataset.she&&SHP.ed&&t.type!=='checkbox'){SHP.ed[t.dataset.she]=t.value;if(t.dataset.she==='prix'||t.dataset.she==='prix_barre'){const el=document.getElementById('shx-pct'),pc=shPct({prix:shNum(SHP.ed.prix)||0,prix_barre:shNum(SHP.ed.prix_barre)});if(el){el.hidden=!pc;el.querySelector('b').textContent='−'+pc+' %'}}}
   else if(t.dataset.sho){const [k,id]=t.dataset.sho.split(':'),o=(SHP.aOrders||[]).find(x=>x.id===+id);if(o){o._e=o._e||{};o._e[k]=t.value}}}
 function shChange(e){const t=e.target;if(t.dataset.she==='actif'&&SHP.ed)SHP.ed.actif=t.checked;else if(t.dataset.sho)shInput(e);else if(t.matches('[data-shup]'))shUpload(t.files)}
+function shAddCart(p,n){const c=SHP.cart.find(x=>x.id===p.id),max=p.stock!=null?p.stock:99,q=Math.min(max,(c?c.qte:0)+n);if(q<1)return false;if(c)c.qte=q;else SHP.cart.push({id:p.id,qte:q});shSaveCart();return true}
+function shShare(p){const url=SH_URL+'?shop='+p.id,txt=p.titre+' · '+shEur(p.prix),cp=()=>shCopy(url,'Lien du produit copié 🔗');
+  try{if(navigator.share){navigator.share({title:p.titre,text:txt,url}).catch(e=>{if(!e||e.name!=='AbortError')cp()});return}}catch(e){}cp()}
 async function shClick(e){const t=e.target.closest&&e.target.closest('button,[data-shv]');if(!t)return;const d=t.dataset;
   if(d.shv){if(d.shv==='mine')SHP.orders=null;if(d.shv==='adm')SHP.aOrders=null;if(d.shv==='list')shLoad();return shGo(d.shv,d.shv==='prod'?{}:{done:d.shv==='cart'?SHP.done:0})}
   if('shretry' in d)return shLoad(true);
-  if(d.shcat!==undefined){SHP.cat=d.shcat;return shDraw(1)}
   if(d.shp)return shGo('prod',{cur:+d.shp,img:0,qty:1});
-  if(d.shimg){SHP.img=+d.shimg;return shDraw(1)}
-  if(d.shq){SHP.qty=Math.max(1,Math.min(99,SHP.qty+ +d.shq));return shDraw(1)}
-  if(d.shadd){const p=shProd(d.shadd);if(!p)return;const c=SHP.cart.find(x=>x.id===p.id),max=p.stock!=null?p.stock:99,q=Math.min(max,(c?c.qte:0)+SHP.qty);
-    if(c)c.qte=q;else SHP.cart.push({id:p.id,qte:Math.max(1,q)});shSaveCart();toast('Ajouté au panier 🛒');SHP.qty=1;return shDraw(1)}
+  if(d.shimg){const g=document.getElementById('shx-gal');if(g)g.scrollTo({left:+d.shimg*g.clientWidth,behavior:'smooth'});return}
+  if(d.shlb){SHP.lb=+d.shlb;return shDraw(1)}
+  if('shlbx' in d){SHP.lb=null;return shDraw(1)}
+  if(d.shlbn){const l=document.getElementById('shx-lbs');if(l)l.scrollTo({left:(Math.round(l.scrollLeft/l.clientWidth)+ +d.shlbn)*l.clientWidth,behavior:'smooth'});return}
+  if(d.shq){SHP.qty=Math.max(1,Math.min(99,SHP.qty+ +d.shq));const b=document.querySelector('#aff-sh .shx-bar');if(b){const k=d.shq;b.outerHTML=shBuyBar();const n=document.querySelector(`#aff-sh [data-shq="${k}"]`);if(n&&!n.disabled)n.focus({preventScroll:true})}return}
+  if(d.shadd){const p=shProd(d.shadd);if(!p)return;if(shAddCart(p,SHP.qty)){toast('Ajouté au panier');SHP.qty=1}else toast('Plus assez de stock');shDraw(1);const c=document.querySelector('#aff-sh .shx-cartb i');if(c)c.classList.add('pop');return}
+  if(d.shquick){const p=shProd(d.shquick);if(!p)return;const ok=shAddCart(p,1);toast(ok?'Ajouté au panier':'Plus assez de stock');shDraw(1);
+    const nb=document.querySelector(`#aff-sh [data-shquick="${p.id}"]`);if(nb){nb.focus({preventScroll:true});if(ok)nb.classList.add('pop')}const c=document.querySelector('#aff-sh .shx-cartb i');if(ok&&c)c.classList.add('pop');return}
   if(d.shcq){const [id,dl]=d.shcq.split(':').map(Number),c=SHP.cart.find(x=>x.id===id),p=shProd(id);if(!c)return;
     if(dl===0)SHP.cart=SHP.cart.filter(x=>x!==c);else{c.qte=Math.max(1,Math.min(p&&p.stock!=null?p.stock:99,c.qte+dl))}shSaveCart();return shDraw(1)}
+  if(d.shshare){const p=shProd(d.shshare);if(p)shShare(p);return}
+  if(d.shcopy!==undefined){shCopy(d.shcopy,'Numéro de suivi copié');return}
   if('shlogin' in d){affClose();S.tab='set';S.menu=false;render();try{window.scrollTo(0,0)}catch(_){}return}
   if('shorder' in d)return shOrder();
   if(d.shdel){SHP.del=d.shdel;return shDraw(1)}
@@ -8808,28 +9252,39 @@ async function shClick(e){const t=e.target.closest&&e.target.closest('button,[da
   if('shsend' in d)return shThSend();
   if(d.shopen){SHP.open[d.shopen]=!SHP.open[d.shopen];SHP.del='';return shDraw(1)}
   if(d.shfil){SHP.aFil=d.shfil;return shDraw(1)}
-  if(d.shosave){const o=(SHP.aOrders||[]).find(x=>x.id===+d.shosave);if(!o)return;const b=Object.assign({},o._e||{},{updated_at:new Date().toISOString()});
-    try{await shApi('/rest/v1/shop_orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});Object.assign(o,o._e||{});delete o._e;toast('Commande enregistrée');SHP.nouv=SHP.aOrders.filter(x=>x.statut==='nouvelle').length}catch(er){toast(shErr(er))}return shDraw(1)}
+  if(d.shatab){SHP.aTab=d.shatab;return shDraw(1)}
+  if(d.shnext){const o=(SHP.aOrders||[]).find(x=>x.id===+d.shnext),nx=o&&SH_NEXT[o.statut];if(!nx)return;    t.disabled=true;await shOrdPatch(o,{statut:nx[0]},'Commande n° '+o.id+' : '+shStL(nx[0]).replace(/^\S+\s/,'').toLowerCase());return shDraw(1)}
+  if(d.shshipok){const o=(SHP.aOrders||[]).find(x=>x.id===+d.shshipok);if(!o)return;const v=SHP.ship[o.id]===true?'':String(SHP.ship[o.id]||'').trim().slice(0,120);
+    if(await shOrdPatch(o,{statut:'envoyée',suivi:v||o.suivi||''},'Commande n° '+o.id+' expédiée 📦'))delete SHP.ship[o.id];return shDraw(1)}
+  if(d.shshipx){delete SHP.ship[d.shshipx];return shDraw(1)}
+  if(d.shosave){const o=(SHP.aOrders||[]).find(x=>x.id===+d.shosave);if(!o)return;if(await shOrdPatch(o,Object.assign({},o._e||{}),'Commande enregistrée'))delete o._e;return shDraw(1)}
   if(d.shodel){try{await shApi('/rest/v1/shop_orders?id=eq.'+(+d.shodel),{method:'DELETE',headers:{Prefer:'return=minimal'}});SHP.aOrders=SHP.aOrders.filter(x=>x.id!==+d.shodel);SHP.del='';toast('Commande supprimée')}catch(er){toast(shErr(er))}return shDraw(1)}
-  if('shnew' in d)return shGo('edit',{ed:{titre:'',prix:'',prix_barre:'',categorie:'',stock:'',description:'',photos:[],actif:true,ordre:0}});
-  if(d.shedit){const p=shProd(d.shedit);if(p)shGo('edit',{ed:Object.assign({},p,{photos:(p.photos||[]).map(shImg).filter(Boolean),prix_barre:p.prix_barre==null?'':p.prix_barre,stock:p.stock==null?'':p.stock})});return}
-  if('shset' in d)return shGo('edit',{ed:Object.assign({set:1},SHP.set)});
+  if(d.shstk){const [id,dl]=d.shstk.split(':').map(Number),p=shProd(id);if(!p||p.stock==null)return;t.disabled=true;await shProdPatch(p,{stock:Math.max(0,p.stock+dl)});return shDraw(1)}
+  if(d.shvis){const p=shProd(d.shvis);if(!p)return;t.disabled=true;if(await shProdPatch(p,{actif:!p.actif}))toast(p.actif?'Produit visible 👁️':'Produit masqué 🙈');return shDraw(1)}
+  if(d.shmv){const [id,dl]=d.shmv.split(':').map(Number),L=SHP.prods.slice(),i=L.findIndex(p=>p.id===id),j=i+dl;if(i<0||j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];
+    SHP.busy=true;try{for(let k=0;k<L.length;k++){if(L[k].ordre!==k+1)await shApi('/rest/v1/shop_products?id=eq.'+L[k].id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({ordre:k+1})});L[k].ordre=k+1}SHP.prods=L}catch(er){toast(shErr(er))}SHP.busy=false;return shDraw(1)}
+  if('shnew' in d)return shGo('edit',{edFrom:SHP.v,ed:{titre:'',prix:'',prix_barre:'',categorie:'',stock:'',description:'',photos:[],actif:true,ordre:0}});
+  if(d.shedit){const p=shProd(d.shedit);if(p)shGo('edit',{edFrom:SHP.v,cur:SHP.v==='prod'?SHP.cur:p.id,ed:Object.assign({},p,{photos:(p.photos||[]).map(shImg).filter(Boolean),prix:shFr(p.prix),prix_barre:shFr(p.prix_barre),stock:p.stock==null?'':p.stock})});return}
+  if(d.shdup){const e=SHP.ed||{};shGo('edit',{ed:Object.assign({},e,{id:undefined,titre:(String(e.titre||'')+' (copie)').slice(0,120),actif:false,photos:(e.photos||[]).slice()})});toast('Copie prête : change ce qu’il faut puis enregistre');return}
+  if('shset' in d)return shGo('edit',{edFrom:SHP.v,ed:Object.assign({set:1},SHP.set)});
   if(d.shpm){const a=SHP.ed.photos,k=+d.shpm;a.unshift(a.splice(k,1)[0]);return shDraw(1)}
   if(d.shpx){SHP.ed.photos.splice(+d.shpx,1);return shDraw(1)}
   if('shsave' in d)return shSave();
-  if(d.shpdel){try{await shApi('/rest/v1/shop_products?id=eq.'+(+d.shpdel),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Produit supprimé');SHP.prods=SHP.prods.filter(p=>p.id!==+d.shpdel);shGo('list');shLoad(true)}catch(er){toast(shErr(er))}}}
-async function shOrder(){if(!SBS)return;SHP.busy=true;shDraw(1);try{const id=await shApi('/rest/v1/rpc/shop_commander',{method:'POST',body:JSON.stringify({p_articles:SHP.cart.map(x=>({id:x.id,qte:x.qte}))})});
-    SHP.cart=[];shSaveCart();SHP.done=+id||1;SHP.orders=null;SHP.t=0;toast('Commande envoyée ✅')}catch(e){toast(shErr(e))}SHP.busy=false;shDraw();shLoad()}
+  if(d.shpdel){try{await shApi('/rest/v1/shop_products?id=eq.'+(+d.shpdel),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Produit supprimé');SHP.prods=SHP.prods.filter(p=>p.id!==+d.shpdel);SHP.cart=SHP.cart.filter(x=>x.id!==+d.shpdel);shSaveCart();shGo(SHP.v==='adm'||(SHP.v==='edit'&&SHP.edFrom==='adm')?'adm':'list');shLoad(true)}catch(er){toast(shErr(er))}}}
+async function shOrder(){if(!SBS||SHP.busy)return;SHP.busy=true;shDraw(1);try{const id=await shApi('/rest/v1/rpc/shop_commander',{method:'POST',body:JSON.stringify({p_articles:SHP.cart.map(x=>({id:x.id,qte:x.qte}))})});
+    SHP.cart=[];shSaveCart();SHP.done=+id||1;SHP.orders=null;SHP.t=0;SHP.busy=false;shGo('cart');shLoad();return}catch(e){toast(shErr(e))}SHP.busy=false;shDraw(1)}
+const shFr=n=>n==null||n===''?'':(Math.round(+n*100)/100).toFixed(2).replace('.',',');
 const shNum=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?Math.round(n*100)/100:null};
 async function shSave(){const e=SHP.ed;if(!e)return;SHP.busy=true;shDraw(1);
-  try{if(e.set){const data={titre:String(e.titre||'').slice(0,80),intro:String(e.intro||'').slice(0,600),paiement:String(e.paiement||'').slice(0,600),livraison:String(e.livraison||'').slice(0,600)};
-      await shApi('/rest/v1/shop_settings?id=eq.1',{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({data,updated_at:new Date().toISOString()})});SHP.set=data;toast('Textes enregistrés');SHP.busy=false;return shGo('list')}
+  try{if(e.set){const data={titre:String(e.titre||'').slice(0,80),intro:String(e.intro||'').slice(0,600),atouts:String(e.atouts||'').slice(0,400),paiement:String(e.paiement||'').slice(0,600),livraison:String(e.livraison||'').slice(0,600)};
+      await shApi('/rest/v1/shop_settings?id=eq.1',{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({data,updated_at:new Date().toISOString()})});SHP.set=data;toast('Textes enregistrés');SHP.busy=false;return shGo(SHP.edFrom==='adm'?'adm':'list')}
     const prix=shNum(e.prix);if(!String(e.titre||'').trim()||prix===null||prix<0){toast('Il faut un nom et un prix');SHP.busy=false;return shDraw(1)}
     const st=String(e.stock).trim()===''?null:Math.max(0,parseInt(e.stock,10)||0),pb=String(e.prix_barre).trim()===''?null:shNum(e.prix_barre);
     const b={titre:String(e.titre).trim().slice(0,120),prix,prix_barre:pb,categorie:String(e.categorie||'').trim().slice(0,40)||'Produits',description:String(e.description||'').slice(0,5000),photos:e.photos.slice(0,12),stock:st,actif:e.actif!==false,ordre:parseInt(e.ordre,10)||0,updated_at:new Date().toISOString()};
     let id=e.id;if(id)await shApi('/rest/v1/shop_products?id=eq.'+id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});
     else{const r=await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b)});id=r&&r[0]&&r[0].id}
-    toast(e.id?'Produit enregistré':'Produit mis en vente 🎉');SHP.busy=false;SHP.ed=null;await shLoad(true);return shGo(id?'prod':'list',{cur:id,img:0,qty:1})}
+    toast(e.id?'Produit enregistré':b.actif?'Produit mis en vente':'Produit enregistré (masqué)');SHP.busy=false;SHP.ed=null;await shLoad(true);
+    return SHP.edFrom==='adm'?shGo('adm',{aTab:'prod'}):shGo(id?'prod':'list',{cur:id,img:0,qty:1})}
   catch(er){toast(shErr(er))}SHP.busy=false;shDraw(1)}
 function shJpeg(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const m=1600,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
   c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(new Error('Photo illisible')),'image/jpeg',.86)};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('Photo illisible'))};im.src=u})}
@@ -8838,6 +9293,10 @@ async function shUpload(files){if(!SHP.ed||!files||!files.length)return;SHP.up=1
     const r=await fetch(SBC.url+'/storage/v1/object/shop/'+n,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'false'},body:b});
     if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi impossible');SHP.ed.photos.push(SH_PUB()+n)}catch(e){toast(shErr(e));break}}
   SHP.up=0;shDraw(1)}
+/* lien d'un produit partagé : ?shop=12 ouvre directement sa fiche */
+setTimeout(()=>{let id='';try{id=new URLSearchParams(location.search).get('shop')||''}catch(e){}if(!id)return;try{const q=new URLSearchParams(location.search);q.delete('shop');history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash)}catch(e){}
+  let n=0;const go=()=>{if(++n>400)return;if(document.getElementById('splash')||document.querySelector('.sheet,#dbs,div.cs')||S.op){setTimeout(go,300);return}
+    affOpen();let k=0;const w=()=>{if(++k>60)return;if(SHP.ok!==1){setTimeout(w,250);return}if(/^\d+$/.test(id)&&shProd(id))shGo('prod',{cur:+id,img:0,qty:1});else toast('Ce produit n’est plus en vente')};w()};go()},700);
 /* ===== SHOP-3D : mes impressions 3D, à mettre en vente en une touche (gérant) + poubelle sur chaque produit ===== */
 const SH3D=[
  {titre:'Présentoir 4 protections display Fusion World',prix:22.9,prix_barre:27.9,ordre:1,ph:['presentoir_prot_fusion_world_avec','presentoir_prot_fusion_world_face','presentoir_prot_fusion_world_seul'],
@@ -10299,9 +10758,13 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:79,d:'2026-11-11',it:[
+  ['a','🛒','Nouvelle Boutique','La Boutique prend tout l’écran : grandes photos à faire glisser et à agrandir, prix et remises bien visibles, idées de produits qui vont ensemble, et un bouton + pour ajouter au panier sans ouvrir la fiche.','shop'],
+  ['a','📦','Suivre ta commande','Dans « Mes commandes », tu vois l’état de ta commande et tu en parles avec moi dans la discussion de la commande.','shop'],
+  ['n','🔗','Partager un produit','Le bouton Partager d’un produit envoie son lien : il ouvre directement sa fiche dans la Boutique.','shop']]},
+ {v:78,d:'2026-11-11',it:[['c','🗑️','Poubelles de la Boutique','Les poubelles des produits ne passent plus par-dessus les onglets Panier et Mes commandes quand on fait défiler la Boutique.','autres']]},
  {v:77,d:'2026-11-11',it:[
   ['a','🔢','Vrais numéros : Super Battle et Le Grand Combat','Les cartes Super Battle (Power Level, parts 1 à 20) et Le Grand Combat ont leur vrai numéro (N°1 à N°880), avec Prism et Prism double. Tu peux les chercher par numéro. Merci TIBO87 !','serie']]},
- {v:78,d:'2026-11-11',it:[['c','🗑️','Poubelles de la Boutique','Les poubelles des produits ne passent plus par-dessus les onglets Panier et Mes commandes quand on fait défiler la Boutique.','autres']]},
 {v:76,d:'2026-11-10',it:[
   ['a','👆','Notification → bon endroit','Toucher une notification ouvre directement la conversation, le chat général ou ta commande dans la boutique.','autres'],
   ['n','💬','Notifications du chat général','Tu es prévenu quand quelqu’un écrit dans le général (au plus une fois toutes les 15 minutes).','autres']]},

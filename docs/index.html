@@ -8074,7 +8074,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 80';
+const BUILD='11 nov. 2026 · 81';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9077,7 +9077,7 @@ function shTabs(){const b=(v,l,n,on)=>`<button type="button" class="shx-tab${on?
 /* ---------- vitrine ---------- */
 function shList(){const s=SHP.set,L=SHP.prods,vis=L.filter(p=>p.actif||SHP.admin);
   const head=`<div class="shx-intro"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
-  const adm=SHP.admin?`<div class="shx-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes</button>${SHP.imp?`<p class="shx-imp" role="status">⏳ Mise en vente des présentoirs… ${esc(SHP.imp)}</p>`:''}</div>`:'';
+  const adm=SHP.admin?`<div class="shx-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes</button>${SHP.imp?`<p class="shx-imp" role="status">⏳ Mise en vente des nouveaux produits… ${esc(SHP.imp)}</p>`:''}</div>`:'';
   if(!vis.length)return head+adm+`<div class="shx-empty"><span aria-hidden="true">🛍️</span><p>${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour mettre ta première annonce.':'Les premiers produits arrivent très bientôt.'}</p></div>`;
   const F=vis.find(p=>p.actif&&!shOut(p))||vis[0],rest=vis.length>2?vis.filter(p=>p!==F):vis,pc=shPct(F),ex=shExc(F);
   const hero=vis.length>2?`<article class="shx-hero"><button type="button" class="shx-hb" data-shp="${F.id}" tabindex="-1" aria-hidden="true">${shStage(F,'big')}</button>${pc?`<span class="shx-off big" aria-hidden="true">−${pc} %</span>`:''}`+
@@ -9300,10 +9300,14 @@ setTimeout(()=>{let id='';try{id=new URLSearchParams(location.search).get('shop'
     affOpen();let k=0;const w=()=>{if(++k>60)return;if(SHP.ok!==1){setTimeout(w,250);return}if(/^\d+$/.test(id)&&shProd(id))shGo('prod',{cur:+id,img:0,qty:1});else toast('Ce produit n’est plus en vente')};w()};go()},700);
 /* ===== SHOP-3D : mes impressions 3D, à mettre en vente en une touche (gérant) + poubelle sur chaque produit ===== */
 const SH3D=[
- {titre:'Présentoir 4 protections display Fusion World',prix:22.9,prix_barre:27.9,ordre:1,ph:['presentoir_prot_fusion_world_avec','presentoir_prot_fusion_world_face','presentoir_prot_fusion_world_seul'],
-  description:'Présentoir à 2 marches pour 4 protections display Fusion World (japonaises).\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche + séparateur : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 188 × 168 × 162 mm\n\nProtections display et displays non fournis (protections vendues à part).'},
- {titre:'Présentoir 2 protections display US / Masters',prix:17.9,prix_barre:21.9,ordre:2,ph:['presentoir_prot_us_masters_avec','presentoir_prot_us_masters_face','presentoir_prot_us_masters_seul'],
-  description:'Présentoir à 2 marches pour 2 protections display US / Masters.\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 169 × 146 × 148 mm\n\nProtections display et displays non fournis (protections vendues à part).'}];
+ {titre:'Présentoir 2 boîtiers magnétiques',prix:4.99,ordre:3,ph:['presentoir_magnets_2_face','presentoir_magnets_2_biais','presentoir_magnets_2_vide'],
+  description:'Présentoir pour 2 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Imprimé en 3D en PLA blanc\n• 163 × 122 mm\n\nBoîtiers magnétiques et cartes non fournis.'},
+ {titre:'Présentoir 3 boîtiers magnétiques',prix:5.99,ordre:4,ph:['presentoir_magnets_3_face','presentoir_magnets_3_biais','presentoir_magnets_3_vide'],
+  description:'Présentoir pour 3 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Imprimé en 3D en PLA blanc\n• 240 × 122 mm\n\nBoîtiers magnétiques et cartes non fournis.'},
+ {titre:'Présentoir 4 boîtiers magnétiques',prix:6.99,ordre:5,ph:['presentoir_magnets_4_face','presentoir_magnets_4_biais','presentoir_magnets_4_vide'],
+  description:'Présentoir pour 4 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Imprimé en 3D en PLA blanc\n• 163 × 236 mm (2 × 2)\n\nBoîtiers magnétiques et cartes non fournis.'},
+ {titre:'Cadre 9 boîtiers magnétiques',prix:14.99,ordre:6,ph:['presentoir_magnets_9_face','presentoir_magnets_9_biais','presentoir_magnets_9_vide'],
+  description:'Présentoir pour 9 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Livré en 3 plaques à assembler (4 clés à coller au dos) + 2 socles\n• Imprimé en 3D en PLA blanc\n• 240 × 366 mm\n\nBoîtiers magnétiques et cartes non fournis.'}];
 /* prix « pas chers » choisis le 11 nov. 2026 : appliqués une seule fois quand le gérant ouvre la Boutique */
 const SH_PRIX=[[/pr[ée]sentoir\s*4\s*protection/i,19.99],[/pr[ée]sentoir\s*2\s*protection/i,14.99],[/protection\s*display\s*(jp|japon|fusion world \(jap)/i,14.99],
  [/protection\s*display\s*us/i,18.99],[/nid.*abeille.*(us|masters)/i,12.99],[/nid.*abeille.*(jp|japon|fusion)/i,9.99],[/pr[ée]sentoir\s*pro\s*30/i,16.99],[/pr[ée]sentoir\s*vitrine\s*18/i,13.99]];
@@ -9324,7 +9328,7 @@ async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;
         if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi des photos impossible');photos.push(SH_PUB()+nm)}
       await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({titre:x.titre,prix:x.prix,prix_barre:x.prix_barre,categorie:'Impression 3D',description:x.description,photos,stock:null,actif:true,ordre:x.ordre,updated_at:new Date().toISOString()})});
       n++;SHP.imp=n+'/'+L.length;shDraw(1)}
-    toast(n+' présentoir'+(n>1?'s':'')+' mis en vente dans la Boutique 🎉')}
+    toast(n+' produit'+(n>1?'s':'')+' mis en vente dans la Boutique 🎉')}
   catch(e){toast(shErr(e))}
   SHP.busy=false;SHP.imp='';await shLoad(true)}
 /* ===== SHOP-3D:END ===== */
@@ -10769,7 +10773,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
- {v:80,d:'2026-11-11',it:[['a','💶','Nouveaux prix de la Boutique','Prix baissés pour les clients (présentoirs, protections, nids d’abeille), sans faux prix barrés.','autres']]},
+ {v:81,d:'2026-11-11',it:[['a','🃏','Présentoirs pour boîtiers magnétiques','Nouveaux produits dans la Boutique : présentoirs 2, 3 et 4 boîtiers et cadre 9 boîtiers. Ils s’ajoutent tout seuls quand le gérant ouvre la Boutique.','autres']]},
+{v:80,d:'2026-11-11',it:[['a','💶','Nouveaux prix de la Boutique','Prix baissés pour les clients (présentoirs, protections, nids d’abeille), sans faux prix barrés.','autres']]},
 {v:79,d:'2026-11-11',it:[
   ['a','🛒','Nouvelle Boutique','La Boutique prend tout l’écran : grandes photos à faire glisser et à agrandir, prix et remises bien visibles, idées de produits qui vont ensemble, et un bouton + pour ajouter au panier sans ouvrir la fiche.','shop'],
   ['a','📦','Suivre ta commande','Dans « Mes commandes », tu vois l’état de ta commande et tu en parles avec moi dans la discussion de la commande.','shop'],

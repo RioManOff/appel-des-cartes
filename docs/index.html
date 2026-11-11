@@ -3194,6 +3194,27 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .shx-stl.st-nouvelle{background:color-mix(in srgb,var(--gold) 20%,transparent)}
 .shx-stl.st-terminée{background:color-mix(in srgb,var(--ok) 20%,transparent)}
 .shx-stl.st-annulée{color:var(--shx-ko)}
+/* ===== BQ ===== */
+.bq-home{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-top:12px;padding-top:10px;border-top:1px solid var(--hl,var(--ln));font-size:14px}
+.bq-home span{color:var(--mu);flex-basis:100%}
+.bq-home b.p,.bq .p,.bq-l .p,.bq-ol .p{color:var(--ok)}.bq-home b.n,.bq .n,.bq-l .n,.bq-ol .n{color:#ff5a5a}
+.bq-h{display:flex;justify-content:space-between;align-items:baseline;margin:2px 0 8px}.bq-h small{color:var(--mu)}
+.bq-k{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.bq-k div{padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--hl,var(--ln))}
+.bq-k small{display:block;color:var(--mu);font-size:12.5px}.bq-k b{display:block;margin-top:3px;font:700 22px/1 'Barlow Condensed',Barlow,sans-serif}
+@media(min-width:620px){.bq-k{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.bq-w{margin:6px 0 0;color:var(--mu);font-size:13.5px}
+.bq-t{margin:22px 0 10px}
+.bq-l{padding:4px 14px}
+.bq-r,.bq-c{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--hl,var(--ln))}
+.bq-r:last-child,.bq-c:last-child{border-bottom:0}
+.bq-r>div:first-child,.bq-c>span{min-width:0}
+.bq-r b,.bq-c b{display:block;font-size:14.5px}.bq-r small,.bq-c small{display:block;color:var(--mu);font-size:12.5px;margin-top:2px}
+.bq-n{text-align:right;flex:none}.bq-n b{font:700 17px/1.1 'Barlow Condensed',Barlow,sans-serif}
+.bq-c input{width:84px;flex:none;text-align:right;padding:9px 10px;border-radius:10px;border:1px solid var(--hl2,var(--ln));background:var(--bg);color:var(--tx);font:600 16px Barlow,sans-serif}
+.bq-c i{font-style:normal;color:var(--mu);margin-left:-6px}
+.bq-ol{margin:10px 0 0;font-size:13.5px;color:var(--mu)}.bq-ol b{color:var(--tx)}
+.tv-tabs [data-tvt="q"]{grid-column:1/-1}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3336,7 +3357,7 @@ function finCalc(inp){const sales=inp.sales||[],buys=inp.buys||[],exp=inp.exp||[
   ledger,issues,checks,
   nSales:sales.length,nUnknown:nUnk,unknownCA:finR2(unkCA),dup,dupBuy,dupSale,warn}}
 /* ===== FIN-CALC:END ===== */
-const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},adj:v.adj&&typeof v.adj==='object'&&!Array.isArray(v.adj)?v.adj:{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw',en:v.en&&typeof v.en==='object'&&!Array.isArray(v.en)?v.en:{},ens:v.ens&&typeof v.ens==='object'&&!Array.isArray(v.ens)?v.ens:{},fwed:v.fwed==='en'?'en':'jp'});
+const mkX=v=>({fav:v.fav||{},sell:v.sell||{},sales:v.sales||[],upg:v.upg||{},act:v.act||{},buys:v.buys||[],exp:finMigExp(v.exp),fin:finNorm(v.fin,v.exp),bud:v.bud||0,duel:v.duel||{w:0,l:0,d:0},trash:v.trash||[],opened:v.opened||{},adj:v.adj&&typeof v.adj==='object'&&!Array.isArray(v.adj)?v.adj:{},soon:v.soon||[],added:v.added||{},cd:v.cd&&typeof v.cd==='object'?v.cd:{},db:dbNorm(v.db),al:alNorm(v.al),pp:ppNorm(v.pp),tour:tourNorm(v.tour),ms:msNorm(v.ms),msd:msdNorm(v.msd),game:v.game==='ms'?'ms':'fw',en:v.en&&typeof v.en==='object'&&!Array.isArray(v.en)?v.en:{},ens:v.ens&&typeof v.ens==='object'&&!Array.isArray(v.ens)?v.ens:{},fwed:v.fwed==='en'?'en':'jp',shc:v.shc&&typeof v.shc==='object'&&!Array.isArray(v.shc)?v.shc:{}});
 let X=mkX({});try{const v=JSON.parse(localStorage.getItem('fb_x')||'null');if(v){if(!(v.fin&&v.fin.v>=FIN_VER)){try{if(!localStorage.getItem('fb_x_bak_v1'))localStorage.setItem('fb_x_bak_v1',localStorage.getItem('fb_x'));if(!localStorage.getItem('fb_x_bak_v2')&&v.fin&&v.fin.v===2)localStorage.setItem('fb_x_bak_v2',localStorage.getItem('fb_x'))}catch(e){}}X=mkX(v)}}catch(e){}
 const toTrash=(t,label,data)=>{X.trash.unshift({id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t,d:new Date().toISOString(),label,data});X.trash=X.trash.slice(0,60);saveX()};
 const nb=v=>parseFloat(String(v||'').replace(',','.'))||0,eur=v=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €',today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
@@ -7287,7 +7308,7 @@ function tvSpark(SL,EX,res){const ev=SL.map(x=>[Date.parse(x.d)||0,(nb(x.price)-
 /* après chaque affichage : la série choisie reste visible dans la barre des séries */
 function tvAfter(){if(S.tab!=='trade')return;const r=document.getElementById('tv-sx'),b=r&&r.querySelector('[aria-pressed="true"]');if(!b)return;
  const x=b.offsetLeft-r.offsetLeft;if(x<r.scrollLeft+8||x+b.offsetWidth>r.scrollLeft+r.clientWidth-8)r.scrollLeft=Math.max(0,x-(r.clientWidth-b.offsetWidth)/2)}
-function trade(){try{msBindInit()}catch(e){}
+function trade(){try{msBindInit()}catch(e){}try{bqAuto()}catch(e){}
  const SL=X.sales.filter(x=>!S.sx||(S.sx==='MS'?srxIsMs(x.ext):x.ext===S.sx)),F=finView(S.sx),EXop=S.sx?[]:X.exp.filter(x=>finExpT(x)==='op'),
   dep=X.exp.map(x=>({id:x.id,d:x.d,l:x.l,a:finN(x.a),t:finExpT(x)})).sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:0),pv=vnPv(),
   ok=F.checks.every(c=>c.ok)&&!F.issues.length,todo=F.warn.concat(F.issues),nW=todo.length||(ok?0:1),
@@ -7343,7 +7364,7 @@ ${VN.k==='s'?vnSealPick():`<div><input class="fi" id="vn-c" autocomplete="off" a
 <label class="vnck"><input type="checkbox" id="vn-r" ${VN.r?'checked':''}> ${VN.k==='s'?'Retirer de mon stock de scellé':'Retirer de ma collection'}</label>
 <div class="vnpv" id="vn-pv">${pv.h}</div>
 <button class="vngo" id="vn-go" data-sadd ${pv.ok?'':'disabled'}>${pv.lab}</button></div>`;
- const tab=['v','s','d','b'].includes(TVT)?TVT:'v',
+ const tab=['v','s','d','b'].includes(TVT)||(TVT==='q'&&BQ&&BQ.admin)?TVT:'v',
   tb=(k,l,n)=>`<button type="button" role="tab" aria-selected="${tab===k}" data-tvt="${k}"><span>${l}${n!==''?` <i>${n}</i>`:''}</span></button>`;
  return header()+`<h2 style="margin-top:0">💶 Carnet de ventes</h2>
 ${TVS?saleForm:`<button type="button" class="btn tv-new" data-tvf="sale"><span>＋ Nouvelle vente</span></button>`}
@@ -7353,8 +7374,8 @@ ${TVS?saleForm:`<button type="button" class="btn tv-new" data-tvf="sale"><span>�
 <div class="tv-res"><span>Résultat de gestion</span><b class="${F.result>=0?'p':'n'}">${tvSg(F.result)}</b></div>
 ${tvSpark(SL,EXop,F.result)}
 <div class="tv-kp"><button type="button" data-tvt="b" data-tvj="1"><small>Trésorerie</small><b style="color:${tvCol(F.cash)}">${eur(F.cash)}</b></button><button type="button" data-tvt="s" data-tvj="1"><small>Stock au prix d’achat</small><b>${eur(F.stockValue)}</b></button></div></section>
-<div class="tv-tabs" id="tv-tabs" role="tablist">${tb('v','Ventes',SL.length)}${tb('s','Stock',F.rows.length)}${tb('d','Dépenses',X.exp.length)}${tb('b','Bilan','')}</div>
-<div class="tv-pane" role="tabpanel">${tab==='v'?salesTab:tab==='s'?stockTab:tab==='d'?expTab:bilanTab}</div>`}
+<div class="tv-tabs" id="tv-tabs" role="tablist">${tb('v','Ventes',SL.length)}${tb('s','Stock',F.rows.length)}${tb('d','Dépenses',X.exp.length)}${tb('b','Bilan','')}${BQ&&BQ.admin?tb('q','🛒 Boutique',bqSold().length):''}</div>
+<div class="tv-pane" role="tabpanel">${tab==='q'?bqTab():tab==='v'?salesTab:tab==='s'?stockTab:tab==='d'?expTab:bilanTab}</div>`}
 /* boutons propres au carnet : onglets et ouverture / fermeture des formulaires */
 document.addEventListener('click',e=>{const t=e.target.closest('[data-tvt],[data-tvf],[data-tvsk],[data-tvrq],[data-tvrr],[data-tvrm],[data-tvbd]');if(!t)return;const d=t.dataset;
  if(d.tvrq!==undefined){const [pe,pt]=STK.split('|'),own=tvOwn(pe,pt);TVRQ=d.tvrq==='all'?own:Math.max(1,Math.min(own,TVRQ+(+d.tvrq)));const n=$('#tv-rq'),l=$('#tv-rml');if(n)n.textContent=TVRQ;if(l)l.textContent='Retirer ×'+TVRQ+' du stock';return}
@@ -7626,15 +7647,15 @@ function hmFan(H){const n=H.l.length,dl=LAST.vk!==viewKey()?' hmdl':'';
  const out=Array(n);let L=Math.floor((n-1)/2),R=L;H.l.forEach((c,k)=>{const s=k===0?L:k%2?++R:--L;out[s]={c,k}});
  return `<div class="hmfan${dl}">${out.map((o,s)=>`<button class="hmc" ${o.c.ms?'data-hms2':'data-zoom'}="${o.c.id}" aria-label="Agrandir ${esc(o.c.name||o.c.id)}" style="--i:${s-(n-1)/2};--k:${o.k};z-index:${20-o.k}">${o.c.ms?msArt(o.c.arr):art(o.c)}</button>`).join('')}</div>`}
 /* argent du mois + 6 derniers mois */
-function hmMoney(){const sp=spendAll();
- if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton résultat de gestion (ventes moins coût des produits vendus et frais) s’affichera ici.</div><button class="btn" style="margin-top:12px" data-go="trade" data-tvf="sale">💶 Enregistrer une vente</button></div>`;
+function hmMoney(){const sp=spendAll();try{bqAuto()}catch(e){}
+ if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton résultat de gestion (ventes moins coût des produits vendus et frais) s’affichera ici.</div>${BQ&&BQ.admin?bqHome():''}<button class="btn" style="margin-top:12px" data-go="trade" data-tvf="sale">💶 Enregistrer une vente</button></div>`;
  const mk=today().slice(0,7),sM=X.sales.filter(x=>hmLd(x.d).slice(0,7)===mk),vM=sM.reduce((a,x)=>a+nb(x.price)*vnQ(x),0),aM=sM.reduce((a,x)=>a+nb(x.buy)*vnQ(x),0),opx=X.exp.filter(x=>finExpT(x)==='op'),dM=opx.filter(x=>String(x.d).slice(0,7)===mk).reduce((a,x)=>a+finN(x.a),0),rM=vM-aM-dM,t=new Date(),ms=[];
  for(let k=5;k>=0;k--){const d=new Date(t.getFullYear(),t.getMonth()-k,1),key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),v=X.sales.filter(x=>hmLd(x.d).slice(0,7)===key).reduce((a,x)=>a+(nb(x.price)-nb(x.buy))*vnQ(x),0),e=opx.filter(x=>String(x.d).slice(0,7)===key).reduce((a,x)=>a+finN(x.a),0);ms.push({lab:d.toLocaleDateString('fr-FR',{month:'short'}).replace('.',''),net:v-e})}
  const mx=Math.max(1,...ms.map(m=>Math.abs(m.net))),W=240,bw=28,gp=(W-6*bw)/5,base=44,bars=ms.map((m,i)=>{const x=i*(bw+gp),h=Math.max(m.net?3:0,Math.abs(m.net)/mx*(m.net>=0?40:14)),y=m.net>=0?base-h:base;
   return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="4" fill="${m.net>=0?'var(--ok)':'#ff5a5a'}" opacity="${i===5?1:.5}"><title>${m.lab} : ${eur(m.net)}</title></rect><text x="${(x+bw/2).toFixed(1)}" y="68" font-size="10" text-anchor="middle" fill="currentColor">${m.lab}</text>`}).join('');
  return `<div class="panel hmm"><div class="sub">Résultat de gestion · ${fmtM(mk)}</div><div class="hmbig" style="color:${rM>=0?'var(--ok)':'#ff5a5a'}">${rM>0?'+':''}${eur(rM)}</div><div class="hmkv"><span><b>${eur(vM)}</b>ventes</span><span><b>${eur(aM)}</b>coût des ventes</span><span><b>${eur(dM)}</b>frais</span></div>
  <svg class="hmspark" viewBox="0 0 ${W} 74" role="img" aria-label="Bénéfice des 6 derniers mois"><line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="currentColor" opacity=".3"/>${bars}</svg>
- <button class="btn alt" style="margin-top:8px" data-go="trade">💶 Ouvrir le carnet de ventes</button></div>`}
+ ${BQ&&BQ.admin?bqHome():''}<button class="btn alt" style="margin-top:8px" data-go="trade">💶 Ouvrir le carnet de ventes</button></div>`}
 /* prochaines sorties */
 function hmNews(){const NG=S.hnw||'all',A=[...NEWS,...X.soon.map(x=>({n:x.n,d:x.d,t:x.t}))].filter(x=>NG==='all'||(NG==='fw'?!/^(BT|B)\d/i.test(x.n):!/^FB\d/i.test(x.n))),up=A.filter(x=>!x.d||dayDiff(x.d)>=0).sort((a,b)=>(a.d||'9999').localeCompare(b.d||'9999')),past=A.filter(x=>x.d&&dayDiff(x.d)<0).sort((a,b)=>b.d.localeCompare(a.d)),
  ds=x=>x.d?new Date(x.d+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'date à venir',
@@ -8074,7 +8095,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 81';
+const BUILD='11 nov. 2026 · 82';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9127,7 +9148,7 @@ function shSuivi(o){return '';const c=String(o.suivi).trim(),lp=/^[A-Z0-9]{8,20}
   return `<div class="shx-suivi"><p><span>📦 Numéro de suivi</span><b>${esc(c)}</b></p><div><button type="button" data-shcopy="${esc(c)}">Copier</button>${lp?`<a href="https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(c.replace(/\s+/g,''))}" target="_blank" rel="noopener">Suivre sur La Poste</a>`:''}</div></div>`}
 function shItems(o){return `<ul class="shx-oi">${(Array.isArray(o.articles)?o.articles:[]).map(a=>{const p=shProd(a.id);return `<li>${p?shStage(p,'xs',1):'<span class="shx-stage xs"><span class="shx-noimg">🛍️</span></span>'}<span>${esc(a.qte)} × ${esc(a.titre)}</span><b>${shEur(a.prix*a.qte)}</b></li>`}).join('')}</ul>`}
 function shOrderCard(o,adm){const op=adm&&SHP.open[o.id];
-  let h=`<article class="shx-o st-${esc(o.statut)}"><div class="shx-oh"><div><b>Commande n° ${o.id}</b><small>${adm&&o.pseudo?`de <em>${esc(o.pseudo)}</em>, `:''}le ${shDate(o.created_at)}</small></div><strong>${shEur(o.total)}</strong></div>`+shTrack(o)+shItems(o)+shSuivi(o);
+  let h=`<article class="shx-o st-${esc(o.statut)}"><div class="shx-oh"><div><b>Commande n° ${o.id}</b><small>${adm&&o.pseudo?`de <em>${esc(o.pseudo)}</em>, `:''}le ${shDate(o.created_at)}</small></div><strong>${shEur(o.total)}</strong></div>`+shTrack(o)+shItems(o)+(adm?bqOrderLine(o):'')+shSuivi(o);
   if(adm){const nx=SH_NEXT[o.statut];
     if(nx){if(nx[0]==='envoyée'&&SHP.ship[o.id])h+=`<div class="shx-ship"><label class="sh-l">Numéro de suivi (facultatif)<input data-shtrk="${o.id}" value="${esc(SHP.ship[o.id]===true?'':SHP.ship[o.id])}" maxlength="120" placeholder="ex. 6A12345678901" autocomplete="off"></label><div class="sh-row"><button type="button" class="btn" data-shshipok="${o.id}">Valider l’envoi</button><button type="button" class="btn alt" data-shshipx="${o.id}">Annuler</button></div></div>`;
       else h+=`<button type="button" class="btn shx-next" data-shnext="${o.id}">${nx[1]}</button>`}}
@@ -9176,7 +9197,7 @@ function shAdmProds(){const L=SHP.prods;if(!L.length)return '<div class="shx-emp
     `<div class="shx-pctl">${p.stock==null?'<span class="shx-inf">Stock illimité</span>':`<div class="shx-q sm"><button type="button" data-shstk="${p.id}:-1" aria-label="Stock moins un" ${p.stock<=0?'disabled':''}>−</button><b>${p.stock}</b><button type="button" data-shstk="${p.id}:1" aria-label="Stock plus un">+</button></div>`}`+
     `<button type="button" data-shvis="${p.id}" aria-label="${p.actif?'Masquer':'Afficher'} ${esc(p.titre)}">${p.actif?'👁️':'🙈'}</button><button type="button" data-shmv="${p.id}:-1" aria-label="Monter" ${k?'':'disabled'}>↑</button><button type="button" data-shmv="${p.id}:1" aria-label="Descendre" ${k<L.length-1?'':'disabled'}>↓</button><button type="button" data-shedit="${p.id}" aria-label="Modifier ${esc(p.titre)}">✏️</button></div></div>`).join('')}</div>`}
 async function shLoadAdm(){await shLoadUnr();try{SHP.aOrders=await shApi('/rest/v1/shop_orders?select=*&order=id.desc&limit=300')||[];SHP.nouv=SHP.aOrders.filter(o=>o.statut==='nouvelle').length}catch(e){SHP.aOrders=[];toast(shErr(e))}shDraw(1)}
-async function shOrdPatch(o,b,msg){try{await shApi('/rest/v1/shop_orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({},b,{updated_at:new Date().toISOString()}))});Object.assign(o,b);
+async function shOrdPatch(o,b,msg){try{await shApi('/rest/v1/shop_orders?id=eq.'+o.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({},b,{updated_at:new Date().toISOString()}))});Object.assign(o,b);BQ.t=0;
     SHP.nouv=(SHP.aOrders||[]).filter(x=>x.statut==='nouvelle').length;if(msg)toast(msg);return true}catch(e){toast(shErr(e));return false}}
 async function shProdPatch(p,b){try{await shApi('/rest/v1/shop_products?id=eq.'+p.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({},b,{updated_at:new Date().toISOString()}))});Object.assign(p,b);return true}catch(e){toast(shErr(e));return false}}
 /* ---------- édition ---------- */
@@ -9187,7 +9208,7 @@ function shEdit(){const e=SHP.ed;if(!e)return shList();
   const cats=[...new Set(SHP.prods.map(p=>p.categorie).filter(Boolean))],pv=Object.assign({},e,{prix:shNum(e.prix)||0,prix_barre:shNum(e.prix_barre)}),pc=shPct(pv);
   return `<button type="button" class="shx-back" data-shv="${SHP.edFrom==='prod'&&shProd(SHP.cur)?'prod':SHP.edFrom==='adm'?'adm':'list'}">‹ Annuler</button><h3 class="shx-h1">${e.id?'Modifier le produit':'Nouveau produit'}</h3>
    <div class="sh-phs">${(e.photos||[]).map((u,k)=>`<div><img src="${esc(u)}" alt="">${k?`<button type="button" data-shpm="${k}" aria-label="Mettre en premier">⭐</button>`:'<em>Principale</em>'}<button type="button" data-shpx="${k}" aria-label="Retirer la photo">✕</button></div>`).join('')}<label class="sh-add">${SHP.up?'⏳ Envoi…':'📷 Ajouter des photos'}<input type="file" accept="image/*" multiple data-shup hidden></label></div>
-   ${f('titre','Nom du produit *','','ex. Boîtier pour display FB')}<div class="sh-row">${f('prix','Prix (€) *','dec','12,90')}${f('prix_barre','Ancien prix barré (€)','dec','facultatif')}</div><p class="shx-fine" id="shx-pct" ${pc?'':'hidden'}>Affiché avec une réduction de <b>−${pc} %</b>.</p>
+   ${f('titre','Nom du produit *','','ex. Boîtier pour display FB')}<div class="sh-row">${f('prix','Prix (€) *','dec','12,90')}${f('prix_barre','Ancien prix barré (€)','dec','facultatif')}</div>${f('cout','Ce que ça te coûte (€) : privé, toi seul le vois','dec','ex. 4,50')}<p class="shx-fine" id="shx-pct" ${pc?'':'hidden'}>Affiché avec une réduction de <b>−${pc} %</b>.</p>
    <div class="sh-row"><label class="sh-l">Catégorie<input data-she="categorie" value="${esc(e.categorie||'')}" list="sh-cats" placeholder="ex. Impression 3D" maxlength="40"></label>${f('stock','Stock (vide = illimité)','int','')}</div><datalist id="sh-cats">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
    <label class="sh-l">Description (ce qu’on voit quand on clique sur le produit)<textarea data-she="description" rows="8" maxlength="5000" placeholder="Une phrase pour présenter le produit.&#10;&#10;• Point fort 1&#10;• Point fort 2&#10;&#10;Display non fournie.">${esc(e.description||'')}</textarea></label>
    <p class="shx-fine">Astuce : commence une ligne par « • » pour en faire une liste cochée.</p>
@@ -9265,7 +9286,7 @@ async function shClick(e){const t=e.target.closest&&e.target.closest('button,[da
   if(d.shmv){const [id,dl]=d.shmv.split(':').map(Number),L=SHP.prods.slice(),i=L.findIndex(p=>p.id===id),j=i+dl;if(i<0||j<0||j>=L.length)return;[L[i],L[j]]=[L[j],L[i]];
     SHP.busy=true;try{for(let k=0;k<L.length;k++){if(L[k].ordre!==k+1)await shApi('/rest/v1/shop_products?id=eq.'+L[k].id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({ordre:k+1})});L[k].ordre=k+1}SHP.prods=L}catch(er){toast(shErr(er))}SHP.busy=false;return shDraw(1)}
   if('shnew' in d)return shGo('edit',{edFrom:SHP.v,ed:{titre:'',prix:'',prix_barre:'',categorie:'',stock:'',description:'',photos:[],actif:true,ordre:0}});
-  if(d.shedit){const p=shProd(d.shedit);if(p)shGo('edit',{edFrom:SHP.v,cur:SHP.v==='prod'?SHP.cur:p.id,ed:Object.assign({},p,{photos:(p.photos||[]).map(shImg).filter(Boolean),prix:shFr(p.prix),prix_barre:shFr(p.prix_barre),stock:p.stock==null?'':p.stock})});return}
+  if(d.shedit){const p=shProd(d.shedit);if(p)shGo('edit',{edFrom:SHP.v,cur:SHP.v==='prod'?SHP.cur:p.id,ed:Object.assign({},p,{photos:(p.photos||[]).map(shImg).filter(Boolean),prix:shFr(p.prix),prix_barre:shFr(p.prix_barre),cout:bqCost(p.id)==null?'':shFr(bqCost(p.id)),stock:p.stock==null?'':p.stock})});return}
   if(d.shdup){const e=SHP.ed||{};shGo('edit',{ed:Object.assign({},e,{id:undefined,titre:(String(e.titre||'')+' (copie)').slice(0,120),actif:false,photos:(e.photos||[]).slice()})});toast('Copie prête : change ce qu’il faut puis enregistre');return}
   if('shset' in d)return shGo('edit',{edFrom:SHP.v,ed:Object.assign({set:1},SHP.set)});
   if(d.shpm){const a=SHP.ed.photos,k=+d.shpm;a.unshift(a.splice(k,1)[0]);return shDraw(1)}
@@ -9284,7 +9305,7 @@ async function shSave(){const e=SHP.ed;if(!e)return;SHP.busy=true;shDraw(1);
     const b={titre:String(e.titre).trim().slice(0,120),prix,prix_barre:pb,categorie:String(e.categorie||'').trim().slice(0,40)||'Produits',description:String(e.description||'').slice(0,5000),photos:e.photos.slice(0,12),stock:st,actif:e.actif!==false,ordre:parseInt(e.ordre,10)||0,updated_at:new Date().toISOString()};
     let id=e.id;if(id)await shApi('/rest/v1/shop_products?id=eq.'+id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});
     else{const r=await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b)});id=r&&r[0]&&r[0].id}
-    toast(e.id?'Produit enregistré':b.actif?'Produit mis en vente':'Produit enregistré (masqué)');SHP.busy=false;SHP.ed=null;await shLoad(true);
+    if(id&&e.cout!==undefined){if(String(e.cout).trim()==='')delete X.shc[id];else X.shc[id]=Math.round(nb(e.cout)*100)/100;saveX()}BQ.t=0;toast(e.id?'Produit enregistré':b.actif?'Produit mis en vente':'Produit enregistré (masqué)');SHP.busy=false;SHP.ed=null;await shLoad(true);
     return SHP.edFrom==='adm'?shGo('adm',{aTab:'prod'}):shGo(id?'prod':'list',{cur:id,img:0,qty:1})}
   catch(er){toast(shErr(er))}SHP.busy=false;shDraw(1)}
 function shJpeg(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const m=1600,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
@@ -9332,6 +9353,42 @@ async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;
   catch(e){toast(shErr(e))}
   SHP.busy=false;SHP.imp='';await shLoad(true)}
 /* ===== SHOP-3D:END ===== */
+/* ===== BQ : ventes de la Boutique dans le carnet (gérant seul) — commandes payées / expédiées / terminées, coût privé par produit (X.shc) ===== */
+var BQ={t:0,busy:0,admin:false,orders:[],prods:[],err:''};
+const BQ_SOLD=['payée','envoyée','terminée'],BQ_WAIT=['nouvelle','acceptée'];
+const bqCost=id=>{const v=X.shc&&X.shc[id];return v==null||v===''?null:+v};
+function bqOrd(o){let c=0,miss=0;(Array.isArray(o.articles)?o.articles:[]).forEach(a=>{const k=bqCost(a.id);if(k==null)miss++;else c+=k*(+a.qte||0)});return{ca:+o.total||0,cout:c,ben:(+o.total||0)-c,miss}}
+const bqSold=()=>BQ.orders.filter(o=>BQ_SOLD.includes(o.statut));
+function bqSum(L){return L.reduce((a,o)=>{const r=bqOrd(o);a.n++;a.ca+=r.ca;a.cout+=r.cout;a.ben+=r.ben;a.miss+=r.miss;return a},{n:0,ca:0,cout:0,ben:0,miss:0})}
+async function bqLoad(){if(!SBS||BQ.busy)return;BQ.busy=1;
+  try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});BQ.admin=!!(i&&i.admin);
+    if(BQ.admin){const [o,p]=await Promise.all([shApi('/rest/v1/shop_orders?select=id,pseudo,articles,total,statut,created_at&order=id.desc&limit=1000'),shApi('/rest/v1/shop_products?select=id,titre,prix,photos,actif&order=ordre.asc,id.desc')]);BQ.orders=o||[];BQ.prods=p||[]}
+    BQ.err=''}catch(e){BQ.err=shErr(e)}
+  BQ.t=Date.now();BQ.busy=0;
+  const a=document.activeElement;if((S.tab==='home'||S.tab==='trade')&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))&&!document.getElementById('aff-sh'))render()}
+/* mise à jour toute seule : à chaque affichage de l'accueil ou du carnet (au plus toutes les 30 s) et toutes les 2 min tant que l'appli est ouverte */
+function bqAuto(){if(SBS&&!BQ.busy&&Date.now()-BQ.t>30000)setTimeout(bqLoad,0)}
+setInterval(()=>{if(!document.hidden&&(S.tab==='home'||S.tab==='trade')){BQ.t=0;bqAuto()}},120000);
+function bqHome(){if(!BQ.admin)return '';const mk=today().slice(0,7),m=bqSum(bqSold().filter(o=>String(o.created_at).slice(0,7)===mk));
+  return `<div class="bq-home"><span>🛒 Boutique ce mois</span><b>${m.n} vente${m.n>1?'s':''} · ${eur(m.ca)}</b><b class="${m.ben>=0?'p':'n'}">${m.ben>0?'+':''}${eur(m.ben)} de bénéfice${m.miss?' *':''}</b></div>`}
+function bqOrderLine(o){if(!SHP.admin)return '';const r=bqOrd(o);return `<p class="bq-ol">Ce que ça te coûte : <b>${r.miss?'à remplir':eur(r.cout)}</b>${r.miss?'':` · Bénéfice : <b class="${r.ben>=0?'p':'n'}">${r.ben>0?'+':''}${eur(r.ben)}</b>`}</p>`}
+function bqTab(){if(BQ.err&&!BQ.orders.length)return `<div class="panel"><p class="sub">${esc(BQ.err)}</p><button type="button" class="btn alt" data-bqr>Réessayer</button></div>`;
+  const S2=bqSold(),mk=today().slice(0,7),m=bqSum(S2.filter(o=>String(o.created_at).slice(0,7)===mk)),t=bqSum(S2),W=BQ.orders.filter(o=>BQ_WAIT.includes(o.statut)),wt=W.reduce((a,o)=>a+(+o.total||0),0);
+  const K=(l,v,c)=>`<div><small>${l}</small><b${c?` class="${c}"`:''}>${v}</b></div>`,sg=v=>(v>0?'+':'')+eur(v);
+  const miss=BQ.prods.filter(p=>bqCost(p.id)==null).length;
+  return `<div class="panel bq"><div class="bq-h"><b>Ce mois</b><small>mis à jour ${BQ.t?new Date(BQ.t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'…'}</small></div>
+  <div class="bq-k">${K('Ventes',m.n)}${K('Encaissé',eur(m.ca))}${K('Ce que ça t’a coûté',eur(m.cout))}${K('Bénéfice',sg(m.ben),m.ben>=0?'p':'n')}</div>
+  <div class="bq-h"><b>Depuis le début</b></div><div class="bq-k">${K('Ventes',t.n)}${K('Encaissé',eur(t.ca))}${K('Ce que ça t’a coûté',eur(t.cout))}${K('Bénéfice',sg(t.ben),t.ben>=0?'p':'n')}</div>
+  ${W.length?`<p class="bq-w">⏳ ${W.length} commande${W.length>1?'s':''} pas encore payée${W.length>1?'s':''} : ${eur(wt)}</p>`:''}
+  ${t.miss||miss?`<p class="bq-w">* Remplis ce que te coûte chaque produit (plus bas) pour avoir le vrai bénéfice.</p>`:''}
+  <button type="button" class="btn alt" data-bqopen style="margin-top:10px">🛒 Gérer les commandes</button></div>
+  <h3 class="bq-t">Ventes de la Boutique</h3>${S2.length?`<div class="panel bq-l">${S2.map(o=>{const r=bqOrd(o);return `<div class="bq-r"><div><b>N° ${o.id} · ${esc(o.pseudo||'')}</b><small>${new Date(o.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})} · ${(Array.isArray(o.articles)?o.articles:[]).map(a=>esc(a.qte+' × '+a.titre)).join(', ')}</small></div><div class="bq-n"><b>${eur(r.ca)}</b><small>coût ${r.miss?'?':eur(r.cout)}</small><b class="${r.ben>=0?'p':'n'}">${r.miss?'':sg(r.ben)}</b></div></div>`}).join('')}</div>`:'<p class="sub">Pas encore de vente payée dans la Boutique.</p>'}
+  <h3 class="bq-t">Ce que te coûte chaque produit</h3><p class="sub" style="margin:0 0 8px">Privé : toi seul le vois. Matière, aimants, plexi, emballage…</p>
+  <div class="panel bq-l">${BQ.prods.map(p=>`<label class="bq-c"><span><b>${esc(p.titre)}</b><small>vendu ${eur(+p.prix||0)}${bqCost(p.id)!=null?` · bénéfice ${sg((+p.prix||0)-bqCost(p.id))}`:''}</small></span><input data-bqc="${p.id}" inputmode="decimal" placeholder="0,00" value="${bqCost(p.id)==null?'':String(bqCost(p.id)).replace('.',',')}" aria-label="Ce que te coûte ${esc(p.titre)}"><i>€</i></label>`).join('')}</div>`}
+document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset||t.dataset.bqc===undefined)return;const v=String(t.value).trim();if(!X.shc)X.shc={};if(v==='')delete X.shc[t.dataset.bqc];else X.shc[t.dataset.bqc]=Math.round(nb(v)*100)/100;saveX();toast('Coût enregistré');render()});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-bqopen],[data-bqr]');if(!b)return;if(b.dataset.bqr!==undefined){BQ.t=0;BQ.err='';bqLoad();return}
+  affOpen();let k=0;const w=()=>{if(++k>40)return;if(SHP.ok!==1)return setTimeout(w,200);shGo('adm',{aFil:'tout',aOrders:null,aTab:'cmd'})};w()});
+/* ===== BQ:END ===== */
 /* gérant : petit rappel des nouvelles commandes à l'ouverture de l'appli */
 setTimeout(async()=>{if(!SBS)return;try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});const n=+(i&&i.nouvelles)||0,m=+(i&&i.messages)||0;if(i&&i.admin&&n>0)toast(`🛒 ${n} nouvelle${n>1?'s':''} commande${n>1?'s':''} dans la boutique`);else if(m>0)toast(`💬 ${m} nouveau${m>1?'x':''} message${m>1?'s':''} dans la boutique`)}catch(e){}},5000);
 
@@ -10773,6 +10830,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:82,d:'2026-11-11',it:[['n','🛒','Ventes de la Boutique dans le carnet','Pour le gérant : un onglet Boutique dans le carnet de ventes avec tes ventes, ce que chaque produit te coûte et ton vrai bénéfice. Tout se met à jour tout seul, et l’accueil montre la Boutique du mois.','trade']]},
  {v:81,d:'2026-11-11',it:[['a','🃏','Présentoirs pour boîtiers magnétiques','Nouveaux produits dans la Boutique : présentoirs 2, 3 et 4 boîtiers et cadre 9 boîtiers. Ils s’ajoutent tout seuls quand le gérant ouvre la Boutique.','autres']]},
 {v:80,d:'2026-11-11',it:[['a','💶','Nouveaux prix de la Boutique','Prix baissés pour les clients (présentoirs, protections, nids d’abeille), sans faux prix barrés.','autres']]},
 {v:79,d:'2026-11-11',it:[

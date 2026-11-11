@@ -8095,7 +8095,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 86';
+const BUILD='11 nov. 2026 · 87';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9333,6 +9333,18 @@ const SH3D=[
   description:'Présentoir pour 9 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Livré en 3 plaques à assembler (4 clés à coller au dos) + 2 socles\n• Imprimé en 3D en PLA blanc\n• 240 × 366 mm\n\nBoîtiers magnétiques et cartes non fournis.'},
  {titre:'Magnet frigo 1 carte',prix:3.99,ordre:7,maj:86,ph:['magnet_frigo_carte_face','magnet_frigo_carte_biais','magnet_frigo_carte_dos'],
   description:'Magnet pour frigo qui protège et montre une carte.\n\n• La carte (en sleeve ou nue) glisse par le haut, grande fenêtre devant\n• 6 aimants 6 × 3 mm cachés dans le dos\n• Un trou au dos pour pousser la carte et la ressortir\n• Imprimé en 3D en PLA blanc\n• 80 × 106 × 7 mm\n\nCarte non fournie.'},
+ {titre:'Protection 1 booster Fusion World japonais',prix:10.99,ordre:8,ph:['booster_jp_1_biais','booster_jp_1_face','booster_jp_1_eclatee'],
+  description:'Protection pour 1 booster Dragon Ball Fusion World japonais.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant chaque booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 74 × 23 × 125 mm\n\nIndique la série voulue (FB01 à FB12) dans le message de ta commande. Booster non fourni.'},
+ {titre:'Protection 2 boosters Fusion World japonais',prix:18.99,ordre:9,ph:['booster_jp_2_biais','booster_jp_2_face','booster_jp_2_eclatee'],
+  description:'Protection pour 2 boosters Dragon Ball Fusion World japonais côte à côte.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant chaque booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 145 × 23 × 125 mm\n\nIndique la série voulue (FB01 à FB12) dans le message de ta commande. Boosters non fournis.'},
+ {titre:'Protection 3 boosters Fusion World japonais',prix:26.99,ordre:10,ph:['booster_jp_3_biais','booster_jp_3_face','booster_jp_3_eclatee'],
+  description:'Protection pour 3 boosters Dragon Ball Fusion World japonais côte à côte.\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant chaque booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 217 × 23 × 125 mm\n\nIndique la série voulue (FB01 à FB12) dans le message de ta commande. Boosters non fournis.'},
+ {titre:'Protection 4 boosters Fusion World japonais',prix:36.99,ordre:11,ph:['booster_jp_4_biais','booster_jp_4_face','booster_jp_4_eclatee'],
+  description:'Protection pour 4 boosters Dragon Ball Fusion World japonais (2 × 2).\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant chaque booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 2 boîtes de 2 qui s’empilent, tenues par des aimants\n• 145 × 23 × 250 mm\n\nIndique les séries voulues (FB01 à FB12) dans le message de ta commande. Boosters non fournis.'},
+ {titre:'Protection 9 boosters Fusion World japonais',prix:77.99,ordre:12,ph:['booster_jp_9_biais','booster_jp_9_face','booster_jp_9_eclatee'],
+  description:'Protection pour 9 boosters Dragon Ball Fusion World japonais (3 × 3).\n\n• Booster debout, haut ouvert, angles carrés\n• Plaque plexi 2 mm devant chaque booster (glissée par le haut)\n• Couvercle aimanté (aimants cachés) avec la série gravée : FB01 à FB12, au choix\n• Imprimé en 3D en PLA blanc\n• 3 boîtes de 3 qui s’empilent, tenues par des aimants\n• 217 × 23 × 375 mm, à poser contre un mur\n\nIndique les séries voulues (FB01 à FB12) dans le message de ta commande. Boosters non fournis.'},
+ {titre:'Commande personnalisée',prix:5,ordre:13,ph:['commande_perso'],
+  description:'Tu veux un objet imprimé en 3D qui n’est pas dans la Boutique ? Une protection à la taille de ton scellé, un présentoir, un cadre, un nom gravé…\n\n• Décris ton idée (et les mesures si tu les as) dans le message de ta commande\n• Je te réponds avec le prix final et le délai avant de lancer l’impression\n• Ces 5 € sont un acompte, déduit du prix final\n• Imprimé en 3D en PLA'},
 ];
 /* prix « pas chers » choisis le 11 nov. 2026 : appliqués une seule fois quand le gérant ouvre la Boutique */
 const SH_PRIX=[[/pr[ée]sentoir\s*4\s*protection/i,19.99],[/pr[ée]sentoir\s*2\s*protection/i,14.99],[/protection\s*display\s*(jp|japon|fusion world \(jap)/i,14.99],
@@ -10855,6 +10867,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:87,d:'2026-11-11',it:[['a','📦','Protections boosters Fusion World japonais','Nouveaux produits dans la Boutique : protections pour 1, 2, 3, 4 et 9 boosters FW japonais (de 10,99 € à 77,99 €). Elles s’ajoutent toutes seules quand le gérant ouvre la Boutique.','autres'],['a','✏️','Commande personnalisée','Nouvel article dans la Boutique pour commander un objet 3D sur mesure (acompte de 5 €, déduit du prix final).','autres']]},
  {v:86,d:'2026-11-11',it:[['m','🧲','Magnet frigo 1 carte','Le magnet frigo prend maintenant des aimants 6 × 3 mm. La fiche se met à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:85,d:'2026-11-11',it:[['m','🧲','Magnet frigo 1 carte','Le magnet frigo de la Boutique a maintenant 6 aimants 6 × 2 mm et de nouvelles photos. Les photos et la description se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:84,d:'2026-11-11',it:[['a','🧲','Magnet frigo 1 carte','Nouveau produit dans la Boutique : un magnet de frigo qui protège et montre une carte (3,99 €). Il s’ajoute tout seul quand le gérant ouvre la Boutique.','autres']]},

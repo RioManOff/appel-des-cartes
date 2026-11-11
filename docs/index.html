@@ -2759,7 +2759,7 @@ html.calm #app.enter>*{animation:none!important}
 .sh-b{padding-top:6px}
 .sh-hero h3{margin:8px 0 2px;font:400 24px/1.1 'Big Shoulders Display',Barlow,sans-serif;color:var(--gold,#F5B82E)}
 .sh-hero p{margin:0 0 10px;color:var(--mu)}
-.sh-adm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}
+.sh-adm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}.sh-imp{grid-column:1/-1;font-size:13px;opacity:.8}
 .sh-adm .btn{padding:11px 8px;font-size:14px}
 .sh-cats{display:flex;gap:6px;overflow-x:auto;margin:6px 0 12px;scrollbar-width:none}
 .sh-cats::-webkit-scrollbar{display:none}
@@ -8684,6 +8684,7 @@ async function shLoad(force){if(SHP.busy||(!force&&SHP.ok&&Date.now()-SHP.t<6000
   try{const i=await shApi('/rest/v1/rpc/shop_info',{method:'POST',body:'{}'});SHP.ok=1;SHP.admin=!!(i&&i.admin);SHP.nouv=+(i&&i.nouvelles)||0;SHP.msgs=+(i&&i.messages)||0;
     const [st,pr]=await Promise.all([shApi('/rest/v1/shop_settings?id=eq.1&select=data'),shApi('/rest/v1/shop_products?select=*&order=ordre.asc,id.desc')]);
     SHP.set=(st&&st[0]&&st[0].data)||{};SHP.prods=Array.isArray(pr)?pr:[];SHP.t=Date.now();
+    if(SHP.admin&&!SHP.auto3d&&sh3dMissing().length){SHP.auto3d=1;setTimeout(sh3dAuto,50)}
     const ids=new Set(SHP.prods.map(p=>p.id));const n=SHP.cart.length;SHP.cart=SHP.cart.filter(x=>ids.has(x.id));if(n!==SHP.cart.length)shSaveCart()}
   catch(e){SHP.ok=e&&e.status===404?-1:SHP.ok||0;if(SHP.ok!==-1)SHP.err=shErr(e)}
   SHP.busy=false;shDraw()}
@@ -8697,7 +8698,7 @@ function shTabs(){const b=(v,l,n)=>`<button type="button" class="sh-tab${SHP.v==
 function shPhoto(p,cls){const u=shImg(p.photos&&p.photos[0]);return u?`<img class="${cls}" src="${esc(u)}" alt="" loading="lazy">`:`<span class="${cls} sh-noimg" aria-hidden="true">🛍️</span>`}
 function shList(){const s=SHP.set,L=SHP.prods,cats=[...new Set(L.map(p=>p.categorie||'Produits'))];if(SHP.cat&&!cats.includes(SHP.cat))SHP.cat='';
   const V=L;
-  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button>${sh3dMissing().length?`<button type="button" class="btn" data-sh3d ${SHP.busy?'disabled':''}>${SHP.imp?'⏳ Mise en vente… '+SHP.imp:'🖨️ Ajouter mes impressions 3D ('+sh3dMissing().length+')'}</button>`:''}</div>`:'';
+  const adm=SHP.admin?`<div class="sh-adm"><button type="button" class="btn" data-shnew>➕ Nouveau produit</button><button type="button" class="btn alt" data-shset>⚙️ Textes de la boutique</button>${SHP.imp?`<span class="sh-imp">⏳ Mise en vente des présentoirs… ${SHP.imp}</span>`:''}</div>`:'';
   const head=`<div class="sh-hero"><h3>${esc(s.titre||'Ma boutique')}</h3>${s.intro?`<p>${esc(s.intro)}</p>`:''}</div>`;
   if(!L.length)return head+adm+`<p class="sub sh-empty">${SHP.admin?'Ta boutique est vide : touche « Nouveau produit » pour ajouter ta première annonce.':'Les premiers produits arrivent bientôt ici.'}</p>`;
   return head+adm+
@@ -8815,7 +8816,6 @@ async function shClick(e){const t=e.target.closest&&e.target.closest('button,[da
   if('shset' in d)return shGo('edit',{ed:Object.assign({set:1},SHP.set)});
   if(d.shpm){const a=SHP.ed.photos,k=+d.shpm;a.unshift(a.splice(k,1)[0]);return shDraw(1)}
   if(d.shpx){SHP.ed.photos.splice(+d.shpx,1);return shDraw(1)}
-  if('sh3d' in d)return sh3dImport();
   if('shsave' in d)return shSave();
   if(d.shpdel){try{await shApi('/rest/v1/shop_products?id=eq.'+(+d.shpdel),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Produit supprimé');SHP.prods=SHP.prods.filter(p=>p.id!==+d.shpdel);shGo('list');shLoad(true)}catch(er){toast(shErr(er))}}}
 async function shOrder(){if(!SBS)return;SHP.busy=true;shDraw(1);try{const id=await shApi('/rest/v1/rpc/shop_commander',{method:'POST',body:JSON.stringify({p_articles:SHP.cart.map(x=>({id:x.id,qte:x.qte}))})});
@@ -8840,20 +8840,11 @@ async function shUpload(files){if(!SHP.ed||!files||!files.length)return;SHP.up=1
   SHP.up=0;shDraw(1)}
 /* ===== SHOP-3D : mes impressions 3D, à mettre en vente en une touche (gérant) + poubelle sur chaque produit ===== */
 const SH3D=[
- {titre:'Protection display Fusion World (japonaise)',prix:17.9,prix_barre:22.9,ordre:1,ph:['protection_jp_fermee_plexi','protection_jp_ouverte_plexi','protection_jp_fermee_sans_plexi','protection_jp_ouverte_sans_plexi'],
-  description:'Protection sur mesure pour une display japonaise Dragon Ball Super Fusion World (70 × 70 × 140 mm).\n\n• Couvercle plat aimanté (aimants cachés), il s’ouvre par le haut\n• Façade en plexi transparent qui glisse dans une rainure (7,7 × 14,5 cm, inclus)\n• Imprimée en 3D en PLA blanc\n• Ta display reste visible et à l’abri de la poussière\n\nDisplay non fournie.'},
- {titre:'Protection display US / Masters',prix:22.9,prix_barre:27.9,ordre:2,ph:['protection_us_fermee_plexi','protection_us_ouverte_plexi','protection_us_fermee_sans_plexi','protection_us_ouverte_sans_plexi'],
-  description:'Protection sur mesure pour une display Dragon Ball Super Masters / version US (jusqu’à 144 × 126 × 60 mm).\n\n• Couvercle plat aimanté (aimants cachés), il s’ouvre par le haut\n• Façade en plexi transparent qui glisse dans une rainure (inclus)\n• Imprimée en 3D en PLA blanc\n• Ta display reste visible et à l’abri de la poussière\n\nDisplay non fournie.'},
- {titre:'Nid d’abeille mural – display Fusion World',prix:9.9,prix_barre:12.9,ordre:3,ph:['nid_abeille_jp'],
-  description:'Module hexagonal à accrocher au mur pour ranger une display japonaise Fusion World dans sa protection.\n\n• Fond fermé, profondeur pile celle de la protection\n• Les modules s’assemblent entre eux pour faire un mur en nid d’abeille\n• Imprimé en 3D en PLA blanc\n• Prix pour 1 module\n\nProtection display non fournie (vendue à part). Display non fournie.'},
- {titre:'Nid d’abeille mural – display US / Masters',prix:12.9,prix_barre:15.9,ordre:4,ph:['nid_abeille_us'],
-  description:'Module hexagonal à accrocher au mur pour ranger une display US / Masters dans sa protection.\n\n• Fond fermé, profondeur pile celle de la protection\n• Les modules s’assemblent entre eux pour faire un mur en nid d’abeille\n• Imprimé en 3D en PLA blanc\n• Prix pour 1 module\n\nProtection display non fournie (vendue à part). Display non fournie.'},
- {titre:'Cadre magnet pour carte (35 pt)',prix:9.9,prix_barre:12.9,ordre:5,ph:['cadre_magnet','cadre_magnet_socle'],
-  description:'Cadre en 2 parties qui se ferment par aimants, pour une carte dans un étui magnétique 35 pt.\n\n• Se colle sur le frigo ou se pose sur son socle de bureau (inclus)\n• Imprimé en 3D en PLA blanc\n\nCarte et étui non fournis.'},
- {titre:'Présentoir PRO 30 cartes',prix:19.9,prix_barre:24.9,ordre:6,ph:['presentoir_pro_30'],
-  description:'Présentoir à gradins pour exposer jusqu’à 30 cartes en sleeves.\n\n• Une seule pièce, imprimée en 3D en PLA blanc\n• Cartes inclinées pour bien les voir de face\n• Patins sous le présentoir pour qu’il ne glisse pas\n\nCartes non fournies.'},
- {titre:'Présentoir vitrine 18 cartes',prix:16.9,prix_barre:19.9,ordre:7,ph:['presentoir_vitrine_18'],
-  description:'Présentoir à gradins plus compact pour exposer jusqu’à 18 cartes en sleeves.\n\n• Une seule pièce, imprimée en 3D en PLA blanc\n• Idéal pour une vitrine ou un bureau\n\nCartes non fournies.'}];
+ {titre:'Présentoir 4 protections display Fusion World',prix:22.9,prix_barre:27.9,ordre:1,ph:['presentoir_prot_fusion_world_avec','presentoir_prot_fusion_world_face','presentoir_prot_fusion_world_seul'],
+  description:'Présentoir à 2 marches pour 4 protections display Fusion World (japonaises).\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche + séparateur : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 188 × 168 × 162 mm\n\nProtections display et displays non fournis (protections vendues à part).'},
+ {titre:'Présentoir 2 protections display US / Masters',prix:17.9,prix_barre:21.9,ordre:2,ph:['presentoir_prot_us_masters_avec','presentoir_prot_us_masters_face','presentoir_prot_us_masters_seul'],
+  description:'Présentoir à 2 marches pour 2 protections display US / Masters.\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 169 × 146 × 148 mm\n\nProtections display et displays non fournis (protections vendues à part).'}];
+function sh3dAuto(){if(SHP.busy)return setTimeout(sh3dAuto,300);sh3dImport()}
 const sh3dMissing=()=>SH3D.filter(x=>!SHP.prods.some(p=>p.titre===x.titre));
 async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;SHP.busy=true;SHP.imp='0/'+L.length;shDraw(1);let n=0;
   try{const t=await sbTok();
@@ -8863,7 +8854,7 @@ async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;
         if(!r.ok)throw new Error(r.status===403||r.status===400?'Envoi refusé : es-tu bien connecté avec le compte gérant ?':'Envoi des photos impossible');photos.push(SH_PUB()+nm)}
       await shApi('/rest/v1/shop_products',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({titre:x.titre,prix:x.prix,prix_barre:x.prix_barre,categorie:'Impression 3D',description:x.description,photos,stock:null,actif:true,ordre:x.ordre,updated_at:new Date().toISOString()})});
       n++;SHP.imp=n+'/'+L.length;shDraw(1)}
-    toast(n+' impression'+(n>1?'s':'')+' 3D mise'+(n>1?'s':'')+' en vente 🎉')}
+    toast(n+' présentoir'+(n>1?'s':'')+' mis en vente dans la Boutique 🎉')}
   catch(e){toast(shErr(e))}
   SHP.busy=false;SHP.imp='';await shLoad(true)}
 /* ===== SHOP-3D:END ===== */
@@ -10319,7 +10310,8 @@ const MJV=[
  {v:74,d:'2026-11-10',it:[
   ['a','🔔','Notifications dans l’appli Play Store','L’appli du Play Store peut maintenant te prévenir d’un message privé, même fermée (après sa mise à jour sur le Play Store).','autres'],
   ['n','🛒','Notifications de la boutique','Tu es prévenu d’une nouvelle commande et des messages de tes commandes.','autres']]},
- {v:73,d:'2026-11-09',it:[['a','🖨️','Impressions 3D dans la Boutique','Le gérant peut mettre en vente toutes ses impressions 3D (protections de display, nids d’abeille, cadre magnet, présentoirs) en une seule touche, avec photos et descriptions.','autres'],['a','🗑️','Supprimer un produit plus vite','Une poubelle sur chaque produit de la Boutique permet au gérant de le supprimer (deuxième touche pour confirmer).','autres']]},
+ {v:74,d:'2026-11-11',it:[['a','🗂️','Présentoirs à protections display','Nouveaux produits dans la Boutique : présentoir 4 protections Fusion World et présentoir 2 protections US / Masters. Ils s’ajoutent tout seuls quand le gérant ouvre la Boutique (plus de bouton).','autres']]},
+{v:73,d:'2026-11-09',it:[['a','🖨️','Impressions 3D dans la Boutique','Le gérant peut mettre en vente toutes ses impressions 3D (protections de display, nids d’abeille, cadre magnet, présentoirs) en une seule touche, avec photos et descriptions.','autres'],['a','🗑️','Supprimer un produit plus vite','Une poubelle sur chaque produit de la Boutique permet au gérant de le supprimer (deuxième touche pour confirmer).','autres']]},
 {v:72,d:'2026-11-09',it:[
   ['a','🔄','Boutique et Amis échangés','La 🛒 Boutique est maintenant dans la barre du bas, à la place d’Amis. 👥 Amis est dans le menu ＋, en haut avec les autres actions.','autres']]},
  {v:71,d:'2026-11-09',it:[

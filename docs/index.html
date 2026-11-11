@@ -8095,7 +8095,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 85';
+const BUILD='11 nov. 2026 · 86';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9331,8 +9331,8 @@ const SH3D=[
   description:'Présentoir pour 4 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Imprimé en 3D en PLA blanc\n• 163 × 236 mm (2 × 2)\n\nBoîtiers magnétiques et cartes non fournis.'},
  {titre:'Cadre 9 boîtiers magnétiques',prix:14.99,ordre:6,ph:['presentoir_magnets_9_face','presentoir_magnets_9_biais','presentoir_magnets_9_vide'],
   description:'Présentoir pour 9 boîtiers magnétiques 35 pt (format standard 73 × 109,5 mm : Ultra Pro, BCW, Vault X…).\n\n• Le boîtier s’enfonce par l’avant et reste tenu, encoche pour le retirer\n• Dos ajouré : on voit aussi le dos de la carte\n• Socle inclus, la plaque est légèrement penchée vers l’arrière\n• Livré en 3 plaques à assembler (4 clés à coller au dos) + 2 socles\n• Imprimé en 3D en PLA blanc\n• 240 × 366 mm\n\nBoîtiers magnétiques et cartes non fournis.'},
- {titre:'Magnet frigo 1 carte',prix:3.99,ordre:7,maj:85,ph:['magnet_frigo_carte_face','magnet_frigo_carte_biais','magnet_frigo_carte_dos'],
-  description:'Magnet pour frigo qui protège et montre une carte.\n\n• La carte (en sleeve ou nue) glisse par le haut, grande fenêtre devant\n• 6 aimants 6 × 2 mm cachés dans le dos\n• Un trou au dos pour pousser la carte et la ressortir\n• Imprimé en 3D en PLA blanc\n• 80 × 106 × 6,6 mm\n\nCarte non fournie.'},
+ {titre:'Magnet frigo 1 carte',prix:3.99,ordre:7,maj:86,ph:['magnet_frigo_carte_face','magnet_frigo_carte_biais','magnet_frigo_carte_dos'],
+  description:'Magnet pour frigo qui protège et montre une carte.\n\n• La carte (en sleeve ou nue) glisse par le haut, grande fenêtre devant\n• 6 aimants 6 × 3 mm cachés dans le dos\n• Un trou au dos pour pousser la carte et la ressortir\n• Imprimé en 3D en PLA blanc\n• 80 × 106 × 7 mm\n\nCarte non fournie.'},
 ];
 /* prix « pas chers » choisis le 11 nov. 2026 : appliqués une seule fois quand le gérant ouvre la Boutique */
 const SH_PRIX=[[/pr[ée]sentoir\s*4\s*protection/i,19.99],[/pr[ée]sentoir\s*2\s*protection/i,14.99],[/protection\s*display\s*(jp|japon|fusion world \(jap)/i,14.99],
@@ -10855,6 +10855,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:86,d:'2026-11-11',it:[['m','🧲','Magnet frigo 1 carte','Le magnet frigo prend maintenant des aimants 6 × 3 mm. La fiche se met à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:85,d:'2026-11-11',it:[['m','🧲','Magnet frigo 1 carte','Le magnet frigo de la Boutique a maintenant 6 aimants 6 × 2 mm et de nouvelles photos. Les photos et la description se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:84,d:'2026-11-11',it:[['a','🧲','Magnet frigo 1 carte','Nouveau produit dans la Boutique : un magnet de frigo qui protège et montre une carte (3,99 €). Il s’ajoute tout seul quand le gérant ouvre la Boutique.','autres']]},
  {v:83,d:'2026-11-11',it:[['n','🦸','Super Dragon Ball Heroes','Toutes les séries Super Dragon Ball Heroes (SH, UM, BM, UGM, MM, boosters et Gumica) avec les photos et les vrais numéros : plus de 6 000 cartes. Elles sont rangées avec Dragon Ball Heroes et Super Divers, juste après Fusion World dans les cartes japonaises.','coll'],['a','🃏','Super Divers complet','Les cartes hors série de Dragon Ball Super Divers passent de 200 à 303 cartes, avec leurs numéros.','coll'],['c','💶','Mes ventes = carnet','Le cadre Mes ventes de l’accueil montre maintenant le même résultat que le carnet de ventes (depuis le début), avec le mois en dessous.','trade']]},

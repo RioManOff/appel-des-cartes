@@ -57,4 +57,4 @@ jobs:
           json.dump(M,open('sdbh/manifest.json','w'),ensure_ascii=False)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -q --orphan sdbh-photos && git rm -rq --cached . 2>/dev/null; git add sdbh && git commit -q -m "photos SDBH" && git push -q -f origin sdbh-photos
+          git checkout -q --orphan sdbh-photos; git reset -q || true; git add --sparse -f sdbh && git commit -q -m "photos SDBH" && git push -q -f origin sdbh-photos

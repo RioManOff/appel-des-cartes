@@ -5,12 +5,12 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - run: |
           python3 - <<'PY'
-          import re,json,time,http.cookiejar,urllib.request
+          import re,time,http.cookiejar,urllib.request
           cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
           B='http://www.dbzcollection.fr/2v2/'
           def get(u):
@@ -19,23 +19,10 @@ jobs:
               except Exception as e:time.sleep(3)
             return ''
           get('cartes.php?idc=99')
-          def parse(t):
-            return [[m.group(1),m.group(3).strip(),m.group(2)] for m in re.finditer(r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>',t)]
-          R={}
-          t=get('cartes.php?idc=199');i=t.find('ids=');open('sample_col.html','w').write(t[max(0,i-3000):i+6000])
-          for idc in [199,205,207,208,256,289,329]:
-            t=get('cartes.php?idc=%d'%idc)
-            ids=[]
-            for m in re.finditer(r'idc=%d&(?:amp;)?ids=(\d+)'%idc,t):
-              if m.group(1) not in ids:ids.append(m.group(1))
-            R[idc]={}
-            for x in ids:
-              tt=get('cartes.php?idc=%d&ids=%s'%(idc,x));c=parse(tt)
-              tl=re.search(r'<title>([^<]*)</title>',tt);R[idc][x]={'n':len(c),'title':tl.group(1) if tl else '','first':c[:3],'last':c[-2:]}
-              print(idc,x,len(c),R[idc][x]['title'][:90])
-              if idc==199 and x==ids[0]:
-                i=tt.find('<a name="c');open('sample_set.html','w').write(tt[max(0,i-500):i+5000])
-          json.dump(R,open('sdbh_sets.json','w'),ensure_ascii=False)
+          t=get('cartes.php?idc=199&ids=740')
+          print('XX len',len(t))
+          print('XX',sorted(set(re.findall(r'href="([^"]*ids=740[^"]*)"',t))))
+          print('XX',sorted(set(re.findall(r'(?:href|onclick)="([^"]*(?:page|deb|debut|start|suiv)[^"]*)"',t,re.I)))[:40])
+          i=t.rfind('bloc_carte');print('XX',re.sub(r'\s+',' ',t[i:i+2500]))
+          r=op.open(B+'cartes/199/910/h400_54293_carte.jpg',timeout=60);b=r.read();print('XX img',len(b),r.headers.get('Content-Type'))
           PY
-          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sdbh_sets.json sample_col.html sample_set.html && git commit -q -m sdbh && git push -q

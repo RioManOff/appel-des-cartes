@@ -5,7 +5,7 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -18,17 +18,24 @@ jobs:
               try:return op.open(B+u,timeout=60).read().decode('latin-1')
               except Exception as e:time.sleep(3)
             return ''
+          get('cartes.php?idc=99')
+          def parse(t):
+            return [[m.group(1),m.group(3).strip(),m.group(2)] for m in re.finditer(r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>',t)]
           R={}
-          for u in ['cartes.php?idc=99','index.php','cartes.php','collections.php','cartes.php?cat=jp']:
-            t=get(u);L=sorted(set((int(a),re.sub(r'\s+',' ',b).strip()) for a,b in re.findall(r'idc=(\d+)[^>]*>([^<]{2,80})<',t)))
-            R[u]=L;print(u,len(t),len(L))
-            for a,b in L:
-              if re.search(r'hero|diver|h.ros',b,re.I):print('   ',a,b)
-          for idc in [335]:
+          t=get('cartes.php?idc=199');i=t.find('ids=');open('sample_col.html','w').write(t[max(0,i-3000):i+6000])
+          for idc in [199,205,207,208,256,289,329]:
             t=get('cartes.php?idc=%d'%idc)
-            L=[(m.group(1),re.sub(r'\s+',' ',m.group(2)).strip()) for m in re.finditer(r'idc=%d&(?:amp;)?ids=(\d+)[^>]*>([^<]{0,80})'%idc,t)]
-            print('idc',idc,L)
-          json.dump(R,open('dz_index.json','w'),ensure_ascii=False)
+            ids=[]
+            for m in re.finditer(r'idc=%d&(?:amp;)?ids=(\d+)'%idc,t):
+              if m.group(1) not in ids:ids.append(m.group(1))
+            R[idc]={}
+            for x in ids:
+              tt=get('cartes.php?idc=%d&ids=%s'%(idc,x));c=parse(tt)
+              tl=re.search(r'<title>([^<]*)</title>',tt);R[idc][x]={'n':len(c),'title':tl.group(1) if tl else '','first':c[:3],'last':c[-2:]}
+              print(idc,x,len(c),R[idc][x]['title'][:90])
+              if idc==199 and x==ids[0]:
+                i=tt.find('<a name="c');open('sample_set.html','w').write(tt[max(0,i-500):i+5000])
+          json.dump(R,open('sdbh_sets.json','w'),ensure_ascii=False)
           PY
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dz_index.json && git commit -q -m idx && git push -q
+          git add sdbh_sets.json sample_col.html sample_set.html && git commit -q -m sdbh && git push -q

@@ -2750,7 +2750,7 @@ html.calm #app.enter>*{animation:none!important}
 /* ===== PR:END ===== */
 /* ===== SHOP ===== */
 .aff-sh .aff-d{width:min(640px,100%)}
-.sh-tabs{position:sticky;top:-18px;z-index:2;background:var(--bg,#0b0b0b);display:flex;flex-wrap:wrap;gap:6px;margin:12px -2px 4px;padding:2px;scrollbar-width:none}
+.sh-tabs{position:sticky;top:-18px;z-index:5;background:var(--bg,#0b0b0b);display:flex;flex-wrap:wrap;gap:6px;margin:12px -2px 4px;padding:2px;scrollbar-width:none}
 .sh-tabs::-webkit-scrollbar{display:none}
 .sh-tab{flex:none;padding:7px 11px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-weight:700;font-size:14px;white-space:nowrap}
 .sh-tab.on{background:var(--gold,#F5B82E);border-color:var(--gold,#F5B82E);color:#111}
@@ -2769,7 +2769,7 @@ html.calm #app.enter>*{animation:none!important}
 .sh-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:0 0 10px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);text-align:left;overflow:hidden}
 .sh-card.off{opacity:.55}
 .sh-cw{position:relative;display:flex}.sh-cw>.sh-card{flex:1;min-width:0}
-.sh-trash{position:absolute;z-index:2;top:6px;right:6px;min-width:36px;height:36px;padding:0 8px;border:0;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font:700 14px/1 Barlow,sans-serif}
+.sh-trash{position:absolute;z-index:1;top:6px;right:6px;min-width:36px;height:36px;padding:0 8px;border:0;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font:700 14px/1 Barlow,sans-serif}
 .sh-trash.ok{background:#d11;padding:0 12px}
 .sh-ci{width:100%;aspect-ratio:1;object-fit:cover;background:#fff;display:grid;place-items:center;font-size:40px}
 .sh-noimg{background:color-mix(in srgb,var(--gold,#F5B82E) 16%,var(--sf))}
@@ -7733,7 +7733,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 77';
+const BUILD='11 nov. 2026 · 78';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -10301,7 +10301,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 const MJV=[
  {v:77,d:'2026-11-11',it:[
   ['a','🔢','Vrais numéros : Super Battle et Le Grand Combat','Les cartes Super Battle (Power Level, parts 1 à 20) et Le Grand Combat ont leur vrai numéro (N°1 à N°880), avec Prism et Prism double. Tu peux les chercher par numéro. Merci TIBO87 !','serie']]},
- {v:76,d:'2026-11-10',it:[
+ {v:78,d:'2026-11-11',it:[['c','🗑️','Poubelles de la Boutique','Les poubelles des produits ne passent plus par-dessus les onglets Panier et Mes commandes quand on fait défiler la Boutique.','autres']]},
+{v:76,d:'2026-11-10',it:[
   ['a','👆','Notification → bon endroit','Toucher une notification ouvre directement la conversation, le chat général ou ta commande dans la boutique.','autres'],
   ['n','💬','Notifications du chat général','Tu es prévenu quand quelqu’un écrit dans le général (au plus une fois toutes les 15 minutes).','autres']]},
  {v:75,d:'2026-11-10',it:[

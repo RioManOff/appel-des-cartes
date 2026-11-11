@@ -8074,7 +8074,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='11 nov. 2026 · 79';
+const BUILD='11 nov. 2026 · 80';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -9029,6 +9029,7 @@ async function shLoad(force){if(SHP.busy||(!force&&SHP.ok&&Date.now()-SHP.t<6000
     const [st,pr]=await Promise.all([shApi('/rest/v1/shop_settings?id=eq.1&select=data'),shApi('/rest/v1/shop_products?select=*&order=ordre.asc,id.desc')]);
     SHP.set=(st&&st[0]&&st[0].data)||{};SHP.prods=Array.isArray(pr)?pr:[];SHP.t=Date.now();
     if(SHP.admin&&!SHP.auto3d&&sh3dMissing().length){SHP.auto3d=1;setTimeout(sh3dAuto,50)}
+    else if(SHP.admin&&!SHP.autoPrix){let f=0;try{f=localStorage.getItem('shPrix1111')}catch(e){}if(!f){SHP.autoPrix=1;setTimeout(shPrixAuto,50)}}
     const ids=new Set(SHP.prods.map(p=>p.id));const n=SHP.cart.length;SHP.cart=SHP.cart.filter(x=>ids.has(x.id));if(n!==SHP.cart.length)shSaveCart()}
   catch(e){SHP.ok=e&&e.status===404?-1:SHP.ok||0;if(SHP.ok!==-1)SHP.err=shErr(e)}
   SHP.busy=false;shDraw(1)}
@@ -9303,6 +9304,16 @@ const SH3D=[
   description:'Présentoir à 2 marches pour 4 protections display Fusion World (japonaises).\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche + séparateur : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 188 × 168 × 162 mm\n\nProtections display et displays non fournis (protections vendues à part).'},
  {titre:'Présentoir 2 protections display US / Masters',prix:17.9,prix_barre:21.9,ordre:2,ph:['presentoir_prot_us_masters_avec','presentoir_prot_us_masters_face','presentoir_prot_us_masters_seul'],
   description:'Présentoir à 2 marches pour 2 protections display US / Masters.\n\n• La marche du fond est surélevée de toute la hauteur d’une protection : chaque display se voit en entier\n• Petit rebord devant chaque marche : les protections ne glissent pas\n• Côtés et dos en nid d’abeille\n• Imprimé en 3D en PLA blanc, une seule pièce\n• 169 × 146 × 148 mm\n\nProtections display et displays non fournis (protections vendues à part).'}];
+/* prix « pas chers » choisis le 11 nov. 2026 : appliqués une seule fois quand le gérant ouvre la Boutique */
+const SH_PRIX=[[/pr[ée]sentoir\s*4\s*protection/i,19.99],[/pr[ée]sentoir\s*2\s*protection/i,14.99],[/protection\s*display\s*(jp|japon|fusion world \(jap)/i,14.99],
+ [/protection\s*display\s*us/i,18.99],[/nid.*abeille.*(us|masters)/i,12.99],[/nid.*abeille.*(jp|japon|fusion)/i,9.99],[/pr[ée]sentoir\s*pro\s*30/i,16.99],[/pr[ée]sentoir\s*vitrine\s*18/i,13.99]];
+async function shPrixMaj(){let n=0;try{for(const p of SHP.prods){const r=SH_PRIX.find(([re])=>re.test(p.titre||''));if(!r)continue;
+  if(+p.prix===r[1]&&!p.prix_barre)continue;
+  await shApi('/rest/v1/shop_products?id=eq.'+p.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({prix:r[1],prix_barre:null,updated_at:new Date().toISOString()})});n++}
+  try{localStorage.setItem('shPrix1111','1')}catch(e){}
+  if(n)toast(n+' prix mis à jour dans la Boutique 💶')}catch(e){toast(shErr(e))}
+  if(n){SHP.busy=false;await shLoad(true)}}
+function shPrixAuto(){if(SHP.busy)return setTimeout(shPrixAuto,300);shPrixMaj()}
 function sh3dAuto(){if(SHP.busy)return setTimeout(sh3dAuto,300);sh3dImport()}
 const sh3dMissing=()=>SH3D.filter(x=>!SHP.prods.some(p=>p.titre===x.titre));
 async function sh3dImport(){const L=sh3dMissing();if(!L.length||SHP.busy)return;SHP.busy=true;SHP.imp='0/'+L.length;shDraw(1);let n=0;
@@ -10758,7 +10769,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
- {v:79,d:'2026-11-11',it:[
+ {v:80,d:'2026-11-11',it:[['a','💶','Nouveaux prix de la Boutique','Prix baissés pour les clients (présentoirs, protections, nids d’abeille), sans faux prix barrés.','autres']]},
+{v:79,d:'2026-11-11',it:[
   ['a','🛒','Nouvelle Boutique','La Boutique prend tout l’écran : grandes photos à faire glisser et à agrandir, prix et remises bien visibles, idées de produits qui vont ensemble, et un bouton + pour ajouter au panier sans ouvrir la fiche.','shop'],
   ['a','📦','Suivre ta commande','Dans « Mes commandes », tu vois l’état de ta commande et tu en parles avec moi dans la discussion de la commande.','shop'],
   ['n','🔗','Partager un produit','Le bouton Partager d’un produit envoie son lien : il ouvre directement sa fiche dans la Boutique.','shop']]},

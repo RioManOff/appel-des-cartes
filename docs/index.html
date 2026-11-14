@@ -7692,7 +7692,7 @@ function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0
  +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
  +hmVal()+`<div class="hmgn">🐉 Fusion World</div><div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>${hmMsTot()}`
  +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
- +`<div class="hmhrow"><h2 class="hmh">📚 Mes séries</h2><button class="chip" data-share>📤 Partager</button></div><div class="panel hmser"><div class="hmgn">🐉 Fusion World</div>${ser}${srxFw(tot,own)}<div class="hmgn">🃏 Masters</div>${msser}${srxHomeOld()}</div>`
+ +`<div class="hmhrow" style="justify-content:flex-end"><button class="chip" data-share>📤 Partager ma collection</button></div>`
  +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
  +dbHomeCard()
  +`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney()
@@ -8097,7 +8097,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='12 nov. 2026 · 94';
+const BUILD='14 nov. 2026 · 96';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -10883,6 +10883,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:96,d:'2026-11-14',it:[['c','🏠','Accueil allégé','La liste « Mes séries » est retirée de l’accueil : tes séries restent dans l’onglet Collection. Le bouton Partager reste sur l’accueil.','home']]},
  {v:95,d:'2026-11-14',it:[['n','🇬🇧','Masters en anglais','Le drapeau anglais contient maintenant les séries Masters BT01 à BT31 en édition anglaise, avec leur propre collection (séparée de tes cartes françaises) et les photos anglaises.','coll'],['a','📸','Photos selon la langue','Plus besoin de choisir la langue des photos : le drapeau français montre les photos françaises, le drapeau anglais les photos anglaises.','coll'],['a','💶','Cardmarket dans la bonne langue','Le bouton « Voir le prix sur Cardmarket » ouvre les offres dans la langue de ta carte : japonais ou anglais pour Fusion World, français ou anglais pour Masters (toutes les séries BT01 à BT31).','prix']]},
  {v:94,d:'2026-11-12',it:[['a','📐','Protection 1 booster Fusion World japonais','Agrandie pour les boosters de 6,8 × 13,8 cm, avec de nouvelles photos. La fiche se met à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:93,d:'2026-11-11',it:[['n','🏆','Cadre carte gradée PSA','Nouveau produit dans la Boutique : cadre debout pour 1 carte gradée PSA, avec aimants sur les côtés pour en coller plusieurs (5,99 €). Il s’ajoute tout seul quand le gérant ouvre la Boutique.','autres']]},

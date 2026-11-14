@@ -9398,8 +9398,8 @@ async function sh3dRm(){const L=sh3dGone();if(!L.length||SHP.busy)return;SHP.bus
     SHP.cart=SHP.cart.filter(x=>!L.some(p=>p.id===x.id));shSaveCart();if(n)toast(n+' produit'+(n>1?'s':'')+' retiré'+(n>1?'s':'')+' de la Boutique')}
   catch(e){toast(shErr(e))}
   SHP.busy=false;await shLoad(true)}
-/* vraies photos ajoutées en tête d'un produit déjà en vente (ex. protection display FW japonais, v97) : une seule fois, les anciennes photos restent après */
-const SH3D_PH=[{tag:'phfbjp97_',ok:t=>/protection\s*display/i.test(t)&&/(jp|japon|fusion world)/i.test(t)&&!/(\bus\b|masters|14,3)/i.test(t),
+/* vraies photos qui remplacent celles d'un produit déjà en vente (ex. protection display FW japonais, v98 : seulement les photos du gérant) : une seule fois */
+const SH3D_PH=[{tag:'phfbjp98_',ok:t=>/protection\s*display/i.test(t)&&/(jp|japon|fusion world)/i.test(t)&&!/(\bus\b|masters|14,3)/i.test(t),
   ph:['protection_jp_photo_1','protection_jp_photo_2','protection_jp_photo_3','protection_jp_photo_4']}];
 const sh3dPhTodo=()=>{const L=[];for(const x of SH3D_PH)for(const p of SHP.prods)if(x.ok(p.titre||'')&&!(p.photos||[]).some(u=>String(u).includes(x.tag)))L.push([x,p]);return L};
 function sh3dPhAuto(){if(SHP.busy)return setTimeout(sh3dPhAuto,300);sh3dPh()}
@@ -9409,8 +9409,8 @@ async function sh3dPh(){const L=sh3dPhTodo();if(!L.length||SHP.busy)return;SHP.b
       for(const f of x.ph){const b=await (await fetch('boutique3d/'+f+'.jpg')).blob(),nm=x.tag+Date.now().toString(36)+Math.random().toString(36).slice(2,8)+'.jpg';
         const r=await fetch(SBC.url+'/storage/v1/object/shop/'+nm,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','x-upsert':'false'},body:b});
         if(!r.ok)throw new Error('Envoi des photos impossible');photos.push(SH_PUB()+nm)}
-      await shApi('/rest/v1/shop_products?id=eq.'+p.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({photos:photos.concat(p.photos||[]),updated_at:new Date().toISOString()})});n++}
-    if(n)toast('Nouvelles photos ajoutées dans la Boutique 📸')}
+      await shApi('/rest/v1/shop_products?id=eq.'+p.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({photos,updated_at:new Date().toISOString()})});n++}
+    if(n)toast('Photos mises à jour dans la Boutique 📸')}
   catch(e){toast(shErr(e))}
   SHP.busy=false;await shLoad(true)}
 /* ===== SHOP-3D:END ===== */
@@ -10899,6 +10899,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:98,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','La fiche ne montre plus que les vraies photos de la protection (les images 3D sont retirées). Elles se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:97,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','De vraies photos de la protection (vide, avec un display FB09 et ouverte) sont ajoutées en tête de la fiche dans la Boutique. Elles s’ajoutent quand le gérant ouvre la Boutique.','autres']]},
  {v:96,d:'2026-11-14',it:[['c','🏠','Accueil allégé','La liste « Mes séries » est retirée de l’accueil : tes séries restent dans l’onglet Collection. Le bouton Partager reste sur l’accueil.','home']]},
  {v:95,d:'2026-11-14',it:[['n','🇬🇧','Masters en anglais','Le drapeau anglais contient maintenant les séries Masters BT01 à BT31 en édition anglaise, avec leur propre collection (séparée de tes cartes françaises) et les photos anglaises.','coll'],['a','📸','Photos selon la langue','Plus besoin de choisir la langue des photos : le drapeau français montre les photos françaises, le drapeau anglais les photos anglaises.','coll'],['a','💶','Cardmarket dans la bonne langue','Le bouton « Voir le prix sur Cardmarket » ouvre les offres dans la langue de ta carte : japonais ou anglais pour Fusion World, français ou anglais pour Masters (toutes les séries BT01 à BT31).','prix']]},

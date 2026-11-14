@@ -943,6 +943,8 @@ a.set{color:var(--tx);text-decoration:none}
 .ppfr{border-color:var(--ok);color:var(--ok)}
 .ppcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .ppc{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 10px;border:1px solid var(--ln);border-radius:14px;background:var(--bg);font-size:13px}.ppc small{color:var(--mu);font-size:11.5px}.ppc.mu{color:var(--mu)}
+.cx-shb{display:block;margin:10px 0 0 auto;padding:7px 14px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:13px;font-weight:600}
+.qmr{align-items:flex-start}.qmr .vnin{min-width:0}.qmr .ppcs{margin-top:6px}
 .ppno{margin:10px 2px 0}
 .ppst{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .ppst>div{padding:12px 6px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);text-align:center}
@@ -7708,9 +7710,9 @@ let SHN='';try{SHN=localStorage.getItem('fb_shname')||''}catch(e){}
 function shareStats(){
  const MSG=((S.shr&&S.shr.g)||X.game)==='ms';if(MSG)msBindInit();const EX=MSG?MS_SETS.map(t=>[t.id,t.n]):EXTS,CA=MSG?MS_ALL:cards;const per=EX.map(([e,nm])=>{const T=CA.filter(c=>c.ext===e);return {e,nm,o:T.filter(c=>c.own>0).length,n:T.length}}),A=CA.filter(c=>c.ver!=='Normal');
  return {MSG,nser:EX.length,per,nAll:CA.length,nOwn:CA.filter(c=>c.own>0).length,copies:CA.reduce((a,c)=>a+(c.own||0),0),full:per.filter(x=>x.n>0&&x.o===x.n).length,aOwn:A.filter(c=>c.own>0).length,aAll:A.length}}
-function shareText(){const s=shareStats(),who=SHN.trim();
+function shareText(){if(S.shr&&S.shr.ser)return serShareText();const s=shareStats(),who=SHN.trim();
  return (who?'Collection de '+who+' · ':'')+(s.MSG?'Dragon Ball Super Card Game Masters (cartes françaises) : ':'Dragon Ball Super Card Game Fusion World (cartes japonaises) : ')+s.nOwn+' / '+s.nAll+' cartes différentes ('+pct(s.nOwn,s.nAll)+' %), '+s.copies+' exemplaire'+(s.copies>1?'s':'')+(s.full?', '+s.full+' série'+(s.full>1?'s':'')+' complète'+(s.full>1?'s':''):'')+'.'+dbShareLine()+'\nJe la suis avec L’Appel des Cartes : '+SITE}
-function shareDraw(){
+function shareDraw(){if(S.shr&&S.shr.ser)return serShareDraw();
  const s=shareStats(),W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
  const FD='Big Shoulders Display,"Poppins","Arial Black",Impact,sans-serif',FT='Barlow,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif',p=pct(s.nOwn,s.nAll);
  const rr=(x,y,w,h,r)=>{g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,r);else{g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}};
@@ -7749,7 +7751,7 @@ function shareDraw(){
  return cv.toDataURL('image/png')}
 function shareOpen(){S.shr={g:X.game==='ms'?'ms':'fw'};S.shr.url=shareDraw();
  try{if(document.fonts&&document.fonts.load){Promise.race([document.fonts.load('40px Big Shoulders Display'),new Promise(r=>setTimeout(r,900))]).then(()=>{if(!S.shr)return;const u=shareDraw();if(u!==S.shr.url){S.shr.url=u;const im=document.getElementById('shimg');if(im)im.src=u}}).catch(()=>{})}}catch(e){}}
-function shareSheet(){const s=S.shr;if(!s)return '';
+function shareSheet(){const s=S.shr;if(!s)return '';if(s.ser)return serShareSheet();
  return `<div class="sheet" data-close><div role="dialog" aria-label="Partager ma collection"><h2 style="margin-top:0">📤 Partager ma collection</h2><div class="shg" role="group" aria-label="Jeu à partager"><button type="button" data-shg="fw" aria-pressed="${s.g!=='ms'}">Fusion World</button><button type="button" data-shg="ms" aria-pressed="${s.g==='ms'}">Masters</button></div><img id="shimg" class="shimg" src="${s.url}" alt="Aperçu de l’image à partager">
 <label class="sub" for="shn" style="display:block;margin:12px 0 4px">Nom affiché sur l’image (facultatif)</label><input id="shn" class="shin" maxlength="24" autocomplete="nickname" placeholder="ex. RioMan0ff" value="${esc(SHN)}">
 <button class="btn" data-sharesend style="margin-top:12px">📤 Partager l’image</button><div class="sx2" style="margin-top:8px"><button class="btn alt" data-sharedl>💾 Enregistrer</button><button class="btn alt" data-sharecopy>📋 Copier le texte</button></div><button class="btn alt" data-close style="margin-top:8px">Fermer</button></div></div>`}
@@ -7760,6 +7762,98 @@ async function shareSend(){if(!S.shr||!S.shr.url)return;const text=shareText(),n
  try{const f=shareFile();if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text,title:'Ma collection'});return}}catch(e){if(e&&e.name==='AbortError')return}
  shareDl()}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='shn'){SHN=e.target.value.slice(0,24);try{localStorage.setItem('fb_shname',SHN)}catch(_){}clearTimeout(window._shT);window._shT=setTimeout(()=>{if(!S.shr)return;S.shr.url=shareDraw();const im=document.getElementById('shimg');if(im)im.src=S.shr.url},220)}});
+/* ===== 99 · Partager une série en image (depuis l'onglet Collection) ===== */
+function serShareData(){const x=cxCtx(),dz=x.set&&x.set.dz?cxDzT(x.set):null;
+ return {code:dz?dz[0]:x.id,nm:dz?dz[1]:x.nm,col:'rgb('+(x.rgb||'229,9,20')+')',game:x.ed==='ms'?(X.msed==='en'?'Masters · édition anglaise':'Masters · cartes françaises'):x.ed==='en'?'Fusion World · édition anglaise':'Fusion World · cartes japonaises',
+  L:x.L.map(c=>({c,o:x.own(c)||0,p:x.px(c)||0,a:x.isAlt(c)}))}}
+function serShareTop(D){return D.L.filter(x=>x.o>0).sort((a,b)=>(b.p||0)-(a.p||0)||(b.a-a.a)||(a.c.id<b.c.id?-1:1)).slice(0,10)}
+function serShareOpen(){const D=serShareData();S.menu=false;S.shr={ser:D,img:{}};S.shr.url=serShareDraw();
+ const top=serShareTop(D),src=x=>CARDIMG[x.c.id]||MS_CI[x.c.id];let n=0;
+ const up=()=>{if(!S.shr||S.shr.ser!==D)return;S.shr.url=serShareDraw();const im=document.getElementById('shimg');if(im)im.src=S.shr.url};
+ top.forEach(x=>{const u=src(x);if(!u)return;n++;const im=new Image();im.onload=()=>{if(S.shr&&S.shr.ser===D){S.shr.img[x.c.id]=im;clearTimeout(window._ssT);window._ssT=setTimeout(up,60)}};im.src=u});
+ try{if(document.fonts&&document.fonts.load)Promise.race([document.fonts.load('40px Big Shoulders Display'),new Promise(r=>setTimeout(r,900))]).then(up).catch(()=>{})}catch(e){}}
+function serShareStats(D){const n=D.L.length,o=D.L.filter(x=>x.o>0).length,A=D.L.filter(x=>x.a);
+ return {n,o,p:pct(o,n),miss:n-o,cp:D.L.reduce((a,x)=>a+(x.o||0),0),aO:A.filter(x=>x.o>0).length,aN:A.length}}
+function serShareText(){const D=S.shr.ser,s=serShareStats(D),who=SHN.trim();
+ return (who?who+' : ':'')+(s.miss?'j’ai '+s.o+' / '+s.n+' cartes de '+D.code+' '+D.nm+' ('+s.p+' %) ! Plus que '+s.miss+' carte'+(s.miss>1?'s':'')+' à trouver.':'série '+D.code+' '+D.nm+' complète : '+s.n+' / '+s.n+' cartes ! 🏆')+'\nJe suis ma collection avec L’Appel des Cartes : '+SITE}
+function serShareDraw(){
+ const D=S.shr.ser,s=serShareStats(D),W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+ const FD='Big Shoulders Display,"Poppins","Arial Black",Impact,sans-serif',FT='Barlow,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif';
+ const rr=(x,y,w,h,r)=>{g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,r);else{g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}};
+ const fit=(t,max)=>{if(g.measureText(t).width<=max)return t;while(t.length>1&&g.measureText(t+'…').width>max)t=t.slice(0,-1);return t+'…'};
+ const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#17090B');bg.addColorStop(1,'#07070A');g.fillStyle=bg;g.fillRect(0,0,W,H);
+ g.save();g.globalAlpha=.28;const hl=g.createRadialGradient(W-120,360,10,W-120,360,620);hl.addColorStop(0,D.col);hl.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=hl;g.fillRect(0,0,W,H);g.restore();
+ /* bille + titre */
+ g.save();g.shadowColor='rgba(255,150,40,.65)';g.shadowBlur=30;const bl=g.createRadialGradient(100,98,5,116,120,56);bl.addColorStop(0,'#fff6c8');bl.addColorStop(.28,'#ffc233');bl.addColorStop(.62,'#f0830f');bl.addColorStop(1,'#b84a05');g.fillStyle=bl;g.beginPath();g.arc(116,120,52,0,Math.PI*2);g.fill();g.restore();
+ g.fillStyle='#c4161c';g.beginPath();for(let k=0;k<10;k++){const r=k%2?10:24,a=-Math.PI/2+k*Math.PI/5;g.lineTo(116+r*Math.cos(a),122+r*Math.sin(a))}g.closePath();g.fill();
+ g.textAlign='left';g.textBaseline='alphabetic';g.fillStyle='#fff';g.font='400 50px '+FD;g.fillText("L'Appel des Cartes",196,118);
+ g.fillStyle='#A89C9C';g.font='400 25px '+FT;g.fillText(D.game,196,156);
+ const who=SHN.trim();if(who){g.fillStyle='#FFB23A';g.font='600 30px '+FT;g.fillText(fit('Collection de '+who,960),60,232)}
+ /* série */
+ g.fillStyle=D.col;g.font='400 108px '+FD;g.fillText(D.code,60,350);const cw=g.measureText(D.code).width;
+ g.fillStyle='#fff';g.font='600 40px '+FT;g.fillText(fit(D.nm,1020-(60+cw+28)),60+cw+28,346);
+ /* progression */
+ const done=s.n>0&&!s.miss;
+ g.fillStyle='#fff';g.font='400 150px '+FD;const pt=s.p+' %';g.fillText(pt,60,512);const pw=g.measureText(pt).width;
+ g.fillStyle='#A89C9C';g.font='400 34px '+FT;g.fillText(s.o+' / '+s.n+' cartes',60+pw+28,470);g.font='400 26px '+FT;g.fillText(s.cp+' exemplaire'+(s.cp>1?'s':'')+(s.aN?' · Alt Art '+s.aO+' / '+s.aN:''),60+pw+28,510);
+ rr(60,544,960,28,14);g.fillStyle='#2A1A1C';g.fill();
+ if(s.p>0){rr(60,544,Math.max(28,960*s.p/100),28,14);g.fillStyle=D.col;g.fill()}
+ g.fillStyle=done?'#FFD166':'#FFB23A';g.font='600 36px '+FT;g.fillText(done?'🏆 Série complète !':s.o?'Plus que '+s.miss+' carte'+(s.miss>1?'s':'')+' à trouver !':'Je commence cette série !',60,630);
+ /* plus belles cartes */
+ const top=serShareTop(D);
+ if(top.length){g.fillStyle='#A89C9C';g.font='400 26px '+FT;g.fillText(top.length>1?'Mes plus belles cartes de la série':'Ma carte de la série',60,690);
+  const cols=5,gap=16,cwd=(960-gap*(cols-1))/cols,ch=Math.round(cwd*1.4),rows=Math.ceil(top.length/cols);
+  top.forEach((x,i)=>{const r=Math.floor(i/cols),inRow=Math.min(cols,top.length-r*cols),off=(960-(inRow*cwd+(inRow-1)*gap))/2,cx=60+off+(i%cols)*(cwd+gap),cy=712+r*(ch+gap)+(rows===1?ch/2-20:0);
+   g.save();rr(cx,cy,cwd,ch,12);g.clip();const im=S.shr.img[x.c.id];
+   if(im&&im.naturalWidth){const sc=Math.max(cwd/im.naturalWidth,ch/im.naturalHeight),iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;g.drawImage(im,cx+(cwd-iw)/2,cy+(ch-ih)/2,iw,ih)}
+   else{g.fillStyle='#2A1A1C';g.fillRect(cx,cy,cwd,ch);g.fillStyle='#fff';g.font='400 40px '+FD;g.textAlign='center';g.fillText(String(x.c.n||x.c.id.split('-').pop()),cx+cwd/2,cy+ch/2+14);g.textAlign='left'}
+   g.restore();rr(cx,cy,cwd,ch,12);g.strokeStyle='rgba(255,255,255,.14)';g.lineWidth=2;g.stroke();
+   if(x.o>1){g.font='600 22px '+FT;const t='×'+x.o,tw=g.measureText(t).width+18;rr(cx+cwd-tw-8,cy+8,tw,32,16);g.fillStyle='rgba(0,0,0,.72)';g.fill();g.fillStyle='#fff';g.fillText(t,cx+cwd-tw+1,cy+31)}})}
+ else{g.fillStyle='#A89C9C';g.font='400 30px '+FT;g.fillText('Aucune carte pour l’instant : la chasse commence !',60,760)}
+ /* pied */
+ g.fillStyle='rgba(255,255,255,.12)';g.fillRect(60,1268,960,2);
+ g.textAlign='left';g.fillStyle='#FFB23A';g.font='600 27px '+FT;g.fillText(SITE.replace('https://','').replace(/\/$/,''),60,1316);
+ g.textAlign='right';g.fillStyle='#A89C9C';g.font='400 24px '+FT;g.fillText(new Date().toLocaleDateString('fr-FR'),1020,1316);g.textAlign='left';
+ return cv.toDataURL('image/png')}
+function serShareSheet(){const s=S.shr;
+ return `<div class="sheet" data-close><div role="dialog" aria-label="Partager la série ${esc(s.ser.code)}"><h2 style="margin-top:0">📤 Partager ${esc(s.ser.code)}</h2><img id="shimg" class="shimg" src="${s.url}" alt="Aperçu de l’image de la série à partager">
+<label class="sub" for="shn" style="display:block;margin:12px 0 4px">Nom affiché sur l’image (facultatif)</label><input id="shn" class="shin" maxlength="24" autocomplete="nickname" placeholder="ex. RioMan0ff" value="${esc(SHN)}">
+<button class="btn" data-sharesend style="margin-top:12px">📤 Partager l’image</button><div class="sx2" style="margin-top:8px"><button class="btn alt" data-sharedl>💾 Enregistrer</button><button class="btn alt" data-sharecopy>📋 Copier le texte</button></div><button class="btn alt" data-close style="margin-top:8px">Fermer</button></div></div>`}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-sershare]');if(!b)return;e.stopPropagation();e.preventDefault();serShareOpen();render()},true);
+
+/* ===== 99 · Qui a mes cartes ? (correspondances avec tous les profils publics) ===== */
+let QM={st:'',rows:[],t:0};
+function qmIndex(){const m=new Map();cards.forEach(c=>m.set(c.id,c));try{msBindInit();MS_ALL.forEach(c=>m.set(c.id,c))}catch(e){}return m}
+async function qmRun(){if(QM.st==='busy')return;QM.st='busy';qmDraw();
+ try{const rows=await ppGet('/rest/v1/profil_public?select=pseudo,data,updated_at&order=updated_at.desc&limit=300'),ix=qmIndex(),
+   dbl=new Set(tradeData().prop.concat(msProp()).map(x=>x.c.id)),out=[];
+  for(const r of (Array.isArray(rows)?rows:[])){if(!r||typeof r.pseudo!=='string'||cmMe(r.pseudo))continue;const P=ppClean(r.data);if(!P)continue;
+   const get=[],give=[];let w=0;
+   for(const [id,q] of (P.sell||[])){const c=ix.get(id);if(!c)continue;if(c.want>c.own){get.push({c,q,w:1});w++}else if(!(c.own>0))get.push({c,q,w:0})}
+   for(const [id] of (P.want||[])){const c=ix.get(id);if(c&&dbl.has(id))give.push(c)}
+   if(!get.length&&!give.length)continue;
+   get.sort((a,b)=>b.w-a.w||(pxv(b.c)||0)-(pxv(a.c)||0));
+   out.push({n:r.pseudo,t:Date.parse(r.updated_at)||0,get,give,w,sc:w*3+get.length+give.length*2+(get.length&&give.length?5:0)})}
+  out.sort((a,b)=>b.sc-a.sc||b.t-a.t);QM={st:'ok',rows:out.slice(0,25),t:Date.now()}}
+ catch(e){QM={st:e&&e.status===404?'nosrv':'err',rows:[],t:0}}
+ qmDraw()}
+function qmList(){
+ if(QM.st==='busy')return '<div class="sub">Recherche dans les profils publics…</div>';
+ if(QM.st==='nosrv')return '<div class="sub">Les profils publics ne sont pas encore activés sur le serveur.</div>';
+ if(QM.st==='err')return '<div class="sub">Recherche indisponible pour le moment. Vérifie ta connexion.</div>';
+ if(QM.st!=='ok')return '';
+ if(!QM.rows.length)return '<div class="sub">Personne pour l’instant. Ajoute des doublons à échanger (💱) et des cartes recherchées, puis réessaie plus tard.</div>';
+ const nm=l=>l.slice(0,4).map(c=>`<span class="ppc">${esc(c.name||c.id)} <small>${esc(c.id.replace(/_ALT\d?/,''))}${c.ver!=='Normal'?' · Alt':''}</small></span>`).join('')+(l.length>4?`<span class="ppc mu">+${l.length-4}</span>`:'');
+ return QM.rows.map(r=>`<button type="button" class="vnsg qmr" data-ppo="${esc(r.n)}">${cmAv(r.n)}<span class="vnin"><b>${esc(r.n)}</b><small>${r.get.length?`🎁 Il a <b>${r.get.length}</b> carte${r.get.length>1?'s':''} qui te manque${r.get.length>1?'nt':''}${r.w?` (dont ${r.w} que tu cherches)`:''}`:''}${r.get.length&&r.give.length?'<br>':''}${r.give.length?`🔁 Tu as <b>${r.give.length}</b> carte${r.give.length>1?'s':''} qu’il cherche`:''}</small>${r.get.length?`<span class="ppcs">${nm(r.get.map(x=>x.c))}</span>`:''}</span><span class="cmg" aria-hidden="true">›</span></button>`).join('')}
+function qmCard(lg){const on=lg&&X.pp.on;
+ return `<section class="panel cmc"><div class="cmh"><b>🔁 Qui a mes cartes ?</b></div><p class="cmst">Trouve les joueurs qui ont en double les cartes qui te manquent, et ceux qui cherchent tes doublons. Touche un joueur pour voir son profil et préparer l’échange.</p>${on?'':`<p class="cmst">💡 ${lg?'Active ton profil public pour que les autres te trouvent aussi.':'Connecte-toi et active ton profil public pour que les autres te trouvent aussi.'}</p>`}<button type="button" class="btn" data-qmgo style="margin-top:10px">${QM.st==='ok'?'🔄 Relancer la recherche':'🔎 Chercher les échanges'}</button><div class="cmls" id="qm-l">${qmList()}</div></section>`}
+function qmDraw(){const l=document.getElementById('qm-l');if(l)l.innerHTML=qmList();const b=document.querySelector('[data-qmgo]');if(b){b.disabled=QM.st==='busy';b.textContent=QM.st==='ok'?'🔄 Relancer la recherche':'🔎 Chercher les échanges'}}
+/* page à part dans Amis (S.cmt='qm'), ouverte par la tuile « Qui a mes cartes ? » */
+{const _c=commV;commV=function(){
+  if(S.cmt==='qm'){try{frEnsure()}catch(e){}return header()+`<button type="button" class="btn alt ppb" data-cmt="msg">← Amis</button>`+qmCard(!!SBS)}
+  const h=_c.apply(this,arguments);
+  return typeof h==='string'?h.replace('<button type="button" class="hmt" data-go="tour">','<button type="button" class="hmt" data-cmt="qm"><span>🔁</span>Qui a mes cartes ?</button><button type="button" class="hmt" data-go="tour">'):h}}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-qmgo]');if(!b)return;e.stopPropagation();qmRun()},true);
 const CSORTD={num:['du plus petit au plus grand','du plus grand au plus petit'],name:['de A à Z','de Z à A'],copies:['le moins d’exemplaires d’abord','le plus d’exemplaires d’abord'],recent:['les plus anciennes d’abord','les plus récentes d’abord'],price:['les moins chères d’abord','les plus chères d’abord'],trend:['les plus en baisse d’abord','les plus en hausse d’abord']};
 const SRTICON='<svg class="srti" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 4v14M8 18l-3.5-3.5M8 18l3.5-3.5M16 20V6M16 6l-3.5 3.5M16 6l3.5 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function sortSheet(){if(!S.srt)return '';const cur=csortDir();
@@ -8097,7 +8191,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='14 nov. 2026 · 96';
+const BUILD='15 nov. 2026 · 99';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8659,7 +8753,7 @@ function cxHero(x,s){
   +`<span class="cx-arrs"><button type="button" class="cx-arr" ${arr(-1)} aria-label="Série précédente">${CXIC.left}</button><button type="button" class="cx-arr" ${arr(1)} aria-label="Série suivante">${CXIC.right}</button></span></div>`
   +`<div class="cx-pw"><div class="cx-hp" role="progressbar" aria-valuemin="0" aria-valuemax="${s.n}" aria-valuenow="${s.o}" aria-label="Cartes possédées dans la série"><i style="width:${s.n?Math.max(s.o?2:0,s.o/s.n*100).toFixed(1):0}%"></i></div><b class="cx-pc">${pc}<small>%</small></b></div>`
   +`<div class="cx-hs">${badge}<b>${s.o}</b> / ${s.n} carte${s.n>1?'s':''}${val}</div></div>`
-  +(tags?`<div class="cx-tags" role="group" aria-label="Filtrer par rareté">${tags}</div>`:'')+part+(x.ed==='ms'&&/^BT\d/.test(x.id)?msImgSw():'')+`</section>`}
+  +(tags?`<div class="cx-tags" role="group" aria-label="Filtrer par rareté">${tags}</div>`:'')+part+(x.ed==='ms'&&/^BT\d/.test(x.id)?msImgSw():'')+`<button type="button" class="cx-shb" data-sershare>📤 Partager cette série</button></section>`}
 function cxTabs(x,s){if(x.ed==='en')return enSealTabs(x,s);
  const ms=x.ed==='ms',sc=ms?msSealQ(x.set).reduce((a,b)=>a+b,0):sealTs(x.id).reduce((a,t)=>a+Math.max(0,+(cxSl(x.id,t[0]).own)||0),0),at=v=>ms?`data-msmode="${v}"`:`data-mode="${v}"`;
  return `<div class="cx-tabs" role="group" aria-label="Cartes ou produits scellés"><button type="button" ${at('cards')} aria-pressed="${!x.sealed}">${cxSp('Cartes')}<small>${s.o}/${s.n}</small></button><button type="button" ${at('sealed')} aria-pressed="${x.sealed}">${cxSp('Scellés')}<small>${sc}</small></button></div>`}
@@ -10899,6 +10993,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:99,d:'2026-11-15',it:[['n','📤','Partager une série','Dans l’onglet Collection, le bouton « Partager cette série » crée une belle image de ta progression (pourcentage, cartes manquantes et tes plus belles cartes) à poster sur TikTok, Insta ou Discord.','coll'],['n','🔁','Qui a mes cartes ?','Dans Amis, la nouvelle tuile « Qui a mes cartes ? » cherche parmi tous les profils publics qui a en double les cartes qui te manquent, et qui cherche tes doublons. Touche un joueur pour préparer l’échange.','comm']]},
  {v:98,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','La fiche ne montre plus que les vraies photos de la protection (les images 3D sont retirées). Elles se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:97,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','De vraies photos de la protection (vide, avec un display FB09 et ouverte) sont ajoutées en tête de la fiche dans la Boutique. Elles s’ajoutent quand le gérant ouvre la Boutique.','autres']]},
  {v:96,d:'2026-11-14',it:[['c','🏠','Accueil allégé','La liste « Mes séries » est retirée de l’accueil : tes séries restent dans l’onglet Collection. Le bouton Partager reste sur l’accueil.','home']]},

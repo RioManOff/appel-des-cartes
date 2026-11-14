@@ -943,7 +943,15 @@ a.set{color:var(--tx);text-decoration:none}
 .ppfr{border-color:var(--ok);color:var(--ok)}
 .ppcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .ppc{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 10px;border:1px solid var(--ln);border-radius:14px;background:var(--bg);font-size:13px}.ppc small{color:var(--mu);font-size:11.5px}.ppc.mu{color:var(--mu)}
-.cx-shb{display:block;margin:10px 0 0 auto;padding:7px 14px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:13px;font-weight:600}
+.cx-hero .cx-shb{grid-column:1/-1;justify-self:end;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;width:auto;height:auto;}.cx-shb{display:block;margin:10px 0 0 auto;padding:7px 14px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:inherit;font-size:13px;font-weight:600}
+.gift{margin:12px 0;padding:14px;border-radius:18px;border:1px solid rgba(255,178,58,.45);background:linear-gradient(135deg,rgba(255,178,58,.16),rgba(229,9,20,.10));color:var(--tx)}
+.gift.done{border-color:rgba(255,209,102,.6)}
+.gift-h{display:flex;gap:12px;align-items:center}.gift-i{font-size:34px;line-height:1}.gift-t{display:grid;gap:3px;min-width:0}.gift-t b{font-size:16px}.gift-t small{color:var(--mu);font-size:13px}.gift-t small b{color:var(--tx);font-size:13px}
+.gift-b{height:10px;border-radius:6px;background:rgba(255,255,255,.08);margin-top:12px;overflow:hidden}.gift-b i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#f0830f,#ffc233)}
+.gift-a{display:flex;gap:8px;margin-top:12px}.gift-a .btn{flex:1;margin:0;padding:10px;font-size:14px}
+.sad{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:4px 0 12px;padding:10px;border-radius:16px;border:1px solid rgba(255,178,58,.45);background:linear-gradient(135deg,rgba(255,178,58,.14),rgba(255,255,255,.02));color:var(--tx);font:inherit}
+.sad img,.sad-e{flex:none;width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--sf);display:grid;place-items:center;font-size:30px}
+.sad-t{display:grid;gap:2px;min-width:0;flex:1}.sad-t b{font-size:15px}.sad-t small{color:var(--mu);font-size:12.5px}.sad-t small b{color:#FFB23A;font-size:12.5px}.sad-g{flex:none;font-weight:700;color:#FFB23A}
 .qmr{align-items:flex-start}.qmr .vnin{min-width:0}.qmr .ppcs{margin-top:6px}
 .ppno{margin:10px 2px 0}
 .ppst{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
@@ -7692,7 +7700,7 @@ function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0
  ser=(S.hfx?EXTS:EXTS.slice(0,4)).map(([e,nm])=>{const o=own[e]||0,n=tot[e]||0,p=pct(o,n);return `<button class="ppsr" data-hext="${e}" style="--c:${SERCOL[e]}"><b class="ppsc" style="color:${SERCOL[e]||'var(--tx)'}">${e}</b><span class="ppsn">${esc(nm)}<span class="bar"><i style="width:${p}%"></i></span></span><span class="ppsv">${o}<small> / ${n}</small></span></button>`}).join('')+`<button type="button" class="chip hmmore" data-hfx>${S.hfx?'Réduire ▴':'Voir les '+EXTS.length+' séries ▾'}</button>`;
  return header()+pollBox()+remBanner()+alBanner()+greet()+hmFan(H)
  +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
- +hmVal()+`<div class="hmgn">🐉 Fusion World</div><div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>${hmMsTot()}`
+ +hmGift()+hmVal()+`<div class="hmgn">🐉 Fusion World</div><div class="hmtot"><b>${hmNum(nOwn)}</b> cartes différentes sur ${hmNum(nAll)}<span>${hmNum(copies)} exemplaire${copies>1?'s':''} en tout${value>0?' · valeur ≈ '+eur(value)+(MKON?' (Cardmarket)':' selon tes prix'):''}</span></div><div class="bar"><i style="width:${pct(nOwn,nAll)}%"></i></div>${hmMsTot()}`
  +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
  +`<div class="hmhrow" style="justify-content:flex-end"><button class="chip" data-share>📤 Partager ma collection</button></div>`
  +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
@@ -7762,6 +7770,28 @@ async function shareSend(){if(!S.shr||!S.shr.url)return;const text=shareText(),n
  try{const f=shareFile();if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text,title:'Ma collection'});return}}catch(e){if(e&&e.name==='AbortError')return}
  shareDl()}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='shn'){SHN=e.target.value.slice(0,24);try{localStorage.setItem('fb_shname',SHN)}catch(_){}clearTimeout(window._shT);window._shT=setTimeout(()=>{if(!S.shr)return;S.shr.url=shareDraw();const im=document.getElementById('shimg');if(im)im.src=S.shr.url},220)}});
+/* ===== 100 · Accueil : « le 100e membre gagne une protection display » ===== */
+const GIFT_N=100;
+function hmGift(){let m=ONL.mem||0;if(!m){try{m=parseInt(localStorage.getItem('fb_mem'),10)||0}catch(e){}}
+ const done=m>=GIFT_N,left=Math.max(0,GIFT_N-m),p=Math.min(100,Math.round(m*100/GIFT_N));
+ return `<section class="gift${done?' done':''}" aria-label="Concours du ${GIFT_N}e membre"><div class="gift-h"><span class="gift-i" aria-hidden="true">🎁</span><span class="gift-t"><b>${done?`${GIFT_N} membres atteints, merci !`:`Le ${GIFT_N}e membre gagne une protection display !`}</b><small>${done?'Le gagnant va être contacté par message. D’autres surprises arrivent…':m?`Déjà <b>${m}</b> membre${m>1?'s':''} : plus que <b>${left}</b> inscription${left>1?'s':''}.`:'Crée ton compte gratuit : le '+GIFT_N+'e inscrit repart avec une protection imprimée en 3D.'}</small></span></div>`
+  +(m?`<div class="gift-b" role="progressbar" aria-valuemin="0" aria-valuemax="${GIFT_N}" aria-valuenow="${Math.min(m,GIFT_N)}" aria-label="Membres inscrits"><i style="width:${p}%"></i></div>`:'')
+  +(done?'':`<div class="gift-a">${SBS?'':'<button type="button" class="btn" data-cmlogin>Je crée mon compte</button>'}<button type="button" class="btn alt" data-giftsh>📣 Inviter des amis</button></div>`)+`</section>`}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-giftsh]');if(!b)return;e.stopPropagation();
+ const t='🎁 Le '+GIFT_N+'e membre de L’Appel des Cartes gagne une protection display imprimée en 3D ! Appli gratuite pour gérer ta collection Dragon Ball : '+SITE;
+ if(navigator.share)navigator.share({text:t}).catch(()=>{});else copyText(t).then(ok=>toast(ok?'Message copié : colle-le à tes amis ✓':'Copie impossible ici'))},true);
+
+/* ===== 100 · Scellés : encart « Protège ton display » vers la Boutique ===== */
+function sadProd(ed){const L=(SHP.prods||[]).filter(p=>p&&p.actif!==false&&/protection/i.test(p.titre||'')&&/display/i.test(p.titre||''));if(!L.length)return null;
+ const us=ed==='ms'||ed==='en';return L.find(p=>us?/\b(US|Masters|anglais)\b/i.test(p.titre):/japonais|Fusion/i.test(p.titre)&&!/\bUS\b/.test(p.titre))||null}
+function sadCard(x){if(!SHP.ok){if(!SHP.busy&&!window._sadT){window._sadT=1;shLoad().then(()=>{if(S.tab==='coll'&&SHP.ok&&sadProd(x.ed))render()}).catch(()=>{})}return ''}
+ const p=sadProd(x.ed);if(!p)return '';
+ let n=0;try{n=x.ed==='ms'?msOwn(x.set.id+'-display')+msOwn(x.set.id+'-case')*12:x.ed==='en'?0:(+(cxSl(x.id,'display').own)||0)+(+(cxSl(x.id,'case').own)||0)*12}catch(e){}
+ const ph=(()=>{try{return shPh(p)[0]||''}catch(e){return ''}})();
+ return `<button type="button" class="sad" data-sad="${p.id}" aria-label="${esc(p.titre)} : voir dans la Boutique">${ph?`<img src="${esc(ph)}" alt="" loading="lazy">`:'<span class="sad-e" aria-hidden="true">🛡️</span>'}<span class="sad-t"><b>${n?`Protège ${n>1?'tes '+n+' displays':'ton display'} !`:'Protège tes displays'}</b><small>${esc(p.titre)} · <b>${shEur(p.prix)}</b></small><small>Imprimée en 3D, plexi devant, aimants cachés.</small></span><span class="sad-g">Voir ›</span></button>`}
+function shOpenProd(id){affOpen();let k=0;const w=()=>{if(++k>60)return;if(SHP.ok!==1){setTimeout(w,250);return}if(shProd(id))shGo('prod',{cur:+id,img:0,qty:1});else toast('Ce produit n’est plus en vente')};w()}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-sad]');if(!b)return;e.stopPropagation();e.preventDefault();shOpenProd(b.dataset.sad)},true);
+{const c0=cxSealed;cxSealed=function(x){const h=c0.apply(this,arguments);let a='';try{a=sadCard(x)}catch(e){}return a+h}}
 /* ===== 99 · Partager une série en image (depuis l'onglet Collection) ===== */
 function serShareData(){const x=cxCtx(),dz=x.set&&x.set.dz?cxDzT(x.set):null;
  return {code:dz?dz[0]:x.id,nm:dz?dz[1]:x.nm,col:'rgb('+(x.rgb||'229,9,20')+')',game:x.ed==='ms'?(X.msed==='en'?'Masters · édition anglaise':'Masters · cartes françaises'):x.ed==='en'?'Fusion World · édition anglaise':'Fusion World · cartes japonaises',
@@ -8191,7 +8221,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 99';
+const BUILD='15 nov. 2026 · 100';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -10993,6 +11023,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:100,d:'2026-11-15',it:[['n','🎁','Le 100e membre gagne une protection display','Sur l’accueil, au-dessus de la valeur de ta collection : le compteur des membres inscrits. Le 100e membre repart avec une protection display imprimée en 3D. Invite tes amis !','home'],['n','🛡️','Protège ton display','Dans l’onglet Scellés d’une série, un encart te montre la protection display de la Boutique, avec son prix. Un appui ouvre sa fiche.','shop']]},
  {v:99,d:'2026-11-15',it:[['n','📤','Partager une série','Dans l’onglet Collection, le bouton « Partager cette série » crée une belle image de ta progression (pourcentage, cartes manquantes et tes plus belles cartes) à poster sur TikTok, Insta ou Discord.','coll'],['n','🔁','Qui a mes cartes ?','Dans Amis, la nouvelle tuile « Qui a mes cartes ? » cherche parmi tous les profils publics qui a en double les cartes qui te manquent, et qui cherche tes doublons. Touche un joueur pour préparer l’échange.','comm']]},
  {v:98,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','La fiche ne montre plus que les vraies photos de la protection (les images 3D sont retirées). Elles se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:97,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','De vraies photos de la protection (vide, avec un display FB09 et ouverte) sont ajoutées en tête de la fiche dans la Boutique. Elles s’ajoutent quand le gérant ouvre la Boutique.','autres']]},

@@ -7774,11 +7774,11 @@ document.addEventListener('input',e=>{if(e.target&&e.target.id==='shn'){SHN=e.ta
 const GIFT_N=100;
 function hmGift(){let m=ONL.mem||0;if(!m){try{m=parseInt(localStorage.getItem('fb_mem'),10)||0}catch(e){}}
  const done=m>=GIFT_N,left=Math.max(0,GIFT_N-m),p=Math.min(100,Math.round(m*100/GIFT_N));
- return `<section class="gift${done?' done':''}" aria-label="Concours du ${GIFT_N}e membre"><div class="gift-h"><span class="gift-i" aria-hidden="true">🎁</span><span class="gift-t"><b>${done?`${GIFT_N} membres atteints, merci !`:`Le ${GIFT_N}e membre gagne une protection display !`}</b><small>${done?'Le gagnant va être contacté par message. D’autres surprises arrivent…':m?`Déjà <b>${m}</b> membre${m>1?'s':''} : plus que <b>${left}</b> inscription${left>1?'s':''}.`:'Crée ton compte gratuit : le '+GIFT_N+'e inscrit repart avec une protection imprimée en 3D.'}</small></span></div>`
+ return `<section class="gift${done?' done':''}" aria-label="Tirage au sort à ${GIFT_N} membres"><div class="gift-h"><span class="gift-i" aria-hidden="true">🎁</span><span class="gift-t"><b>${done?`${GIFT_N} membres atteints, merci !`:`À ${GIFT_N} membres : tirage au sort !`}</b><small>${done?'Le tirage au sort arrive : le gagnant choisit sa protection imprimée en 3D. Résultat sur le Discord !':`Une protection imprimée en 3D au choix à gagner parmi les membres.${m?` Déjà <b>${m}</b> membre${m>1?'s':''} : plus que <b>${left}</b> inscription${left>1?'s':''}.`:' Crée ton compte gratuit pour participer.'}`}</small></span></div>`
   +(m?`<div class="gift-b" role="progressbar" aria-valuemin="0" aria-valuemax="${GIFT_N}" aria-valuenow="${Math.min(m,GIFT_N)}" aria-label="Membres inscrits"><i style="width:${p}%"></i></div>`:'')
   +(done?'':`<div class="gift-a">${SBS?'':'<button type="button" class="btn" data-cmlogin>Je crée mon compte</button>'}<button type="button" class="btn alt" data-giftsh>📣 Inviter des amis</button></div>`)+`</section>`}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-giftsh]');if(!b)return;e.stopPropagation();
- const t='🎁 Le '+GIFT_N+'e membre de L’Appel des Cartes gagne une protection display imprimée en 3D ! Appli gratuite pour gérer ta collection Dragon Ball : '+SITE;
+ const t='🎁 Tirage au sort quand L’Appel des Cartes atteint '+GIFT_N+' membres : une protection imprimée en 3D au choix à gagner ! Appli gratuite pour gérer ta collection Dragon Ball : '+SITE;
  if(navigator.share)navigator.share({text:t}).catch(()=>{});else copyText(t).then(ok=>toast(ok?'Message copié : colle-le à tes amis ✓':'Copie impossible ici'))},true);
 
 /* ===== 100 · Scellés : encart « Protège ton display » vers la Boutique ===== */
@@ -8221,7 +8221,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 100';
+const BUILD='15 nov. 2026 · 101';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -11023,7 +11023,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
- {v:100,d:'2026-11-15',it:[['n','🎁','Le 100e membre gagne une protection display','Sur l’accueil, au-dessus de la valeur de ta collection : le compteur des membres inscrits. Le 100e membre repart avec une protection display imprimée en 3D. Invite tes amis !','home'],['n','🛡️','Protège ton display','Dans l’onglet Scellés d’une série, un encart te montre la protection display de la Boutique, avec son prix. Un appui ouvre sa fiche.','shop']]},
+ {v:101,d:'2026-11-15',it:[['a','🎁','Tirage au sort à 100 membres','À 100 membres, un tirage au sort parmi tous les membres fait gagner une protection imprimée en 3D au choix.','home']]},
+ {v:100,d:'2026-11-15',it:[['n','🎁','Tirage au sort à 100 membres','Sur l’accueil, au-dessus de la valeur de ta collection : le compteur des membres inscrits. À 100 membres, un tirage au sort parmi les membres fait gagner une protection imprimée en 3D au choix. Invite tes amis !','home'],['n','🛡️','Protège ton display','Dans l’onglet Scellés d’une série, un encart te montre la protection display de la Boutique, avec son prix. Un appui ouvre sa fiche.','shop']]},
  {v:99,d:'2026-11-15',it:[['n','📤','Partager une série','Dans l’onglet Collection, le bouton « Partager cette série » crée une belle image de ta progression (pourcentage, cartes manquantes et tes plus belles cartes) à poster sur TikTok, Insta ou Discord.','coll'],['n','🔁','Qui a mes cartes ?','Dans Amis, la nouvelle tuile « Qui a mes cartes ? » cherche parmi tous les profils publics qui a en double les cartes qui te manquent, et qui cherche tes doublons. Touche un joueur pour préparer l’échange.','comm']]},
  {v:98,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','La fiche ne montre plus que les vraies photos de la protection (les images 3D sont retirées). Elles se mettent à jour quand le gérant ouvre la Boutique.','autres']]},
  {v:97,d:'2026-11-14',it:[['a','📸','Protection display Fusion World japonais','De vraies photos de la protection (vide, avec un display FB09 et ouverte) sont ajoutées en tête de la fiche dans la Boutique. Elles s’ajoutent quand le gérant ouvre la Boutique.','autres']]},

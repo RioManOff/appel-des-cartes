@@ -4,6 +4,8 @@ jobs:
   d:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    permissions:
+      contents: write
     steps:
       - run: pip install pillow >/dev/null
       - run: |
@@ -42,7 +44,5 @@ jobs:
           PY
           python3 g.py
           ls -la *.json | sed 's/^/XXF /'
-      - uses: actions/upload-artifact@v4
-        with:
-          name: photos
-          path: '*.json'
+      - run: |
+          mkdir pub && mv *.json pub/ && cd pub && git init -q && git checkout -q -b tmp-photos && git add . && git -c user.name=bot -c user.email=bot@x commit -qm photos && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-photos && echo XXPUSHED

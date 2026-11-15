@@ -6507,7 +6507,7 @@ function gcFab(){
   const n=document.querySelector('nav');
   const on=!GC.open&&!!n&&S.tab!=='chat'&&!S.menu&&GC.v!==-1&&!document.querySelector('.cs,.sheet,.vr');
   b.style.display=on?'flex':'none';
-  if(n&&on)b.style.bottom=(n.offsetHeight+14)+'px'}
+  if(n&&on){if(!GCUI.nh||!GCUI.nhw){GCUI.nh=n.offsetHeight;GCUI.nhw=1;addEventListener('resize',()=>{GCUI.nhw=0},{once:true})}b.style.bottom=(GCUI.nh+14)+'px'}}
 /* ---------- liaison avec l'appli ---------- */
 function gcSyncOv(){
   try{
@@ -8282,7 +8282,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 110';
+const BUILD='15 nov. 2026 · 111';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10116,6 +10116,10 @@ function adCard(){const d=AD.d;if(!d)return '';const n=x=>(+x||0).toLocaleString
 {const m2=hmMoney;hmMoney=function(){try{adAuto()}catch(e){}return m2()+(AD.d?adCard():'')}}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-adl]');if(!b)return;AD.open=!AD.open;render()});
 /* ===== AD:END ===== */
+/* ===== RMEMO : un même calcul demandé plusieurs fois pendant un affichage n'est fait qu'une fois ===== */
+{const M=new Map();let on=0;const r0=renderCore;renderCore=function(){M.clear();on=1;try{return r0.apply(this,arguments)}finally{on=0;M.clear()}};
+ for(const f of ['stData','msProp','dbStats']){const o=window[f];if(typeof o!=='function')continue;window[f]=function(){if(!on||arguments.length)return o.apply(this,arguments);if(M.has(f))return M.get(f);const v=o.call(this);M.set(f,v);return v}}}
+/* ===== RMEMO:END ===== */
 
 /* ===== SRX : toutes les séries dans chaque liste (accueil, stats, profil, carnet de ventes) =====
    Fusion World (boosters, decks FS, autres séries), Masters, et les anciennes collections (rangées par collection). */
@@ -11171,6 +11175,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:111,d:'2026-11-15',it:[['a','⚡','Accueil et Stats plus rapides','L’Accueil et les Stats s’affichent plus vite : les calculs de ta collection ne sont plus refaits plusieurs fois à chaque toucher.','home']]},
  {v:110,d:'2026-11-15',it:[['a','⚡','Collection plus fluide','Ajouter ou retirer une carte est bien plus rapide, surtout sur les téléphones un peu anciens : les photos ne sont plus redessinées à chaque toucher.','coll'],['a','🎲','Boosters plus directs','L’onglet Boosters va droit au but : les boutons « Ouvrir » sont tout de suite visibles. Les règles et les taux sont derrière « ⓘ ».','luck']]},
  {v:109,d:'2026-11-15',it:[['a','🏠','Accueil plus clair','« Mes ventes » n’apparaît plus sur l’Accueil tant que tu n’as noté aucune vente : touche la tuile « Ventes » pour commencer. La recherche de la collection est aussi plus lisible.','home']]},
  {v:108,d:'2026-11-15',it:[['a','⚡','Appli plus rapide','L’appli ne retélécharge plus tout à chaque ouverture : seulement ce qui a changé. La page est aussi plus légère, elle s’ouvre plus vite, surtout en 4G.','home']]},

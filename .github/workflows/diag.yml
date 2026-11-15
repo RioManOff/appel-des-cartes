@@ -3,7 +3,13 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - run: |
-          curl -s -X POST "https://lxufdngidosgyblnhasp.supabase.co/rest/v1/rpc/site_stats" -H "apikey: sb_publishable_xP8CEMJWnJP3hUJ1stdCbQ_gJNXCvJ-" -H "Content-Type: application/json" -d '{}' | sed 's/^/XXSTATS /'
+          t(){ c=$(curl -s -o /dev/null -w '%{http_code} %{size_download}' -A 'Mozilla/5.0' "$1"); echo "XX $c $1"; }
+          for b in https://www.dbs-cardgame.com/fw/images/cards/card/jp https://www.dbs-cardgame.com/fw/images/cards/card/en; do
+            for id in FB02-141 FB02-141_p1 FB02-141_p2 FB02-142_p1 FB05-121 FB05-121_p1 FB05-121_p2 FB01-139_p2 FB01-139_p1 FB01-139_p3 FS05-16_p1 FS03-15_p2; do t "$b/$id.webp"; done
+          done
+          for u in https://www.dbs-cardgame.com/images/cardlist/cardimg/DB1-001.png https://www.dbs-cardgame.com/us-en/images/cardlist/cardimg/DB1-001.png https://www.dbs-cardgame.com/images/cardlist/cardimg/BT1-001.png https://www.dbs-cardgame.com/asia/images/cardlist/cardimg/DB1-001.png; do t "$u"; done
+          curl -s -A 'Mozilla/5.0' "https://www.dbs-cardgame.com/fw/jp/cardlist/?search=true&q=FB05-121" | grep -o 'cards/card/[^"]*FB05-12[0-9][^"]*' | sort -u | head -20 | sed 's/^/XXL /'
+          curl -s -A 'Mozilla/5.0' "https://www.dbs-cardgame.com/fw/en/cardlist/?search=true&q=FB02-141" | grep -o 'cards/card/[^"]*FB02-14[0-9][^"]*' | sort -u | head -20 | sed 's/^/XXL2 /'

@@ -3,7 +3,17 @@
 <head><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#0A0A0A">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>L'Appel des Cartes</title>
+<title>L'Appel des Cartes : appli gratuite pour ta collection de cartes Dragon Ball (Fusion World, Masters)</title>
+<meta name="description" content="Gère ta collection de cartes Dragon Ball Super Card Game gratuitement : Fusion World (FB01 à FB11, japonais et anglais) et Masters (BT01 à BT31). Progression par série, prix Cardmarket, scanner, échanges entre collectionneurs.">
+<meta name="keywords" content="Dragon Ball, Dragon Ball Super Card Game, Fusion World, Masters, collection, cartes, DBSCG, FB01, BT01, Cardmarket, appli collection cartes">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://riomanoff.github.io/appel-des-cartes/">
+<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="L'Appel des Cartes">
+<meta property="og:title" content="L'Appel des Cartes : ta collection de cartes Dragon Ball">
+<meta property="og:description" content="Appli gratuite pour suivre ta collection Dragon Ball Super Card Game : Fusion World et Masters, prix Cardmarket, échanges entre collectionneurs.">
+<meta property="og:url" content="https://riomanoff.github.io/appel-des-cartes/"><meta property="og:image" content="https://riomanoff.github.io/appel-des-cartes/icon-512.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="L'Appel des Cartes : ta collection de cartes Dragon Ball"><meta name="twitter:description" content="Appli gratuite pour suivre ta collection Dragon Ball Super Card Game : Fusion World et Masters.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"L'Appel des Cartes","url":"https://riomanoff.github.io/appel-des-cartes/","applicationCategory":"LifestyleApplication","operatingSystem":"Android, iOS, Windows, navigateur web","inLanguage":"fr","description":"Appli gratuite pour gérer sa collection de cartes Dragon Ball Super Card Game : Fusion World (FB01 à FB11) et Masters (BT01 à BT31), avec prix Cardmarket et échanges entre collectionneurs.","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Person","name":"RioMan0ff"}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:ital,wght@0,800;0,900&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
 <style>
@@ -952,6 +962,14 @@ a.set{color:var(--tx);text-decoration:none}
 .sad{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:4px 0 12px;padding:10px;border-radius:16px;border:1px solid rgba(255,178,58,.45);background:linear-gradient(135deg,rgba(255,178,58,.14),rgba(255,255,255,.02));color:var(--tx);font:inherit}
 .sad img,.sad-e{flex:none;width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--sf);display:grid;place-items:center;font-size:30px}
 .sad-t{display:grid;gap:2px;min-width:0;flex:1}.sad-t b{font-size:15px}.sad-t small{color:var(--mu);font-size:12.5px}.sad-t small b{color:#FFB23A;font-size:12.5px}.sad-g{flex:none;font-weight:700;color:#FFB23A}
+.av{margin-top:18px}.av-sum{display:flex;align-items:center;gap:8px;margin:4px 0 10px}.av-sum b{font-size:20px}
+.av-st{display:inline-flex;gap:1px;color:rgba(255,255,255,.18);font-size:18px;letter-spacing:0}.av-st i{font-style:normal}.av-st i.on{color:#FFB23A}.av-st i.half{background:linear-gradient(90deg,#FFB23A 50%,rgba(255,255,255,.18) 50%);-webkit-background-clip:text;background-clip:text;color:transparent}.av-st.sm{font-size:13px}
+.av-mini{display:flex;align-items:center;gap:4px;margin-top:2px}.av-mini small{color:var(--mu);font-size:11.5px}
+.av-f{display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid var(--ln);background:var(--sf);margin:8px 0 12px}
+.av-pick{display:flex;gap:4px}.av-pick button{border:0;background:none;font-size:30px;line-height:1;padding:2px;color:rgba(255,255,255,.2)}.av-pick button.on{color:#FFB23A}
+.av-f textarea{width:100%;padding:10px;border-radius:12px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);font:inherit;resize:vertical}
+.av-l{list-style:none;padding:0;margin:0;display:grid;gap:8px}.av-r{padding:10px 12px;border-radius:14px;border:1px solid var(--ln);background:var(--sf)}.av-r p{margin:6px 0 0;white-space:pre-line}
+.av-rh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.av-rh small{color:var(--mu);margin-left:auto}.av-r .chip{margin:8px 6px 0 0}.av-why{margin:6px 0 10px}
 .qmr{align-items:flex-start}.qmr .vnin{min-width:0}.qmr .ppcs{margin-top:6px}
 .ppno{margin:10px 2px 0}
 .ppst{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
@@ -3237,6 +3255,7 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 </style>
 </head>
 <body>
+<noscript><div style="max-width:520px;margin:40px auto;padding:0 16px;font-family:sans-serif;color:#eee"><h1>L'Appel des Cartes</h1><p>Appli gratuite pour gérer ta collection de cartes Dragon Ball Super Card Game : Fusion World (FB01 à FB11, cartes japonaises et anglaises) et Masters (BT01 à BT31, cartes françaises et anglaises).</p><ul><li>Progression par série et par rareté, cartes Alternative Art</li><li>Prix Cardmarket et valeur de ta collection</li><li>Suivi des produits scellés : boosters, displays, cases</li><li>Classeurs, liste de recherche, doublons à échanger</li><li>Profils publics, amis, échanges et chat entre collectionneurs</li></ul><p>Active JavaScript pour utiliser l'appli.</p></div></noscript>
 <div id="splash" class="wait" role="status" aria-live="polite"><div class="orb"><span class="dot" style="--i:0"></span><span class="dot" style="--i:1"></span><span class="dot" style="--i:2"></span><span class="dot" style="--i:3"></span><span class="dot" style="--i:4"></span><span class="dot" style="--i:5"></span><span class="dot" style="--i:6"></span><span class="dot" style="--i:7"></span><span class="dot" style="--i:8"></span><span class="dot" style="--i:9"></span><span class="dot" style="--i:10"></span><div class="ball">★</div></div><b>L'Appel des Cartes</b><div class="bar"><u></u></div><small>Chargement des cartes…</small></div>
 <div id="app"></div>
 <div id="toast" role="status"></div>
@@ -7770,6 +7789,45 @@ async function shareSend(){if(!S.shr||!S.shr.url)return;const text=shareText(),n
  try{const f=shareFile();if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text,title:'Ma collection'});return}}catch(e){if(e&&e.name==='AbortError')return}
  shareDl()}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='shn'){SHN=e.target.value.slice(0,24);try{localStorage.setItem('fb_shname',SHN)}catch(_){}clearTimeout(window._shT);window._shT=setTimeout(()=>{if(!S.shr)return;S.shr.url=shareDraw();const im=document.getElementById('shimg');if(im)im.src=S.shr.url},220)}});
+/* ===== 102 · Avis clients dans la Boutique (table shop_avis : seuls les acheteurs d'un produit expédié peuvent noter) ===== */
+let AV={L:null,off:0,busy:0,mine:null,note:0,txt:'',edit:0,send:0};
+async function avLoad(force){if(AV.busy||AV.off&&!force)return;AV.busy=1;
+ try{const r=await shApi('/rest/v1/shop_avis?select=id,product_id,user_id,pseudo,note,texte,created_at&order=created_at.desc&limit=1000');AV.L=Array.isArray(r)?r:[];AV.off=0}
+ catch(e){if(e&&(e.status===404||/does not exist|schema cache/i.test(e.message||'')))AV.off=1;AV.L=AV.L||[]}
+ AV.busy=0;try{shDraw(1)}catch(e){}}
+async function avMine(){if(!SBS||AV.mine!==null)return;AV.mine=[];
+ try{const r=await shApi('/rest/v1/shop_orders?select=articles,statut&user_id=eq.'+encodeURIComponent(SBS.uid)+'&limit=200');const s=new Set();
+  (r||[]).forEach(o=>{if(['envoyée','terminée'].includes(o.statut))(Array.isArray(o.articles)?o.articles:[]).forEach(a=>s.add(+a.id))});AV.mine=[...s]}catch(e){AV.mine=[]}
+ try{shDraw(1)}catch(e){}}
+const avOf=id=>(AV.L||[]).filter(a=>+a.product_id===+id);
+function avSum(id){const l=avOf(id);if(!l.length)return null;return{n:l.length,m:l.reduce((a,x)=>a+(+x.note||0),0)/l.length}}
+const avStars=(m,sz)=>`<span class="av-st${sz?' '+sz:''}" aria-hidden="true">${[1,2,3,4,5].map(k=>`<i class="${m>=k-.25?'on':m>=k-.75?'half':''}">★</i>`).join('')}</span>`;
+const avM=m=>m.toFixed(1).replace('.',',');
+function avSec(p){if(AV.off)return '';if(AV.L===null){avLoad();return ''}
+ const l=avOf(p.id),s=avSum(p.id),me=SBS?l.find(a=>a.user_id===SBS.uid):null;
+ if(SBS&&AV.mine===null)avMine();
+ const can=SBS&&AV.mine&&AV.mine.includes(+p.id);
+ let f='';
+ if(can&&(!me||AV.edit===p.id)){const n=AV.note||(me?me.note:0);
+  f=`<div class="av-f"><b>${me?'Modifier ton avis':'Tu as reçu ce produit ? Donne ton avis !'}</b><div class="av-pick" role="group" aria-label="Ta note">${[1,2,3,4,5].map(k=>`<button type="button" data-avn="${k}" class="${n>=k?'on':''}" aria-label="${k} étoile${k>1?'s':''}" aria-pressed="${n===k}">★</button>`).join('')}</div><textarea id="av-t" maxlength="500" rows="3" placeholder="Ce que tu en penses (facultatif)">${esc(AV.txt||(me?me.texte:''))}</textarea><button type="button" class="btn" data-avsend="${p.id}"${n&&!AV.send?'':' disabled'}>${AV.send?'Envoi…':'Publier mon avis'}</button></div>`}
+ else if(SBS&&!can&&!me&&AV.mine!==null)f=`<p class="sub av-why">Seuls les clients qui ont reçu ce produit peuvent laisser un avis.</p>`;
+ const rows=l.slice(0,AV.all===p.id?100:5).map(a=>`<li class="av-r"><div class="av-rh"><b>${esc(a.pseudo||'Client')}</b>${avStars(+a.note,'sm')}<small>${new Date(a.created_at).toLocaleDateString('fr-FR')}</small></div>${a.texte?`<p>${esc(a.texte)}</p>`:''}${me&&a.id===me.id?`<button type="button" class="chip" data-avedit="${p.id}">✏️ Modifier</button><button type="button" class="chip" data-avdel="${a.id}">🗑️ Supprimer</button>`:SHP.admin?`<button type="button" class="chip" data-avdel="${a.id}">🗑️ Supprimer</button>`:''}</li>`).join('');
+ return `<section class="av"><h4 class="shx-h">Avis clients</h4>${s?`<div class="av-sum">${avStars(s.m)}<b>${avM(s.m)}</b><span class="sub">sur 5 · ${s.n} avis</span></div>`:'<p class="sub">Pas encore d’avis sur ce produit.</p>'}${f}${rows?`<ul class="av-l">${rows}</ul>`:''}${l.length>5&&AV.all!==p.id?`<button type="button" class="chip" data-avall="${p.id}">Voir les ${l.length} avis</button>`:''}</section>`}
+async function avSend(pid){const n=AV.note||((avOf(pid).find(a=>SBS&&a.user_id===SBS.uid)||{}).note)||0;if(!n||!SBS)return;
+ const t=(document.getElementById('av-t')||{}).value||'';AV.send=1;shDraw(1);
+ try{await shApi('/rest/v1/shop_avis?on_conflict=product_id,user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({product_id:+pid,user_id:SBS.uid,pseudo:(SBS.pseudo||'Client').slice(0,40),note:n,texte:t.trim().slice(0,500)})});
+  AV.note=0;AV.txt='';AV.edit=0;toast('Merci pour ton avis ✓')}catch(e){toast(e&&e.status===403||/row-level/i.test(e&&e.message||'')?'Seuls les clients qui ont reçu ce produit peuvent laisser un avis':shErr(e))}
+ AV.send=0;await avLoad(true)}
+async function avDel(id){try{await shApi('/rest/v1/shop_avis?id=eq.'+(+id),{method:'DELETE',headers:{Prefer:'return=minimal'}});toast('Avis supprimé')}catch(e){toast(shErr(e))}AV.edit=0;await avLoad(true)}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-avn],[data-avsend],[data-avedit],[data-avdel],[data-avall]');if(!b)return;e.stopPropagation();e.preventDefault();const d=b.dataset;
+ const ta=document.getElementById('av-t');if(ta)AV.txt=ta.value;
+ if(d.avn){AV.note=+d.avn;shDraw(1)}else if(d.avsend)avSend(d.avsend);else if(d.avedit){AV.edit=+d.avedit;AV.note=0;AV.txt='';shDraw(1)}else if(d.avdel)avDel(d.avdel);else if(d.avall){AV.all=+d.avall;shDraw(1)}},true);
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='av-t')AV.txt=e.target.value});
+{const v0=shProdView;shProdView=function(){const h=v0.apply(this,arguments),p=shProd(SHP.cur);if(!p||SHP.v!=='prod')return h;let a='';try{a=avSec(p)}catch(e){}if(!a)return h;
+  const k=h.indexOf('<h4 class="shx-h">Ça va bien avec');return k>=0?h.slice(0,k)+a+h.slice(k):h+a}}
+{const c0=shCard;shCard=function(p){const h=c0.apply(this,arguments);const s=AV.L&&!AV.off?avSum(p.id):null;if(!s)return h;return h.replace(`<span class="shx-ct">${esc(p.titre)}</span>`,`<span class="shx-ct">${esc(p.titre)}</span><span class="av-mini">${avStars(s.m,'sm')}<small>${avM(s.m)} (${s.n})</small></span>`)}}
+{const l0=shLoad;shLoad=async function(){const r=await l0.apply(this,arguments);if(AV.L===null&&!AV.off)avLoad();return r}}
+{const o0=sbLogout;sbLogout=async function(){const r=await o0.apply(this,arguments);AV.mine=null;return r}}
 /* ===== 100 · Accueil : « le 100e membre gagne une protection display » ===== */
 const GIFT_N=100;
 function hmGift(){let m=ONL.mem||0;if(!m){try{m=parseInt(localStorage.getItem('fb_mem'),10)||0}catch(e){}}
@@ -8221,7 +8279,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 101';
+const BUILD='15 nov. 2026 · 102';
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -11023,6 +11081,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:102,d:'2026-11-15',it:[['n','⭐','Avis clients dans la Boutique','Quand tu as reçu un produit, tu peux lui donner une note de 1 à 5 étoiles et un commentaire. La note moyenne s’affiche sur chaque produit.','shop'],['a','🔎','Mieux trouvé sur Google','Le site a un meilleur titre, une description et un aperçu quand on partage son lien.','autres']]},
  {v:101,d:'2026-11-15',it:[['a','🎁','Tirage au sort à 100 membres','À 100 membres, un tirage au sort parmi tous les membres fait gagner une protection imprimée en 3D au choix.','home']]},
  {v:100,d:'2026-11-15',it:[['n','🎁','Tirage au sort à 100 membres','Sur l’accueil, au-dessus de la valeur de ta collection : le compteur des membres inscrits. À 100 membres, un tirage au sort parmi les membres fait gagner une protection imprimée en 3D au choix. Invite tes amis !','home'],['n','🛡️','Protège ton display','Dans l’onglet Scellés d’une série, un encart te montre la protection display de la Boutique, avec son prix. Un appui ouvre sa fiche.','shop']]},
  {v:99,d:'2026-11-15',it:[['n','📤','Partager une série','Dans l’onglet Collection, le bouton « Partager cette série » crée une belle image de ta progression (pourcentage, cartes manquantes et tes plus belles cartes) à poster sur TikTok, Insta ou Discord.','coll'],['n','🔁','Qui a mes cartes ?','Dans Amis, la nouvelle tuile « Qui a mes cartes ? » cherche parmi tous les profils publics qui a en double les cartes qui te manquent, et qui cherche tes doublons. Touche un joueur pour préparer l’échange.','comm']]},

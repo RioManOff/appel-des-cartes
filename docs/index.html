@@ -7710,6 +7710,8 @@ function hmFan(H){const n=H.l.length,dl=LAST.vk!==viewKey()?' hmdl':'';
   return `<div class="hmfan${dl}">${[-1,0,1].map((i,k)=>`<div class="hmc" style="--i:${i};--k:${k};z-index:${10-Math.abs(i)}"><div class="hmph">＋</div></div>`).join('')}</div><p class="sub hmcap">${cap}</p>`}
  const out=Array(n);let L=Math.floor((n-1)/2),R=L;H.l.forEach((c,k)=>{const s=k===0?L:k%2?++R:--L;out[s]={c,k}});
  return `<div class="hmfan${dl}">${out.map((o,s)=>`<button class="hmc" ${o.c.ms?'data-hms2':'data-zoom'}="${o.c.id}" aria-label="Agrandir ${esc(o.c.name||o.c.id)}" style="--i:${s-(n-1)/2};--k:${o.k};z-index:${20-o.k}">${o.c.ms?msArt(o.c.arr):art(o.c)}</button>`).join('')}</div>`}
+/* « Mes ventes » n'apparaît qu'à ceux qui ont noté une vente ou une dépense */
+function hmMs(){try{return !!(X.sales.length||spendAll().length||(typeof BQ!=='undefined'&&BQ&&BQ.admin))}catch(e){return true}}
 /* argent du mois + 6 derniers mois */
 function hmMoney(){const sp=spendAll();try{bqAuto()}catch(e){}
  if(!X.sales.length&&!sp.length)return `<div class="panel hmm"><div class="sub">Aucune vente ni dépense notée pour le moment. Ton résultat de gestion (ventes moins coût des produits vendus et frais) s’affichera ici.</div>${BQ&&BQ.admin?bqHome():''}<button class="btn" style="margin-top:12px" data-go="trade" data-tvf="sale">💶 Enregistrer une vente</button></div>`;
@@ -7757,7 +7759,7 @@ function homeV(){const tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0
  +`<div class="hmhrow" style="justify-content:flex-end"><button class="chip" data-share>📤 Partager ma collection</button></div>`
  +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
  +dbHomeCard()
- +`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney()
+ +(hmMs()?`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney():(typeof AD!=='undefined'&&AD.d?adCard():''))
  +hmNews()
  +`<div class="hmsoc"><h2 class="hmh" style="margin-top:0">Retrouve RioMan0ff</h2><div class="hmlinks"><a class="hml" href="https://www.whatnot.com/user/rioman0ff" target="_blank" rel="noopener noreferrer" aria-label="Profil Whatnot de RioMan0ff (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.wn}</span><span><b>Whatnot</b><small>RioMan0ff</small></span></a><a class="hml" href="https://www.instagram.com/rioman___/" target="_blank" rel="noopener noreferrer" aria-label="Profil Instagram rioman___ (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.ig}</span><span><b>Instagram</b><small>rioman___</small></span></a><a class="hml" href="https://www.tiktok.com/@riomanoff0" target="_blank" rel="noopener noreferrer" aria-label="Profil TikTok de riomanoff0 (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.tt}</span><span><b>TikTok</b><small>riomanoff0</small></span></a><a class="hml" href="${DISC}" target="_blank" rel="noopener noreferrer" aria-label="Discord : une idée ou un bug ? (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.dc}</span><span><b>Discord</b><small>Idée ou bug ?</small></span></a></div></div>`}
 const dayDiff=d=>Math.round((new Date(d+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5);
@@ -8273,7 +8275,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 108';
+const BUILD='15 nov. 2026 · 109';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -8862,7 +8864,7 @@ function cxCards(x,s){
  for(const c of base){const o=x.own(c);if(o)cnt.y++;else cnt.n++;if(o>1)cnt.d++}
  let l=x.F.own?base.filter(c=>cxPass(x,c)):base;l=cxSort(x,l);CXL=l.map(c=>c.id);
  const key=[x.ed,x.id,x.F.own,x.F.ver,x.F.rar,x.F.typ,x.F.fx,x.q,CSK,CSD,CXV].join('|');if(key!==CXK){CXK=key;CXN=216}
- const nf=cxNF(x),ph='Nom ou numéro';
+ const nf=cxNF(x),ph='Nom ou n°';
  const hud=`<i class="cx-anchor" aria-hidden="true"></i><div class="cx-hud" role="search"><label class="cx-s">${CXIC.search}<input id="cxq" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${ph}" value="${esc(x.q)}" aria-label="Chercher une carte">${x.q?`<button type="button" class="cx-sx" data-cxclr aria-label="Effacer la recherche">${CXIC.x}</button>`:''}</label>`
   +`<button type="button" class="cx-ib${CXQ?' on':''}" data-cxquick aria-pressed="${CXQ}" aria-label="Ajout rapide : chaque carte touchée est ajoutée">${CXIC.bolt}<small>Rapide</small></button>`
   +`<button type="button" class="cx-ib" data-cxfilt aria-haspopup="dialog" aria-label="Filtres et affichage${nf?' : '+nf+' filtre'+cxS(nf,'')+' actif'+cxS(nf,''):''}">${CXIC.filt}<small>Filtres</small>${nf?`<i>${nf}</i>`:''}</button>`
@@ -9632,7 +9634,9 @@ function tourKey(e){if(TOUR.k<0)return;if(e.key==='Escape')tourEnd();else if(e.k
 function tourEnd(){TOUR.k=-1;const w=document.getElementById('tour');if(w)w.remove();removeEventListener('resize',tourPlace);document.removeEventListener('keydown',tourKey);
  S.tut=null;try{localStorage.setItem('fb_help','1')}catch(e){}S.tab='home';try{render()}catch(e){}window.scrollTo(0,0)}
 /* l'ancien tutoriel (fiches les unes après les autres) lance maintenant la visite */
-function tutSheet(){if(S.tut!==null&&S.tut!==undefined&&TOUR.k<0){S.tut=null;setTimeout(()=>tourGo(0),60)}return ''}
+function tutSheet(){if(S.tut!==null&&S.tut!==undefined&&TOUR.k<0){S.tut=null;
+ {const i=TOUR_ST.findIndex(x=>x.h==='Mes ventes');if(i>=0&&!hmMs())TOUR_ST.splice(i,1)}
+ let n=0;const go=()=>{if(TOUR.k>=0)return;if(document.getElementById('splash')&&++n<60){setTimeout(go,250);return}setTimeout(()=>tourGo(0),350)};setTimeout(go,60)}return ''}
 /* ===== TOUR:END ===== */
 /* ===== BQ : ventes de la Boutique dans le carnet (gérant seul) — commandes payées / expédiées / terminées, coût privé par produit (X.shc) ===== */
 var BQ={t:0,busy:0,admin:false,orders:[],prods:[],err:''};
@@ -11160,6 +11164,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:109,d:'2026-11-15',it:[['a','🏠','Accueil plus clair','« Mes ventes » n’apparaît plus sur l’Accueil tant que tu n’as noté aucune vente : touche la tuile « Ventes » pour commencer. La recherche de la collection est aussi plus lisible.','home']]},
  {v:108,d:'2026-11-15',it:[['a','⚡','Appli plus rapide','L’appli ne retélécharge plus tout à chaque ouverture : seulement ce qui a changé. La page est aussi plus légère, elle s’ouvre plus vite, surtout en 4G.','home']]},
  {v:107,d:'2026-11-15',it:[['a','🦸','Couvertures Super Dragon Ball Heroes','Les 7 collections Super Dragon Ball Heroes ont maintenant une belle carte en couverture au lieu de « CARTES ».','coll'],['a','🔢','Hors-série du Grand Combat','Les 13 cartes hors-série du Grand Combat ont leur vrai nom : « Carte Flash » ou « Hors-série », avec la Part d’où elles viennent.','coll']]},
  {v:106,d:'2026-11-15',it:[['n','⚡','Energy markers','Tous les energy markers de Fusion World (E-01 à E-202, E01 à E03, versions or et alternatives) ont leur propre série « EM Energy markers », en japonais et en anglais, avec leurs photos officielles. Ils étaient cachés dans PROMO : ce que tu avais déjà coché est gardé.','serie'],['a','🔢','Numéros du Super Battle Premium Set','Les cartes du Super Battle Premium Set (Binder Box) ont leurs vrais numéros, comme les Super Battle.','coll']]},
@@ -11403,7 +11408,7 @@ const MJF=[
 
 /* ---------- état ---------- */
 const MJ={st:'',srv:0,t:0,busy:false,q:'',tab:'n',last:0,just:0,tries:0,op:null};
-const lastSeen=()=>{const s=lsG(K_SEEN),m=s&&/(\d+)\s*$/.exec(s),n=m?+m[1]:0;return n>0?Math.min(n,VER):Math.max(0,VER-1)};
+const lastSeen=()=>{const s=lsG(K_SEEN),m=s&&/(\d+)\s*$/.exec(s),n=m?+m[1]:0;if(n>0)return Math.min(n,VER);lsS(K_SEEN,String(VER));return VER};
 const fresh=l=>MJV.reduce((a,x)=>a+(x.v>l&&x.v<=VER?x.it.length:0),0);
 const busy=()=>{try{return !!(document.getElementById('splash')||document.querySelector('.sheet,#dbs,div.cs,.aff-sh')||(typeof S!=='undefined'&&S.op))}catch(e){return false}};
 

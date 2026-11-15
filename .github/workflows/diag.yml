@@ -5,32 +5,38 @@ permissions:
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - run: |
+          pip install -q pillow
           python3 - <<'PY'
-          import re,json,time,http.cookiejar,urllib.request
+          import re,json,time,base64,io,http.cookiejar,urllib.request
+          from PIL import Image
           cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
           B='http://www.dbzcollection.fr/2v2/'
-          def get(u):
+          def raw(u):
             for k in range(3):
-              try:return op.open(B+u,timeout=60).read().decode('latin-1')
+              try:return op.open(B+u,timeout=60).read()
               except Exception as e:time.sleep(3)
-            return ''
+            return b''
+          get=lambda u:raw(u).decode('latin-1')
           get('cartes.php?idc=99')
-          CARD=r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>'
-          R={}
-          for idc in [292]:
-            t=get('cartes.php?idc=%d'%idc);sets=[]
-            for m in re.finditer(r'href="cartes\.php\?idc=%d&(?:amp;)?ids=(\d+)"><img id="([^"]+)"'%idc,t):
-              if m.group(1) not in sets:sets.append(m.group(1))
-            for ids in sets:
-              out=[];p=1
-              while True:
-                tt=get('cartes.php?idc=%d&ids=%s'%(idc,ids)+('&p=%d'%p if p>1 else ''))
-                out+=[[m.group(3).strip(),m.group(2)] for m in re.finditer(CARD,tt)]
-                if ('ids=%s&p=%d"'%(ids,p+1)) in tt or ('ids=%s&amp;p=%d"'%(ids,p+1)) in tt:p+=1
-                else:break
-              R['D'+ids]=out
-          print('XXJSON'+json.dumps(R,ensure_ascii=False))
+          CARD=r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>.*?afficher_detail\(\'\d+\',\'([^\']+)\'\)'
+          t=get('cartes.php?idc=53');sets=[]
+          for m in re.finditer(r'href="cartes\.php\?idc=53&(?:amp;)?ids=(\d+)"><img id="([^"]+)"',t):
+            if m.group(1) not in [x[0] for x in sets]:sets.append((m.group(1),m.group(2)))
+          print('XXSETS',sets)
+          out=[]
+          for ids,nm in sets:
+            if re.match(r'Part \d',nm):continue
+            tt=get('cartes.php?idc=53&ids=%s'%ids)
+            for m in re.finditer(CARD,tt,re.S):
+              b=raw('cartes/%s_carte.jpg'%m.group(4))
+              try:
+                im=Image.open(io.BytesIO(b)).convert('L');w,h=im.size
+                if w>h:im=im.rotate(90,expand=True)
+                im=im.resize((16,24));th=list(im.getdata())
+              except Exception:th=[]
+              out.append([ids,nm,m.group(3).strip(),m.group(2),th])
+          print('XXJSON'+json.dumps(out,ensure_ascii=False))
           PY

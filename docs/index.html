@@ -3249,6 +3249,20 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .bq-c i{font-style:normal;color:var(--mu);margin-left:-6px}
 .bq-ol{margin:10px 0 0;font-size:13.5px;color:var(--mu)}.bq-ol b{color:var(--tx)}
 .tv-tabs [data-tvt="q"]{grid-column:1/-1}
+/* ===== TOUR ===== */
+#tour{position:fixed;inset:0;z-index:300}
+.tour-hole{position:fixed;border-radius:14px;box-shadow:0 0 0 200vmax rgba(0,0,0,.72),0 0 0 3px var(--gold);transition:left .3s,top .3s,width .3s,height .3s;pointer-events:none}
+#tour.c .tour-hole{box-shadow:0 0 0 200vmax rgba(0,0,0,.72)}
+.tour-tip{position:fixed;padding:16px 16px 14px;border-radius:18px;background:var(--sf);color:var(--tx);border:1px solid var(--gold);box-shadow:0 18px 40px -12px #000;transition:left .3s,top .3s;animation:tourin .25s ease-out}
+@keyframes tourin{from{opacity:0;transform:translateY(6px)}}
+.tour-ar{position:absolute;width:14px;height:14px;margin-left:-7px;background:var(--sf);border:1px solid var(--gold);transform:rotate(45deg)}
+.tour-ar.up{top:-8px;border-right:0;border-bottom:0}.tour-ar.down{bottom:-8px;border-left:0;border-top:0}
+.tour-h{display:flex;align-items:center;gap:8px}.tour-h span{font-size:24px;line-height:1}.tour-h b{flex:1;font:800 22px/1.05 'Big Shoulders Display',Barlow,sans-serif}.tour-h small{color:var(--mu);font-weight:600}
+.tour-tip p{margin:8px 0 12px;font-size:15px;line-height:1.45;color:var(--tx)}
+.tour-dots{display:flex;gap:3px;margin-bottom:12px}.tour-dots i{flex:1;height:4px;border-radius:2px;background:var(--ln)}.tour-dots i.on{background:var(--gold)}
+.tour-b{display:flex;gap:8px;align-items:center}.tour-b .btn{flex:1;width:auto;margin:0!important;min-height:44px}
+.tour-x{border:0;background:none;color:var(--mu);font:600 14px Barlow,sans-serif;padding:10px 6px;text-decoration:underline;text-underline-offset:3px}
+@media(prefers-reduced-motion:reduce){.tour-hole,.tour-tip{transition:none;animation:none}}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -8246,7 +8260,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 104';
+const BUILD='15 nov. 2026 · 105';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9564,6 +9578,49 @@ async function sh3dPh(){const L=sh3dPhTodo();if(!L.length||SHP.busy)return;SHP.b
   catch(e){toast(shErr(e))}
   SHP.busy=false;await shLoad(true)}
 /* ===== SHOP-3D:END ===== */
+/* ===== TOUR : visite guidée de l'appli, avec une bulle qui montre chaque onglet pour de vrai ===== */
+const TOUR_ST=[
+ {t:'',e:'👋',h:'Bienvenue !',p:'Je te fais visiter l’appli en 1 minute : chaque bulle te montre un endroit et ce qu’il fait. Touche « Suivant ».'},
+ {t:'home',s:'#nav [data-go="home"]',e:'🏠',h:'Accueil',p:'Ton résumé du jour : les nouveautés, le concours, tes ventes, les prochaines sorties et tes amis.'},
+ {t:'home',s:()=>[...document.querySelectorAll('#app h2.hmh')].find(x=>/Mes ventes/.test(x.textContent)),e:'💶',h:'Mes ventes',p:'Le résultat de ton carnet de ventes : ce que tu as gagné ou perdu. Touche « Ouvrir le carnet » pour noter une vente.'},
+ {t:'coll',s:'#nav [data-go="coll"]',e:'🗂️',h:'Collection',p:'Toutes tes cartes, série par série : Fusion World, Masters et les anciennes collections.'},
+ {t:'coll',s:'.cx-ed',e:'🌍',h:'L’édition',p:'Choisis l’édition de tes cartes : japonaise, française ou anglaise. Chacune a sa propre collection.'},
+ {t:'coll',s:'.cx-hero',e:'📚',h:'La série',p:'Touche ici pour choisir une autre série, ou les flèches ‹ › pour passer à la suivante. La barre montre combien tu en as.'},
+ {t:'coll',s:'.cx-tabs',e:'📦',h:'Cartes et scellés',p:'« Cartes » pour tes cartes, « Scellés » pour tes boosters, displays et cases, avec leur prix.'},
+ {t:'coll',s:'.cx-hud',e:'🔎',h:'Chercher et trier',p:'Cherche une carte par son nom ou son numéro. ⚡ Rapide ajoute chaque carte touchée. Filtres et Trier pour t’y retrouver.'},
+ {t:'coll',s:'.cx-g .cx-t',e:'🃏',h:'Une carte',p:'Touche + pour l’ajouter, touche la carte pour sa fiche : prix Cardmarket, favori, à échanger, vendre…'},
+ {t:'luck',s:'#nav [data-go="luck"]',e:'🎲',h:'Boosters',p:'Ouvre des boosters, displays et cases pour de faux, sans toucher à ta vraie collection. Un booster par jour, un display par semaine, une case par mois.'},
+ {t:'home',s:'#nav .mid',e:'＋',h:'Le bouton +',p:'Tout le reste est ici : ajouter des cartes, classeurs, recherchées, budget, ventes, échanges, alertes de prix, amis…'},
+ {t:'home',s:'#nav [data-affshop]',e:'🛒',h:'Boutique',p:'Des accessoires imprimés en 3D (protections, présentoirs) à commander en un clic, et une sélection Amazon.'},
+ {t:'stats',s:'#nav [data-go="stats"]',e:'📊',h:'Stats',p:'Ton niveau de puissance, la valeur de ta collection et tes séries les plus avancées.'},
+ {t:'home',s:'.cg-fab',e:'💬',h:'Le chat',p:'Discute avec toute la communauté dans le chat général, ou en privé avec un membre.'},
+ {t:'set',s:'#nav [data-go="set"]',e:'⚙️',h:'Réglages',p:'Ton compte (ta collection est sauvegardée dedans), le thème, la couleur, les sons, les notifications… et cette visite si tu veux la revoir.'},
+ {t:'',e:'🚀',h:'C’est parti !',p:'Tu peux revoir cette visite quand tu veux dans Réglages → Tutoriel.'}
+];
+const TOUR={k:-1};
+function tourEl(st){try{return typeof st.s==='function'?st.s():st.s?document.querySelector(st.s):null}catch(e){return null}}
+function tourGo(k){const n=TOUR_ST.length;if(k<0)k=0;if(k>=n)return tourEnd();TOUR.k=k;const st=TOUR_ST[k];
+ if(st.t&&S.tab!==st.t){S.tab=st.t;S.menu=false;try{render()}catch(e){}window.scrollTo(0,0)}
+ let w=document.getElementById('tour');if(!w){w=document.createElement('div');w.id='tour';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');w.setAttribute('aria-label','Visite guidée');document.body.appendChild(w);
+  w.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();if(b.dataset.tg==='n')tourGo(TOUR.k+1);else if(b.dataset.tg==='p')tourGo(TOUR.k-1);else tourEnd()});
+  addEventListener('resize',tourPlace);document.addEventListener('keydown',tourKey)}
+ const last=k===n-1;
+ w.innerHTML=`<div class="tour-hole"></div><div class="tour-tip"><i class="tour-ar"></i><div class="tour-h"><span aria-hidden="true">${st.e}</span><b>${st.h}</b><small>${k+1} / ${n}</small></div><p>${st.p}</p><div class="tour-dots" aria-hidden="true">${TOUR_ST.map((_,i)=>`<i class="${i<=k?'on':''}"></i>`).join('')}</div><div class="tour-b">${last?'':'<button type="button" class="tour-x" data-tg="x">Passer</button>'}${k?'<button type="button" class="btn alt" data-tg="p">Retour</button>':''}<button type="button" class="btn" data-tg="n">${last?'Terminer':'Suivant'}</button></div></div>`;
+ const el=tourEl(st);if(el){const r=el.getBoundingClientRect();if(r.top<70||r.bottom>innerHeight-100)el.scrollIntoView({block:'center'})}
+ requestAnimationFrame(()=>{tourPlace();const b=w.querySelector('[data-tg="n"]');if(b)try{b.focus({preventScroll:true})}catch(e){}})}
+function tourPlace(){const w=document.getElementById('tour');if(!w||TOUR.k<0)return;const st=TOUR_ST[TOUR.k],el=tourEl(st),h=w.querySelector('.tour-hole'),t=w.querySelector('.tour-tip'),a=w.querySelector('.tour-ar');
+ const W=innerWidth,H=innerHeight,tw=Math.min(340,W-24);t.style.width=tw+'px';
+ if(!el){h.style.cssText=`left:${W/2}px;top:${H/2}px;width:0;height:0`;t.style.left=(W-tw)/2+'px';t.style.top=Math.max(20,(H-t.offsetHeight)/2)+'px';a.style.display='none';w.classList.add('c');return}
+ w.classList.remove('c');const r=el.getBoundingClientRect(),p=6,x=Math.max(4,r.left-p),y=Math.max(4,r.top-p),ww=Math.min(W-8,r.width+2*p),hh=r.height+2*p;
+ h.style.cssText=`left:${x}px;top:${y}px;width:${ww}px;height:${hh}px`;
+ const th=t.offsetHeight,below=y+hh+14+th<H-8||y<th+30,cx=x+ww/2,left=Math.max(12,Math.min(W-tw-12,cx-tw/2));
+ t.style.left=left+'px';t.style.top=(below?y+hh+14:y-14-th)+'px';a.style.display='';a.className='tour-ar '+(below?'up':'down');a.style.left=Math.max(16,Math.min(tw-16,cx-left))+'px'}
+function tourKey(e){if(TOUR.k<0)return;if(e.key==='Escape')tourEnd();else if(e.key==='ArrowRight')tourGo(TOUR.k+1);else if(e.key==='ArrowLeft')tourGo(TOUR.k-1)}
+function tourEnd(){TOUR.k=-1;const w=document.getElementById('tour');if(w)w.remove();removeEventListener('resize',tourPlace);document.removeEventListener('keydown',tourKey);
+ S.tut=null;try{localStorage.setItem('fb_help','1')}catch(e){}S.tab='home';try{render()}catch(e){}window.scrollTo(0,0)}
+/* l'ancien tutoriel (fiches les unes après les autres) lance maintenant la visite */
+function tutSheet(){if(S.tut!==null&&S.tut!==undefined&&TOUR.k<0){S.tut=null;setTimeout(()=>tourGo(0),60)}return ''}
+/* ===== TOUR:END ===== */
 /* ===== BQ : ventes de la Boutique dans le carnet (gérant seul) — commandes payées / expédiées / terminées, coût privé par produit (X.shc) ===== */
 var BQ={t:0,busy:0,admin:false,orders:[],prods:[],err:''};
 const BQ_SOLD=['payée','envoyée','terminée'],BQ_WAIT=['nouvelle','acceptée'];
@@ -11049,6 +11106,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:105,d:'2026-11-15',it:[['a','👋','Nouvelle visite guidée','La visite de l’appli te montre maintenant chaque onglet pour de vrai, avec une petite bulle qui explique à quoi il sert : Accueil, Collection, Boosters, le bouton +, Boutique, Stats, le chat et Réglages.','tut']]},
  {v:104,d:'2026-11-15',it:[['a','🆕','Mises à jour plus simples','Le menu des mises à jour est plus léger : les nouveautés sont rangées par jour, sans numéros de version. Touche une nouveauté pour aller la voir.','']]},
  {v:102,d:'2026-11-15',it:[['a','🔎','Mieux trouvé sur Google','Le site a un meilleur titre, une description et un aperçu quand on partage son lien.','autres']]},
  {v:101,d:'2026-11-15',it:[['a','🎁','Tirage au sort à 100 membres','À 100 membres, un tirage au sort parmi tous les membres fait gagner une protection imprimée en 3D au choix.','home']]},

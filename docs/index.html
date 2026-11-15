@@ -962,6 +962,20 @@ a.set{color:var(--tx);text-decoration:none}
 .sad{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:4px 0 12px;padding:10px;border-radius:16px;border:1px solid rgba(255,178,58,.45);background:linear-gradient(135deg,rgba(255,178,58,.14),rgba(255,255,255,.02));color:var(--tx);font:inherit}
 .sad img,.sad-e{flex:none;width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--sf);display:grid;place-items:center;font-size:30px}
 .sad-t{display:grid;gap:2px;min-width:0;flex:1}.sad-t b{font-size:15px}.sad-t small{color:var(--mu);font-size:12.5px}.sad-t small b{color:#FFB23A;font-size:12.5px}.sad-g{flex:none;font-weight:700;color:#FFB23A}
+.mj-top h2{margin:2px auto 0 0!important}
+.mj-hero{display:flex!important;align-items:center;gap:12px;padding:12px 14px!important;margin:12px 0 4px!important;border-radius:14px!important;border:1px solid var(--ln)!important;background:var(--sf)!important;box-shadow:none!important;min-height:0!important}
+.mj-hero::before,.mj-hero::after{display:none!important}.mj-hr{flex:1;min-width:0}.mj-hn{margin:2px 0 0!important;font-size:13px;color:var(--mu)}.mj-hn b{color:var(--tx)}.mj-st b{font-size:15px}
+.mj-day{margin:18px 0 0!important;padding:0!important}.mj-day::before{display:none!important}
+.mj-dh{display:flex!important;align-items:center;justify-content:space-between;gap:8px;margin:0 0 6px!important;padding:0!important}
+.mj-dt{margin:0!important;font-size:17px!important;color:var(--tx)!important}
+.mj-cp{border:0!important;background:none!important;box-shadow:none!important;color:var(--mu)!important;font:inherit;font-size:13px!important;padding:6px 2px!important;text-decoration:underline}
+.mj-day .mj-it{list-style:none;margin:0;padding:0;border:1px solid var(--ln);border-radius:14px;background:var(--sf);overflow:hidden}
+.mj-day .mj-i{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;margin:0!important;border:0!important;border-top:1px solid var(--ln)!important;border-radius:0!important;background:none!important}
+.mj-day .mj-i:first-child{border-top:0!important}.mj-day .mj-i.has-go{cursor:pointer}.mj-day .mj-i.has-go:active{background:rgba(255,255,255,.04)!important}
+.mj-day .mj-ic{font-size:20px;line-height:1.3}.mj-day .mj-tx{flex:1;min-width:0}.mj-day .mj-tx b{font-size:14.5px;display:flex;align-items:center;gap:6px}
+.mj-day .mj-tx p{margin:3px 0 0;font-size:13px;color:var(--mu);line-height:1.4}.mj-day .mj-tx em{font-style:normal;color:var(--tx)}
+.mj-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#FFB23A;flex:none}
+.mj-ch{flex:none;align-self:center;font-size:22px;color:var(--mu)}
 .qmr{align-items:flex-start}.qmr .vnin{min-width:0}.qmr .ppcs{margin-top:6px}
 .ppno{margin:10px 2px 0}
 .ppst{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
@@ -8232,7 +8246,8 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 103';
+const BUILD='15 nov. 2026 · 104';
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
 /* ===== Suppression du compte (exigée par Google Play) : fonction Supabase supprimer_mon_compte (voir suppression_compte.sql) ===== */
@@ -8285,7 +8300,7 @@ const dat=sg('💾','Mes données','Elles restent sur ton appareil, sauf si tu t
 <div class="panel sxl" style="margin-top:12px">${lrow('data-go="trash"','🗑️','Corbeille',X.trash.length+' ›')}</div>`);
 /* aide */
 const own=cards.filter(c=>c.own>0).length,tot=cards.reduce((a,c)=>a+c.own,0),imgs=Object.keys(CARDIMG).filter(k=>!k.startsWith('BT')).length;
-const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-clog','🆕','Mises à jour','Version '+BUILD.split('·').pop().trim()+' ›')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
+const help=sg('🧭','Aide et infos','',`<div class="panel sxl">${lrow('data-tut','👋','Revoir le tutoriel')}${lrow('data-clog','🆕','Mises à jour','›')}${lrow('data-act="upd"','🔄','Mettre à jour l’appli','Recharger ›')}${discRow('idee','💡','Proposer une idée')}${discRow('bug','🐞','Signaler un bug')}</div>
 <div class="panel" style="margin-top:12px">${kv('Cartes différentes possédées',own+' / '+cards.length)}${kv('Exemplaires au total',tot)}${kv('Images de cartes',imgs+' / '+cards.length)}${kv('Version',BUILD)}</div>`);
 const sp=S.setp&&SETP[S.setp]?S.setp:'';
 const g=(a,ic,t,r)=>lrow('data-setp="'+a+'"',ic,t,(r?esc(r)+' ':'')+'›');
@@ -11034,6 +11049,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:104,d:'2026-11-15',it:[['a','🆕','Mises à jour plus simples','Le menu des mises à jour est plus léger : les nouveautés sont rangées par jour, sans numéros de version. Touche une nouveauté pour aller la voir.','']]},
  {v:102,d:'2026-11-15',it:[['a','🔎','Mieux trouvé sur Google','Le site a un meilleur titre, une description et un aperçu quand on partage son lien.','autres']]},
  {v:101,d:'2026-11-15',it:[['a','🎁','Tirage au sort à 100 membres','À 100 membres, un tirage au sort parmi tous les membres fait gagner une protection imprimée en 3D au choix.','home']]},
  {v:100,d:'2026-11-15',it:[['n','🎁','Tirage au sort à 100 membres','Sur l’accueil, au-dessus de la valeur de ta collection : le compteur des membres inscrits. À 100 membres, un tirage au sort parmi les membres fait gagner une protection imprimée en 3D au choix. Invite tes amis !','home'],['n','🛡️','Protège ton display','Dans l’onglet Scellés d’une série, un encart te montre la protection display de la Boutique, avec son prix. Un appui ouvre sa fiche.','shop']]},
@@ -11324,34 +11340,33 @@ const row=(ic,t,tx,k,tag,s)=>`<li class="mj-i" data-s="${E(N(s))}"><span class="
 function verT(v,last){const nw=v.v>last;
  return `<article class="mj-v${nw?' is-new':''}" aria-label="Version ${v.v}"><div class="mj-vh"><span class="mj-cap">V${v.v}</span>${nw?'<span class="mj-nt">Nouveau pour toi</span>':''}${v.by?`<span class="mj-by">💡 Idée de ${E(v.by)}</span>`:''}</div>`
   +`<ul class="mj-it">${v.it.map(x=>row(x[1],x[2],x[3],x[4],x[0],x[2]+' '+x[3]+' '+TG[x[0]]+' v'+v.v+' version '+v.v+(v.by?' '+v.by:''))).join('')}</ul></article>`}
-function dayT(d,vs,last){const nm=dayName(d),r=rel(d),n=vs.length;
- return `<section class="mj-day" aria-label="${E(cap(nm))}"><div class="mj-dh"><span class="mj-orb">${orb(Math.max(1,Math.min(7,n)))}</span><div class="mj-dw"><h3 class="mj-dt">${E(r?cap(r):cap(nm))}</h3><span class="mj-dd">${r?E(nm)+' · ':''}${n} version${n>1?'s':''}</span></div>`
-  +`<button type="button" class="mj-cp" data-mjcp="${d}" aria-label="Copier les nouveautés du ${E(nm)} pour Discord"><span>Copier</span></button></div><div class="mj-vs">${vs.map(v=>verT(v,last)).join('')}</div></section>`}
-function oldT(){return `<details class="mj-old"><summary><span class="mj-oi" aria-hidden="true">🗃️</span><span class="mj-ot"><b>Avant la version 24</b><small>${MJOLD.length} fonctions déjà là</small></span><span class="mj-oc" aria-hidden="true">›</span></summary>`
+function dayT(d,vs,last){const nm=dayName(d),r=rel(d),seen=new Set(),L=[];
+ vs.forEach(v=>v.it.forEach(x=>{const k=x[2];if(seen.has(k))return;seen.add(k);L.push({x,nw:v.v>last,by:v.by})}));
+ return `<section class="mj-day" aria-label="${E(cap(nm))}"><div class="mj-dh"><h3 class="mj-dt">${E(r?cap(r):cap(nm))}</h3><button type="button" class="mj-cp" data-mjcp="${d}" aria-label="Copier les nouveautés du ${E(nm)} pour Discord">Copier</button></div>`
+  +`<ul class="mj-it">${L.map(o=>{const x=o.x;return `<li class="mj-i${o.nw?' is-new':''}${x[4]?' has-go':''}" data-s="${E(N(x[2]+' '+x[3]+(o.by?' '+o.by:'')))}"${x[4]?` data-mjgo="${E(x[4])}" role="button" tabindex="0" aria-label="${E(x[2])} : voir"`:''}><span class="mj-ic" aria-hidden="true">${x[1]}</span><div class="mj-tx"><b>${E(x[2])}${o.nw?'<i class="mj-dot" aria-label="nouveau"></i>':''}</b><p>${E(x[3])}${o.by?` <em>💡 Idée de ${E(o.by)}</em>`:''}</p></div>${x[4]?'<span class="mj-ch" aria-hidden="true">›</span>':''}</li>`}).join('')}</ul></section>`}
+function oldT(){return `<details class="mj-old"><summary><span class="mj-oi" aria-hidden="true">🗃️</span><span class="mj-ot"><b>Plus anciennes</b><small>${MJOLD.length} fonctions déjà là</small></span><span class="mj-oc" aria-hidden="true">›</span></summary>`
  +`<ul class="mj-it">${MJOLD.map(x=>row(x[0],x[1],x[2],x[3],'',x[1]+' '+x[2])).join('')}</ul></details>`}
 function guideT(){return `<div class="mj-jump" role="navigation" aria-label="Thèmes">${MJF.map((g,i)=>`<button type="button" class="chip" data-mjj="${i}">${g[0]} ${E(g[1])}</button>`).join('')}</div>`
  +MJF.map((g,i)=>`<section class="mj-g" id="mj-g${i}"><h3 class="mj-gt"><span aria-hidden="true">${g[0]}</span> ${E(g[1])}</h3><ul class="mj-gl">${g[2].map(x=>row(x[0],x[1],x[2],x[3],'',x[1]+' '+x[2]+' '+g[1])).join('')}</ul></section>`).join('')}
 function stT(){const v=MJ.srv;
- if(MJ.just)return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Version ${VER} installée</b>`;
+ if(MJ.just)return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Appli mise à jour ✓</b>`;
  switch(MJ.st){
-  case 'new':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>La version ${v} est sortie</b>`;
-  case 'wait':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>La version ${v} arrive</b><small>${MJ.tries>1?'Elle met plus de temps que prévu : réessaie dans quelques minutes.':'Elle est en route : réessaie dans une minute.'}</small>`;
+  case 'new':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>Nouvelle mise à jour disponible</b>`;
+  case 'wait':return `<span class="mj-sd s-up" aria-hidden="true"></span><b>La mise à jour arrive</b><small>${MJ.tries>1?'Elle met plus de temps que prévu : réessaie dans quelques minutes.':'Elle est en route : réessaie dans une minute.'}</small>`;
   case 'inst':return `<span class="mj-sd s-chk" aria-hidden="true"></span><b>Installation…</b>`;
   case 'chk':return `<span class="mj-sd s-chk" aria-hidden="true"></span><b>Recherche d’une nouvelle version…</b>`;
   case 'ok':return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Tu as la dernière version</b>`;
   case 'off':return `<span class="mj-sd s-off" aria-hidden="true"></span><b>Hors connexion</b><small>Impossible de vérifier s’il y a une nouvelle version.</small>`;
   case 'err':return `<span class="mj-sd s-off" aria-hidden="true"></span><b>Vérification impossible</b><small>Réessaie dans un moment.</small>`}
- return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Version ${VER}</b>`}
+ return `<span class="mj-sd s-ok" aria-hidden="true"></span><b>Appli à jour</b>`}
 function actT(){if(MJ.just)return '';const v=MJ.srv;
- if(MJ.st==='new')return `<button type="button" class="btn mj-in" data-mjup><span>Installer la version ${v}</span></button>`;
+ if(MJ.st==='new')return `<button type="button" class="btn mj-in" data-mjup><span>Mettre à jour</span></button>`;
  if(MJ.st==='wait')return `<button type="button" class="btn alt mj-in" data-mjup><span>Réessayer</span></button>`;
  if(MJ.st==='off'||MJ.st==='err')return `<button type="button" class="chip mj-re" data-mjre>Vérifier</button>`;
  return ''}
 const pend=()=>!MJ.just&&(MJ.st==='new'||MJ.st==='wait'||MJ.st==='inst');
-function heroT(last,n){const top=MJV[0]&&MJV[0].v===VER?MJV[0]:null,r=top?rel(top.d):'',hd=pend()?' hidden':'';
- return `<div class="mj-hero" id="mj-hero"><div class="mj-hl"><span class="mj-vl">Version</span><span class="mj-num" id="mj-num"><span id="mj-n">${last<VER&&!RMx()?last:VER}</span></span></div>`
-  +`<div class="mj-hr"><div class="mj-st" id="mj-st" role="status" aria-live="polite">${stT()}</div>${top?`<p class="mj-hd" id="mj-hd"${hd}>Sortie ${r?E(r):'le '+E(dayName(top.d))}</p>`:''}`
-  +`<p class="mj-hn" id="mj-hn"${hd}>${n>0?`<b>${n} nouveauté${n>1?'s':''}</b> pour toi depuis la version ${last}`:'Tu as déjà vu toutes ses nouveautés.'}</p></div><div class="mj-ha" id="mj-ha">${actT()}</div></div>`}
+function heroT(last,n){const hd=pend()?' hidden':'';
+ return `<div class="mj-hero" id="mj-hero"><div class="mj-hr"><div class="mj-st" id="mj-st" role="status" aria-live="polite">${stT()}</div><p class="mj-hn" id="mj-hn"${hd}>${n>0?`<b>${n} nouveauté${n>1?'s':''}</b> pour toi`:'Tu as tout vu.'}</p></div><div class="mj-ha" id="mj-ha">${actT()}</div></div>`}
 function barT(n){const nf=MJF.reduce((a,g)=>a+g[2].length,0),tb=(k,id,lab,c)=>`<button type="button" role="tab" id="${id}" class="mj-tab" aria-selected="${MJ.tab===k}" aria-controls="mj-p${k==='n'?1:2}" data-mjtab="${k}"${MJ.tab===k?'':' tabindex="-1"'}><span>${lab}<i class="mj-c" data-d="${c}"${c?'':' hidden'}>${c}</i></span></button>`;
  return `<div class="mj-bar" id="mj-bar"><div class="mj-tabs" role="tablist" aria-label="Mises à jour">${tb('n','mj-t1','Nouveautés',n>0?n:'')}${tb('f','mj-t2','Toutes les fonctions',nf)}</div>`
   +`<label class="mj-q"><span class="mj-qi">${SRCH}</span><input type="search" id="mj-q" placeholder="Chercher : booster, prix, chat…" autocomplete="off" enterkeyhint="search" spellcheck="false" aria-label="Chercher dans les nouveautés et les fonctions"></label></div>`}
@@ -11369,8 +11384,7 @@ function open(){if(document.getElementById('mj'))return;
  document.documentElement.classList.add('mj-lock');
  lsS(K_SEEN,String(VER));mark();bnPaint();
  const x=document.querySelector('#mj .mj-x');if(x)try{x.focus({preventScroll:true})}catch(e){}
- if(last<VER)countUp(last,VER);
- if(Date.now()-MJ.t>60000)check(true)}
+  if(Date.now()-MJ.t>60000)check(true)}
 function close(){const o=document.getElementById('mj');if(!o)return;o.remove();document.documentElement.classList.remove('mj-lock');MJ.just=0;MJ.q='';bnPaint();
  const f=MJ.op;MJ.op=null;if(f&&f.isConnected&&f.focus)try{f.focus({preventScroll:true})}catch(e){}}
 function countUp(a,b){const el=document.getElementById('mj-n');if(!el)return;if(RMx()){el.textContent=b;return}
@@ -11387,7 +11401,7 @@ function jump(i){const s=document.getElementById('mj-g'+i),sc=document.getElemen
 function filter(){const o=document.getElementById('mj');if(!o)return;const raw=MJ.q.trim(),ws=N(raw).split(/\s+/).filter(Boolean),c={n:0,f:0};
  o.querySelectorAll('.mj-p [data-s]').forEach(li=>{const ok=!ws.length||ws.every(w=>li.dataset.s.indexOf(w)>=0);li.hidden=!ok;if(ok)c[li.closest('#mj-p2')?'f':'n']++});
  o.querySelectorAll('.mj-v').forEach(v=>{v.hidden=!v.querySelector('[data-s]:not([hidden])')});
- o.querySelectorAll('.mj-day').forEach(d=>{d.hidden=!d.querySelector('.mj-v:not([hidden])')});
+ o.querySelectorAll('.mj-day').forEach(d=>{d.hidden=!d.querySelector('[data-s]:not([hidden])')});
  o.querySelectorAll('.mj-g').forEach(g=>{g.hidden=!g.querySelector('[data-s]:not([hidden])')});
  const od=o.querySelector('.mj-old');if(od){const has=!!od.querySelector('[data-s]:not([hidden])');od.hidden=!has;if(ws.length&&has)od.open=true}
  const jp=o.querySelector('.mj-jump');if(jp)jp.hidden=!!ws.length;
@@ -11419,13 +11433,13 @@ async function check(force){if(MJ.busy)return;if(!/^https?:$/.test(location.prot
  else MJ.st=was==='new'?'new':st;
  setTimeout(clean,1500);paint();mark()}
 function paint(){const s=document.getElementById('mj-st'),a=document.getElementById('mj-ha'),p=pend();if(s)s.innerHTML=stT();if(a)a.innerHTML=actT();
- ['mj-hd','mj-hn'].forEach(id=>{const e=document.getElementById(id);if(e&&e.hidden!==p)e.hidden=p});bnPaint()}
+ ['mj-hn'].forEach(id=>{const e=document.getElementById(id);if(e&&e.hidden!==p)e.hidden=p});bnPaint()}
 function bnPaint(){let b=document.getElementById('mj-bn');
  const show=(MJ.st==='new'||MJ.st==='wait')&&MJ.srv>VER&&!document.getElementById('mj')&&ssG(K_BN)!==String(MJ.srv);
  if(!show){if(b)b.remove();return}
  const w=MJ.st==='wait',k=MJ.st+MJ.srv;
  if(!b){b=document.createElement('div');b.id='mj-bn';b.className='mj-bn';b.setAttribute('role','status');document.body.appendChild(b)}
- if(b.dataset.k!==k){b.dataset.k=k;b.innerHTML=`<span class="mj-bo" aria-hidden="true">${orb(1)}</span><span class="mj-bt"><b>${w?'La version '+MJ.srv+' arrive':'Version '+MJ.srv+' disponible'}</b><small>${w?'Elle est en route : réessaie dans une minute.':'Un appui pour avoir les nouveautés.'}</small></span>`
+ if(b.dataset.k!==k){b.dataset.k=k;b.innerHTML=`<span class="mj-bo" aria-hidden="true">${orb(1)}</span><span class="mj-bt"><b>${w?'La mise à jour arrive':'Nouvelle mise à jour'}</b><small>${w?'Elle est en route : réessaie dans une minute.':'Un appui pour avoir les nouveautés.'}</small></span>`
   +`<button type="button" class="mj-bu" data-mjup><span>${w?'Réessayer':'Mettre à jour'}</span></button><button type="button" class="mj-bx" data-mjbx aria-label="Plus tard">✕</button>`}}
 const wait=ms=>new Promise(z=>setTimeout(z,ms));
 async function install(){if(navigator.onLine===false){tst('Pas de connexion : mise à jour impossible');return}
@@ -11453,7 +11467,7 @@ if(/[?&]maj=/.test(location.search)){try{const u=new URL(location.href),from=u.h
  history.replaceState(history.state,'',to+u.hash);fixCache(from,new URL(to,location.href).href,2)}catch(e){}}
 {let tr=null;try{tr=JSON.parse(ssG(K_TRY)||'null')}catch(e){}
  if(tr&&Date.now()-tr.t<3e5){
-  if(VER>=tr.to){ssD(K_TRY);MJ.just=VER;MJ.st='ok';MJ.srv=VER;MJ.t=Date.now();tst('✓ Version '+VER+' installée');
+  if(VER>=tr.to){ssD(K_TRY);MJ.just=VER;MJ.st='ok';MJ.srv=VER;MJ.t=Date.now();tst('✓ Appli mise à jour');
    let n=0;const t=setInterval(()=>{if(++n>60||document.getElementById('mj')){clearInterval(t);return}if(!busy()){clearInterval(t);open()}},250)}
   else{MJ.st='wait';MJ.srv=tr.to;MJ.tries=tr.n||1;setTimeout(bnPaint,0)}}
  else if(tr)ssD(K_TRY)}
@@ -11464,7 +11478,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  const o=document.getElementById('mj');if(!o||!o.contains(t))return;
  if(t===o||t.closest('[data-mjx]')){e.preventDefault();e.stopPropagation();close();return}
  if((b=t.closest('[data-mjtab]'))){e.stopPropagation();tab(b.dataset.mjtab);return}
- if((b=t.closest('[data-mjgo]'))){e.stopPropagation();go(b.dataset.mjgo);return}
+ if(t.closest('[data-mjcp]')){}else if((b=t.closest('[data-mjgo]'))){e.stopPropagation();go(b.dataset.mjgo);return}
  if((b=t.closest('[data-mjcp]'))){e.stopPropagation();copyDay(b.dataset.mjcp);return}
  if((b=t.closest('[data-mjj]'))){e.stopPropagation();jump(+b.dataset.mjj);return}
  if(t.closest('[data-mjre]')){e.stopPropagation();check(true);return}

@@ -3,18 +3,29 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
+    permissions:
+      contents: write
     steps:
+      - run: pip install -q pillow
       - run: |
           python3 - <<'PY'
-          import json,urllib.request,html
-          B='https://downloads.s3.cardmarket.com/productCatalog/'
-          P=json.loads(urllib.request.urlopen(urllib.request.Request(B+'productList/products_singles_13.json',headers={'User-Agent':'x'}),timeout=120).read())['products']
-          G={g['idProduct']:g for g in json.loads(urllib.request.urlopen(urllib.request.Request(B+'priceGuide/price_guide_13.json',headers={'User-Agent':'x'}),timeout=120).read())['priceGuides']}
-          print('XXN',len(P))
-          for p in P:
-            n=html.unescape(p.get('name',''))
-            if 'Marker' in n or 'marker' in n or 'Shatterfoil' in n or ('God Rare' in n) or ('(BT7-131)' in n) or ('(BT18-147)' in n) or ('(BT25-14' in n):
-              g=G.get(p['idProduct'],{})
-              print('XXP',json.dumps([p['idProduct'],n,p.get('idExpansion'),g.get('trend'),g.get('avg30')],ensure_ascii=False))
+          import json,urllib.request,base64,io,os,concurrent.futures as cf
+          from PIL import Image
+          M=json.loads('''{"fw": {"FB02-141_ALT": 547749, "FB02-142_ALT": 547748, "FB02-143_ALT": 547750, "FB02-144_ALT": 547751, "FB03-141_ALT": 562370, "FB03-142_ALT": 562371, "FB03-143_ALT": 562374, "FB04-131_ALT": 593556, "FB04-132_ALT": 593557, "FB04-133_ALT": 593560, "FB05-121_ALT": 615532, "FB05-122_ALT": 615536, "FB05-123_ALT": 615538, "FB05-124_ALT": 615541, "FB05-125_ALT": 615542, "FB05-126_ALT": 615544, "FB05-127_ALT": 615548, "FB05-128_ALT": 615549, "FB05-129_ALT": 615550, "FB05-130_ALT": 615552, "FB05-131_ALT": 615553, "FB05-132_ALT": 615560, "FB05-133_ALT": 615562, "FB06-121_ALT": 629021, "FB06-122_ALT": 629022, "FB06-123_ALT": 629023, "FB07-123_ALT": 651069, "FB07-125_ALT": 651071, "FB08-123_ALT": 666776, "FB08-124_ALT": 666777, "FB08-125_ALT": 666778}, "ms": {"BT7-131-GDR": 672166, "BT18-147-GDR": 702607, "BT25-147-GDR": 557282, "BT25-148-GDR": 557281, "DB1-BT4-030-SF": 199372, "DB1-BT1-008-SF": 199368, "DB1-BT1-073-SF": 199379, "DB1-TB1-078-SF": 199381, "DB1-BT2-037-SF": 199373, "DB1-BT3-088-SF": 199380, "DB1-BT3-008-SF": 199366, "DB1-TB3-035-SF": 199377, "DB1-TB1-032-SF": 199371, "DB1-TB1-077-SF": 199384, "DB1-BT1-087-SF": 199383, "DB1-TB1-075-SF": 199382, "DB1-BT1-031-SF": 199374, "DB1-TB1-010-SF": 199367, "DB1-BT4-053-SF": 199375, "DB1-BT6-071-SF": 199376, "DB1-BT1-070-SF": 199378, "DB1-TB1-004-SF": 199369, "DB1-BT4-004-SF": 199370}}''')
+          def img(a):
+            k,pid,size=a
+            try:
+              b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+              im=Image.open(io.BytesIO(b)).convert('RGB')
+              if im.width>im.height:im=im.rotate(90,expand=True)
+              im=im.resize(size,Image.LANCZOS);x=io.BytesIO();im.save(x,'WEBP',quality=82,method=6)
+              return k,'data:image/webp;base64,'+base64.b64encode(x.getvalue()).decode()
+            except Exception as e:print('XXE',k,e);return k,None
+          jobs=[(k,v,(260,363)) for k,v in M['fw'].items()]+[(k,v,(400,560)) for k,v in M['ms'].items()]
+          with cf.ThreadPoolExecutor(8) as ex:R=dict(ex.map(img,jobs))
+          os.makedirs('pub',exist_ok=True)
+          json.dump({k:R[k] for k in M['fw'] if R.get(k)},open('pub/fw.json','w'));json.dump({k:R[k] for k in M['ms'] if R.get(k)},open('pub/ms.json','w'))
+          print('XXOK',sum(1 for v in R.values() if v),len(R))
           PY
+          cd pub && git init -q && git checkout -q -b tmp-img && git add . && git -c user.name=bot -c user.email=bot@x commit -qm em && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-img && echo XXPUSHED

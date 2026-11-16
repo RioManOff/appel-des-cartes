@@ -16,7 +16,7 @@ jobs:
           seen={}
           for q in ['Energy Marker','Energy Marker Gold-Stamped']:
             for fr in range(0,600,50):
-              body=json.dumps({"algorithm":"sales_synonym_v2","from":fr,"size":50,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{"sellerStatus":"Live","channelId":0},"range":{"quantity":{"gte":1}},"exclude":{"channelExclusion":0}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":False,"didYouMean":{}},"sort":{}}).encode()
+              body=json.dumps({"algorithm":"sales_synonym_v2","from":fr,"size":50,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{},"range":{},"exclude":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":False,"didYouMean":{}},"sort":{}}).encode()
               try:d=json.load(urllib.request.urlopen(urllib.request.Request('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',data=body,headers=H),timeout=30))
               except Exception as e:print('XXE',e);break
               res=d['results'][0]['results']

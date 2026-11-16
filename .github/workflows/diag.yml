@@ -3,43 +3,37 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     permissions:
       contents: write
     steps:
       - run: pip install -q pillow
       - run: |
-          curl -sL https://raw.githubusercontent.com/RioManOff/appel-des-cartes/diag-prix/msx-data.b64 -o data.b64; wc -c data.b64
+          git clone -q --depth 1 -b ms-photos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" mp
           python3 - <<'PY'
-          import json,gzip,base64,urllib.request,io,os,time,concurrent.futures as cf
+          import json,urllib.request,base64,io,re
           from PIL import Image
-          O=json.loads(gzip.decompress(base64.b64decode(''.join(l.strip() for l in open('data.b64')))))
-          def img(a):
-            cid,pid=a
-            for t in range(3):
-              try:
-                b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=40).read()
-                im=Image.open(io.BytesIO(b)).convert('RGB')
-                if im.width>im.height:im=im.rotate(90,expand=True)
-                im=im.resize((400,560),Image.LANCZOS);x=io.BytesIO();im.save(x,'WEBP',quality=80,method=4)
-                return cid,'data:image/webp;base64,'+base64.b64encode(x.getvalue()).decode()
-              except urllib.error.HTTPError as e:
-                if e.code==404:return cid,None
-                time.sleep(2)
-              except Exception:time.sleep(2)
-            return cid,None
-          os.makedirs('pub',exist_ok=True);ok=0;miss=[]
-          with cf.ThreadPoolExecutor(16) as ex:
-            for sid,L in O:
-              R=dict(ex.map(img,L))
-              ks=[c for c,_ in L]
-              for n in range(0,len(ks),100):
-                part={k:R[k] for k in ks[n:n+100] if R.get(k)}
-                fn='pub/msx-%s%s.json'%(sid,'' if n==0 else '-%d'%(n//100+1))
-                json.dump(part,open(fn,'w'))
-              ok+=sum(1 for v in R.values() if v);miss+=[k for k,v in R.items() if not v]
-              print('XXSET',sid,len(L),sum(1 for v in R.values() if v),flush=True)
-          json.dump(miss,open('pub/manquantes.json','w'))
-          print('XXTOTAL',ok,'manquantes',len(miss))
+          R=json.loads('''[["TB3-037", "TB3", 1], ["P-211", "AN5", 1], ["P-337", "AN5", 1], ["P-360_PR", "AN5", 1], ["P-398", "AN5", 1], ["SD14-001", "AN5", 1], ["EX09-003", "RP20", 1], ["EX10-003", "RP20", 1], ["P-075", "RP20", 1], ["P-092", "RP20", 1], ["P-144", "RP20", 1], ["P-250", "RP20", 1], ["XD2-009", "RP20", 1], ["P-333", "PROMO", 7], ["P-433", "PROMO", 8], ["SD19-004", "PROMO", 9], ["SD19-004_PROMO", "PROMO", 9], ["P-360_PR_PTOUR", "PTOUR", 8], ["P-434", "PTOUR", 9], ["P-434_PTOUR", "PTOUR", 9], ["P-435", "PTOUR", 9], ["P-435_PTOUR", "PTOUR", 9], ["P-453", "PTOUR", 10], ["P-453_PTOUR4", "PTOUR", 10], ["P-457", "PTOUR", 10], ["P-457_PTOUR4", "PTOUR", 10], ["P-536", "PTOUR", 11], ["P-538", "PTOUR", 11], ["SD2-004", "PTOUR", 13], ["SD2-004_PTOUR", "PTOUR", 13], ["SD2-004_PTOUR2", "PTOUR", 13], ["P-453_PJUGE2", "PJUGE", 3], ["SD17-005", "PJUGE", 3], ["SD17-005_PJUGE", "PJUGE", 3], ["SD12-001", "BT10E2", 2], ["SD12-003", "BT10E2", 2], ["SD12-004", "BT10E2", 2], ["SD12-005", "BT10E2", 2], ["SD13-001", "BT10E2", 2], ["SD13-002", "BT10E2", 2], ["SD13-002_BT10E2", "BT10E2", 2], ["SD13-003", "BT10E2", 2], ["SD13-004", "BT10E2", 2], ["SD13-005", "BT10E2", 2], ["SD14-001_BT10E2", "BT10E2", 2], ["SD14-002", "BT10E2", 2], ["SD14-002_BT10E2", "BT10E2", 2], ["SD14-003", "BT10E2", 2], ["SD14-004", "BT10E2", 2], ["SD13-02_VAR", "VAR", 1], ["SD14-02_VAR", "VAR", 1], ["SD21-01_VAR", "VAR", 2]]''')
+          def get(u):
+            try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+            except Exception:return None
+          done=0
+          for cid,sid,n in R:
+            b=re.sub(r'_.*$','',cid)
+            cands=[b]
+            m=re.match(r'^([A-Z]+)(\d*)-(\d+)$',b)
+            if m:
+              cands+=['%s%s-%s'%(m.group(1),m.group(2).zfill(2) if m.group(2) else '',m.group(3)),'%s%s-%s'%(m.group(1),m.group(2),m.group(3).zfill(3)),'%s%s-%s'%(m.group(1),m.group(2),str(int(m.group(3))).zfill(2))]
+            img=None
+            for c in dict.fromkeys(cands):
+              img=get('https://www.dbs-cardgame.com/images/cardlist/cardimg/%s.png'%c)
+              if img:break
+            if not img:print('XXNO',cid);continue
+            im=Image.open(io.BytesIO(img)).convert('RGB')
+            if im.width>im.height:im=im.rotate(90,expand=True)
+            im=im.resize((400,560),Image.LANCZOS);o=io.BytesIO();im.save(o,'WEBP',quality=80)
+            fn='mp/msx-%s%s.json'%(sid,'' if n==1 else '-%d'%n)
+            d=json.load(open(fn));d[cid]='data:image/webp;base64,'+base64.b64encode(o.getvalue()).decode();json.dump(d,open(fn,'w'));done+=1
+          print('XXDONE',done,len(R))
           PY
-          cd pub && git init -q && git checkout -q -b ms-photos && git add . && git -c user.name=bot -c user.email=bot@x commit -qm "photos Masters (promos, TB, EX…)" && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ms-photos && echo XXPUSHED
+          cd mp && git add -A && git -c user.name=bot -c user.email=bot@x commit -qm "photos officielles manquantes" && git push -q origin ms-photos && echo XXPUSHED

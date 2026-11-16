@@ -3,39 +3,24 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 8
     permissions:
       contents: write
     steps:
       - run: pip install -q pillow
       - run: |
           python3 - <<'PY'
-          import json,urllib.request,urllib.parse,base64,io,concurrent.futures as cf
+          import json,urllib.request,base64,io,os
           from PIL import Image
-          H={'Content-Type':'application/json','User-Agent':'Mozilla/5.0','Origin':'https://www.tcgplayer.com'}
-          seen={}
-          for q in ['Energy Marker','Energy Marker Gold-Stamped']:
-            for fr in range(0,600,50):
-              body=json.dumps({"algorithm":"sales_synonym_v2","from":fr,"size":50,"filters":{"term":{"productLineName":["dragon-ball-super-ccg"]},"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{},"range":{},"exclude":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":False,"didYouMean":{}},"sort":{}}).encode()
-              try:d=json.load(urllib.request.urlopen(urllib.request.Request('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',data=body,headers=H),timeout=30))
-              except Exception as e:print('XXE',e);break
-              res=d['results'][0]['results']
-              if not res:break
-              for x in res:
-                if 'Energy Marker' in x['productName']:seen[int(x['productId'])]=[x['productName'],x.get('setName'),(x.get('customAttributes') or {}).get('number'),x.get('productLineName')]
-          print('XXN',len(seen))
-          def img(pid):
+          o={}
+          for pid in (689063,675294,675317):
             try:
               b=urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
               im=Image.open(io.BytesIO(b)).convert('RGB')
               if im.width>im.height:im=im.rotate(90,expand=True)
-              im=im.resize((400,560),Image.LANCZOS);o=io.BytesIO();im.save(o,'WEBP',quality=82,method=6)
-              return pid,'data:image/webp;base64,'+base64.b64encode(o.getvalue()).decode()
-            except Exception as e:return pid,None
-          with cf.ThreadPoolExecutor(8) as ex:IM=dict(ex.map(img,list(seen)))
-          out={str(k):v+[IM.get(k)] for k,v in seen.items()}
-          print('XXIMG',sum(1 for v in IM.values() if v))
-          import os;os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/em.json','w'))
-          for k,v in sorted(seen.items(),key=lambda x:str(x[1][1])):print('XXR',k,v)
+              im=im.resize((400,560),Image.LANCZOS);x=io.BytesIO();im.save(x,'WEBP',quality=82,method=6)
+              o[pid]='data:image/webp;base64,'+base64.b64encode(x.getvalue()).decode();print('XXOK',pid)
+            except Exception as e:print('XXE',pid,e)
+          os.makedirs('pub',exist_ok=True);json.dump(o,open('pub/em2.json','w'))
           PY
-          cd pub && git init -q && git checkout -q -b tmp-em && git add . && git -c user.name=bot -c user.email=bot@x commit -qm em && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-em && echo XXPUSHED
+          cd pub && git init -q && git checkout -q -b tmp-em2 && git add . && git -c user.name=bot -c user.email=bot@x commit -qm em && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-em2 && echo XXPUSHED

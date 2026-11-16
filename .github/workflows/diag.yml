@@ -3,12 +3,24 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - run: |
-          t(){ c=$(curl -s -o /dev/null -w '%{http_code} %{size_download}' -A 'Mozilla/5.0' "$1"); echo "XX $c $1"; }
-          B=https://www.dbs-cardgame.com/images/cardlist/cardimg
-          for s in BT27 BT28 BT29 BT30 BT31; do for n in 01 02 06 07 08; do t "$B/$s-EM$n.png"; done; t "$B/$s-EM01_p1.png"; t "$B/$s-EM01_PR.png"; t "$B/$s-EM01-GS.png"; done
-          curl -s -A 'Mozilla/5.0' "https://www.dbs-cardgame.com/us-en/cardlist/?search=true&category=428031" -o l.html; echo "XXSIZE $(wc -c < l.html)"; grep -o 'BT31-EM[^"<]\{0,30\}' l.html | sort -u | head -30 | sed 's/^/XXL /'
-          grep -o 'cardimg/[^"]*EM[^"]*' l.html | sort -u | head | sed 's/^/XXI /'
-          grep -o 'category=4280[0-9]*' l.html | sort -u | head -40 | tr '\n' ' ' | sed 's/^/XXC /'
+          python3 - <<'PY'
+          import re,time,http.cookiejar,urllib.request
+          cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
+          B='http://www.dbzcollection.fr/2v2/'
+          def get(u):
+            for k in range(3):
+              try:return op.open(B+u,timeout=60).read().decode('latin-1')
+              except Exception:time.sleep(3)
+            return ''
+          get('cartes.php?idc=99')
+          t=get('collections.php')
+          print('XXLEN',len(t))
+          for m in re.finditer(r'idc=(\d+)[^>]*>([^<]{0,80})',t):
+            if re.search(r'super|master|zenkai|bt|ultra|card game|fusion',m.group(2),re.I):print('XXC',m.group(1),m.group(2).strip())
+          for idc in (330,):
+            tt=get('cartes.php?idc=%d'%idc)
+            for m in re.finditer(r'ids=(\d+)"><img id="([^"]+)"',tt):print('XXS',idc,m.group(1),m.group(2))
+          PY

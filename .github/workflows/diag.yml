@@ -3,38 +3,18 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: write
+    timeout-minutes: 10
     steps:
       - run: |
           python3 - <<'PY'
-          import json,urllib.request,urllib.parse,os,time
-          H={'Content-Type':'application/json','User-Agent':'Mozilla/5.0','Origin':'https://www.tcgplayer.com'}
-          def search(q,line,fr,size,sets=None):
-            t={"productLineName":[line]}
-            if sets:t["setName"]=sets
-            body=json.dumps({"algorithm":"sales_synonym_v2","from":fr,"size":size,"filters":{"term":t,"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{},"range":{},"exclude":{}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":False,"didYouMean":{}},"sort":{"field":"product-sorting-name","order":"asc"}}).encode()
-            for k in range(3):
-              try:return json.load(urllib.request.urlopen(urllib.request.Request('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',data=body,headers=H),timeout=60))['results'][0]
-              except Exception as e:err=e;time.sleep(2)
-            print('XXE',err);return {'results':[],'aggregations':{}}
-          out={}
-          for line in ['dragon-ball-super-ccg','dragon-ball-super-fusion-world']:
-            r=search('',line,0,1)
-            aggs=r.get('aggregations',{}).get('setName',[])
-            sets=[a['urlValue'] if 'urlValue' in a else a.get('value') for a in aggs]
-            print('XXSETS',line,len(sets),r.get('totalResults'))
-            for st in sets:
-              fr=0
-              while True:
-                rr=search('',line,fr,50,[st]);res=rr['results']
-                for x in res:
-                  ca=x.get('customAttributes') or {}
-                  out[int(x['productId'])]=[line,x.get('setName'),ca.get('number'),x['productName'],x.get('rarityName'),x.get('marketPrice')]
-                fr+=50
-                if len(res)<50 or fr>=10000:break
-          os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/cat.json','w'))
-          print('XXN',len(out))
+          import json,urllib.request,html
+          B='https://downloads.s3.cardmarket.com/productCatalog/'
+          P=json.loads(urllib.request.urlopen(urllib.request.Request(B+'productList/products_singles_13.json',headers={'User-Agent':'x'}),timeout=120).read())['products']
+          G={g['idProduct']:g for g in json.loads(urllib.request.urlopen(urllib.request.Request(B+'priceGuide/price_guide_13.json',headers={'User-Agent':'x'}),timeout=120).read())['priceGuides']}
+          print('XXN',len(P))
+          for p in P:
+            n=html.unescape(p.get('name',''))
+            if 'Marker' in n or 'marker' in n or 'Shatterfoil' in n or ('God Rare' in n) or ('(BT7-131)' in n) or ('(BT18-147)' in n) or ('(BT25-14' in n):
+              g=G.get(p['idProduct'],{})
+              print('XXP',json.dumps([p['idProduct'],n,p.get('idExpansion'),g.get('trend'),g.get('avg30')],ensure_ascii=False))
           PY
-          cd pub && git init -q && git checkout -q -b tmp-cat && git add . && git -c user.name=bot -c user.email=bot@x commit -qm cat && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-cat && echo XXPUSHED

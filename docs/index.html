@@ -2090,7 +2090,7 @@ html:is([data-ly=tab],[data-ly=pc]) .mn-big:not(.mn-cm){grid-template-columns:re
 html[data-ly=pc]{--side:250px}
 html[data-ly=pc] body{padding-left:var(--side)}
 html[data-ly=pc] #app{max-width:1180px;padding:0 36px 48px}
-html[data-ly=pc] #app:is([data-tab=comm],[data-tab=chat],[data-tab=set],[data-tab=prof],[data-tab=tour],[data-tab=trade],[data-tab=swap],[data-tab=budget],[data-tab=trash],[data-tab=dev],[data-tab=scan],[data-tab=print]){max-width:900px}
+html[data-ly=pc] #app:is([data-tab=luck],[data-tab=comm],[data-tab=chat],[data-tab=set],[data-tab=prof],[data-tab=tour],[data-tab=trade],[data-tab=swap],[data-tab=budget],[data-tab=trash],[data-tab=dev],[data-tab=scan],[data-tab=print]){max-width:900px}
 html[data-ly=pc] nav{top:0;bottom:0;left:0;right:auto;width:var(--side);display:block;overflow-y:auto;padding:20px 14px calc(18px + env(safe-area-inset-bottom,0px));border:0;border-right:3px solid var(--gold);border-radius:0;box-shadow:4px 0 0 var(--ac);background:#000}
 html[data-ly=pc] body.chfocus nav{display:block}
 html[data-ly=pc] nav div{flex-direction:column;align-items:stretch;justify-content:flex-start;max-width:none;width:100%;margin:0;gap:6px}
@@ -4812,7 +4812,7 @@ const msNum=id=>+(/-(\d{3,4})/.exec(id)||[0,0])[1],msLead=c=>c[1].includes('//')
 var EMOF={};
 const msCur=()=>MS_SETS.find(s=>s.id===S.mss)||dzSet(S.mss)||MS_SETS[0],msFind=id=>{const dm=/^([DE]\d+)-/.exec(id||'');if(dm){const ds=dzSet(EMOF[id]||dm[1]);return ds?ds.c.find(x=>x[0]===id):undefined}for(const s of MS_SETS){const c=s.c.find(x=>x[0]===id);if(c)return c}};
 function msSetOf(c){const dm=c&&/^([DE]\d+)-/.exec(c[0]);const k=dm&&(EMOF[c[0]]||dm[1]);if(dm&&dzSet(k))return dzSet(k);return MS_SETS.find(s=>s.c.includes(c))||MS_SETS[0]}
-const MS_HI={};const KPK={};function msHi(k){if(/^K[A-Z]+-/.test(k)){const s=k.split('-')[0];if(MS_HI[s])return;MS_HI[s]=1;fetch('ms-ci-'+s+'.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(d._pk){KPK[s]=d._pk;delete d._pk}Object.assign(MS_CI,d);clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},200)}).catch(()=>{MS_HI[s]=0});return}const m=/^BT(\d+)-/.exec(k);if(!m)return;const s=m[1].padStart(2,'0');if(MS_HI[s])return;MS_HI[s]=1;const go=n=>{try{fetch('ms-hi-BT'+s+(n>1?'-'+n:'')+'.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{Object.assign(MS_CI,d);clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},200);go(n+1)}).catch(()=>{})}catch(e){}};go(1)}
+const MS_HI={};const KPK={};function msHi(k){if(/^K[A-Z]+-/.test(k)){const s=k.split('-')[0];if(MS_HI[s])return;MS_HI[s]=1;fetch('ms-ci-'+s+'.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(d._pk){KPK[s]=d._pk;delete d._pk}Object.assign(MS_CI,d);clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},200)}).catch(()=>{MS_HI[s]=0});return}const db=/^DB(\d)-/.exec(k),m=db||/^BT(\d+)-/.exec(k);if(!m)return;const s=db?'DB'+db[1]:m[1].padStart(2,'0');if(MS_HI[s])return;MS_HI[s]=1;const go=n=>{try{fetch('ms-hi-'+(db?'':'BT')+s+(n>1?'-'+n:'')+'.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{Object.assign(MS_CI,d);clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},200);go(n+1)}).catch(()=>{})}catch(e){}};go(1)}
 const MSTH=(()=>{try{return Promise.all(['ms-ci-1.json','ms-ci-2.json','ms-th.json','ms-ci-lgc.json'].map(u=>fetch(u).then(r=>r.ok?r.json():{}).catch(()=>({})))).then(a=>Object.assign({},a[2],a[0],a[1],a[3])).then(d=>{for(const k in d){if(!MS_CI[k])MS_CI[k]=d[k];if(typeof CARDIMG!=='undefined'&&!CARDIMG[k])CARDIMG[k]=d[k]}clearTimeout(MS_HI.t);MS_HI.t=setTimeout(()=>{try{render()}catch(e){}},200)}).catch(()=>{})}catch(e){return Promise.resolve()}})();
 function msArt(c){msHi(c[0]);const q=msOwn(c[0]),im=PH[c[0]]||MS_CI[c[0]];return `<div class="art r-${msLead(c)?'L':'U'} ${q?'':'miss'}">${im?`<img class="cimg" decoding="async" src="${bU('m'+c[0],im)}" alt="${esc(c[1])}" draggable="false">`:p3(msNum(c[0]))}${msIsSpr(c)?`<em>${msKind(c)}</em>`:''}${q>1?`<span class="qty">×${q}</span>`:''}</div>`}
 function msTile(c,pr){const id=c[0];return csCell(id,msShort(c),msPx(id),msOwn(id),`<button class="card" data-msopen="${id}" aria-label="${id}" style="width:100%">${msArt(c)}</button>`,'data-ms="dec" data-id="'+id+'"','data-ms="inc" data-id="'+id+'"')}
@@ -8282,7 +8282,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='15 nov. 2026 · 111';
+const BUILD='16 nov. 2026 · 112';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10120,6 +10120,9 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 {const M=new Map();let on=0;const r0=renderCore;renderCore=function(){M.clear();on=1;try{return r0.apply(this,arguments)}finally{on=0;M.clear()}};
  for(const f of ['stData','msProp','dbStats']){const o=window[f];if(typeof o!=='function')continue;window[f]=function(){if(!on||arguments.length)return o.apply(this,arguments);if(M.has(f))return M.get(f);const v=o.call(this);M.set(f,v);return v}}}
 /* ===== RMEMO:END ===== */
+/* ===== FW-EXTRA : photos d'alternatives qui manquaient ===== */
+fetch('fw-extra.json').then(r=>r.ok?r.json():{}).then(d=>{let n=0;for(const k in d)if(!CARDIMG[k]){CARDIMG[k]=d[k];n++}if(n)try{render()}catch(e){}}).catch(()=>{});
+/* ===== FW-EXTRA:END ===== */
 
 /* ===== SRX : toutes les séries dans chaque liste (accueil, stats, profil, carnet de ventes) =====
    Fusion World (boosters, decks FS, autres séries), Masters, et les anciennes collections (rangées par collection). */
@@ -11175,6 +11178,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:112,d:'2026-11-16',it:[['a','🖼️','Photos des Draft Box Masters','Les 424 cartes des Draft Box 01, 02 et 03 (Masters) ont maintenant leur photo officielle. Quatre cartes alternatives de Fusion World aussi.','ms'],['a','🖥️','Boosters sur ordinateur','Sur ordinateur, l’onglet Boosters n’est plus étiré sur toute la largeur de l’écran.','luck']]},
  {v:111,d:'2026-11-15',it:[['a','⚡','Accueil et Stats plus rapides','L’Accueil et les Stats s’affichent plus vite : les calculs de ta collection ne sont plus refaits plusieurs fois à chaque toucher.','home']]},
  {v:110,d:'2026-11-15',it:[['a','⚡','Collection plus fluide','Ajouter ou retirer une carte est bien plus rapide, surtout sur les téléphones un peu anciens : les photos ne sont plus redessinées à chaque toucher.','coll'],['a','🎲','Boosters plus directs','L’onglet Boosters va droit au but : les boutons « Ouvrir » sont tout de suite visibles. Les règles et les taux sont derrière « ⓘ ».','luck']]},
  {v:109,d:'2026-11-15',it:[['a','🏠','Accueil plus clair','« Mes ventes » n’apparaît plus sur l’Accueil tant que tu n’as noté aucune vente : touche la tuile « Ventes » pour commencer. La recherche de la collection est aussi plus lisible.','home']]},

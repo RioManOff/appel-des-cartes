@@ -107,6 +107,10 @@ jobs:
           def meilleur(g):
               """Premier prix > 0 dans l'ordre de confiance : tendance, moyennes, puis prix le plus bas."""
               if g:
+                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
+                  t0, a30 = g.get('trend'), g.get('avg30')
+                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
+                      return a30, 'avg30'
                   for k in ORDRE:
                       v = g.get(k)
                       if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
@@ -302,6 +306,10 @@ jobs:
               print('Prix Masters : téléchargement impossible, je ne change rien.'); sys.exit(0)
           def meilleur(g):
               if g:
+                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
+                  t0, a30 = g.get('trend'), g.get('avg30')
+                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
+                      return a30, 'avg30'
                   for k in ORDRE:
                       v = g.get(k)
                       if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
@@ -386,6 +394,10 @@ jobs:
               print('Autres séries : téléchargement impossible, je ne change rien.'); sys.exit(0)
           def meilleur(g, bas):
               if g:
+                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
+                  t0, a30 = g.get('trend'), g.get('avg30')
+                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
+                      return a30, 'avg30'
                   for k in ORDRE:
                       if not bas and k.startswith('low'):
                           continue

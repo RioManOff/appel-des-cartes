@@ -3,24 +3,20 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - run: |
           python3 - <<'PY'
-          import re,time,http.cookiejar,urllib.request
-          cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
-          B='http://www.dbzcollection.fr/2v2/'
-          def get(u):
-            for k in range(3):
-              try:return op.open(B+u,timeout=60).read().decode('latin-1')
-              except Exception:time.sleep(3)
-            return ''
-          get('cartes.php?idc=99')
-          t=get('collections.php')
-          print('XXLEN',len(t))
-          for m in re.finditer(r'idc=(\d+)[^>]*>([^<]{0,80})',t):
-            if re.search(r'super|master|zenkai|bt|ultra|card game|fusion',m.group(2),re.I):print('XXC',m.group(1),m.group(2).strip())
-          for idc in (330,):
-            tt=get('cartes.php?idc=%d'%idc)
-            for m in re.finditer(r'ids=(\d+)"><img id="([^"]+)"',tt):print('XXS',idc,m.group(1),m.group(2))
+          import json,urllib.request
+          body=json.dumps({"algorithm":"sales_synonym_v2","from":0,"size":50,"filters":{"term":{},"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{"sellerStatus":"Live","channelId":0},"range":{"quantity":{"gte":1}},"exclude":{"channelExclusion":0}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":False,"didYouMean":{}},"sort":{}}).encode()
+          for q in ['Energy Marker BT31','BT31-EM','Energy Marker Impact Beyond Dimensions','Energy Marker BT30','Energy Marker BT29','Energy Marker BT28']:
+            try:
+              r=urllib.request.urlopen(urllib.request.Request('https://mp-search-api.tcgplayer.com/v1/search/request?q='+urllib.parse.quote(q)+'&isList=false',data=body,headers={'Content-Type':'application/json','User-Agent':'Mozilla/5.0','Origin':'https://www.tcgplayer.com'}),timeout=30)
+              d=json.load(r)
+              res=d['results'][0]['results']
+              print('XXQ',q,len(res))
+              for x in res:
+                cn=(x.get('customAttributes') or {}).get('number')
+                print('XXR',int(x['productId']),x['productName'],'|',x.get('setName'),'|',cn,'|',x.get('rarityName'))
+            except Exception as e:print('XXE',q,e)
           PY

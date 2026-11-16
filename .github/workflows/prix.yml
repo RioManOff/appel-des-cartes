@@ -349,7 +349,8 @@ jobs:
           if len(t) < 1000:
               print('trop peu de prix Masters reconnus (%d) : je ne change rien.' % len(t)); sys.exit(0)
           try:
-              avant = len(json.load(open('docs/prix_ms.json', encoding='utf-8')).get('t', {}))
+              # on ne compte pas les prix des autres collections ajoutés plus loin (codes D…) : sinon la comparaison est faussée
+              avant = len([k for k in json.load(open('docs/prix_ms.json', encoding='utf-8')).get('t', {}) if not re.match(r'D\d', k)])
           except Exception:
               avant = 0
           if avant and len(t) < 0.9 * avant:

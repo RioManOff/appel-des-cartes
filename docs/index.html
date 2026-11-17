@@ -6892,7 +6892,7 @@ function bkCreate(){
  BIND.unshift(b);saveB();S.bsel=b.id;S.bpg=0;S.bpick=false;S.b2.new=null;S.b2.org=false;S.b2.sel=null;S.b2.sh='';S.b2.finding=false;
  toast('Classeur créé ✓'+(ids.length?' · '+bkPlural(ids.length,'carte'):''));return true}
 /* ===================== VUES ===================== */
-function bkArt(c){const im=CARDIMG[c.id]||MS_CI[c.id];
+function bkArt(c){const im=CARDIMG[c.id]||MS_CI[c.id];if(!im&&typeof msHi==='function')try{msHi(c.id)}catch(e){}
  return `<div class="art r-${c.type==='Leader'?'L':'U'} ${c.own?'':'miss'}">${im?`<img class="cimg" src="${im}" alt="" draggable="false"><small>${p3(c.n)}</small>`:`<span class="bk-num">${p3(c.n)}</span><span class="bk-nm2">${esc(c.name||'')}</span>`}${c.ver!=='Normal'?'<em>ALT</em>':''}${c.own>1?`<span class="qty">×${c.own}</span>`:''}</div>`}
 function bkSlot(b,i,hl){
  const id=b.cards[i],c=id?BKC[id]:null,sel=S.b2.sel===i,org=S.b2.org;
@@ -8318,7 +8318,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='17 nov. 2026 · 121';
+const BUILD='17 nov. 2026 · 122';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10229,7 +10229,7 @@ function bkSResHTML(b){
  const {L,n,bulk}=bkSearch(q);let h='';
  if(bulk){const add=bulk.ids.filter(id=>!inB.has(id)).length;h+=`<button class="bk-sbulk" data-b2="sall" data-b2p="${esc(bulk.sid)}" ${add?'':'disabled'}><b>＋ Ajouter toute la série ${esc(bulk.sid)}</b><small>${add?bkPlural(add,'carte')+' à ajouter, dans l’ordre des numéros':'Toutes ses cartes sont déjà dans ce classeur'}</small></button>`}
  if(!L.length)return h+`<div class="bk-sh">Aucune carte trouvée pour « ${esc(q)} ». Essaie le numéro (FB01-001, BT31-045) ou un seul mot du nom.</div>`;
- h+=L.map(e=>{const c=bkSC(e);if(!c)return '';const i=inB.get(e.id),ser=bkSerLab(e,c),nm=esc(c.name||c.id),th=`<span class="vnth sm">${art({...c,own:1})}</span>`;
+ h+=L.map(e=>{const c=bkSC(e);if(!c)return '';if(!CARDIMG[e.id]&&!MS_CI[e.id]&&typeof msHi==='function')try{msHi(e.id)}catch(x){}const i=inB.get(e.id),ser=bkSerLab(e,c),nm=esc(c.name||c.id),th=`<span class="vnth sm">${art({...c,own:1})}</span>`;
   return i!=null?`<button class="bk-fr bk-sr in" data-b2="sgo" data-i="${i}" aria-label="${nm}, ${esc(bkDispId(e))}, déjà dans le classeur, ${bkPos(b,i)}">${th}<span class="vnin"><b>${nm}</b><small>${esc(bkDispId(e))} · ${esc(ser)}</small></span><span class="vnst">✓ ${bkPos(b,i)}</span></button>`
   :`<button class="bk-fr bk-sr" data-b2="sadd" data-b2p="${esc(e.id)}" aria-label="Ajouter ${nm}, ${esc(bkDispId(e))}">${th}<span class="vnin"><b>${nm}</b><small>${esc(bkDispId(e))} · ${esc(ser)}${c.own>0?` · <b>×${c.own}</b> à toi`:''}</small></span><span class="bk-sadd" aria-hidden="true">＋</span></button>`}).join('');
  if(n>L.length)h+=`<div class="bk-sh">… et ${n-L.length} autres : précise ta recherche.</div>`;
@@ -11370,6 +11370,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:122,d:'2026-11-17',it:[['c','🖼️','Photos dans les classeurs','Les cartes SB01, SB02 et des anciennes collections ont maintenant leur photo dans les classeurs.','bind']]},
  {v:121,d:'2026-11-17',it:[['n','📒','Classeurs plus simples','Crée un classeur : il s’ouvre vide. Tape le nom ou le numéro d’une carte (Goku, FB01-001, BT31-045, P-001…) et touche-la pour l’ajouter : elle se range à la suite, ou dans l’emplacement vide que tu as touché. Tape une série (FB01) pour l’ajouter en entier. Le clavier reste ouvert pour enchaîner.','bind'],['c','📒','Classeurs : cartes en anglais','Les cartes notées dans l’édition anglaise (Fusion World ou Masters) n’apparaissaient pas comme possédées dans les classeurs, donc impossible de les y ranger. C’est corrigé : une carte compte comme possédée, quelle que soit l’édition où tu l’as notée.','coll']]},
  {v:120,d:'2026-11-17',it:[['a','📦','Prix des scellés à jour','Les prix des boosters, displays et cases Fusion World (japonais) sont maintenant mis à jour chaque jour depuis Cardmarket, comme les cartes. Masters : prix ajoutés pour BT04, les Draft Box, les Themed Boosters, le Mythic et le Battle Evolution. Bientôt : l’évolution sur 30 jours sous chaque prix et la courbe dans la fiche du produit.','coll']]},
  {v:119,d:'2026-11-16',it:[['a','📅','BT32 pas encore sorti','BT32 Chromatic Ascension sort le 27 novembre : ses cartes sont déjà dévoilées, d’où l’étiquette « sortie le 27 nov. » jusqu’à sa sortie. Les prix arriveront ensuite.','ms'],['a','⚡','Ouverture plus rapide','Les images des boosters et displays Masters se chargent juste après l’ouverture : l’appli démarre avec environ 1 Mo de moins à télécharger.','home']]},

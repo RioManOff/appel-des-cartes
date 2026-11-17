@@ -8361,7 +8361,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='18 nov. 2026 · 125';
+const BUILD='18 nov. 2026 · 126';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10477,20 +10477,28 @@ const ppFwIds=e=>cards.filter(c=>c.ext===e).map(c=>c.id);
  try{const fl=new Map(EXTS.map(([e])=>[e,ppFwIds(e).length]));r.ow=ok(d.ow,k=>fl.get(k))}catch(e){r.ow={}}
  try{const ml=new Map(MS_SETS.map(t=>[t.id,t.c.length]));r.mw=ok(d.mw,k=>ml.get(k))}catch(e){r.mw={}}
  return r}}
-let PPSV=null;
+let PPSV=null;const PPC={};
+async function ppCLoad(nm){const k=nm.toLowerCase();if(PPC[k])return;PPC[k]='busy';
+ try{const j=await frApi('/rest/v1/rpc/pp_cartes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p_pseudo:nm})});
+  PPC[k]=j&&typeof j==='object'?{fw:new Set(Array.isArray(j.fw)?j.fw.filter(x=>typeof x==='string').slice(0,20000):[]),ms:new Set(Array.isArray(j.ms)?j.ms.filter(x=>typeof x==='string').slice(0,40000):[])}:'none'}
+ catch(e){PPC[k]=e&&e.status===404?'nosrv':'err'}render()}
 const ppCurP=()=>{try{return cmMe(PP.name)?ppClean(ppData()):PP.row&&PP.row.P}catch(e){return null}};
-function ppSvHTML(P){const id=PPSV.id,ms=!EXTS.some(x=>x[0]===id),bits=b64d(((ms?P.mw:P.ow)||{})[id]||''),name=cmMe(PP.name)?'toi':PP.name;
+const ppSvShell=(id,name,inner)=>`<div class="sheet ppsv" id="ppsv"><div role="dialog" aria-label="Cartes ${esc(id)}"><div class="bkv-hd"><h2>${esc(id)} · ${esc(name)}</h2><button class="ib" data-ppsvx aria-label="Fermer">✕</button></div>${inner}</div></div>`;
+function ppSvHTML(P){const id=PPSV.id,ms=!EXTS.some(x=>x[0]===id),raw=((ms?P.mw:P.ow)||{})[id],bits=b64d(raw||''),me=cmMe(PP.name),name=me?'toi':PP.name;
+ let srv=null;if(!raw&&!me){const st=PPC[PP.name.toLowerCase()];if(!st){ppCLoad(PP.name)}if(!st||st==='busy')return ppSvShell(id,name,'<div class="sub">Chargement des cartes…</div>');
+  if(typeof st==='string')return ppSvShell(id,name,`<div class="sub">${st==='nosrv'?'Cette fonction n’est pas encore activée sur le serveur.':st==='none'?'Ce joueur n’a pas encore sauvegardé sa collection en ligne.':'Vérifie ta connexion puis réessaie.'}</div>`);srv=ms?st.ms:st.fw}
  let L;if(ms){msBindInit();const t=MS_SETS.find(x=>x.id===id);L=t?t.c.map(x=>BKC[x[0]]||{id:x[0],name:x[1],n:+(x[0].split('-')[1]||0),ver:'Normal'}):[]}else L=cards.filter(c=>c.ext===id);
- const has=i=>!!(bits[i>>3]&(1<<(i&7))),n=L.filter((c,i)=>has(i)).length,f=PPSV.f||'';
+ const has=srv?(i=>srv.has(L[i].id)):(i=>!!(bits[i>>3]&(1<<(i&7)))),n=L.filter((c,i)=>has(i)).length,f=PPSV.f||'';
  const cells=L.map((c,i)=>{const o=has(i);if(f==='y'&&!o||f==='n'&&o)return '';return `<div class="ppg-c${o?'':' miss'}">${bkArt({id:c.id,type:c.type,n:c.n,name:c.name,ver:c.ver,own:1})}<small>${esc(ms?c.id:cid(c.id))}</small></div>`}).join('');
  const T=(k,t)=>`<button class="chip" aria-pressed="${f===k}" data-ppsvf="${k}">${t}</button>`;
+ if(PPSV.f===undefined)PPSV.f='';
  return `<div class="sheet ppsv" id="ppsv"><div role="dialog" aria-label="Cartes ${esc(id)}"><div class="bkv-hd"><h2>${esc(id)} · ${esc(name)}</h2><button class="ib" data-ppsvx aria-label="Fermer">✕</button></div>
  <div class="sub">${n} / ${L.length} cartes · les cartes grisées, ${cmMe(PP.name)?'tu ne les as pas':'il ne les a pas'}</div>
  <div class="row" style="margin:10px 0">${T('','Toutes')}${T('y',cmMe(PP.name)?'Possédées':'Il les a')}${T('n',cmMe(PP.name)?'Manquantes':'Il ne les a pas')}</div>
  <div class="ppg">${cells||'<div class="sub">Aucune carte.</div>'}</div></div></div>`}
 {const v0=ppView;ppView=function(){let h=v0();const P=ppCurP();if(!P)return h;const ow=P.ow||{},mw=P.mw||{};
- h=h.replace(/<div class="ppsr"><b class="ppsc" style="([^"]*)">([A-Za-z0-9-]+)<\/b>/g,(m,st,id)=>ow[id]||mw[id]?`<div class="ppsr ppgo" role="button" tabindex="0" data-ppser="${id}" aria-label="Voir les cartes ${id} en photo"><b class="ppsc" style="${st}">${id}</b>`:m);
- if(Object.keys(ow).length||Object.keys(mw).length)h=h.replace(/(<div class="cmh"><b>(?:Fusion World|Masters) · séries<\/b>[\s\S]*?<\/div>)/g,'$1<p class="sub pphint">📷 Touche une série pour voir les cartes en photo.</p>');
+ h=h.replace(/<div class="ppsr"><b class="ppsc" style="([^"]*)">([A-Za-z0-9-]+)<\/b>/g,(m,st,id)=>ow[id]||mw[id]||!cmMe(PP.name)?`<div class="ppsr ppgo" role="button" tabindex="0" data-ppser="${id}" aria-label="Voir les cartes ${id} en photo"><b class="ppsc" style="${st}">${id}</b>`:m);
+ if(Object.keys(ow).length||Object.keys(mw).length||!cmMe(PP.name))h=h.replace(/(<div class="cmh"><b>(?:Fusion World|Masters) · séries<\/b>[\s\S]*?<\/div>)/g,'$1<p class="sub pphint">📷 Touche une série pour voir les cartes en photo.</p>');
  if(PPSV)h+=ppSvHTML(P);return h}}
 document.addEventListener('click',e=>{if(!e.target.closest)return;const t=e.target;
  const g=t.closest('[data-ppser]');if(g){e.stopPropagation();PPSV={id:g.dataset.ppser,f:''};render();return}
@@ -11557,6 +11565,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:126,d:'2026-11-18',it:[['c','📷','Profils : cartes visibles tout de suite','Les séries d’un profil s’ouvrent même si le joueur n’a pas encore la dernière version.','comm']]},
 {v:125,d:'2026-11-18',it:[['n','📷','Cartes en photo dans les profils','Sur un profil public, touche une série pour voir ses cartes en photo : celles qu’il n’a pas sont grisées.','comm']]},
 {v:124,d:'2026-11-17',it:[['n','🖨️','Liste à imprimer avec photos','Choisis « Avec photos » ou « Sans photo » avant d’imprimer ta liste.','print']]},
 {v:123,d:'2026-11-17',it:[['n','💶','Valeur des classeurs','Chaque classeur montre la valeur de tes cartes et combien coûteraient celles qui manquent.','bind'],['n','💬','Classeur dans le chat','Dans un classeur, touche « Montrer dans le chat » : les autres voient tes pages et peuvent le copier.','bind'],['n','📤','Partager tes manquantes','Collection > Manquantes > Partager : la liste des cartes qui te manquent, à envoyer pour des échanges.','coll']]},

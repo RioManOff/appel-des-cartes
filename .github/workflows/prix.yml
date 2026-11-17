@@ -282,7 +282,7 @@ jobs:
               main()
           PYEOF
 
-      - name: Prix des cartes Masters (BT01 à BT31, Draft Box, boosters et displays) -> docs/prix_ms.json
+      - name: Prix des cartes Masters (BT01 à BT32, Draft Box, boosters et displays) -> docs/prix_ms.json
         env:
           PYTHONUTF8: '1'
         run: |
@@ -344,6 +344,48 @@ jobs:
               if cid not in lien and cid not in vus:
                   vus[cid] = p['idProduct']
           lien.update(vus)
+          # séries Masters toutes neuves (ex. BT32 à sa sortie) : Cardmarket ne met pas le code dans le nom.
+          # On relie les cartes par leur nom anglais, dans une extension Cardmarket dont aucun produit n'est encore relié.
+          try:
+              import collections
+              src = open('docs/index.html', encoding='utf-8').read()
+              dec = json.JSONDecoder()
+              connus = set(lien.values())
+              parexp = collections.defaultdict(list)
+              for p in produits:
+                  if 'idProduct' in p and 'idExpansion' in p:
+                      parexp[p['idExpansion']].append(p)
+              libres = {e: L for e, L in parexp.items() if not any(p['idProduct'] in connus for p in L)}
+              nz = lambda s: re.sub(r'[^a-z0-9]', '', html.unescape(s).lower().replace('&', 'and'))
+              base = lambda nom: nz(re.sub(r'\s*\((SLR|SPR|SCR|GDR|SR|CR)\)\s*$', '', nom))
+              index = {}
+              for e, L in libres.items():
+                  noms = collections.defaultdict(list)
+                  for p in sorted(L, key=lambda p: p['idProduct']):
+                      noms[nz(p.get('name', ''))].append(p['idProduct'])
+                  index[e] = noms
+              for mset in re.finditer(r'\{"id":"(BT\d+)","n":', src):
+                  sid = mset.group(1)
+                  cs, _ = dec.raw_decode(src, mset.start())
+                  cl = cs.get('c', [])
+                  if not cl or any(c[0] in lien for c in cl):
+                      continue
+                  best = None
+                  for e, noms in index.items():
+                      ok = sum(1 for c in cl if base(c[1]) in noms)
+                      if ok >= 0.6 * len(cl) and (not best or ok > best[0]):
+                          best = (ok, e)
+                  if not best:
+                      print(sid, ': pas encore sur Cardmarket')
+                      continue
+                  noms = index[best[1]]; pris = collections.defaultdict(int); n = 0
+                  for c in cl:  # la liste met la carte normale avant sa version spéciale, comme Cardmarket (idProduct croissant)
+                      k = base(c[1]); L = noms.get(k, [])
+                      if pris[k] < len(L):
+                          lien[c[0]] = L[pris[k]]; pris[k] += 1; n += 1
+                  print(sid, ': %d cartes reliées par leur nom (extension Cardmarket %s)' % (n, best[1]))
+          except Exception as ex:
+              print('association par le nom impossible :', ex)
           t, a = {}, {}
           for cid, ip in lien.items():
               g = G.get(ip)

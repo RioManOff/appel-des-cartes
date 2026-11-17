@@ -3,18 +3,22 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - run: |
-          git clone -q --depth 1 -b sdbh-photos https://github.com/${{ github.repository }} sb
           python3 - <<'PY'
-          import json,os
-          N=json.loads('''{"910": 10, "739": 81, "742": 81, "747": 77, "748": 76, "751": 85, "752": 88, "754": 105, "764": 96, "740": 265, "765": 40, "773": 39, "791": 40, "805": 40, "877": 40, "930": 40, "1000": 31, "1037": 31, "1102": 31, "1130": 31, "1190": 40, "1222": 40, "1327": 40, "1380": 40, "1422": 30, "770": 82, "793": 86, "814": 94, "840": 93, "850": 111, "876": 99, "915": 89, "916": 94, "953": 93, "963": 93, "964": 98, "994": 104, "771": 339, "778": 12, "779": 12, "780": 12, "781": 12, "783": 12, "806": 12, "836": 12, "885": 12, "941": 12, "961": 13, "1004": 12, "1077": 13, "1098": 12, "1131": 12, "1168": 13, "1185": 12, "1219": 12, "1220": 13, "1352": 12, "1371": 13, "995": 107, "1025": 93, "1028": 100, "1049": 92, "1081": 123, "1085": 92, "1091": 88, "1121": 94, "1127": 92, "1158": 97, "1165": 102, "1175": 100, "996": 277, "1179": 90, "1191": 89, "1221": 91, "1235": 90, "1236": 110, "1294": 98, "1332": 98, "1349": 98, "1350": 94, "1351": 101, "1276": 173, "1372": 97, "1373": 97, "1385": 101, "1402": 96, "1407": 97, "1411": 93, "1390": 91}''')
-          res={}
-          for ids,n in N.items():
-            f='sb/sdbh/D%s.json'%ids
-            if not os.path.exists(f):res[ids]=['absent',n];continue
-            d=json.load(open(f));k=len([x for x in d if not x.startswith('_')])
-            if k<n:res[ids]=[k,n]
-          print('XXJSON'+json.dumps(res))
+          import json,urllib.request,html,os
+          B='https://downloads.s3.cardmarket.com/productCatalog/'
+          def L(u):return json.loads(urllib.request.urlopen(urllib.request.Request(B+u,headers={'User-Agent':'x'}),timeout=120).read())
+          try:P=L('productList/products_nonsingles_13.json')
+          except Exception as e:print('XXE',e);P={}
+          print('XXKEYS',list(P)[:5])
+          prods=P.get('products',[])
+          G={g['idProduct']:g for g in L('priceGuide/price_guide_13.json')['priceGuides']}
+          out=[[p['idProduct'],html.unescape(p.get('name','')),p.get('idExpansion'),p.get('categoryName'),G.get(p['idProduct'],{}).get('trend'),G.get(p['idProduct'],{}).get('avg30')] for p in prods]
+          print('XXN',len(out),out[:3])
+          os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/ns.json','w'))
           PY
+          cd pub && git init -q && git checkout -q -b tmp-ns && git add . && git -c user.name=bot -c user.email=bot@x commit -qm ns && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-ns && echo XXPUSHED

@@ -3,25 +3,34 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
+    permissions:
+      contents: write
     steps:
+      - run: pip install -q pillow
       - run: |
           python3 - <<'PY'
-          import json,urllib.request,html,re
-          def get(u,t=30):
-            try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=t).read()
-            except Exception as e:return None
-          ok=[n for n in range(1,160) if get('https://www.dbs-cardgame.com/images/cardlist/cardimg/BT32-%03d.png'%n,15)]
-          print('XXIMG',len(ok),ok[:5],ok[-5:])
-          for u in ['https://www.dbs-cardgame.com/fw/en/cardlist/','https://www.dbs-cardgame.com/us-en/cardlist/?search=true&category%5B%5D=428032','https://www.dbs-cardgame.com/us-en/cardlist/']:
-            b=get(u);print('XXPAGE',u,len(b) if b else None, re.findall(r'BT32[^<"]{0,40}',b.decode('utf-8','ignore'))[:5] if b else '')
-          B='https://downloads.s3.cardmarket.com/productCatalog/'
-          P=json.loads(get(B+'productList/products_singles_13.json',120))['products']
-          ex={}
-          for p in P:ex.setdefault(p.get('idExpansion'),[]).append(html.unescape(p.get('name','')))
-          mx=max(ex);print('XXEXP',sorted(ex)[-6:])
-          for e in sorted(ex)[-6:]:print('XXE',e,len(ex[e]),ex[e][:4])
-          for p in P:
-            n=html.unescape(p.get('name',''))
-            if 'Inoshikacho' in n or 'Fasha, Enduring' in n:print('XXHIT',p['idProduct'],p.get('idExpansion'),n)
+          import json,urllib.request,base64,io,os
+          from PIL import Image
+          def get(u):
+            try:return urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+            except Exception:return None
+          V=[1,6,10,20,26,28,38,44,52,56,59,65,68,92,93,99,103,110,116,118,122,125,126,130,132]
+          for suf in ['_p1','_p2','_P1','_SPR','_SLR','_b','_PR','-p1']:
+            r=get('https://www.dbs-cardgame.com/images/cardlist/cardimg/BT32-006%s.png'%suf);print('XXSUF',suf,bool(r))
+          out={}
+          def conv(b):
+            im=Image.open(io.BytesIO(b)).convert('RGB')
+            if im.width>im.height:im=im.rotate(90,expand=True)
+            im=im.resize((400,560),Image.LANCZOS);o=io.BytesIO();im.save(o,'WEBP',quality=80);return 'data:image/webp;base64,'+base64.b64encode(o.getvalue()).decode()
+          for n in range(1,161):
+            b=get('https://www.dbs-cardgame.com/images/cardlist/cardimg/BT32-%03d.png'%n)
+            if b:out['BT32-%03d'%n]=conv(b)
+            if n in V:
+              for suf in ['_p1','_p2']:
+                b=get('https://www.dbs-cardgame.com/images/cardlist/cardimg/BT32-%03d%s.png'%(n,suf))
+                if b:out['BT32-%03d%s'%(n,suf)]=conv(b)
+          print('XXN',len(out),sorted(k for k in out if '_' in k))
+          os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/bt32.json','w'))
           PY
+          cd pub && git init -q && git checkout -q -b tmp-bt32 && git add . && git -c user.name=bot -c user.email=bot@x commit -qm bt32 && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-bt32 && echo XXPUSHED

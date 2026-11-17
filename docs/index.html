@@ -3327,6 +3327,13 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .bkv-me{position:absolute;right:3px;bottom:3px;width:18px;height:18px;border-radius:50%;background:#2fbf71;color:#fff;font:700 11px/18px system-ui;text-align:center;font-style:normal}
 .bkv-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}
 .bkv-nav .btn{width:auto;min-width:56px;margin:0}
+/* PRPH */
+.prg{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px 10px;margin-top:10px}
+.prc{display:flex;flex-direction:column;gap:3px;min-width:0;font-size:12px;line-height:1.25;break-inside:avoid;page-break-inside:avoid}
+.prc img,.prph{display:block;width:100%;aspect-ratio:5/7;object-fit:cover;border-radius:6px;background:rgba(255,255,255,.06)}
+.prph{display:flex;align-items:center;justify-content:center;font-weight:700;opacity:.7;border:1px dashed rgba(255,255,255,.25)}
+.prc small{opacity:.75;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@media print{.cg-fab,#dbn,#bkv{display:none!important}.prg{grid-template-columns:repeat(5,1fr);gap:8px}.prc{font-size:9pt}.prc img{border-radius:4px}.prph{border-color:#999!important}}
 </style>
 </head>
 <body>
@@ -8342,7 +8349,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='17 nov. 2026 · 123';
+const BUILD='17 nov. 2026 · 124';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10428,6 +10435,23 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElement
 {const v0=bkView;bkView=function(b){const h=v0(b);return h.replace('<button class="chip" data-b2="miss">📋 Manquantes</button>','<button class="chip" data-b2="miss">📋 Manquantes</button><button class="chip" data-b2="chat">💬 Montrer dans le chat</button>')}}
 {const c0=bkClick;bkClick=function(e){const t=e.target.closest&&e.target.closest('[data-b2="chat"]');if(t){const b=bkGet();if(b)bkToChat(b);return}return c0(e)}}
 /* ===== BK4:END ===== */
+/* ===== PRPH : liste à imprimer, avec ou sans photos ===== */
+let PRPH=false;try{PRPH=localStorage.getItem('fb_prph')==='1'}catch(e){}
+const prImg=(id,ms)=>{const im=ms?MS_CI[id]:CARDIMG[id];if(!im&&ms&&typeof msHi==='function')try{msHi(id)}catch(e){}return im};
+function prPanel(lab,sr,l,ms){const head=`<b>${lab} — ${esc(sr)}</b><div class="sub">${l.length} carte${l.length>1?'s':''} · ${fmtD(new Date())} · L'Appel des Cartes</div>`,
+ tail=c=>S.pr==='own'?'×'+c.own:S.pr==='missing'&&c.want?'cherchée ×'+c.want:'',idt=c=>ms?esc(c.id):cid(c.id);
+ if(!l.length)return `<div class="panel pzl" style="margin-top:6px">${head}<div class="sub">Rien dans cette liste.</div></div>`;
+ if(PRPH&&!S.pal)return `<div class="panel pzl" style="margin-top:6px">${head}<div class="prg">${l.map(c=>{const im=prImg(c.id,ms),t=tail(c);return `<div class="prc">${im?`<img src="${im}" alt="">`:`<div class="prph">${idt(c)}</div>`}<span>${S.pr==='missing'?'☐ ':''}<b>${idt(c)}</b>${c.rar?' · '+esc(c.rar):''}${t?' · '+t:''}</span><small>${esc(c.name||'')}</small></div>`}).join('')}</div></div>`;
+ return `<div class="panel pzl" style="margin-top:6px">${head}${l.map(c=>`<div class="tr"><span>${S.pr==='missing'?'☐ ':''}${idt(c)} · ${esc(c.name||'')}${c.rar?' ('+esc(c.rar)+')':''}</span><b>${tail(c)}</b></div>`).join('')}</div>`}
+const prPhBar=()=>`<div class="row"><button class="chip" aria-pressed="${!PRPH}" data-prph="0">📝 Sans photo</button><button class="chip" aria-pressed="${PRPH}" data-prph="1">🖼️ Avec photos</button></div>${PRPH&&S.pal?'<div class="sub" style="margin:-2px 0 8px">Les photos se font série par série : choisis une série.</div>':''}`;
+printVFW=function(){const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-pressed="${S.pr===k}" data-prt="${k}">${t}</button>`,sr=S.pal?'toutes les séries':S.ext+' · '+serNm(S.ext);
+ return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,sr,l,false)}`};
+printV=function(){if(!prMs())return printVFW().replace('<h2>🖨️ Liste à imprimer</h2>','<h2>🖨️ Liste à imprimer</h2>'+prGame());
+ const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-pressed="${S.pr===k}" data-prt="${k}">${t}</button>`,set=msCur(),sr=S.pal?'toutes les séries Masters':set.id+' · '+set.n;
+ return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${prGame()}<div style="margin-bottom:8px">${msBar(set)}</div><div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,'Masters · '+sr,l,true)}${msPickSheet()}`};
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-prph]');if(!t)return;e.stopPropagation();PRPH=t.dataset.prph==='1';try{localStorage.setItem('fb_prph',PRPH?'1':'0')}catch(x){}render()},true);
+/* ===== PRPH:END ===== */
+
 
 
 /* ===== SRX : toutes les séries dans chaque liste (accueil, stats, profil, carnet de ventes) =====
@@ -11484,6 +11508,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:124,d:'2026-11-17',it:[['n','🖨️','Liste à imprimer avec photos','Choisis « Avec photos » ou « Sans photo » avant d’imprimer ta liste.','print']]},
 {v:123,d:'2026-11-17',it:[['n','💶','Valeur des classeurs','Chaque classeur montre la valeur de tes cartes et combien coûteraient celles qui manquent.','bind'],['n','💬','Classeur dans le chat','Dans un classeur, touche « Montrer dans le chat » : les autres voient tes pages et peuvent le copier.','bind'],['n','📤','Partager tes manquantes','Collection > Manquantes > Partager : la liste des cartes qui te manquent, à envoyer pour des échanges.','coll']]},
 {v:122,d:'2026-11-17',it:[['c','🖼️','Photos dans les classeurs','Les cartes SB01, SB02 et des anciennes collections ont maintenant leur photo dans les classeurs.','bind']]},
  {v:121,d:'2026-11-17',it:[['n','📒','Classeurs plus simples','Crée un classeur : il s’ouvre vide. Tape le nom ou le numéro d’une carte (Goku, FB01-001, BT31-045, P-001…) et touche-la pour l’ajouter : elle se range à la suite, ou dans l’emplacement vide que tu as touché. Tape une série (FB01) pour l’ajouter en entier. Le clavier reste ouvert pour enchaîner.','bind'],['c','📒','Classeurs : cartes en anglais','Les cartes notées dans l’édition anglaise (Fusion World ou Masters) n’apparaissaient pas comme possédées dans les classeurs, donc impossible de les y ranger. C’est corrigé : une carte compte comme possédée, quelle que soit l’édition où tu l’as notée.','coll']]},

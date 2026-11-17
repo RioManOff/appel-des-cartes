@@ -1,51 +1,36 @@
 name: diag-prix
 on: push
-permissions:
-  contents: write
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 8
+    permissions:
+      contents: write
     steps:
+      - run: pip install -q pillow
       - run: |
-          pip install -q pillow
           python3 - <<'PY'
-          import re,json,time,base64,io,http.cookiejar,urllib.request
+          import json,urllib.request,base64,io,os
           from PIL import Image
-          cj=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj));op.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130 Safari/537.36')]
-          B='http://www.dbzcollection.fr/2v2/'
-          def raw(u):
-            for k in range(3):
-              try:return op.open(B+u,timeout=60).read()
-              except Exception as e:time.sleep(3)
-            return b''
-          get=lambda u:raw(u).decode('latin-1')
-          get('cartes.php?idc=99')
-          CARD=r'<a name="c(\d+)"></a>\s*<div class="bc_cadre"[^>]*>\s*<div class="bc_cadre_numero" title="([^"]*)"[^>]*><div class="bc_texte_numero">([^<]*)</div>.*?afficher_detail\(\'\d+\',\'([^\']+)\'\)'
-          NEED=json.loads('''{"124": {"idc": 20, "n": 82, "miss": [56, 57, 58, 59, 60, 61, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82], "nm": []}, "695": {"idc": 171, "n": 253, "miss": [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253], "nm": ["Avatar Binder 4", "Avatar Binder Set", "Avatar Binder Set", "Avatar Budokai Limited 100", "Avatar Card", "Avatar Card", "Avatar GD5TH", "Avatar GDB", "Avatar GDM", "Avatar GDM Licence Set 2015", "Avatar Licence Set", "Avatar Stamp Rally", "Avatar Starter Set", "Certificat Or S15", "Certificat Or S17", "CERTIFICAT par \u00e9quipe Or", "Certificat Silver S15", "Certificat Silver S16", "Certificat Silver S17", "Certificat Silver S18", "GD5TH-01", "GD5TH-02", "GD5TH-03", "GD5TH-04", "GD5TH-05", "GDB-01", "GDB-02", "GDB-03", "GDB-04", "GDB-05", "GDB-06", "GDB-07", "GDB-08", "GDB-09", "GDB-10", "GDB-11", "GDB-12", "GDDS-01", "GDDS-02", "GDDS-03", "GDDS-04", "GDPB-01", "GDPB-02", "GDPB-03", "GDPB-04", "GDPB-05", "GDPB-06", "GDPB-06", "GDPB-07", "GDPB-07", "GDPB-08", "GDPB-08", "GDPB-09", "GDPB-09", "GDPB-10", "GDPB-10", "GDPB-11", "GDPB-11", "GDPB-12", "GDPB-13", "GDPB-14", "GDPB-14", "GDPB-15", "GDPB-16", "GDPB-17", "GDPB-18", "GDPB-19", "GDPB-20", "GDPB-21", "GDPB-22", "GDPB-23", "GDPB-24", "GDPB-24", "GDPB-25", "GDPB-25", "GDPB-26", "GDPB-27", "GDPB-27", "GDPB-28", "GDPB-28", "GDPB-29", "GDPB-29", "GDPB-30", "GDPB-30", "GDPB-31", "GDPB-31", "GDPB-31", "GDPB-32", "GDPB-33", "GDPB-34", "GDPB-35", "GDPB-36", "GDPB-36", "GDPB-37", "GDPB-37", "GDPB-38", "GDPB-39", "GDPB-39", "GDPB-40", "GDPB-41", "GDPB-41", "GDPB-42", "GDPB-42", "GDPB-43", "GDPB-43", "GDPB-44", "GDPB-45", "GDPB-46", "GDPB-47", "GDPB-48", "GDPB-49", "GDPB-50", "GDPB-51", "GDPB-52", "GDPB-52", "GDPB-53", "GDPB-53", "GDPB-54", "GDPB-54", "GDPB-55", "GDPB-55", "GDPB-56", "GDPB-56", "GDPB-57", "GDPB-57", "GDPB-58", "GDPB-59", "GDPB-60", "GDPB-61", "GDPB-62", "GDPB-63", "GDPB-64", "GDPB-65", "GDPB-65", "GDPB-66", "GDPB-66", "GDPB-67", "GDPB-67", "GDPB-68", "GDPB-68", "GDPB-69", "GDPB-70", "GDPB-70", "GDPB-71", "GDPB-71", "GDPB-72", "GDPB-73", "GDPB-74", "GDPB-75", "GDPC-01", "GDPC-02", "GDPC-03", "GDPJ-01", "GDPJ-02", "GDPJ-03", "GDPJ-04", "GDPJ-05", "GDPJ-06", "GDPJ-07", "GDPJ-08", "GDPJ-09", "GDPJ-10", "GDPJ-11", "GDPJ-12", "GDPJ-13", "GDPJ-14", "GDPJ-15", "GDPJ-16", "GDPJ-17", "GDPJ-18", "GDPJ-19", "GDPJ-20", "GDPJ-21", "GDPJ-22", "GDPJ-23", "GDPJ-24", "GDPJ-25", "GDPJ-26", "GDPJ-27", "GDPJ-28", "GDPJ-29", "GDPJ-30", "GDPJ-31", "GDPJ-32", "GDPJ-33", "GDPK-01", "GDPK-02", "GDPK-03", "GDPK-04", "GDPK-05", "GDPK-06", "GDPM-01", "GDPM-02", "GDPM-03", "GDPM-04", "GDPM-05", "GDPM-06", "GDPM2-01", "GDPM2-02", "GDPM2-03", "GDPM2-04", "GDPM2-05", "GDPM2-06", "GDPT-01", "GDSE-01", "GDSE-02", "GDSE-03", "GDSE-04", "GDSE-05", "GDSE2-01", "GDSE2-02", "GDSE2-03", "GDSE2-04", "GDSE2-05", "GDSE2-06", "GDSE2-07", "GDSE3-01", "GDSE3-02", "GDSE3-03", "GDSE3-04", "GDSE3-05", "GDSE3-06", "GDSE3-07", "GDSE4-01", "GDSE4-02", "GDSE4-03", "GDSE4-04", "GDSE4-05", "GDSE4-06", "GDSE4-07", "GDSE5-01", "GDSE5-02", "GDSE5-03", "GDSE5-04", "GDSE5-05", "GDSE5-06", "GDSE5-07", "GDSE5-08", "GDSE5-09", "GDSE5-10", "GDSE5-11", "GDSE5-12", "GDSE5-13", "GDSE5-14", "GDSG-01", "GDSG-02", "GDSG-03", "GDSG-04", "GDSG-05", "GDSG-06", "UP5-01", "UP5-02", "UP5-03"]}, "1419": {"idc": 335, "n": 303, "miss": [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303], "nm": ["AP-001", "AP-002", "AP-003", "AP-004", "AP-005", "AP-006", "AP-007", "AP-008", "AP-009", "AP-010", "AP-011", "AP-012", "AP-013", "AP-014", "AP-015", "AP-016", "AP-017", "AP-018", "AP-019", "AP-020", "AP-021", "AP-022", "AP-023", "AP-024", "AP-025", "AP-026", "AP-027", "AP-028", "AP-029", "AP-030", "AP2-001 Alt", "AP2-001", "AP2-002", "AP2-003", "AP2-004", "AP2-005", "AP2-006", "AP2-007", "AP2-008", "AP2-009", "AP2-010", "AP2-011", "AP2-012", "AP2-013", "AP2-014", "AP2-015", "AP2-016", "AP2-017", "AP2-018", "AP2-019", "AP2-020", "AP2-021", "AP2-022", "AP2-023", "AP2-024", "AP2-025", "AP2-026", "AP2-027", "AP2-028", "AP2-029", "AP2-030", "AP3-001", "AP3-002", "AP3-003", "AP3-004", "AP3-005 Alt", "AP3-005", "AP3-006", "AP3-007", "AP3-008", "AP3-009", "AP3-010", "AP3-011", "AP3-012", "AP3-013", "AP3-014", "AP3-015", "AP3-016", "AP3-017", "AP3-018", "AP3-019", "AP3-020", "AP3-021", "AP3-022", "AP3-023", "AP3-024", "AP3-PUR1", "AP3-PUR2", "AP3-PUR3", "AP3-PUR4", "AP3-PUR5", "AP3-PUR6", "APT-001 Alt", "APT-001", "APT-002 Alt", "APT-002", "APT-003 Alt", "APT-003", "APT-004 Alt", "APT-004", "APT-005 Alt", "APT-005 Alt 2", "APT-005", "APT-006 Alt", "APT-006", "APT-007 Alt", "APT-007", "APT-008 Alt", "APT-008", "APT-009 Alt", "APT-009", "APT-010 Alt", "APT-010", "APT-011 Alt", "APT-011", "APT-012 Alt", "APT-012", "APT-013 Alt", "APT-013", "APT-014 Alt", "APT-014", "APT-015 Alt", "APT-015", "APT-016 Alt", "APT-016", "APT-017 Alt", "APT-017", "APT-018 Alt", "APT-018", "APT-019 Alt", "APT-019", "APT-020 Alt", "APT-020", "APT-021 Alt", "APT-021", "APT-022 Alt", "APT-022", "APT-023 Alt", "APT-023", "APT-024 Alt", "APT-024", "APT-025 Alt", "APT-025", "APT-026 Alt", "APT-026", "APT-027 Alt", "APT-027", "APT-028 Alt", "APT-028 Alt 2", "APT-028", "APT-029 Alt", "APT-029", "APT-030 Alt", "APT-030", "Avatar 1", "EX1-001", "EX1-002", "EX1-003", "EX1-004", "Mise \u00e0 niveau", "SDV3-072", "SDV10-069 GDR", "SDV11-069", "SDVA-001", "SDVA-002", "SDVA-003", "SDVBS-001", "SDVBS-002", "SDVBS-003", "SDVBS-004", "SDVBS-005", "SDVBS-006", "SDVBS-007", "SDVP-001", "SDVP-002", "SDVP-003", "SDVP-004", "SDVP-005", "SDVP-006", "SDVP-007", "SDVP-008", "SDVP-009 Alt", "SDVP-009", "SDVP-010 Alt", "SDVP-010", "SDVP-011 Alt", "SDVP-011", "SDVP-012 Alt", "SDVP-012", "SDVP-013 Alt", "SDVP-013", "SDVP-014 Alt", "SDVP-014", "SDVP-015 Alt", "SDVP-015", "SDVP-016", "SDVP-017", "SDVP-018", "SDVP-019", "SDVP-020", "SDVP-021", "SDVP-022", "SDVP-023", "SDVP-024", "SDVP-025", "SDVP-026", "SDVP-027", "SDVP-028", "SDVP-029", "SDVP-030", "SDVP-031", "SDVP-032", "SDVP-033", "SDVP-034", "SDVP-035", "SDVP-036", "SDVP-037", "SDVP-038", "SDVP-039", "SDVP-040", "SDVPJ-001", "SDVPJ-002", "SDVPJ-003", "SDVPJ-004", "SDVPJ-005", "SDVPJ-006", "SDVPJ-007", "SDVPJ-008", "SDVPJ-009", "SDVPJ-010", "SDVPJ-011", "SDVPJ-012", "SDVPJ-013", "SDVPJ-014", "SDVPJ-015", "SDVPJ-016", "SDVPJ-017", "SDVPJ-018", "SDVPJ-019", "SDVPJ-020", "SDVPJ-021", "SDVPJ-023", "SDVPJ-024", "SDVPJ-025", "SDVPJ-026", "SDVPJ-027", "SDVPJ-028", "SDVPJ-029", "SDVPJ-030", "SDVPJ-031", "SDVPJ-032", "SDVPJ-033", "SDVPJ-034", "SDVPJ-035", "SDVPJ-036", "SDVPJ-037", "SDVPJ-038", "SDVPJ-039", "SDVPJ-043", "SDVPS-001", "SDVTB-001", "SDVTB-002", "SDVTB-003", "SDVTB-004", "SDVTB-005", "SDVTB-006", "SDVTB-007", "SDVTD-001", "SDVTD-002", "SDVTD-003", "SDVTP-001 Alt", "SDVTP-001", "SDVTP-002 Alt", "SDVTP-002", "SDVTP-003", "SDVTP-004 Alt", "SDVTP-004", "SDVTP-005 Alt", "SDVTP-005", "SDVTP-006", "SDVTP-007 Alt", "SDVTP-007", "SDVTP-008 Alt", "SDVTP-008 Alt", "SDVTP-008", "SDVTP-008", "SDVTP-009", "SDVTP-009", "SDVTP-010 Alt", "SDVTP-010", "SDVTP-011 Alt", "SDVTP-011", "SDVTP-012", "SDVZS-001", "SDVZS-002", "SDVZS-003", "SDVZV-001", "SDVZV-002", "SDVZV-003", "SDVZV-004", "SDVZV-005", "SDVZV-006", "SDVZV-007"]}}''')
-          out={};rep=[]
-          for ids,v in NEED.items():
-            L=[];p=1;seen=set()
-            while p<20:
-              tt=get('cartes.php?idc=%d&ids=%s&p=%d'%(v['idc'],ids,p))
-              ms=list(re.finditer(CARD,tt,re.S))
-              new=[m for m in ms if m.group(1) not in seen]
-              if not new:break
-              for m in new:seen.add(m.group(1));L.append((m.group(3).strip(),m.group(4)))
-              p+=1
-            rep.append([ids,len(L),v['n'],L[:3],L[-3:]])
-            for k in v['miss']:
-              if k-1>=len(L):continue
-              num,path=L[k-1]
-              b=raw('cartes/%s_carte.jpg'%path)
-              try:
-                im=Image.open(io.BytesIO(b)).convert('RGB');w,h=im.size
-                if w>h:im=im.rotate(90,expand=True);w,h=im.size
-                im=im.resize((round(w*400/h),400),Image.LANCZOS);o=io.BytesIO();im.save(o,'JPEG',quality=85)
-                out['D%s-%03d'%(ids,k)]=['data:image/jpeg;base64,'+base64.b64encode(o.getvalue()).decode(),num,v['nm'][k-1] if k-1<len(v['nm']) else None]
-              except Exception as e:print('XXERR',ids,k,e)
-          print('XXREP',json.dumps(rep,ensure_ascii=False))
-          import os;os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/dzmiss.json','w'))
-          print('XXN',len(out))
+          M=json.loads('''{"BT32": [710674, 710675], "TB1": [162381, 162382], "TB2": [173548, 173547], "TB3": [180741, 180739], "MB": [248234, 248235], "BEB": [228920, 228919]}''')
+          def get(pid):
+            try:return urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
+            except Exception as e:print('XXE',pid,e);return None
+          def enc(b,h):
+            im=Image.open(io.BytesIO(b)).convert('RGBA')
+            # fond blanc -> transparent
+            px=im.load();w,hh=im.size
+            bb=im.getbbox();
+            im2=Image.new('RGBA',im.size)
+            data=[(r,g,bl,0) if r>245 and g>245 and bl>245 else (r,g,bl,a) for r,g,bl,a in im.getdata()]
+            im2.putdata(data);bb=im2.getbbox() or (0,0,w,hh);im2=im2.crop(bb)
+            ww=round(im2.width*h/im2.height);im2=im2.resize((ww,h),Image.LANCZOS);o=io.BytesIO();im2.save(o,'WEBP',quality=85)
+            return 'data:image/webp;base64,'+base64.b64encode(o.getvalue()).decode()
+          out={}
+          for sid,(pk,bx) in M.items():
+            a=get(pk);b=get(bx);out[sid]={}
+            if a:out[sid]['pk']=enc(a,360)
+            if b:out[sid]['box']=enc(b,300)
+          os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/packs.json','w'));print('XXOK',{k:list(v) for k,v in out.items()})
           PY
-          cd pub && git init -q && git checkout -q -b tmp-dz && git add . && git -c user.name=bot -c user.email=bot@x commit -qm dz && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-dz && echo XXPUSHED
+          cd pub && git init -q && git checkout -q -b tmp-packs && git add . && git -c user.name=bot -c user.email=bot@x commit -qm p && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-packs && echo XXPUSHED

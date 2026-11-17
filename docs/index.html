@@ -3334,6 +3334,18 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .prph{display:flex;align-items:center;justify-content:center;font-weight:700;opacity:.7;border:1px dashed rgba(255,255,255,.25)}
 .prc small{opacity:.75;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 @media print{.cg-fab,#dbn,#bkv{display:none!important}.prg{grid-template-columns:repeat(5,1fr);gap:8px}.prc{font-size:9pt}.prc img{border-radius:4px}.prph{border-color:#999!important}}
+/* PPS2 */
+.ppgo{cursor:pointer;border-radius:10px}
+.ppgo:active{background:rgba(255,255,255,.05)}
+.ppgo .ppsv::after{content:' ›';color:var(--mu)}
+.pphint{margin:2px 0 6px;font-size:12.5px}
+.sheet.ppsv{z-index:40}
+.ppsv>div{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.ppg{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:10px 8px}
+.ppg-c{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.ppg-c .art{width:100%}
+.ppg-c small{font-size:11px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ppg-c.miss .art{opacity:.3;filter:grayscale(1)}
 </style>
 </head>
 <body>
@@ -3833,7 +3845,7 @@ async function ppPush(){
   try{
     if(PPS.u!==u||!PPS.pr)await frProfile(SBS.pseudo);                 /* la ligne « pseudo » doit exister pour que le profil soit trouvable */
     await frApi('/rest/v1/pubprof?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:u,is_public:pub,data:pub?ppData():{},updated_at:new Date().toISOString()})});
-    PPS={u,pr:1,pub:pub?1:0,at,t:Date.now(),v:2};ppSaveS();ok=true
+    PPS={u,pr:1,pub:pub?1:0,at,t:Date.now(),v:3};ppSaveS();ok=true
   }catch(e){PPF=Date.now();PPERR=e&&e.status===404?'nosrv':/déjà pris/.test((e&&e.message)||'')?'taken':'net'}
   PPB=false;ppStatDraw();if(PPQ){PPQ=false;setTimeout(ppTick,50)}return ok}
 /* toutes les 30 s : republier si ma collection a changé (au plus une fois toutes les 2 min), ou retirer le profil s'il vient d'être désactivé */
@@ -3841,7 +3853,7 @@ function ppTick(){
   if(!SBS||!SBS.pseudo||PPB)return;
   if(PPERR&&Date.now()-PPF<(PPERR==='nosrv'?6e5:3e4))return;
   const at=localStorage.getItem('fb_at')||'',mine=PPS.u===SBS.uid;
-  if(X.pp.on){if(!mine||!PPS.pub||PPS.v!==2||(at!==PPS.at&&Date.now()-(PPS.t||0)>=12e4))ppPush()}
+  if(X.pp.on){if(!mine||!PPS.pub||PPS.v!==3||(at!==PPS.at&&Date.now()-(PPS.t||0)>=12e4))ppPush()}
   else if(mine&&PPS.pub)ppPush()}
 setInterval(ppTick,30000);setTimeout(ppTick,4000);
 /* se déconnecter retire aussi le profil des recherches (il revient tout seul à la prochaine connexion) */
@@ -8349,7 +8361,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='17 nov. 2026 · 124';
+const BUILD='18 nov. 2026 · 125';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10451,6 +10463,43 @@ printV=function(){if(!prMs())return printVFW().replace('<h2>🖨️ Liste à imp
  return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${prGame()}<div style="margin-bottom:8px">${msBar(set)}</div><div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,'Masters · '+sr,l,true)}${msPickSheet()}`};
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-prph]');if(!t)return;e.stopPropagation();PRPH=t.dataset.prph==='1';try{localStorage.setItem('fb_prph',PRPH?'1':'0')}catch(x){}render()},true);
 /* ===== PRPH:END ===== */
+/* ===== PPS2 : profil public, voir les cartes d'une série en photo ===== */
+/* ce que je publie : pour chaque série où j'ai des cartes, [nombre de cartes de la série, cartes possédées en bits] */
+const ppBits=(ids,has)=>{const a=new Uint8Array(Math.ceil(ids.length/8));ids.forEach((id,i)=>{if(has(id))a[i>>3]|=1<<(i&7)});return b64u(a)};
+const ppFwIds=e=>cards.filter(c=>c.ext===e).map(c=>c.id);
+{const d0=ppData;ppData=function(){const d=d0();
+ try{const ow={};EXTS.forEach(([e])=>{const ids=ppFwIds(e),by=new Map(cards.map(c=>[c.id,c]));if(ids.some(id=>by.get(id).own>0))ow[e]=[ids.length,ppBits(ids,id=>by.get(id).own>0)]});d.ow=ow}catch(e){}
+ try{msBindInit();const om=new Set(MS_ALL.filter(c=>c.own>0).map(c=>c.id)),mw={};MS_SETS.forEach(t=>{const ids=t.c.map(x=>x[0]);if(ids.some(id=>om.has(id)))mw[t.id]=[ids.length,ppBits(ids,id=>om.has(id))]});d.mw=mw}catch(e){}
+ return d}}
+/* ce que je reçois : seulement des séries connues, de la bonne taille */
+{const c0=ppClean;ppClean=function(d){const r=c0(d);if(!r)return r;
+ const ok=(o,len)=>{const out={};if(!o||typeof o!=='object'||Array.isArray(o))return out;for(const k of Object.keys(o).slice(0,400)){const v=o[k],n=len(k);if(!n||!Array.isArray(v)||+v[0]!==n||typeof v[1]!=='string'||!/^[A-Za-z0-9_-]{1,3000}$/.test(v[1]))continue;out[k]=v[1]}return out};
+ try{const fl=new Map(EXTS.map(([e])=>[e,ppFwIds(e).length]));r.ow=ok(d.ow,k=>fl.get(k))}catch(e){r.ow={}}
+ try{const ml=new Map(MS_SETS.map(t=>[t.id,t.c.length]));r.mw=ok(d.mw,k=>ml.get(k))}catch(e){r.mw={}}
+ return r}}
+let PPSV=null;
+const ppCurP=()=>{try{return cmMe(PP.name)?ppClean(ppData()):PP.row&&PP.row.P}catch(e){return null}};
+function ppSvHTML(P){const id=PPSV.id,ms=!EXTS.some(x=>x[0]===id),bits=b64d(((ms?P.mw:P.ow)||{})[id]||''),name=cmMe(PP.name)?'toi':PP.name;
+ let L;if(ms){msBindInit();const t=MS_SETS.find(x=>x.id===id);L=t?t.c.map(x=>BKC[x[0]]||{id:x[0],name:x[1],n:+(x[0].split('-')[1]||0),ver:'Normal'}):[]}else L=cards.filter(c=>c.ext===id);
+ const has=i=>!!(bits[i>>3]&(1<<(i&7))),n=L.filter((c,i)=>has(i)).length,f=PPSV.f||'';
+ const cells=L.map((c,i)=>{const o=has(i);if(f==='y'&&!o||f==='n'&&o)return '';return `<div class="ppg-c${o?'':' miss'}">${bkArt({id:c.id,type:c.type,n:c.n,name:c.name,ver:c.ver,own:1})}<small>${esc(ms?c.id:cid(c.id))}</small></div>`}).join('');
+ const T=(k,t)=>`<button class="chip" aria-pressed="${f===k}" data-ppsvf="${k}">${t}</button>`;
+ return `<div class="sheet ppsv" id="ppsv"><div role="dialog" aria-label="Cartes ${esc(id)}"><div class="bkv-hd"><h2>${esc(id)} · ${esc(name)}</h2><button class="ib" data-ppsvx aria-label="Fermer">✕</button></div>
+ <div class="sub">${n} / ${L.length} cartes · les cartes grisées, ${cmMe(PP.name)?'tu ne les as pas':'il ne les a pas'}</div>
+ <div class="row" style="margin:10px 0">${T('','Toutes')}${T('y',cmMe(PP.name)?'Possédées':'Il les a')}${T('n',cmMe(PP.name)?'Manquantes':'Il ne les a pas')}</div>
+ <div class="ppg">${cells||'<div class="sub">Aucune carte.</div>'}</div></div></div>`}
+{const v0=ppView;ppView=function(){let h=v0();const P=ppCurP();if(!P)return h;const ow=P.ow||{},mw=P.mw||{};
+ h=h.replace(/<div class="ppsr"><b class="ppsc" style="([^"]*)">([A-Za-z0-9-]+)<\/b>/g,(m,st,id)=>ow[id]||mw[id]?`<div class="ppsr ppgo" role="button" tabindex="0" data-ppser="${id}" aria-label="Voir les cartes ${id} en photo"><b class="ppsc" style="${st}">${id}</b>`:m);
+ if(Object.keys(ow).length||Object.keys(mw).length)h=h.replace(/(<div class="cmh"><b>(?:Fusion World|Masters) · séries<\/b>[\s\S]*?<\/div>)/g,'$1<p class="sub pphint">📷 Touche une série pour voir les cartes en photo.</p>');
+ if(PPSV)h+=ppSvHTML(P);return h}}
+document.addEventListener('click',e=>{if(!e.target.closest)return;const t=e.target;
+ const g=t.closest('[data-ppser]');if(g){e.stopPropagation();PPSV={id:g.dataset.ppser,f:''};render();return}
+ const v=document.getElementById('ppsv');if(!v||!v.contains(t))return;e.stopPropagation();
+ if(t===v||t.closest('[data-ppsvx]')){PPSV=null;render();return}
+ const f=t.closest('[data-ppsvf]');if(f){PPSV.f=f.dataset.ppsvf;render()}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PPSV){e.stopPropagation();PPSV=null;render()}else if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-ppser]')){e.preventDefault();e.target.closest('[data-ppser]').click()}},true);
+/* ===== PPS2:END ===== */
+
 
 
 
@@ -11508,6 +11557,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:125,d:'2026-11-18',it:[['n','📷','Cartes en photo dans les profils','Sur un profil public, touche une série pour voir ses cartes en photo : celles qu’il n’a pas sont grisées.','comm']]},
 {v:124,d:'2026-11-17',it:[['n','🖨️','Liste à imprimer avec photos','Choisis « Avec photos » ou « Sans photo » avant d’imprimer ta liste.','print']]},
 {v:123,d:'2026-11-17',it:[['n','💶','Valeur des classeurs','Chaque classeur montre la valeur de tes cartes et combien coûteraient celles qui manquent.','bind'],['n','💬','Classeur dans le chat','Dans un classeur, touche « Montrer dans le chat » : les autres voient tes pages et peuvent le copier.','bind'],['n','📤','Partager tes manquantes','Collection > Manquantes > Partager : la liste des cartes qui te manquent, à envoyer pour des échanges.','coll']]},
 {v:122,d:'2026-11-17',it:[['c','🖼️','Photos dans les classeurs','Les cartes SB01, SB02 et des anciennes collections ont maintenant leur photo dans les classeurs.','bind']]},

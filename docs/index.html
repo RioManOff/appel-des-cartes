@@ -3276,6 +3276,7 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .ad-l{margin:10px 0 0;padding:0;list-style:none}
 .ad-l li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--hl,var(--ln));font-size:14px}.ad-l li:last-child{border:0}.ad-l span{color:var(--mu);font-size:13px}
 .lk-in{padding:12px 14px;font-size:14px;line-height:1.4}.lk-i{margin-top:6px}.lk-i summary{cursor:pointer;color:var(--mu);font-size:13px;font-weight:600;list-style:none;padding:4px 0}.lk-i summary::-webkit-details-marker{display:none}.lk-i[open] summary{margin-bottom:4px}
+.sevo{display:block;font:700 11.5px/1.2 Barlow,sans-serif;color:var(--mu);margin-top:2px}.sevo.up{color:#3ecf8e}.sevo.dn{color:#ff6b6b}.scurve{margin-top:10px;padding:10px;border:1px solid var(--ln);border-radius:10px;background:var(--sf)}.scurve svg{display:block;width:100%;height:70px;margin:6px 0}.sch{display:flex;justify-content:space-between;gap:8px;font:600 12px Barlow,sans-serif;color:var(--mu)}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -3586,7 +3587,8 @@ const sealCm=(e,t)=>MKON?(MKS[e+'-'+t]||0):0,                                  /
   sealVal=e=>SEALT.reduce((a,t)=>{const s=SEAL[e+'-'+t[0]];return a+(s?Math.max(0,s.own||0)*sealPx(e,t[0]):0)},0),   /* valeur des scellés possédés d'une série */
   sealTag=(e,t)=>{const p=sealPx(e,t);return p?`<br><b class="pxt">${eur(p)}</b>`:''};
 /* fiche d'un scellé : tableau « Prix Cardmarket » (comme celui d'une carte) */
-function sealCmBlock(e,t){if(!MKON)return '';const k=e+'-'+t,p=MKS[k];
+function sealCmBlock(e,t){return sealCmBlock0(e,t)+sealCurve(e+'-'+t)}
+function sealCmBlock0(e,t){if(!MKON)return '';const k=e+'-'+t,p=MKS[k];
   if(!p)return '<div class="sub mkl">💶 Pas de prix japonais sur Cardmarket pour ce produit.</div>';
   const est=MKSX.includes(k),own=Math.max(0,(SEAL[k]||{}).own||0);
   return `<div class="cmt" role="group" aria-label="Prix Cardmarket"><div class="cmh"><span>💶 Cardmarket · japonais</span><span style="white-space:nowrap">au ${pxFd(MKSD)}</span></div><dl><dt>Premier prix</dt><dd>${est?'—':eur(p)}</dd>${own>0?`<dt>Ton stock (×${own})</dt><dd>${eur(own*sealPx(e,t))}</dd>`:''}</dl>${est?`<div class="sub">Pas de vente récente sur Cardmarket : ${eur(p)} est une estimation moins fiable.</div>`:''}</div>`}
@@ -8299,7 +8301,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='16 nov. 2026 · 119';
+const BUILD='17 nov. 2026 · 120';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -8912,16 +8914,16 @@ function cxCards(x,s){
  return hud+seg+pills+qb+tip+rh+body+mb+oth}
 
 /* ---------- l'onglet Scellés ---------- */
-function cxSealCard(img,t,sub,n,px,want,open,dec,inc){
- return `<div class="cx-sp${n?' own':''}">${open?`<button type="button" class="cx-spa" ${open} aria-label="${t} : acheter, prix, vendre">${img}</button>`:`<div class="cx-spa">${img}</div>`}<div class="cx-spt"><b>${t}</b><small>${sub}</small>${px?`<span class="cx-px">${eur(px)}</span>`:''}${want?`<em>Recherché × ${want}</em>`:''}</div>`
+function cxSealCard(img,t,sub,n,px,want,open,dec,inc,key){
+ return `<div class="cx-sp${n?' own':''}">${open?`<button type="button" class="cx-spa" ${open} aria-label="${t} : acheter, prix, vendre">${img}</button>`:`<div class="cx-spa">${img}</div>`}<div class="cx-spt"><b>${t}</b><small>${sub}</small>${px?`<span class="cx-px">${eur(px)}</span>${key?sealEvo(key):''}`:''}${want?`<em>Recherché × ${want}</em>`:''}</div>`
   +`<span class="cx-st big${n?'':' z'}">${n?`<button type="button" class="cx-m" ${dec} aria-label="Retirer : ${t}">−</button><b>${n}</b>`:''}<button type="button" class="cx-p" ${inc} aria-label="Ajouter : ${t}">+</button></span></div>`}
 function cxSealed(x){if(x.ed==='en')return enSealed(x);
  if(x.ed==='ms'){const set=x.set,q=msSealQ(set),tot=q.reduce((a,b)=>a+b,0);
   return `<div class="cx-sls">${tot?`<b>${tot}</b> produit${cxS(tot,'')} scellé${cxS(tot,'')} non ouvert${cxS(tot,'')}`:'Aucun produit scellé noté pour cette série.'} Ils sont comptés à part de tes cartes.</div><div class="cx-sg" style="--cr:${x.rgb}">${MS_SEAL.map((t,k)=>{const id=set.id+'-'+t[0],im=t[3]?msImg(set.id,t[3],'cx-spi'):'';
-   return cxSealCard(im||`<span class="cx-spe">${{booster:'🎴',display:'📦',case:'🗃️'}[t[0]]}</span>`,t[1],t[2],q[k],msCm(id),0,'',`data-ms="dec" data-id="${id}"`,`data-ms="inc" data-id="${id}"`)}).join('')}</div>`}
+   return cxSealCard(im||`<span class="cx-spe">${{booster:'🎴',display:'📦',case:'🗃️'}[t[0]]}</span>`,t[1],t[2],q[k],msCm(id),0,'',`data-ms="dec" data-id="${id}"`,`data-ms="inc" data-id="${id}"`,id)}).join('')}</div>`}
  const e=x.id,T=sealTs(e),tot=T.reduce((a,t)=>a+Math.max(0,+(cxSl(e,t[0]).own)||0),0),inv=X.buys.filter(b=>b.ext===e).reduce((a,b)=>a+b.q*nb(b.p),0),val=sealVal(e);
  return `<div class="cx-sls">${tot?`<b>${tot}</b> produit${cxS(tot,'')} scellé${cxS(tot,'')} non ouvert${cxS(tot,'')}`:'Aucun produit scellé noté pour cette série.'}${inv?` · investi <b>${eur(inv)}</b>`:''}${val>0?` · valeur <b>${eur(val)}</b>`:''}</div>`
-  +`<div class="cx-sg" style="--cr:${x.rgb}">${T.map(t=>{const s=cxSl(e,t[0]),im=imgOf(e,t[0]);return cxSealCard(im?`<img class="cx-spi" src="${im}" alt="" draggable="false">`:`<span class="cx-spe">${SEALI[t[0]]}</span>`,t[1],t[2],Math.max(0,+s.own||0),sealPx(e,t[0]),s.want,`data-sn="${t[0]}"`,`data-sk="${t[0]}" data-sd="-1"`,`data-sk="${t[0]}" data-sd="1"`)}).join('')}</div>`
+  +`<div class="cx-sg" style="--cr:${x.rgb}">${T.map(t=>{const s=cxSl(e,t[0]),im=imgOf(e,t[0]);return cxSealCard(im?`<img class="cx-spi" src="${im}" alt="" draggable="false">`:`<span class="cx-spe">${SEALI[t[0]]}</span>`,t[1],t[2],Math.max(0,+s.own||0),sealPx(e,t[0]),s.want,`data-sn="${t[0]}"`,`data-sk="${t[0]}" data-sd="-1"`,`data-sk="${t[0]}" data-sd="1"`,e+'-'+t[0])}).join('')}</div>`
   +`<p class="sub cx-slh">Touche un produit pour noter un achat, son prix, l’ouvrir ou le vendre.</p>`}
 
 /* ---------- fiches ---------- */
@@ -10158,6 +10160,19 @@ fetch('fw-extra.json').then(r=>r.ok?r.json():{}).then(d=>{let n=0;for(const k in
  {const r0=render;render=function(){const v=r0.apply(this,arguments);setTimeout(arm,0);return v}}
  document.addEventListener('click',()=>setTimeout(arm,80),true);try{new MutationObserver(()=>setTimeout(arm,0)).observe(document.body,{childList:true})}catch(e){}setTimeout(arm,1500)})();
 /* ===== BACK:END ===== */
+/* ===== SEAL-EVO : évolution du prix des produits scellés (historique docs/hist_seal.json, un point par jour) ===== */
+let HSEAL=null;
+function hsLoad(){if(HSEAL!==null)return;HSEAL={d:[],v:{}};fetch('hist_seal.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(h=>{if(h&&Array.isArray(h.d)&&h.v&&typeof h.v==='object'){HSEAL=h;try{render()}catch(e){}}}).catch(()=>{})}
+function hsPts(key,days){hsLoad();const L=HSEAL.v[key];if(!L)return [];const o=[],lim=Date.now()-days*864e5;HSEAL.d.forEach((d,i)=>{const v=L[i];if(v!=null&&v>0&&Date.parse(d)>=lim)o.push([d,v/100])});return o}
+function sealEvo(key){if(!MKON)return '';const P=hsPts(key,31);if(P.length<2)return '';const a=P[0],b=P[P.length-1],span=(Date.parse(b[0])-Date.parse(a[0]))/864e5;if(span<6||!a[1])return '';
+ const pc=Math.round((b[1]-a[1])/a[1]*100);if(!pc)return `<small class="sevo">= ${span>=28?'sur 30 j':'en '+Math.round(span)+' j'}</small>`;
+ return `<small class="sevo ${pc>0?'up':'dn'}">${pc>0?'▲':'▼'} ${Math.abs(pc)} % ${span>=28?'sur 30 j':'en '+Math.round(span)+' j'}</small>`}
+function sealCurve(key){if(!MKON)return '';const P=hsPts(key,365);if(P.length<3)return `<div class="sub" style="margin-top:6px">📈 La courbe de prix apparaîtra après quelques jours de relevés.</div>`;
+ const W=300,H=70,vs=P.map(x=>x[1]),mn=Math.min(...vs),mx=Math.max(...vs),r=mx-mn||1,t0=Date.parse(P[0][0]),t1=Date.parse(P[P.length-1][0])||t0+1;
+ const pt=P.map(([d,v])=>[((Date.parse(d)-t0)/((t1-t0)||1))*(W-8)+4,H-6-((v-mn)/r)*(H-14)].map(n=>n.toFixed(1)).join(',')).join(' ');
+ const up=vs[vs.length-1]>=vs[0];
+ return `<div class="scurve" role="img" aria-label="Prix de ${eur(vs[0])} à ${eur(vs[vs.length-1])} depuis le ${pxFd(P[0][0])}"><div class="sch"><span>📈 Évolution du prix</span><span>${pxFd(P[0][0])} → ${pxFd(P[P.length-1][0])}</span></div><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline fill="none" stroke="${up?'var(--ok,#3ecf8e)':'var(--ko,#ff5a5a)'}" stroke-width="2.5" stroke-linejoin="round" points="${pt}"/></svg><div class="sch"><span>min ${eur(mn)}</span><span>max ${eur(mx)}</span></div></div>`}
+/* ===== SEAL-EVO:END ===== */
 
 /* ===== SRX : toutes les séries dans chaque liste (accueil, stats, profil, carnet de ventes) =====
    Fusion World (boosters, decks FS, autres séries), Masters, et les anciennes collections (rangées par collection). */
@@ -11213,6 +11228,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+ {v:120,d:'2026-11-17',it:[['a','📦','Prix des scellés à jour','Les prix des boosters, displays et cases Fusion World (japonais) sont maintenant mis à jour chaque jour depuis Cardmarket, comme les cartes. Masters : prix ajoutés pour BT04, les Draft Box, les Themed Boosters, le Mythic et le Battle Evolution. Bientôt : l’évolution sur 30 jours sous chaque prix et la courbe dans la fiche du produit.','coll']]},
  {v:119,d:'2026-11-16',it:[['a','📅','BT32 pas encore sorti','BT32 Chromatic Ascension sort le 27 novembre : ses cartes sont déjà dévoilées, d’où l’étiquette « sortie le 27 nov. » jusqu’à sa sortie. Les prix arriveront ensuite.','ms'],['a','⚡','Ouverture plus rapide','Les images des boosters et displays Masters se chargent juste après l’ouverture : l’appli démarre avec environ 1 Mo de moins à télécharger.','home']]},
  {v:118,d:'2026-11-17',it:[['a','↩️','Bouton retour','Sur Android, le bouton « retour » du téléphone ferme maintenant la fiche, le menu ou la boutique ouverte, puis ramène à l’Accueil, au lieu de quitter l’appli.','home'],['a','🎲','BT32 en boosters virtuels','Chromatic Ascension, les Themed Boosters, le Mythic Booster et le Battle Evolution Booster s’ouvrent en boosters virtuels. Les promos et coffrets n’y apparaissent plus.','luck']]},
  {v:117,d:'2026-11-16',it:[['a','🏷️','Noms des réimpressions','3662 cartes Masters (avant-premières, tournois de lancement, 2e éditions, promos de tournoi, variantes spéciales) portent maintenant le même nom que la carte d’origine, avec leur version entre parenthèses. Toutes les nouvelles cartes ont aussi leur photo.','ms']]},

@@ -5,17 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          sparse-checkout: docs/index.html
-            docs/ms_pid.json
-          sparse-checkout-cone-mode: false
       - run: |
           python3 - <<'PY'
           import json,urllib.request,html,re,collections
           B='https://downloads.s3.cardmarket.com/productCatalog/'
           produits=json.loads(urllib.request.urlopen(urllib.request.Request(B+'productList/products_singles_13.json',headers={'User-Agent':'x'}),timeout=120).read())['products']
+          import os;os.makedirs('docs',exist_ok=True)
+          for f in ['index.html','ms_pid.json']:open('docs/'+f,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/RioManOff/appel-des-cartes/main/docs/'+f,timeout=120).read())
           pid=json.load(open('docs/ms_pid.json'))
           ref={k:v for k,v in pid['c'].items() if re.match(r'BT2[01]-',k)}
           lien={k:v for k,v in pid['c'].items() if not re.match(r'BT2[01]-',k)}

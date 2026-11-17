@@ -3,34 +3,18 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
-    permissions:
-      contents: write
+    timeout-minutes: 15
     steps:
-      - run: pip install -q pillow
       - run: |
+          git clone -q --depth 1 -b sdbh-photos https://github.com/${{ github.repository }} sb
           python3 - <<'PY'
-          import json,urllib.request,base64,io,os
-          from PIL import Image
-          M=json.loads('''{"BT32": [710674, 710675], "TB1": [162381, 162382], "TB2": [173548, 173547], "TB3": [180741, 180739], "MB": [248234, 248235], "BEB": [228920, 228919]}''')
-          def get(pid):
-            try:return urllib.request.urlopen(urllib.request.Request('https://tcgplayer-cdn.tcgplayer.com/product/%d_in_1000x1000.jpg'%pid,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()
-            except Exception as e:print('XXE',pid,e);return None
-          def enc(b,h):
-            im=Image.open(io.BytesIO(b)).convert('RGBA')
-            # fond blanc -> transparent
-            px=im.load();w,hh=im.size
-            bb=im.getbbox();
-            im2=Image.new('RGBA',im.size)
-            data=[(r,g,bl,0) if r>245 and g>245 and bl>245 else (r,g,bl,a) for r,g,bl,a in im.getdata()]
-            im2.putdata(data);bb=im2.getbbox() or (0,0,w,hh);im2=im2.crop(bb)
-            ww=round(im2.width*h/im2.height);im2=im2.resize((ww,h),Image.LANCZOS);o=io.BytesIO();im2.save(o,'WEBP',quality=85)
-            return 'data:image/webp;base64,'+base64.b64encode(o.getvalue()).decode()
-          out={}
-          for sid,(pk,bx) in M.items():
-            a=get(pk);b=get(bx);out[sid]={}
-            if a:out[sid]['pk']=enc(a,360)
-            if b:out[sid]['box']=enc(b,300)
-          os.makedirs('pub',exist_ok=True);json.dump(out,open('pub/packs.json','w'));print('XXOK',{k:list(v) for k,v in out.items()})
+          import json,os
+          N=json.loads('''{"910": 10, "739": 81, "742": 81, "747": 77, "748": 76, "751": 85, "752": 88, "754": 105, "764": 96, "740": 265, "765": 40, "773": 39, "791": 40, "805": 40, "877": 40, "930": 40, "1000": 31, "1037": 31, "1102": 31, "1130": 31, "1190": 40, "1222": 40, "1327": 40, "1380": 40, "1422": 30, "770": 82, "793": 86, "814": 94, "840": 93, "850": 111, "876": 99, "915": 89, "916": 94, "953": 93, "963": 93, "964": 98, "994": 104, "771": 339, "778": 12, "779": 12, "780": 12, "781": 12, "783": 12, "806": 12, "836": 12, "885": 12, "941": 12, "961": 13, "1004": 12, "1077": 13, "1098": 12, "1131": 12, "1168": 13, "1185": 12, "1219": 12, "1220": 13, "1352": 12, "1371": 13, "995": 107, "1025": 93, "1028": 100, "1049": 92, "1081": 123, "1085": 92, "1091": 88, "1121": 94, "1127": 92, "1158": 97, "1165": 102, "1175": 100, "996": 277, "1179": 90, "1191": 89, "1221": 91, "1235": 90, "1236": 110, "1294": 98, "1332": 98, "1349": 98, "1350": 94, "1351": 101, "1276": 173, "1372": 97, "1373": 97, "1385": 101, "1402": 96, "1407": 97, "1411": 93, "1390": 91}''')
+          res={}
+          for ids,n in N.items():
+            f='sb/sdbh/D%s.json'%ids
+            if not os.path.exists(f):res[ids]=['absent',n];continue
+            d=json.load(open(f));k=len([x for x in d if not x.startswith('_')])
+            if k<n:res[ids]=[k,n]
+          print('XXJSON'+json.dumps(res))
           PY
-          cd pub && git init -q && git checkout -q -b tmp-packs && git add . && git -c user.name=bot -c user.email=bot@x commit -qm p && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-packs && echo XXPUSHED

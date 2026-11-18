@@ -3346,6 +3346,15 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .ppg-c .art{width:100%}
 .ppg-c small{font-size:11px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .ppg-c.miss .art{opacity:.3;filter:grayscale(1)}
+/* CMP */
+.cmp-go{margin:12px 0 4px}
+.cmp-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;text-align:center}
+.cmp-top b{display:block;font-size:22px}
+.cmp-top small{color:var(--mu);font-size:12px}
+.cmp-k{flex-wrap:wrap}
+.cmp-sx{display:flex;gap:6px;overflow-x:auto;padding:4px 0 6px;scrollbar-width:none}
+.cmp-sx .chip{flex:none}
+.cmp-sx small{opacity:.7;margin-left:3px}
 </style>
 </head>
 <body>
@@ -8361,7 +8370,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='18 nov. 2026 · 126';
+const BUILD='18 nov. 2026 · 127';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10507,6 +10516,62 @@ document.addEventListener('click',e=>{if(!e.target.closest)return;const t=e.targ
  const f=t.closest('[data-ppsvf]');if(f){PPSV.f=f.dataset.ppsvf;render()}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PPSV){e.stopPropagation();PPSV=null;render()}else if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-ppser]')){e.preventDefault();e.target.closest('[data-ppser]').click()}},true);
 /* ===== PPS2:END ===== */
+/* ===== CMP : comparer sa collection avec celle d'un autre membre (profil public) ===== */
+let PPCMP=null;
+/* ses cartes : d'après son profil (v125+) ou, sinon, d'après sa sauvegarde en ligne (pp_cartes) */
+function cmpHis(P){const fw=new Set(),ms=new Set();let any=false;
+ const rd=(bits,ids,S)=>{const b=b64d(bits);ids.forEach((id,i)=>{if(b[i>>3]&(1<<(i&7)))S.add(id)})};
+ try{for(const [e,bits] of Object.entries(P.ow||{})){any=true;rd(bits,ppFwIds(e),fw)}}catch(e){}
+ try{const by=new Map(MS_SETS.map(t=>[t.id,t]));for(const [k,bits] of Object.entries(P.mw||{})){const t=by.get(k);if(t){any=true;rd(bits,t.c.map(x=>x[0]),ms)}}}catch(e){}
+ if(any)return {fw,ms};
+ const st=PPC[PP.name.toLowerCase()];if(!st){ppCLoad(PP.name);return 'busy'}if(st==='busy')return 'busy';if(typeof st==='string')return st;return st}
+function cmpData(P){const his=cmpHis(P);if(typeof his==='string')return his;msBindInit();
+ const mine=new Set(cards.filter(c=>c.own>0).map(c=>c.id));MS_ALL.forEach(c=>{if(c.own>0)mine.add(c.id)});
+ const ser=[];const add=(id,nm,ids,ms)=>{const H=ms?his.ms:his.fw,a=[],b=[],c=[];for(const x of ids){const m=mine.has(x),h=H.has(x);if(h&&!m)a.push(x);else if(m&&!h)b.push(x);else if(m&&h)c.push(x)}if(a.length||b.length||c.length)ser.push({id,nm,ms,a,b,c})};
+ EXTS.forEach(([e])=>add(e,serNm(e),ppFwIds(e),false));MS_SETS.forEach(t=>add(t.id,t.n,t.c.map(x=>x[0]),true));
+ const T=k=>ser.reduce((s,x)=>s+x[k].length,0);return {ser,a:T('a'),b:T('b'),c:T('c'),me:mine.size,he:his.fw.size+his.ms.size}}
+const cmpCard=id=>BKC[id]||swCard(id);
+function cmpHTML(P){const nm=PP.name,d=cmpData(P),sh=inner=>`<div class="sheet ppsv" id="ppcmp"><div role="dialog" aria-label="Comparer avec ${esc(nm)}"><div class="bkv-hd"><h2>⚖️ Toi et ${esc(nm)}</h2><button class="ib" data-cmpx aria-label="Fermer">✕</button></div>${inner}</div></div>`;
+ if(d==='busy')return sh('<div class="sub">Chargement de sa collection…</div>');
+ if(typeof d==='string')return sh(`<div class="sub">${d==='nosrv'?'La comparaison n’est pas encore activée sur le serveur.':d==='none'?esc(nm)+' n’a pas encore sauvegardé sa collection en ligne.':'Vérifie ta connexion puis réessaie.'}</div>`);
+ const k=PPCMP.k||'a',L=d.ser.filter(x=>x[k].length).sort((x,y)=>y[k].length-x[k].length);let sid=PPCMP.s;if(!L.some(x=>x.id===sid))sid=L[0]&&L[0].id;PPCMP.s=sid;
+ const cur=L.find(x=>x.id===sid),ids=cur?cur[k].slice().sort((x,y)=>pxv(cmpCard(y)||{})-pxv(cmpCard(x)||{})):[];
+ const lab={a:`Il a, pas toi`,b:`Toi, pas lui`,c:`En commun`},T=x=>`<button class="chip" aria-pressed="${k===x}" data-cmpk="${x}">${lab[x]} <b>${cmNum(d[x])}</b></button>`;
+ const val=ids.reduce((s,id)=>s+(pxv(cmpCard(id)||{})||0),0);
+ return sh(`<div class="cmp-top"><div><b>${cmNum(d.me)}</b><small>tes cartes</small></div><div><b>${cmNum(d.c)}</b><small>en commun</small></div><div><b>${cmNum(d.he)}</b><small>ses cartes</small></div></div>
+ <button class="btn" data-cmpeq style="margin:4px 0 12px">🤝 Proposer un échange équilibré</button>
+ <div class="row cmp-k">${T('a')}${T('b')}${T('c')}</div>
+ ${L.length?`<div class="cmp-sx" role="tablist">${L.map(x=>`<button class="chip" aria-pressed="${x.id===sid}" data-cmps="${esc(x.id)}">${esc(x.id)} <small>${x[k].length}</small></button>`).join('')}</div>
+ <div class="sub" style="margin:8px 0">${esc(cur.id)} · ${esc(cur.nm||'')} : ${ids.length} carte${ids.length>1?'s':''}${val>0?' · ≈ '+eur(val):''}</div>
+ <div class="ppg">${ids.slice(0,240).map(id=>{const c=cmpCard(id);if(!c)return '';const p=pxv(c);return `<div class="ppg-c">${bkArt({id:c.id,type:c.type,n:c.n,name:c.name,ver:c.ver,own:1})}<small>${esc(cur.ms?c.id:cid(c.id))}${p?' · '+eur(p):''}</small></div>`}).join('')}</div>${ids.length>240?`<div class="sub">+ ${ids.length-240} autres</div>`:''}`:'<div class="sub">Aucune carte ici.</div>'}`)}
+/* échange équilibré : je reçois des cartes qu'il propose à l'échange et que je n'ai pas ; je donne mes cartes en trop qu'il n'a pas ; même valeur des deux côtés */
+function cmpEq(P){const d=cmpData(P);if(typeof d==='string'){toast('Patiente, sa collection se charge…');return}
+ const his=cmpHis(P),hasH=id=>his.fw.has(id)||his.ms.has(id);
+ const R=(P.sell||[]).map(([id,q])=>({c:cards.find(x=>x.id===id),q})).filter(x=>x.c&&!(x.c.own>0)&&pxv(x.c)>0).sort((a,b)=>(b.c.want>0)-(a.c.want>0)||pxv(b.c)-pxv(a.c));
+ const G=tradeData().prop.filter(x=>!hasH(x.c.id)&&pxv(x.c)>0).sort((a,b)=>pxv(b.c)-pxv(a.c));
+ if(!R.length){toast(PP.name+' n’a mis en échange aucune carte qui te manque');return}
+ if(!G.length){toast('Tu n’as pas de cartes en trop qu’il n’a pas (Fusion World)');return}
+ const sumG=G.reduce((s,x)=>s+pxv(x.c),0),r=[],g=[];let tr=0,tg=0;
+ for(const x of R){if(r.length>=12)break;const p=pxv(x.c);if(tr+p<=sumG*1.05){r.push({id:x.c.id,q:1,p:''});tr+=p}}
+ if(!r.length){r.push({id:R[R.length-1].c.id,q:1,p:''});tr=pxv(R[R.length-1].c)}
+ for(const x of G){if(g.length>=12)break;const p=pxv(x.c);if(tg+p<=tr*1.05){g.push({id:x.c.id,q:1,p:''});tg+=p}}
+ if(tg<tr*0.85){const rest=G.filter(x=>!g.some(y=>y.id===x.c.id)).sort((a,b)=>pxv(a.c)-pxv(b.c));for(const x of rest){if(tg>=tr*0.95||g.length>=12)break;g.push({id:x.c.id,q:1,p:''});tg+=pxv(x.c)}}
+ SW=swNorm({g,r,cg:'',cr:''});swSave();PPCMP=null;S.tab='swap';render();window.scrollTo(0,0);
+ toast(`Échange proposé : tu donnes ≈ ${eur(tg)}, tu reçois ≈ ${eur(tr)}. Ajuste puis partage-le.`)}
+{const v0=ppView;ppView=function(){let h=v0();if(cmMe(PP.name))return h;const P=ppCurP();if(!P)return h;
+ const btn=`<button type="button" class="btn alt cmp-go" data-cmpgo>⚖️ Comparer nos collections</button>`;
+ h=h.includes('<div class="ppst">')?h.replace('<div class="ppst">',btn+'<div class="ppst">'):h;
+ if(PPCMP)h+=cmpHTML(P);return h}}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-cmpgo]')){e.stopPropagation();PPCMP={k:'a',s:null};render();return}
+ const v=document.getElementById('ppcmp');if(!v||!v.contains(t))return;e.stopPropagation();
+ if(t===v||t.closest('[data-cmpx]')){PPCMP=null;render();return}
+ const k=t.closest('[data-cmpk]');if(k){PPCMP.k=k.dataset.cmpk;PPCMP.s=null;render();return}
+ const s=t.closest('[data-cmps]');if(s){PPCMP.s=s.dataset.cmps;render();return}
+ if(t.closest('[data-cmpeq]')){const P=ppCurP();if(P)cmpEq(P)}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PPCMP){e.stopPropagation();PPCMP=null;render()}},true);
+/* ===== CMP:END ===== */
+
 
 
 
@@ -11565,6 +11630,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:127,d:'2026-11-18',it:[['n','⚖️','Comparer avec un membre','Sur son profil, « Comparer nos collections » : ce qu’il a et pas toi, l’inverse, et un échange équilibré proposé en un appui.','comm']]},
 {v:126,d:'2026-11-18',it:[['c','📷','Profils : cartes visibles tout de suite','Les séries d’un profil s’ouvrent même si le joueur n’a pas encore la dernière version.','comm']]},
 {v:125,d:'2026-11-18',it:[['n','📷','Cartes en photo dans les profils','Sur un profil public, touche une série pour voir ses cartes en photo : celles qu’il n’a pas sont grisées.','comm']]},
 {v:124,d:'2026-11-17',it:[['n','🖨️','Liste à imprimer avec photos','Choisis « Avec photos » ou « Sans photo » avant d’imprimer ta liste.','print']]},

@@ -3364,6 +3364,10 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .gphv{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.94);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 .gphv img{max-width:100vw;max-height:100vh;object-fit:contain}
 .gphx{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:20px}
+/* GPH2 */
+.chc .chpb{flex:none;width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line,rgba(255,255,255,.12));background:var(--cd,rgba(255,255,255,.06));font-size:20px;line-height:1;cursor:pointer;align-self:flex-end}
+.ch-ph{display:block;max-width:min(240px,62vw);margin:0 0 6px;cursor:zoom-in}
+.ch-ph img{max-height:300px}
 </style>
 </head>
 <body>
@@ -4143,7 +4147,7 @@ function msHubBody(){
   if(MS.inbox===null)return '<div class="sub">Chargement…</div>';
   const conv=fr.map(f=>({f,l:MS.inbox[f.uid]||null,n:MS.unread[f.uid]||0})).filter(x=>x.l||x.n).sort((a,b)=>(b.l?b.l.t:9e15)-(a.l?a.l.t:9e15)||(b.l?b.l.id:9e15)-(a.l?a.l.id:9e15));
   if(!conv.length)return `<div class="sub">${MS.ibE?'Messages indisponibles pour le moment.':'Aucune discussion pour l’instant. Touche 💬 à côté d’un ami pour lui écrire.'}</div>`;
-  return conv.map(({f,l,n})=>`<button type="button" class="vnsg${n?' msn':''}" data-chat="${esc(f.uid)}">${cmAv(f.name)}<span class="vnin"><b>${esc(f.name)}</b><small class="msp">${l?esc((l.mine?'Toi : ':'')+l.body.replace(/\s+/g,' ').slice(0,80)):'Nouveau message'}</small></span><span class="mst">${l?`<small>${msAgo(l.t)}</small>`:''}${n?`<b class="cmbd" aria-label="${n} non lu${n>1?'s':''}">${n>99?'99+':n}</b>`:''}</span></button>`).join('')}
+  return conv.map(({f,l,n})=>`<button type="button" class="vnsg${n?' msn':''}" data-chat="${esc(f.uid)}">${cmAv(f.name)}<span class="vnin"><b>${esc(f.name)}</b><small class="msp">${l?esc((l.mine?'Toi : ':'')+tkPlain(l.body).replace(/\s+/g,' ').slice(0,80)):'Nouveau message'}</small></span><span class="mst">${l?`<small>${msAgo(l.t)}</small>`:''}${n?`<b class="cmbd" aria-label="${n} non lu${n>1?'s':''}">${n>99?'99+':n}</b>`:''}</span></button>`).join('')}
 function msDrawHub(){if(S.tab!=='comm')return;const h=$('#ms-hub');if(h)h.innerHTML=msHubBody();const n=$('#ms-n');if(n)n.textContent=msCnt()}
 function msHub(lg){if(!lg)return '';
   return `<section class="panel cmc"><div class="cmh"><b>💬 Messages</b><span class="sub" id="ms-n">${msCnt()}</span></div><div class="cmls" id="ms-hub">${msHubBody()}</div></section>`}
@@ -4175,7 +4179,7 @@ function chListHTML(){
   for(const m of CH.msgs){
     const d=chDay(m.t);if(d!==day){day=d;h+=`<div class="chd">${d}</div>`}
     const sel=CH.sel===m.id,st=m.id===lm?(m.read?' · Vu':' · Envoyé'):'';
-    h+=`<div class="chm${m.mine?' me':''}${sel?' sel':''}"><button type="button" class="chb" data-chmsg="${m.id}" aria-pressed="${sel}" aria-label="${m.mine?'Toi':esc(CH.name)}, ${chHour(m.t)} : ${esc(m.body)}">${esc(m.body)}</button><small class="cht">${chHour(m.t)}${st}</small>${sel?`<div class="cha"><button type="button" class="chip" data-chcopy="${m.id}">Copier</button>${m.mine?`<button type="button" class="chip${CH.del===m.id?' chdanger':''}" data-chdel="${m.id}">${CH.del===m.id?'Confirmer ?':'Supprimer'}</button>`:''}</div>`:''}</div>`}
+    h+=`<div class="chm${m.mine?' me':''}${sel?' sel':''}"><button type="button" class="chb" data-chmsg="${m.id}" aria-pressed="${sel}" aria-label="${m.mine?'Toi':esc(CH.name)}, ${chHour(m.t)} : ${esc(tkPlain(m.body))}">${dmBody(m.body)}</button><small class="cht">${chHour(m.t)}${st}</small>${sel?`<div class="cha"><button type="button" class="chip" data-chcopy="${m.id}">Copier</button>${m.mine?`<button type="button" class="chip${CH.del===m.id?' chdanger':''}" data-chdel="${m.id}">${CH.del===m.id?'Confirmer ?':'Supprimer'}</button>`:''}</div>`:''}</div>`}
   return h}
 function chatV(){
   frEnsure();
@@ -4189,7 +4193,7 @@ function chatV(){
   const dr=CHD[CH.uid]||'',nm=esc(f.name);CH.sig=chSig();
   return h+`<div class="panel chh">${cmAv(f.name).replace('class="stb"','class="stb chav"')}<div class="ppt"><h2 class="ppn">${nm}</h2><div class="sub" id="ch-st">${chStat()}</div></div><button type="button" class="chip" data-ppo="${nm}">Profil</button></div>`
    +`<div class="chl" id="ch-l" role="log" aria-label="Discussion avec ${nm}">${chListHTML()}</div>`
-   +`<div class="chc"><textarea id="ch-t" class="cmq" rows="${Math.min(5,dr.split('\n').length)}" maxlength="${MSN}" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" placeholder="Écris un message…" aria-label="Ton message pour ${nm}">${esc(dr)}</textarea><button type="button" class="btn chs" id="ch-s" data-chsend aria-label="Envoyer"${msTrim(msTxt(dr))?'':' disabled'}>➤</button></div><div class="chn" id="ch-n"></div>`}
+   +`<div class="chc"><button type="button" class="chpb" data-chphoto aria-label="Envoyer une photo">📷</button><textarea id="ch-t" class="cmq" rows="${Math.min(5,dr.split('\n').length)}" maxlength="${MSN}" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" placeholder="Écris un message…" aria-label="Ton message pour ${nm}">${esc(dr)}</textarea><button type="button" class="btn chs" id="ch-s" data-chsend aria-label="Envoyer"${msTrim(msTxt(dr))?'':' disabled'}>➤</button></div><div class="chn" id="ch-n"></div>`}
 function chSig(){return CH.msgs.map(m=>m.id+(m.read?'r':'')).join(',')+'|'+CH.sel+'|'+CH.del+'|'+(CH.more?1:0)+'|'+CH.err+'|'+(CH.loaded?1:0)}
 const chBottom=()=>requestAnimationFrame(()=>window.scrollTo(0,document.documentElement.scrollHeight));
 /* met la liste à jour sur place (la saisie en cours n'est jamais touchée) ; mode : 'bottom' = aller en bas, 'keep' = ne pas bouger */
@@ -5705,7 +5709,7 @@ function gcUnTot(){let n=0,m=0;for(const r in GC.un){n+=GC.un[r].n||0;m+=GC.un[r
 function gcNotify(m){
   GC.note=Math.max(GC.note,m.id);gcLS.s('fb_gcnote',GC.note);
   if(GCPREF.n==='off')return;
-  const title=m.pseudo+' t’a mentionné dans le chat',body=m.body.replace(/\s+/g,' ').slice(0,100);
+  const title=m.pseudo+' t’a mentionné dans le chat',body=tkPlain(m.body).replace(/\s+/g,' ').slice(0,100);
   try{if(navigator.vibrate)navigator.vibrate([90,50,90])}catch(e){}
   if(document.hidden){
     try{if(typeof pnState==='function'&&pnState()==='granted'){const c=typeof pnCap==='function'?pnCap():null;
@@ -5995,7 +5999,7 @@ function gcMsgHTML(m,o){
   if(!mine)h+=o.first?`<button type="button" class="cg-av" data-gcp="${esc(m.pseudo)}" aria-label="Profil de ${esc(m.pseudo)}">${cmIni(m.pseudo)}</button>`:'<span class="cg-av cg-sp" aria-hidden="true"></span>';
   h+='<div class="cg-w">';
   if(!mine&&o.first)h+=`<div class="cg-nm"><button type="button" class="cg-pn" data-gcp="${esc(m.pseudo)}">${esc(m.pseudo)}</button></div>`;
-  h+=`<div class="cg-bb"${m.id?` data-gcmsg="${m.id}" role="button" tabindex="0" aria-label="${esc(mine?'Toi':m.pseudo)}, ${gcHM(m.t)} : ${esc(m.body.slice(0,200))}"`:''}>`;
+  h+=`<div class="cg-bb"${m.id?` data-gcmsg="${m.id}" role="button" tabindex="0" aria-label="${esc(mine?'Toi':m.pseudo)}, ${gcHM(m.t)} : ${esc(tkPlain(m.body).slice(0,200))}"`:''}>`;
   if(m.rt)h+=`<button type="button" class="cg-q" style="--gh:${gcHue(m.rp||'')}" data-gcgo="${m.rt}"><b>${esc(m.rp||'Message')}</b><span>${esc(m.rs||'…')}</span></button>`;
   h+=`<div class="cg-t">${rich.h}</div>`;
   if(rich.cards.length)h+=`<div class="cg-cs${rich.cards.length===1?' one':''}">${rich.cards.slice(0,3).map(gcChip).join('')}${rich.cards.length>3?`<span class="cg-cm">+${rich.cards.length-3} autre${rich.cards.length>4?'s':''}</span>`:''}</div>`;
@@ -6055,7 +6059,7 @@ function gcHeadHTML(){
    +`<button type="button" class="cg-ib" data-gcmenu aria-label="Options du chat">⋯${GC.admin&&GC.reports>0?`<em class="men">${GC.reports>9?'9+':GC.reports}</em>`:''}</button>`}
 function gcPinHTML(){
   const R=gcR(GC.room);if(!R.pin||GC.blocks.has(R.pin.uid))return '';
-  return `<button type="button" class="cg-pinb" data-gcpin="${R.pin.id}"><span>📌</span><span class="cg-pint"><b>${esc(R.pin.pseudo)}</b> ${esc(R.pin.body.replace(/\s+/g,' ').slice(0,140))}</span></button>`}
+  return `<button type="button" class="cg-pinb" data-gcpin="${R.pin.id}"><span>📌</span><span class="cg-pint"><b>${esc(R.pin.pseudo)}</b> ${esc(tkPlain(R.pin.body).replace(/\s+/g,' ').slice(0,140))}</span></button>`}
 /* ===== Chat général v2 · fenêtres : actions sur un message, émojis, cartes, joueurs, réglages, modération ===== */
 const GCP={k:'',a:null,more:0,cq:'',cf:'q',mod:null,modErr:'',busy:0},
   gcN=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(),
@@ -6100,7 +6104,7 @@ function gcPAct(id){
     edit=mine&&v2&&Date.now()-m.t<15*60e3,del=mine||GC.admin,pinned=!!(R.pin&&R.pin.id===m.id),set=GCP.more?GCEMOK:GCEMO;
   let b='';
   if(v2)b+=`<div class="cg-emr${GCP.more?' xl':''}" role="group" aria-label="Réagir">${set.map(e=>`<button type="button" class="cg-re${rx.has(e)?' on':''}" data-gca="react" data-gi="${id}" data-ge="${e}" aria-pressed="${rx.has(e)}" aria-label="Réagir avec ${e}">${e}</button>`).join('')}${GCP.more?'':'<button type="button" class="cg-re mo" data-gca="rxmore" aria-label="Plus de réactions">＋</button>'}</div>`;
-  b+=`<div class="cg-qt" style="--gh:${gcHue(m.pseudo)}"><b>${esc(mine?'Toi':m.pseudo)}</b> <small>${gcHM(m.t)}${m.ed?' · modifié':''}</small><p>${esc(m.body.slice(0,260))}${m.body.length>260?'…':''}</p></div>`;
+  b+=`<div class="cg-qt" style="--gh:${gcHue(m.pseudo)}"><b>${esc(mine?'Toi':m.pseudo)}</b> <small>${gcHM(m.t)}${m.ed?' · modifié':''}</small><p>${esc(tkPlain(m.body).slice(0,260))}${tkPlain(m.body).length>260?'…':''}</p></div>`;
   const A=[];
   if(v2)A.push(['reply','↩','Répondre']);
   A.push(['copy','📋','Copier le texte']);
@@ -6483,7 +6487,7 @@ function gcReplyTo(id){
   if(GC.v<2||!GCUI.inp)return;
   const m=gcR(GC.room).msgs.find(x=>x.id===id);if(!m)return;
   if(GCUI.edit)gcCancelBar(true);
-  GCUI.reply={id:m.id,pseudo:m.pseudo,snip:m.body.replace(/\s+/g,' ').slice(0,100)};
+  GCUI.reply={id:m.id,pseudo:m.pseudo,snip:tkPlain(m.body).replace(/\s+/g,' ').slice(0,100)};
   gcBar();try{GCUI.inp.focus()}catch(e){}}
 function gcStartEdit(id){
   const m=gcR(GC.room).msgs.find(x=>x.id===id);if(!m||m.uid!==gcMe()||!GCUI.inp)return;
@@ -6620,7 +6624,7 @@ document.addEventListener('click',e=>{
 function gcRowHTML(){
   if(!gcCan()||GC.v===-1)return '';
   const R=GC.R.general,l=R&&R.msgs.length?R.msgs[R.msgs.length-1]:null,
-    sub=l?esc((l.uid===gcMe()?'Toi : ':l.pseudo+' : ')+l.body.replace(/\s+/g,' ').slice(0,70)):'Discute avec tous les joueurs';
+    sub=l?esc((l.uid===gcMe()?'Toi : ':l.pseudo+' : ')+tkPlain(l.body).replace(/\s+/g,' ').slice(0,70)):'Discute avec tous les joueurs';
   return `<div class="amr cg-rw"><button type="button" class="amo cg-row" data-gcopen aria-label="Ouvrir le chat général"><span class="cg-ri" aria-hidden="true">🌍</span><span class="vnin"><b>Chat général</b><small class="amsp">${sub}</small></span><span class="mst"><b class="cmbd cg-rb" hidden></b></span></button></div>`}
 function gcCard(lg){
   if(!lg)return `<section class="panel cmc"><b>🌍 Chat général</b><p class="cmst">Discute avec tous les joueurs de l’appli. Il faut un compte pour lire et écrire.</p><button type="button" class="btn" data-cmlogin style="margin-top:12px">Se connecter ou créer un compte</button></section>`;
@@ -6685,7 +6689,7 @@ msHubBody=function(){
   const rows=fr.map(f=>({f,l:inb[f.uid]||null,n:(MS.unread||{})[f.uid]||0})).sort((a,b)=>(b.l?b.l.t:0)-(a.l?a.l.t:0)||cmLow(a.f.name).localeCompare(cmLow(b.f.name)));
   let h='';
   if(!fr.length)h+=`<div class="amv"><b>Pas encore d’amis</b><p>Touche « Chercher » pour trouver un joueur par son pseudo, puis ajoute-le depuis son profil.</p></div>`;
-  else h+=rows.map(({f,l,n})=>`<div class="amr${n?' amn':''}"><button type="button" class="amo" ${ns?'data-ppo':'data-chat'}="${esc(ns?f.name:f.uid)}">${cmAv(f.name)}<span class="vnin"><b>${esc(f.name)}</b><small class="amsp">${l?esc((l.mine?'Toi : ':'')+l.body.replace(/\s+/g,' ').slice(0,70)):(ns?'Voir son profil':'Dis bonjour 👋')}</small></span><span class="mst">${l?`<small>${msAgo(l.t)}</small>`:''}${n?`<b class="cmbd" aria-label="${n} non lu${n>1?'s':''}">${n>99?'99+':n}</b>`:''}</span></button><button type="button" class="amp" data-ppo="${esc(f.name)}" aria-label="Profil de ${esc(f.name)}">👤</button></div>`).join('');
+  else h+=rows.map(({f,l,n})=>`<div class="amr${n?' amn':''}"><button type="button" class="amo" ${ns?'data-ppo':'data-chat'}="${esc(ns?f.name:f.uid)}">${cmAv(f.name)}<span class="vnin"><b>${esc(f.name)}</b><small class="amsp">${l?esc((l.mine?'Toi : ':'')+tkPlain(l.body).replace(/\s+/g,' ').slice(0,70)):(ns?'Voir son profil':'Dis bonjour 👋')}</small></span><span class="mst">${l?`<small>${msAgo(l.t)}</small>`:''}${n?`<b class="cmbd" aria-label="${n} non lu${n>1?'s':''}">${n>99?'99+':n}</b>`:''}</span></button><button type="button" class="amp" data-ppo="${esc(f.name)}" aria-label="Profil de ${esc(f.name)}">👤</button></div>`).join('');
   if(sent.length)h+=`<div class="cmsl">En attente de réponse</div>`+sent.map(x=>`<div class="amq2"><button type="button" class="cmfo" data-ppo="${esc(x.name)}">${cmAv(x.name)}<span class="vnin"><b>${esc(x.name)}</b><small>demande envoyée</small></span></button><button type="button" class="chip" data-frdel="${x.id}">Annuler</button></div>`).join('');
   return h};
 {const _c=commV;commV=function(){
@@ -8379,7 +8383,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='19 nov. 2026 · 128';
+const BUILD='20 nov. 2026 · 129';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10612,6 +10616,24 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  const p=t.closest('[data-gcph]');if(p){e.stopPropagation();e.preventDefault();gphView(p.dataset.gcph)}},true);
 document.addEventListener('keydown',e=>{const v=document.getElementById('gphv');if(v&&e.key==='Escape'){e.stopPropagation();v.remove()}},true);
 /* ===== GPH:END ===== */
+/* ===== GPH2 : photos dans les messages privés + aperçus lisibles (notifications, réponses, listes) ===== */
+const tkPlain=b=>String(b||'').replace(/⟦img:[^⟧]*⟧?/g,'📷 Photo').replace(/⟦bk1\|([^|⟧]*)[^⟧]*⟧?/g,'📒 Classeur « $1 »');
+function dmBody(b){const m=GPHRX.exec(b||'');if(!m)return esc(b);const rest=(b.slice(0,m.index)+b.slice(m.index+m[0].length)).trim();
+ return `<span class="cg-ph ch-ph" data-gcph="${esc(m[1])}" role="img" aria-label="Photo"><img src="${esc(gphUrl(m[1]))}" alt="Photo envoyée" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('err')"></span>${rest?esc(rest):''}`}
+let CHPB=false;
+async function chPhoto(f){if(!f||!SBS||!CH.uid||S.tab!=='chat')return;if(!/^image\//.test(f.type||'')){toast('Choisis une photo');return}if(f.size>25*1024*1024){toast('Photo trop lourde');return}
+ if(CHPB||CH.sending)return;CHPB=true;const n=CH.n,to=CH.uid;toast('Envoi de la photo…');
+ try{const b=await gphBlob(f),t=await sbTok(),rnd=Math.random().toString(36).slice(2,8).padEnd(6,'0'),path=SBS.uid.toLowerCase()+'/'+Date.now()+'-'+rnd+'.jpg';
+  const r=await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg'},body:b});
+  if(!r.ok){toast(r.status===404||r.status===400?'Les photos ne sont pas encore activées sur le serveur':'Envoi de la photo impossible');return}
+  const ta=$('#ch-t'),cap=ta?msTrim(msTxt(ta.value)):'',tok=`⟦img:${path}⟧`;let body=cap?cap+'\n'+tok:tok;if(Array.from(body).length>MSN)body=tok;
+  const rr=await frApi('/rest/v1/messages',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({recipient:to,body})});
+  if(n===CH.n){const m=dmNorm(Array.isArray(rr)?rr[0]:rr,msMe());if(m)chAdd([m]);CH.off=false;CH.sel=0;CH.del=0;if(body!==tok){CHD[CH.uid]='';const t2=$('#ch-t');if(t2){t2.value='';t2.removeAttribute('style');t2.rows=1}}chDraw('bottom');chHead()}}
+ catch(e){try{toast(msErr(e).m)}catch(x){toast('Envoi de la photo impossible')}}finally{CHPB=false}}
+function chPick(){let i=document.getElementById('chph-f');if(!i){i=document.createElement('input');i.type='file';i.accept='image/*';i.id='chph-f';i.hidden=true;i.addEventListener('change',()=>{const f=i.files&&i.files[0];i.value='';chPhoto(f)});document.body.appendChild(i)}i.click()}
+document.addEventListener('click',e=>{const t=e.target;if(t&&t.closest&&t.closest('[data-chphoto]')){e.stopPropagation();e.preventDefault();chPick()}},true);
+/* ===== GPH2:END ===== */
+
 
 
 
@@ -11672,6 +11694,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:129,d:'2026-11-20',it:[['n','📷','Photos dans les messages privés','Dans une discussion avec un ami, touche 📷 pour lui envoyer une photo.','comm'],['c','🔔','Notifications plus claires','Une photo ou un classeur s’affiche « 📷 Photo » ou « 📒 Classeur » dans les notifications et les aperçus.','comm']]},
 {v:128,d:'2026-11-19',it:[['n','📷','Photos dans le chat','Dans le Général, touche 📷 pour envoyer une photo (une carte, ton classeur…). Touche une photo pour l’agrandir.','home'],['a','🎴','Menu plus court','« Devine la carte » a été retiré du menu.','home']]},
 {v:127,d:'2026-11-18',it:[['n','⚖️','Comparer avec un membre','Sur son profil, « Comparer nos collections » : ce qu’il a et pas toi, l’inverse, et un échange équilibré proposé en un appui.','comm']]},
 {v:126,d:'2026-11-18',it:[['c','📷','Profils : cartes visibles tout de suite','Les séries d’un profil s’ouvrent même si le joueur n’a pas encore la dernière version.','comm']]},

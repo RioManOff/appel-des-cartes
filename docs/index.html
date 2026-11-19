@@ -3355,6 +3355,15 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .cmp-sx{display:flex;gap:6px;overflow-x:auto;padding:4px 0 6px;scrollbar-width:none}
 .cmp-sx .chip{flex:none}
 .cmp-sx small{opacity:.7;margin-left:3px}
+/* GPH */
+.cg-ph{display:block;max-width:min(260px,100%);margin:2px 0 4px;padding:0;border:0;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.25);cursor:zoom-in}
+.cg-ph img{display:block;width:100%;height:auto;max-height:320px;object-fit:cover;min-height:80px}
+.cg-ph.err{min-width:160px;min-height:80px}
+.cg-ph.err img{display:none}
+.cg-ph.err::after{content:'📷 Photo indisponible';display:block;padding:28px 12px;font-size:13px;opacity:.7}
+.gphv{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.94);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.gphv img{max-width:100vw;max-height:100vh;object-fit:contain}
+.gphx{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:20px}
 </style>
 </head>
 <body>
@@ -4520,7 +4529,7 @@ const MNG=[
   ['🎯','Cartes recherchées','data-go="want"'],
   ['🔁','Mes doublons','data-go="dup"'],
   ['🐉','Dragon Balls','data-go="dball"'],
-  ['🎴','Devine la carte','data-go="dev"'],
+  
   ['🗓️','Prochaines séries','data-go="soon"']]],
  ['Argent',[
   ['💰','Budget','data-go="budget"'],
@@ -6291,7 +6300,7 @@ function gcBuild(){
   o.innerHTML=`<div class="cg-col"><div class="cg-hd" id="cg-hd"></div><div class="cg-pin" id="cg-pin"></div>`
    +`<div class="cg-lw"><div class="cg-list" id="cg-list" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Messages" tabindex="-1"></div><button type="button" class="cg-jump" id="cg-jump" data-gcjump hidden></button></div>`
    +`<div class="cg-tr"><div class="cg-typ" id="cg-typ" aria-live="off"></div><div class="cg-cnt" id="cg-cnt" aria-live="polite"></div></div><div class="cg-bar" id="cg-bar" hidden></div><div class="cg-mp" id="cg-mp" role="listbox" aria-label="Pseudos" hidden></div>`
-   +`<form class="cg-cmp" id="cg-cmp" autocomplete="off"><button type="button" class="cg-ib cg-ia" data-gcemo aria-label="Émojis">😀</button><button type="button" class="cg-ib cg-ia" data-gccards aria-label="Insérer une carte">🃏</button>`
+   +`<form class="cg-cmp" id="cg-cmp" autocomplete="off"><button type="button" class="cg-ib cg-ia" data-gcemo aria-label="Émojis">😀</button><button type="button" class="cg-ib cg-ia" data-gccards aria-label="Insérer une carte">🃏</button><button type="button" class="cg-ib cg-ia" data-gcphoto aria-label="Envoyer une photo">📷</button>`
    +`<textarea id="gc-in" rows="1" placeholder="Écris un message…" aria-label="Message" enterkeyhint="${gcDesk()?'send':'enter'}" autocapitalize="sentences" autocomplete="off" spellcheck="true"></textarea>`
    +`<button type="submit" class="cg-send" data-gcsend aria-label="Envoyer"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6l-.02 6.5L15 12l-11.6 1.9z" fill="currentColor"/></svg></button></form></div><div class="cg-pop" id="cg-pop" hidden></div>`;
   document.body.appendChild(o);
@@ -8370,7 +8379,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='18 nov. 2026 · 127';
+const BUILD='19 nov. 2026 · 128';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10571,6 +10580,39 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(t.closest('[data-cmpeq]')){const P=ppCurP();if(P)cmpEq(P)}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PPCMP){e.stopPropagation();PPCMP=null;render()}},true);
 /* ===== CMP:END ===== */
+/* ===== GPH : photos dans le chat Général (Supabase Storage, seau chat-photos : voir chat_photos.sql) ===== */
+const GPHRX=/⟦img:([0-9a-f-]{36}\/\d{10,14}-[a-z0-9]{6}\.jpg)⟧/;
+const gphUrl=p=>SBC.url+'/storage/v1/object/public/chat-photos/'+p.split('/').map(encodeURIComponent).join('/');
+{const r0=gcRich;gcRich=function(body){const m=GPHRX.exec(body||'');if(!m)return r0(body);
+ const rest=(body.slice(0,m.index)+body.slice(m.index+m[0].length)).trim(),r=rest?r0(rest):{h:'',cards:[]};
+ return {cards:r.cards,h:`<button type="button" class="cg-ph" data-gcph="${esc(m[1])}" aria-label="Agrandir la photo"><img src="${esc(gphUrl(m[1]))}" alt="Photo envoyée" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('err')"></button>`+r.h}}}
+{const s0=gcReplyTo;gcReplyTo=function(id){s0(id);try{if(GCUI.reply&&/⟦img:/.test(GCUI.reply.snip||'')){GCUI.reply.snip=('📷 Photo '+GCUI.reply.snip.replace(/\s*⟦img:[^⟧]*⟧?/,'')).trim();gcBar()}}catch(e){}}}
+/* réduire la photo avant l'envoi : 1280 px max, moins de 900 Ko */
+function gphBlob(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);let side=1280,q=.82;
+ const go=()=>{const k=Math.min(1,side/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+  c.toBlob(b=>{if(!b)return rej(new Error('img'));if(b.size>900*1024&&side>640){side=Math.round(side*.8);q=Math.max(.6,q-.08);go()}else res(b)},'image/jpeg',q)};go()};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('img'))};im.src=u})}
+let GPHB=false;
+async function gphSend(f){if(!f)return;if(!SBS||!SBS.pseudo){toast('Connecte-toi pour envoyer une photo');return}
+ if(!/^image\//.test(f.type||'')){toast('Choisis une photo');return}if(f.size>25*1024*1024){toast('Photo trop lourde');return}
+ if(GC.muted>Date.now()){toast('Tu es réduit au silence jusqu’à '+gcUntil(GC.muted));return}
+ if(GPHB)return;GPHB=true;toast('Envoi de la photo…');
+ try{const b=await gphBlob(f),t=await sbTok(),rnd=Math.random().toString(36).slice(2,8).padEnd(6,'0'),path=SBS.uid.toLowerCase()+'/'+Date.now()+'-'+rnd+'.jpg';
+  const r=await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg'},body:b});
+  if(!r.ok){toast(r.status===404||r.status===400?'Les photos ne sont pas encore activées sur le serveur':'Envoi de la photo impossible');return}
+  const inp=document.getElementById('gc-in'),cap=inp?msTrim(msTxt(inp.value)):'',tok=`⟦img:${path}⟧`;let body=cap?cap+'\n'+tok:tok;
+  if(Array.from(body).length>gcMax())body=tok;
+  if(gcSend(body)){if(inp&&body!==tok){inp.value='';inp.dispatchEvent(new Event('input',{bubbles:true}))}}}
+ catch(e){toast('Envoi de la photo impossible')}finally{GPHB=false}}
+function gphPick(){let i=document.getElementById('gph-f');if(!i){i=document.createElement('input');i.type='file';i.accept='image/*';i.id='gph-f';i.hidden=true;i.addEventListener('change',()=>{const f=i.files&&i.files[0];i.value='';gphSend(f)});document.body.appendChild(i)}i.click()}
+function gphView(p){const v=document.createElement('div');v.id='gphv';v.className='gphv';v.setAttribute('role','dialog');v.setAttribute('aria-label','Photo');
+ v.innerHTML=`<img src="${esc(gphUrl(p))}" alt="Photo envoyée dans le chat"><button type="button" class="gphx" aria-label="Fermer">✕</button>`;document.body.appendChild(v)}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ const v=document.getElementById('gphv');if(v&&v.contains(t)){e.stopPropagation();v.remove();return}
+ if(t.closest('[data-gcphoto]')){e.stopPropagation();e.preventDefault();gphPick();return}
+ const p=t.closest('[data-gcph]');if(p){e.stopPropagation();e.preventDefault();gphView(p.dataset.gcph)}},true);
+document.addEventListener('keydown',e=>{const v=document.getElementById('gphv');if(v&&e.key==='Escape'){e.stopPropagation();v.remove()}},true);
+/* ===== GPH:END ===== */
+
 
 
 
@@ -11630,6 +11672,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:128,d:'2026-11-19',it:[['n','📷','Photos dans le chat','Dans le Général, touche 📷 pour envoyer une photo (une carte, ton classeur…). Touche une photo pour l’agrandir.','home'],['a','🎴','Menu plus court','« Devine la carte » a été retiré du menu.','home']]},
 {v:127,d:'2026-11-18',it:[['n','⚖️','Comparer avec un membre','Sur son profil, « Comparer nos collections » : ce qu’il a et pas toi, l’inverse, et un échange équilibré proposé en un appui.','comm']]},
 {v:126,d:'2026-11-18',it:[['c','📷','Profils : cartes visibles tout de suite','Les séries d’un profil s’ouvrent même si le joueur n’a pas encore la dernière version.','comm']]},
 {v:125,d:'2026-11-18',it:[['n','📷','Cartes en photo dans les profils','Sur un profil public, touche une série pour voir ses cartes en photo : celles qu’il n’a pas sont grisées.','comm']]},

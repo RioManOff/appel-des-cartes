@@ -3369,6 +3369,9 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .ch-ph{display:block;max-width:min(240px,62vw);margin:0 0 6px;cursor:zoom-in}
 .ch-ph img{max-height:300px}
 .ppg-c small.ppg-r{margin-top:-2px;font:700 11px/1 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.03em;color:var(--mu);opacity:.9}
+/* MYPH */
+.art{position:relative}
+.myph-b{position:absolute;top:4px;right:4px;z-index:2;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);font-style:normal;font-size:11px;line-height:20px;text-align:center;pointer-events:none}
 </style>
 </head>
 <body>
@@ -8384,7 +8387,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='20 nov. 2026 · 131';
+const BUILD='20 nov. 2026 · 132';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10634,6 +10637,37 @@ async function chPhoto(f){if(!f||!SBS||!CH.uid||S.tab!=='chat')return;if(!/^imag
 function chPick(){let i=document.getElementById('chph-f');if(!i){i=document.createElement('input');i.type='file';i.accept='image/*';i.id='chph-f';i.hidden=true;i.addEventListener('change',()=>{const f=i.files&&i.files[0];i.value='';chPhoto(f)});document.body.appendChild(i)}i.click()}
 document.addEventListener('click',e=>{const t=e.target;if(t&&t.closest&&t.closest('[data-chphoto]')){e.stopPropagation();e.preventDefault();chPick()}},true);
 /* ===== GPH2:END ===== */
+/* ===== MYPH : « photo de ma carte » partout (Fusion World aussi) + visible sur le profil public ===== */
+/* la photo reste dans le téléphone (PH) et la sauvegarde ; une copie va dans le seau chat-photos pour que le profil public puisse la montrer */
+const MYPHRX=/^[0-9a-f-]{36}\/c-\d{10,14}-[a-z0-9]{6}\.jpg$/;
+let PPPH=null;
+const myImg=id=>{if(PPPH)return PPPH[id]&&MYPHRX.test(PPPH[id])?gphUrl(PPPH[id]):null;if(PH[id])return PH[id];const p=X.myph&&X.myph[id];return p&&MYPHRX.test(p)?gphUrl(p):null};
+const myphSwap=(h,id)=>{const im=myImg(id);if(!im)return h;const tag=`<img class="cimg" src="${esc(im)}" alt="Photo de la carte" draggable="false" loading="lazy" decoding="async">`;
+ h=/<img class="cimg"[^>]*>/.test(h)?h.replace(/<img class="cimg"[^>]*>/,tag):h.replace(/(<div class="art[^"]*"[^>]*>)/,'$1'+tag);return h.replace(/<\/div>$/,'<i class="myph-b" aria-label="Photo de la vraie carte">📷</i></div>')};
+{const a0=art;art=function(c){return myphSwap(a0(c),c.id)}}
+{const a0=msArt;msArt=function(c){return myphSwap(a0(c),c[0])}}
+{const a0=bkArt;bkArt=function(c){return myphSwap(a0(c),c.id)}}
+/* copie en ligne de la photo */
+async function myphUp(id,url){if(!SBS||!SBS.uid||!/^data:image\//.test(url||''))return;
+ try{const b=await (await fetch(url)).blob(),t=await sbTok(),rnd=Math.random().toString(36).slice(2,8).padEnd(6,'0'),path=SBS.uid.toLowerCase()+'/c-'+Date.now()+'-'+rnd+'.jpg';
+  const r=await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg'},body:b});if(!r.ok)return;
+  const old=X.myph&&X.myph[id];X.myph=X.myph||{};X.myph[id]=path;saveX();if(old)myphRm(old)}catch(e){}}
+async function myphRm(path){try{if(!SBS||!MYPHRX.test(path))return;const t=await sbTok();await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'DELETE',headers:{apikey:SBC.key,Authorization:'Bearer '+t}})}catch(e){}}
+{const s0=phSet;phSet=async function(id,url){await s0(id,url);myphUp(id,url)}}
+{const d0=phDel;phDel=async function(id){await d0(id);const p=X.myph&&X.myph[id];if(p){delete X.myph[id];saveX();myphRm(p)}}}
+/* les anciennes photos (prises avant cette version) : copiées en ligne une fois, sans bloquer l'appli */
+setTimeout(async()=>{try{if(!SBS)return;let n=0;for(const id of Object.keys(PH)){if(n>=40)break;if(X.myph&&X.myph[id])continue;n++;await myphUp(id,PH[id])}}catch(e){}},15000);
+/* bouton dans la fiche d'une carte Fusion World (les cartes Masters l'avaient déjà) */
+{const s0=sheet;sheet=function(){const h=s0();const c=S.sel&&cards.find(x=>x.id===S.sel);if(!h||!c)return h;const k=h.indexOf('💶 Voir le prix sur Cardmarket'),a=k>0?h.lastIndexOf('<a ',k):-1;if(a<0)return h;
+ const has=!!(PH[c.id]||(X.myph&&X.myph[c.id]));
+ return h.slice(0,a)+`<div class="row" style="margin:4px 0 10px"><label class="btn alt" style="margin:0;cursor:pointer">📷 ${has?'Changer la photo':'Photo de ma carte'}<input type="file" accept="image/*" hidden data-msph="${esc(c.id)}"></label>${has?`<button class="btn alt" style="margin:0" data-myphdel="${esc(c.id)}">Retirer la photo</button>`:''}</div>`+h.slice(a)}}
+document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.target.closest('[data-myphdel]');if(!t)return;e.stopPropagation();phDel(t.dataset.myphdel).then(()=>{toast('Photo retirée');render()})},true);
+/* profil public : mes photos partent avec le profil, celles des autres s'affichent chez eux */
+{const d0=ppData;ppData=function(){const d=d0();try{const m=X.myph||{},o={};let n=0;const fav=Object.keys(X.fav||{});for(const id of fav.concat(Object.keys(m))){if(n>=80)break;if(m[id]&&!o[id]&&MYPHRX.test(m[id])){o[id]=m[id];n++}}if(n)d.ph=o}catch(e){}return d}}
+{const c0=ppClean;ppClean=function(d){const r=c0(d);if(!r)return r;const o={};try{if(d.ph&&typeof d.ph==='object'&&!Array.isArray(d.ph)){let n=0;for(const [k,v] of Object.entries(d.ph)){if(n>=80)break;if(typeof k==='string'&&k.length<40&&/^[A-Za-z0-9_-]+$/.test(k)&&typeof v==='string'&&MYPHRX.test(v)){o[k]=v;n++}}}}catch(e){}r.ph=o;return r}}
+{const v0=ppView;ppView=function(){let P=null;try{P=ppCurP()}catch(e){}PPPH=P&&!cmMe(PP.name)&&P.ph&&Object.keys(P.ph).length?P.ph:null;try{return v0()}finally{PPPH=null}}}
+/* ===== MYPH:END ===== */
+
 
 
 
@@ -11695,6 +11729,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:132,d:'2026-11-20',it:[['n','📷','Photo de ta vraie carte','Dans la fiche d’une carte (Fusion World aussi), « Photo de ma carte » : ta photo remplace l’image officielle dans ta collection, tes classeurs et ton profil public.','coll']]},
 {v:131,d:'2026-11-20',it:[['c','🏷️','Rareté dans les profils','Les cartes d’un profil public et de la comparaison affichent aussi leur rareté (C, UC, R, SR…).','comm']]},
 {v:130,d:'2026-11-20',it:[['c','🏷️','Rareté visible partout','Avec 4 cartes par ligne, la rareté (C, UC, R, SR…) s’affiche sous le numéro de chaque carte.','coll']]},
 {v:129,d:'2026-11-20',it:[['n','📷','Photos dans les messages privés','Dans une discussion avec un ami, touche 📷 pour lui envoyer une photo.','comm'],['c','🔔','Notifications plus claires','Une photo ou un classeur s’affiche « 📷 Photo » ou « 📒 Classeur » dans les notifications et les aperçus.','comm']]},

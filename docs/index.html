@@ -3399,6 +3399,13 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .an-res,.an-sel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .an-qk{margin-bottom:6px}
 .an-form .row{flex-wrap:wrap;gap:8px}.an-form .row .btn{width:auto;flex:1 1 140px;margin:0}
+.an-phs{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.an-ph{position:relative;width:96px;height:96px;padding:0;border:0;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.3);cursor:zoom-in;flex:none}
+.an-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.an-phx{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:13px}
+.an-phadd{width:96px;height:96px;border-radius:10px;border:1px dashed rgba(255,255,255,.3);background:rgba(255,255,255,.04);color:inherit;font-size:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer}
+.an-phadd small{font-size:12px;opacity:.8}
+.an-fph{margin:4px 0 10px}
 </style>
 </head>
 <body>
@@ -8415,7 +8422,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='20 nov. 2026 · 133';
+const BUILD='20 nov. 2026 · 134';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10696,13 +10703,13 @@ document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.targ
 {const v0=ppView;ppView=function(){let P=null;try{P=ppCurP()}catch(e){}PPPH=P&&!cmMe(PP.name)&&P.ph&&Object.keys(P.ph).length?P.ph:null;try{return v0()}finally{PPPH=null}}}
 /* ===== MYPH:END ===== */
 /* ===== ANN : annonces entre membres (je vends / je cherche / j'échange) — table annonces, voir annonces.sql ===== */
-const ANG={vend:['💶','Je vends'],cherche:['🎯','Je cherche'],echange:['🔁','J’échange']};
+const ANPHRX=/^[0-9a-f-]{36}\/a-\d{10,14}-[a-z0-9]{6}\.jpg$/;const ANG={vend:['💶','Je vends'],cherche:['🎯','Je cherche'],echange:['🔁','J’échange']};
 let AN={open:false,L:null,busy:false,err:'',f:'',form:null,t:0};
 const anCard=id=>BKC[id]||(()=>{try{return dzCard(id)}catch(e){return null}})()||swCard(id);
 const anAgo=t=>{const d=(Date.now()-Date.parse(t))/1000;return d<3600?'il y a '+Math.max(1,Math.round(d/60))+' min':d<86400?'il y a '+Math.round(d/3600)+' h':'il y a '+Math.round(d/86400)+' j'};
 async function anLoad(force){if(!SBS){AN.L=null;anDraw();return}if(AN.busy||(!force&&AN.L&&Date.now()-AN.t<60000))return;AN.busy=true;AN.err='';anDraw();
- try{const r=await frApi('/rest/v1/annonces?select=id,user_id,pseudo,genre,cartes,texte,prix,cree_le&fin_le=gt.'+encodeURIComponent(new Date().toISOString())+'&order=cree_le.desc&limit=300');
-  AN.L=(Array.isArray(r)?r:[]).filter(a=>a&&ANG[a.genre]).map(a=>({id:+a.id,uid:String(a.user_id||''),ps:String(a.pseudo||'?').slice(0,30),g:a.genre,c:(Array.isArray(a.cartes)?a.cartes:[]).filter(x=>typeof x==='string'&&/^[A-Za-z0-9_-]{2,40}$/.test(x)).slice(0,20),tx:String(a.texte||'').slice(0,300),px:a.prix==null?null:+a.prix,t:a.cree_le}));AN.t=Date.now()}
+ try{const q=f=>frApi('/rest/v1/annonces?select=id,user_id,pseudo,genre,cartes,texte,prix,cree_le'+f+'&fin_le=gt.'+encodeURIComponent(new Date().toISOString())+'&order=cree_le.desc&limit=300');let r;if(!AN.noph){try{r=await q(',photos')}catch(e){if(e&&e.status===400){AN.noph=true;r=await q('')}else throw e}}else r=await q('');
+  AN.L=(Array.isArray(r)?r:[]).filter(a=>a&&ANG[a.genre]).map(a=>({id:+a.id,uid:String(a.user_id||''),ps:String(a.pseudo||'?').slice(0,30),g:a.genre,c:(Array.isArray(a.cartes)?a.cartes:[]).filter(x=>typeof x==='string'&&/^[A-Za-z0-9_-]{2,40}$/.test(x)).slice(0,20),tx:String(a.texte||'').slice(0,300),ph:(Array.isArray(a.photos)?a.photos:[]).filter(x=>typeof x==='string'&&ANPHRX.test(x)).slice(0,3),px:a.prix==null?null:+a.prix,t:a.cree_le}));AN.t=Date.now()}
  catch(e){AN.err=e&&e.status===404?'nosrv':'net'}AN.busy=false;anDraw()}
 /* ce qui peut t'intéresser : il vend une carte que tu cherches / il cherche une carte que tu as en double */
 function anFor(a){const ids=a.c;if(a.g!=='cherche'){if(ids.some(id=>{const c=anCard(id);return c&&(+c.want||0)>0}))return '🎯 Tu cherches une de ces cartes';if(ids.some(id=>{const c=anCard(id);return c&&!(c.own>0)}))return ''}
@@ -10710,7 +10717,7 @@ function anFor(a){const ids=a.c;if(a.g!=='cherche'){if(ids.some(id=>{const c=anC
 function anItem(a){const me=SBS&&a.uid===SBS.uid,f=anFor(a),ic=ANG[a.g];const th=a.c.slice(0,6).map(id=>{const c=anCard(id);return c?`<span class="an-c">${bkArt({id:c.id,type:c.type,n:c.n,name:c.name,ver:c.ver,own:1})}<small>${esc(c.id)}</small></span>`:''}).join('')+(a.c.length>6?`<span class="an-more">+${a.c.length-6}</span>`:'');
  const nm=a.c.slice(0,8).map(id=>{const c=anCard(id);return esc(c?(c.name||id):id)}).join(', ');
  return `<article class="an-i an-${a.g}${f?' an-for':''}"><div class="an-h"><b class="an-g">${ic[0]} ${ic[1]}</b><button type="button" class="an-ps" data-anpp="${esc(a.ps)}">${esc(a.ps)}</button><small>${anAgo(a.t)}</small></div>
- ${f?`<div class="an-f">${f}</div>`:''}${a.c.length?`<div class="an-th">${th}</div><div class="an-nm">${nm}${a.c.length>8?'…':''}</div>`:''}${a.tx?`<p class="an-tx">${esc(a.tx)}</p>`:''}${a.px!=null&&a.g==='vend'?`<div class="an-px">${eur(a.px)}</div>`:''}
+ ${f?`<div class="an-f">${f}</div>`:''}${a.c.length?`<div class="an-th">${th}</div><div class="an-nm">${nm}${a.c.length>8?'…':''}</div>`:''}${a.ph&&a.ph.length?`<div class="an-phs">${a.ph.map(x=>`<button type="button" class="an-ph" data-gcph="${esc(x)}" aria-label="Agrandir la photo"><img src="${esc(gphUrl(x))}" alt="Photo de l’annonce" loading="lazy" decoding="async"></button>`).join('')}</div>`:''}${a.tx?`<p class="an-tx">${esc(a.tx)}</p>`:''}${a.px!=null&&a.g==='vend'?`<div class="an-px">${eur(a.px)}</div>`:''}
  <div class="an-a">${me?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Supprimer</button>`:`<button type="button" class="chip" data-anpp="${esc(a.ps)}">👤 Voir son profil</button>${GC.admin?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Retirer (admin)</button>`:''}`}</div></article>`}
 function anFormHTML(){const F=AN.form,T=(k)=>`<button type="button" class="chip" aria-pressed="${F.g===k}" data-ang="${k}">${ANG[k][0]} ${ANG[k][1]}</button>`;
  const R=F.q?bkSearch(F.q).L.slice(0,8):[];
@@ -10719,6 +10726,7 @@ function anFormHTML(){const F=AN.form,T=(k)=>`<button type="button" class="chip"
  <div class="an-res">${R.map(e=>{const c=bkSC(e);return c?`<button type="button" class="chip" data-anadd="${esc(c.id)}">＋ ${esc(c.id)} · ${esc((c.name||'').slice(0,26))}</button>`:''}).join('')}</div>
  <div class="row an-qk">${F.g==='cherche'?`<button type="button" class="chip" data-anfill="want">🎯 Mes cartes recherchées</button>`:`<button type="button" class="chip" data-anfill="dup">🔁 Mes doubles</button>`}</div>
  <div class="an-sel">${F.c.map(id=>`<button type="button" class="chip on" data-anrm="${esc(id)}" aria-label="Retirer ${esc(id)}">${esc(id)} ✕</button>`).join('')||'<span class="sub">Aucune carte choisie (tu peux aussi juste écrire).</span>'}</div>
+ <div class="an-phs an-fph">${(F.ph||[]).map(x=>`<span class="an-ph"><img src="${esc(gphUrl(x))}" alt="Photo ajoutée"><button type="button" class="an-phx" data-anphrm="${esc(x)}" aria-label="Retirer la photo">✕</button></span>`).join('')}${(F.ph||[]).length<3&&!AN.noph?`<button type="button" class="an-phadd" data-anphadd ${F.up?'disabled':''}>${F.up?'Envoi…':'📷<small>Photo</small>'}</button>`:''}</div>
  <label class="sub" for="an-tx">Message (300 caractères)</label><textarea id="an-tx" class="in" rows="3" maxlength="300" placeholder="${F.g==='vend'?'État, envoi, remise en main propre…':F.g==='cherche'?'Ce que tu cherches exactement, ton budget…':'Ce que tu proposes et ce que tu veux en échange…'}">${esc(F.tx||'')}</textarea>
  ${F.g==='vend'?`<label class="sub" for="an-px">Prix (facultatif, en €)</label><input id="an-px" class="in" inputmode="decimal" value="${esc(F.px||'')}" placeholder="ex. 5">`:''}
  <div class="row" style="margin-top:10px"><button type="button" class="btn" data-anpost ${F.busy?'disabled':''}>${F.busy?'Envoi…':'📢 Publier l’annonce'}</button><button type="button" class="btn alt" data-anform="0">Annuler</button></div>
@@ -10741,7 +10749,7 @@ async function anPost(){anKeep();const F=AN.form;if(!F||F.busy)return;const tx=(
  if(/(\+33|0)[1-9]([\s.-]?\d{2}){4}/.test(tx)){toast('Pas de numéro de téléphone dans les annonces');return}
  let px=null;if(F.g==='vend'&&String(F.px||'').trim()){px=Math.round(parseFloat(String(F.px).replace(',','.'))*100)/100;if(!(px>=0&&px<100000)){toast('Prix invalide');return}}
  F.busy=true;anDraw();
- try{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({genre:F.g,cartes:F.c,texte:tx,prix:px})});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}
+ try{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},F.ph&&F.ph.length?{photos:F.ph}:{}))});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}
  catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/10 annonces/.test(m)?'Tu as déjà 10 annonces en cours':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':'Publication impossible');anDraw()}}
 document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(t.closest('[data-annopen]')){e.stopPropagation();if(S.menu){S.menu=false;S.mnmore=false;render()}anOpen();return}
@@ -10751,7 +10759,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(q('[data-anacc]')){anClose();S.tab='set';S.sacc=true;render();window.scrollTo(0,0);return}
  if(q('[data-anre]')){anLoad(true);return}
  if(b=q('[data-anf]')){AN.f=b.dataset.anf;anDraw();return}
- if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
+ if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false,ph:[],up:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
  if(b=q('[data-ang]')){anKeep();AN.form.g=b.dataset.ang;anDraw();return}
  if(b=q('[data-anadd]')){anKeep();const F=AN.form,id=b.dataset.anadd;if(!F.c.includes(id)){if(F.c.length>=20){toast('20 cartes maximum');return}F.c.push(id)}F.q='';anDraw();const n=document.getElementById('an-q');if(n)n.focus();return}
  if(b=q('[data-anrm]')){anKeep();AN.form.c=AN.form.c.filter(x=>x!==b.dataset.anrm);anDraw();return}
@@ -10760,6 +10768,14 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(q('[data-anpost]')){anPost();return}
  if(b=q('[data-anpp]')){const n=b.dataset.anpp;anClose();ppOpen(n);return}
  if(b=q('[data-andel]')){const id=+b.dataset.andel;if(!confirm2(b))return;frApi('/rest/v1/annonces?id=eq.'+id,{method:'DELETE'}).then(()=>{AN.L=(AN.L||[]).filter(a=>a.id!==id);toast('Annonce supprimée');anDraw()}).catch(()=>toast('Suppression impossible'));return}},true);
+/* photos d'une annonce : envoyées tout de suite dans mon dossier */
+async function anPhUp(f){const F=AN.form;if(!F||!f||F.up)return;if(!/^image\//.test(f.type||'')){toast('Choisis une photo');return}if((F.ph||[]).length>=3){toast('3 photos maximum');return}
+ F.up=true;anKeep();anDraw();try{const b=await gphBlob(f),t=await sbTok(),rnd=Math.random().toString(36).slice(2,8).padEnd(6,'0'),path=SBS.uid.toLowerCase()+'/a-'+Date.now()+'-'+rnd+'.jpg';
+  const r=await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg'},body:b});
+  if(!r.ok)toast('Envoi de la photo impossible');else if(AN.form===F)F.ph.push(path)}catch(e){toast('Envoi de la photo impossible')}F.up=false;if(AN.form===F){anKeep();anDraw()}}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-anphadd]')){e.stopPropagation();let i=document.getElementById('anph-f');if(!i){i=document.createElement('input');i.type='file';i.accept='image/*';i.id='anph-f';i.hidden=true;i.addEventListener('change',()=>{const f=i.files&&i.files[0];i.value='';anPhUp(f)});document.body.appendChild(i)}i.click();return}
+ const x=t.closest('[data-anphrm]');if(x&&AN.form){e.stopPropagation();anKeep();const p=x.dataset.anphrm;AN.form.ph=AN.form.ph.filter(y=>y!==p);try{myphRm&&MYPHRX&&0}catch(z){}anDraw()}},true);
 /* suppression : deuxième appui pour confirmer (pas de fenêtre système) */
 function confirm2(b){if(b.dataset.ok==='1')return true;b.dataset.ok='1';b.textContent='Appuie encore pour supprimer';setTimeout(()=>{if(b.isConnected){b.dataset.ok='';b.textContent='🗑️ Supprimer'}},3000);return false}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='an-q'&&AN.form){AN.form.q=e.target.value;clearTimeout(AN.qt);AN.qt=setTimeout(()=>{anKeep();anDraw()},160)}},true);
@@ -11828,6 +11844,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:134,d:'2026-11-20',it:[['n','📷','Photos dans les annonces','Ajoute jusqu’à 3 photos à ton annonce (tes vraies cartes, un lot…). Touche une photo pour l’agrandir.','home']]},
 {v:133,d:'2026-11-20',it:[['n','📢','Annonces entre membres','Menu > Plus d’actions > Annonces : poste « je vends », « je cherche » ou « j’échange » avec tes cartes. « 🎯 Pour toi » montre celles qui t’intéressent.','home']]},
 {v:132,d:'2026-11-20',it:[['n','📷','Photo de ta vraie carte','Dans la fiche d’une carte (Fusion World aussi), « Photo de ma carte » : ta photo remplace l’image officielle dans ta collection, tes classeurs et ton profil public.','coll']]},
 {v:131,d:'2026-11-20',it:[['c','🏷️','Rareté dans les profils','Les cartes d’un profil public et de la comparaison affichent aussi leur rareté (C, UC, R, SR…).','comm']]},

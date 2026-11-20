@@ -3372,6 +3372,33 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 /* MYPH */
 .art{position:relative}
 .myph-b{position:absolute;top:4px;right:4px;z-index:2;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);font-style:normal;font-size:11px;line-height:20px;text-align:center;pointer-events:none}
+/* ANN */
+.sheet.ann{z-index:40}
+.ann>div{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.an-fl{flex-wrap:wrap;margin:12px 0 4px}
+.an-i{margin-top:12px;padding:12px;border-radius:14px;background:var(--cd,rgba(255,255,255,.05));border:1px solid var(--line,rgba(255,255,255,.1));border-left:4px solid #1f6feb}
+.an-i.an-vend{border-left-color:#2fbf71}
+.an-i.an-cherche{border-left-color:#f08a24}
+.an-i.an-for{box-shadow:0 0 0 2px rgba(245,184,46,.55)}
+.an-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.an-g{font-size:15px}
+.an-ps{border:0;background:none;color:var(--ac,#F5B82E);font:inherit;font-weight:700;padding:0;cursor:pointer}
+.an-h small{color:var(--mu);margin-left:auto}
+.an-f{margin-top:6px;font-weight:700;color:#F5B82E;font-size:13.5px}
+.an-th{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
+.an-c{flex:none;width:62px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.an-c .art{width:100%}
+.an-c small{font-size:10.5px;color:var(--mu);white-space:nowrap}
+.an-more{flex:none;align-self:center;padding:0 6px;color:var(--mu);font-weight:700}
+.an-nm{margin-top:4px;font-size:12.5px;color:var(--mu)}
+.an-tx{margin:8px 0 0;white-space:pre-wrap;word-break:break-word}
+.an-px{margin-top:6px;font-size:18px;font-weight:800;color:#2fbf71}
+.an-a{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.an-form h3{margin:4px 0 8px}
+.an-form .in{width:100%;box-sizing:border-box;margin:4px 0 8px;padding:10px 12px;border-radius:10px;border:1px solid var(--line,rgba(255,255,255,.15));background:rgba(0,0,0,.25);color:inherit;font:inherit}
+.an-res,.an-sel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.an-qk{margin-bottom:6px}
+.an-form .row{flex-wrap:wrap;gap:8px}.an-form .row .btn{width:auto;flex:1 1 140px;margin:0}
 </style>
 </head>
 <body>
@@ -4546,6 +4573,7 @@ const MNG=[
   ['🔍','Vérifier une annonce','data-vr'],
   ['🔔','Alertes de prix','data-mn="al"','','al']]],
  ['Amis et partage',[
+  ['📢','Annonces','data-annopen'],
   ['🏟️','Tournoi de la semaine','data-go="tour"'],
   ['🪪','Mon profil public','data-mn="me"'],
   ['📤','Partager ma collection','data-share'],
@@ -8387,7 +8415,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='20 nov. 2026 · 132';
+const BUILD='20 nov. 2026 · 133';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10667,6 +10695,77 @@ document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.targ
 {const c0=ppClean;ppClean=function(d){const r=c0(d);if(!r)return r;const o={};try{if(d.ph&&typeof d.ph==='object'&&!Array.isArray(d.ph)){let n=0;for(const [k,v] of Object.entries(d.ph)){if(n>=80)break;if(typeof k==='string'&&k.length<40&&/^[A-Za-z0-9_-]+$/.test(k)&&typeof v==='string'&&MYPHRX.test(v)){o[k]=v;n++}}}}catch(e){}r.ph=o;return r}}
 {const v0=ppView;ppView=function(){let P=null;try{P=ppCurP()}catch(e){}PPPH=P&&!cmMe(PP.name)&&P.ph&&Object.keys(P.ph).length?P.ph:null;try{return v0()}finally{PPPH=null}}}
 /* ===== MYPH:END ===== */
+/* ===== ANN : annonces entre membres (je vends / je cherche / j'échange) — table annonces, voir annonces.sql ===== */
+const ANG={vend:['💶','Je vends'],cherche:['🎯','Je cherche'],echange:['🔁','J’échange']};
+let AN={open:false,L:null,busy:false,err:'',f:'',form:null,t:0};
+const anCard=id=>BKC[id]||(()=>{try{return dzCard(id)}catch(e){return null}})()||swCard(id);
+const anAgo=t=>{const d=(Date.now()-Date.parse(t))/1000;return d<3600?'il y a '+Math.max(1,Math.round(d/60))+' min':d<86400?'il y a '+Math.round(d/3600)+' h':'il y a '+Math.round(d/86400)+' j'};
+async function anLoad(force){if(!SBS){AN.L=null;anDraw();return}if(AN.busy||(!force&&AN.L&&Date.now()-AN.t<60000))return;AN.busy=true;AN.err='';anDraw();
+ try{const r=await frApi('/rest/v1/annonces?select=id,user_id,pseudo,genre,cartes,texte,prix,cree_le&fin_le=gt.'+encodeURIComponent(new Date().toISOString())+'&order=cree_le.desc&limit=300');
+  AN.L=(Array.isArray(r)?r:[]).filter(a=>a&&ANG[a.genre]).map(a=>({id:+a.id,uid:String(a.user_id||''),ps:String(a.pseudo||'?').slice(0,30),g:a.genre,c:(Array.isArray(a.cartes)?a.cartes:[]).filter(x=>typeof x==='string'&&/^[A-Za-z0-9_-]{2,40}$/.test(x)).slice(0,20),tx:String(a.texte||'').slice(0,300),px:a.prix==null?null:+a.prix,t:a.cree_le}));AN.t=Date.now()}
+ catch(e){AN.err=e&&e.status===404?'nosrv':'net'}AN.busy=false;anDraw()}
+/* ce qui peut t'intéresser : il vend une carte que tu cherches / il cherche une carte que tu as en double */
+function anFor(a){const ids=a.c;if(a.g!=='cherche'){if(ids.some(id=>{const c=anCard(id);return c&&(+c.want||0)>0}))return '🎯 Tu cherches une de ces cartes';if(ids.some(id=>{const c=anCard(id);return c&&!(c.own>0)}))return ''}
+ else if(ids.some(id=>{const c=anCard(id);return c&&(+c.own||0)>1}))return '🔁 Tu en as une en double';return ''}
+function anItem(a){const me=SBS&&a.uid===SBS.uid,f=anFor(a),ic=ANG[a.g];const th=a.c.slice(0,6).map(id=>{const c=anCard(id);return c?`<span class="an-c">${bkArt({id:c.id,type:c.type,n:c.n,name:c.name,ver:c.ver,own:1})}<small>${esc(c.id)}</small></span>`:''}).join('')+(a.c.length>6?`<span class="an-more">+${a.c.length-6}</span>`:'');
+ const nm=a.c.slice(0,8).map(id=>{const c=anCard(id);return esc(c?(c.name||id):id)}).join(', ');
+ return `<article class="an-i an-${a.g}${f?' an-for':''}"><div class="an-h"><b class="an-g">${ic[0]} ${ic[1]}</b><button type="button" class="an-ps" data-anpp="${esc(a.ps)}">${esc(a.ps)}</button><small>${anAgo(a.t)}</small></div>
+ ${f?`<div class="an-f">${f}</div>`:''}${a.c.length?`<div class="an-th">${th}</div><div class="an-nm">${nm}${a.c.length>8?'…':''}</div>`:''}${a.tx?`<p class="an-tx">${esc(a.tx)}</p>`:''}${a.px!=null&&a.g==='vend'?`<div class="an-px">${eur(a.px)}</div>`:''}
+ <div class="an-a">${me?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Supprimer</button>`:`<button type="button" class="chip" data-anpp="${esc(a.ps)}">👤 Voir son profil</button>${GC.admin?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Retirer (admin)</button>`:''}`}</div></article>`}
+function anFormHTML(){const F=AN.form,T=(k)=>`<button type="button" class="chip" aria-pressed="${F.g===k}" data-ang="${k}">${ANG[k][0]} ${ANG[k][1]}</button>`;
+ const R=F.q?bkSearch(F.q).L.slice(0,8):[];
+ return `<div class="an-form"><h3>Nouvelle annonce</h3><div class="row">${T('vend')}${T('cherche')}${T('echange')}</div>
+ <label class="sub" for="an-q">Cartes (20 max) : nom ou numéro</label><input id="an-q" class="in" placeholder="ex. bt31 45, Gogeta, FB01-001" value="${esc(F.q||'')}" autocomplete="off">
+ <div class="an-res">${R.map(e=>{const c=bkSC(e);return c?`<button type="button" class="chip" data-anadd="${esc(c.id)}">＋ ${esc(c.id)} · ${esc((c.name||'').slice(0,26))}</button>`:''}).join('')}</div>
+ <div class="row an-qk">${F.g==='cherche'?`<button type="button" class="chip" data-anfill="want">🎯 Mes cartes recherchées</button>`:`<button type="button" class="chip" data-anfill="dup">🔁 Mes doubles</button>`}</div>
+ <div class="an-sel">${F.c.map(id=>`<button type="button" class="chip on" data-anrm="${esc(id)}" aria-label="Retirer ${esc(id)}">${esc(id)} ✕</button>`).join('')||'<span class="sub">Aucune carte choisie (tu peux aussi juste écrire).</span>'}</div>
+ <label class="sub" for="an-tx">Message (300 caractères)</label><textarea id="an-tx" class="in" rows="3" maxlength="300" placeholder="${F.g==='vend'?'État, envoi, remise en main propre…':F.g==='cherche'?'Ce que tu cherches exactement, ton budget…':'Ce que tu proposes et ce que tu veux en échange…'}">${esc(F.tx||'')}</textarea>
+ ${F.g==='vend'?`<label class="sub" for="an-px">Prix (facultatif, en €)</label><input id="an-px" class="in" inputmode="decimal" value="${esc(F.px||'')}" placeholder="ex. 5">`:''}
+ <div class="row" style="margin-top:10px"><button type="button" class="btn" data-anpost ${F.busy?'disabled':''}>${F.busy?'Envoi…':'📢 Publier l’annonce'}</button><button type="button" class="btn alt" data-anform="0">Annuler</button></div>
+ <p class="sub">Ton annonce reste 30 jours. Pas de numéro de téléphone ni d’adresse : les membres te contactent par l’appli.</p></div>`}
+function anHTML(){const T=(k,t)=>`<button type="button" class="chip" aria-pressed="${AN.f===k}" data-anf="${k}">${t}</button>`;let body;
+ if(!SBS)body=`<div class="sub">Connecte-toi pour voir et poster des annonces.</div><button class="btn" data-anacc>🔑 Se connecter</button>`;
+ else if(AN.err==='nosrv')body='<div class="sub">Les annonces ne sont pas encore activées sur le serveur.</div>';
+ else if(AN.form)body=anFormHTML();
+ else{const L=(AN.L||[]).filter(a=>AN.f==='me'?a.uid===SBS.uid:AN.f==='for'?!!anFor(a):!AN.f||a.g===AN.f),nf=(AN.L||[]).filter(a=>a.uid!==SBS.uid&&anFor(a)).length;
+  body=`<button type="button" class="btn" data-anform="1">＋ Poster une annonce</button><div class="row an-fl">${T('','Toutes')}${nf?T('for','🎯 Pour toi ('+nf+')'):''}${T('vend','💶 Ventes')}${T('cherche','🎯 Recherches')}${T('echange','🔁 Échanges')}${T('me','Mes annonces')}</div>
+  ${AN.err==='net'?'<div class="sub">Connexion impossible. <button class="chip" data-anre>Réessayer</button></div>':''}${AN.L===null?'<div class="sub">Chargement…</div>':L.length?L.map(anItem).join(''):'<div class="sub">Aucune annonce ici pour l’instant. Lance-toi !</div>'}`}
+ return `<div class="sheet ann" id="ann"><div role="dialog" aria-label="Annonces"><div class="bkv-hd"><h2>📢 Annonces</h2><button class="ib" data-anx aria-label="Fermer">✕</button></div><div class="sub" style="margin-bottom:10px">Ventes, recherches et échanges entre membres.</div>${body}</div></div>`}
+function anDraw(){if(!AN.open)return;const a=document.activeElement,id=a&&a.id,ss=a&&a.selectionStart;const e=document.getElementById('ann');if(e)e.outerHTML=anHTML();else document.body.insertAdjacentHTML('beforeend',anHTML());
+ if(id){const n=document.getElementById(id);if(n){n.focus();try{n.setSelectionRange(ss,ss)}catch(x){}}}}
+function anOpen(){AN.open=true;AN.form=null;anDraw();anLoad()}
+function anClose(){AN.open=false;AN.form=null;const e=document.getElementById('ann');if(e)e.remove()}
+function anKeep(){const F=AN.form;if(!F)return;const q=document.getElementById('an-q'),t=document.getElementById('an-tx'),p=document.getElementById('an-px');if(q)F.q=q.value;if(t)F.tx=t.value;if(p)F.px=p.value}
+async function anPost(){anKeep();const F=AN.form;if(!F||F.busy)return;const tx=(F.tx||'').trim().slice(0,300);if(!F.c.length&&!tx){toast('Ajoute au moins une carte ou un message');return}
+ if(!SBS.pseudo){toast('Choisis d’abord ton pseudo dans Réglages');return}
+ if(/(\+33|0)[1-9]([\s.-]?\d{2}){4}/.test(tx)){toast('Pas de numéro de téléphone dans les annonces');return}
+ let px=null;if(F.g==='vend'&&String(F.px||'').trim()){px=Math.round(parseFloat(String(F.px).replace(',','.'))*100)/100;if(!(px>=0&&px<100000)){toast('Prix invalide');return}}
+ F.busy=true;anDraw();
+ try{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({genre:F.g,cartes:F.c,texte:tx,prix:px})});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}
+ catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/10 annonces/.test(m)?'Tu as déjà 10 annonces en cours':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':'Publication impossible');anDraw()}}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ if(t.closest('[data-annopen]')){e.stopPropagation();if(S.menu){S.menu=false;S.mnmore=false;render()}anOpen();return}
+ const v=document.getElementById('ann');if(!v||!v.contains(t))return;e.stopPropagation();
+ const q=s=>t.closest(s);let b;
+ if(t===v||q('[data-anx]')){anClose();return}
+ if(q('[data-anacc]')){anClose();S.tab='set';S.sacc=true;render();window.scrollTo(0,0);return}
+ if(q('[data-anre]')){anLoad(true);return}
+ if(b=q('[data-anf]')){AN.f=b.dataset.anf;anDraw();return}
+ if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
+ if(b=q('[data-ang]')){anKeep();AN.form.g=b.dataset.ang;anDraw();return}
+ if(b=q('[data-anadd]')){anKeep();const F=AN.form,id=b.dataset.anadd;if(!F.c.includes(id)){if(F.c.length>=20){toast('20 cartes maximum');return}F.c.push(id)}F.q='';anDraw();const n=document.getElementById('an-q');if(n)n.focus();return}
+ if(b=q('[data-anrm]')){anKeep();AN.form.c=AN.form.c.filter(x=>x!==b.dataset.anrm);anDraw();return}
+ if(b=q('[data-anfill]')){anKeep();const F=AN.form;let ids=[];if(b.dataset.anfill==='dup'){try{ids=tradeData().prop.map(x=>x.c.id)}catch(x){}}else ids=cards.filter(c=>(+c.want||0)>0).map(c=>c.id);
+  if(!ids.length){toast(b.dataset.anfill==='dup'?'Tu n’as pas de doubles':'Tu n’as pas de cartes recherchées');return}ids.forEach(id=>{if(F.c.length<20&&!F.c.includes(id))F.c.push(id)});anDraw();return}
+ if(q('[data-anpost]')){anPost();return}
+ if(b=q('[data-anpp]')){const n=b.dataset.anpp;anClose();ppOpen(n);return}
+ if(b=q('[data-andel]')){const id=+b.dataset.andel;if(!confirm2(b))return;frApi('/rest/v1/annonces?id=eq.'+id,{method:'DELETE'}).then(()=>{AN.L=(AN.L||[]).filter(a=>a.id!==id);toast('Annonce supprimée');anDraw()}).catch(()=>toast('Suppression impossible'));return}},true);
+/* suppression : deuxième appui pour confirmer (pas de fenêtre système) */
+function confirm2(b){if(b.dataset.ok==='1')return true;b.dataset.ok='1';b.textContent='Appuie encore pour supprimer';setTimeout(()=>{if(b.isConnected){b.dataset.ok='';b.textContent='🗑️ Supprimer'}},3000);return false}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='an-q'&&AN.form){AN.form.q=e.target.value;clearTimeout(AN.qt);AN.qt=setTimeout(()=>{anKeep();anDraw()},160)}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&AN.open){e.stopPropagation();if(AN.form){AN.form=null;anDraw()}else anClose()}},true);
+/* ===== ANN:END ===== */
+
 
 
 
@@ -11729,6 +11828,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:133,d:'2026-11-20',it:[['n','📢','Annonces entre membres','Menu > Plus d’actions > Annonces : poste « je vends », « je cherche » ou « j’échange » avec tes cartes. « 🎯 Pour toi » montre celles qui t’intéressent.','home']]},
 {v:132,d:'2026-11-20',it:[['n','📷','Photo de ta vraie carte','Dans la fiche d’une carte (Fusion World aussi), « Photo de ma carte » : ta photo remplace l’image officielle dans ta collection, tes classeurs et ton profil public.','coll']]},
 {v:131,d:'2026-11-20',it:[['c','🏷️','Rareté dans les profils','Les cartes d’un profil public et de la comparaison affichent aussi leur rareté (C, UC, R, SR…).','comm']]},
 {v:130,d:'2026-11-20',it:[['c','🏷️','Rareté visible partout','Avec 4 cartes par ligne, la rareté (C, UC, R, SR…) s’affiche sous le numéro de chaque carte.','coll']]},

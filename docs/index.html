@@ -1900,7 +1900,7 @@ html .cx-g.v-book{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
 .cx-px{margin-left:auto;white-space:nowrap;font:800 italic 14.5px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em;color:var(--cxg)}
 .cx-nm,.cx-mk2{display:none}
 html[data-gcs="2"] .cx-g:not(.v-list):not(.v-book) .cx-nm{display:block;flex-basis:100%;order:9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 13px/1.25 Barlow,sans-serif;color:var(--mu)}
-html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-r{display:none}
+html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-r{flex-basis:100%;order:8;font-size:11.5px;line-height:1.15}
 html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-no{font-size:13px}
 html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-px{font-size:12px}
 html[data-gcs="4"] .cx-g:not(.v-list):not(.v-book) .cx-st{height:28px;bottom:5px}
@@ -8383,7 +8383,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='20 nov. 2026 · 129';
+const BUILD='20 nov. 2026 · 130';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -11694,6 +11694,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:130,d:'2026-11-20',it:[['c','🏷️','Rareté visible partout','Avec 4 cartes par ligne, la rareté (C, UC, R, SR…) s’affiche sous le numéro de chaque carte.','coll']]},
 {v:129,d:'2026-11-20',it:[['n','📷','Photos dans les messages privés','Dans une discussion avec un ami, touche 📷 pour lui envoyer une photo.','comm'],['c','🔔','Notifications plus claires','Une photo ou un classeur s’affiche « 📷 Photo » ou « 📒 Classeur » dans les notifications et les aperçus.','comm']]},
 {v:128,d:'2026-11-19',it:[['n','📷','Photos dans le chat','Dans le Général, touche 📷 pour envoyer une photo (une carte, ton classeur…). Touche une photo pour l’agrandir.','home'],['a','🎴','Menu plus court','« Devine la carte » a été retiré du menu.','home']]},
 {v:127,d:'2026-11-18',it:[['n','⚖️','Comparer avec un membre','Sur son profil, « Comparer nos collections » : ce qu’il a et pas toi, l’inverse, et un échange équilibré proposé en un appui.','comm']]},

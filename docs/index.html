@@ -3406,6 +3406,99 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .an-phadd{width:96px;height:96px;border-radius:10px;border:1px dashed rgba(255,255,255,.3);background:rgba(255,255,255,.04);color:inherit;font-size:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer}
 .an-phadd small{font-size:12px;opacity:.8}
 .an-fph{margin:4px 0 10px}
+/* PPV2 : profil public */
+.pv-hero{margin-top:10px}
+.pv-card{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:1.45/1;min-height:220px;border-radius:18px;border:3px solid transparent;
+ background:linear-gradient(#120c0c,#120c0c) padding-box,linear-gradient(135deg,var(--pc),#F5B82E 52%,var(--pc)) border-box;
+ box-shadow:0 22px 44px -22px color-mix(in srgb,var(--pc) 80%,transparent),0 10px 24px -14px rgba(0,0,0,.9)}
+.pv-art{position:absolute;inset:0;z-index:0;overflow:hidden}
+.pv-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%;transform:scale(1.22);transform-origin:50% 18%}
+.pv-card.noart .pv-art{background:radial-gradient(120% 90% at 85% 0%,color-mix(in srgb,var(--pc) 60%,transparent),transparent 62%),repeating-linear-gradient(135deg,rgba(255,255,255,.045) 0 2px,transparent 2px 15px),#120c0c}
+.pv-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,0) 40%,rgba(0,0,0,.9) 100%)}
+.pv-card::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.26) 46%,rgba(255,255,255,.06) 52%,transparent 62%);transform:translateX(-115%);animation:pvSheen 1.5s .35s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes pvSheen{to{transform:translateX(115%)}}
+@media (prefers-reduced-motion:reduce){.pv-card::after{animation:none;display:none}}
+.pv-cost{position:absolute;z-index:2;top:10px;left:10px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 28%,#fff1b8 0,#ffc94d 18%,#ff9a1e 48%,#e2560c 78%,#8d2705 100%);box-shadow:0 0 0 3px rgba(0,0,0,.55),0 6px 14px rgba(0,0,0,.55)}
+.pv-cost b{font:900 italic 27px/1 "Big Shoulders Display",Barlow,sans-serif;color:#fff;-webkit-text-stroke:1.2px #6b1f00;paint-order:stroke fill;text-shadow:0 2px 0 rgba(90,20,0,.6)}
+.pv-pow{position:absolute;z-index:2;top:6px;right:12px;text-align:right}
+.pv-pow b{display:block;font:900 italic 46px/.92 "Big Shoulders Display",Barlow,sans-serif;color:#fff;-webkit-text-stroke:2px rgba(0,0,0,.85);paint-order:stroke fill;text-shadow:0 4px 0 rgba(0,0,0,.45);letter-spacing:-.01em}
+.pv-pow small{display:block;margin-top:1px;font:700 13px/1 "Barlow Condensed",Barlow,sans-serif;color:rgba(255,255,255,.9);text-shadow:0 1px 3px #000}
+.pv-plate{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:12px;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:end}
+.pv-av{grid-row:1/3;width:56px;height:56px;border-radius:15px;display:grid;place-items:center;font:900 italic 30px/1 "Big Shoulders Display",Barlow,sans-serif;color:#fff;background:linear-gradient(140deg,var(--pc),#0c0606 135%);border:2px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.55)}
+.pv-id{min-width:0}
+.pv-card h2.pv-name{margin:0;font:900 italic clamp(27px,8.2vw,38px)/.95 "Big Shoulders Display",Barlow,sans-serif;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.55);overflow-wrap:anywhere}
+.pv-rank{margin-top:4px;font:600 13px/1.25 Barlow,sans-serif;color:rgba(255,255,255,.85)}
+.pv-orbs{grid-column:2;display:flex;gap:4px;margin-top:7px}
+.pv-orbs .dbo{--s:15px;max-width:none;margin:0;position:relative;left:auto;top:auto;opacity:1;width:15px;animation:none}
+.pv-facts{display:flex;flex-wrap:wrap;gap:4px 16px;margin:12px 2px 0;font:500 14px/1.3 Barlow,sans-serif;color:var(--mu)}
+.pv-facts span{white-space:nowrap}
+.pv-facts b{color:var(--tx);font-weight:800}
+.pv-acts{display:flex;gap:8px;margin-top:14px;align-items:stretch}
+.pv-acts .ppact{flex:1;margin:0;min-width:0}
+.pv-acts .ppact:empty{display:none}
+.pv-acts>.pv-btn{flex:none}
+.pv-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid transparent;background:var(--ac);color:#fff;font:700 15px Barlow,sans-serif;cursor:pointer}
+.pv-btn.alt{background:var(--sf);border-color:var(--ln);color:var(--tx)}
+.pv-sec>.pv-btn,.pv-row .pv-btn{width:100%;margin-top:12px}
+.pv-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.pv-bd{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;background:color-mix(in srgb,#F5B82E 11%,var(--sf));border:1px solid color-mix(in srgb,#F5B82E 38%,var(--ln));font:600 13px Barlow,sans-serif;color:var(--tx)}
+.pv-bd i{font-style:normal}
+.pv-sec{margin-top:26px}
+.pv-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.pv-h h3{margin:0;font:900 italic 23px/1 "Big Shoulders Display",Barlow,sans-serif;color:var(--tx)}
+.pv-h span{color:var(--mu);font:600 13px Barlow,sans-serif;white-space:nowrap}
+.pv-vit{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}
+.pv-vit::-webkit-scrollbar,.pv-strip::-webkit-scrollbar,.pv-tabs::-webkit-scrollbar{display:none}
+.pv-vc{flex:none;width:142px;scroll-snap-align:start;display:flex;flex-direction:column;gap:2px;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.pv-vc .art{width:100%;border-radius:10px;box-shadow:0 14px 24px -14px rgba(0,0,0,.95)}
+.pv-vc b{margin-top:7px;font:700 14px/1.2 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-vc small{font:600 12.5px/1.2 "Barlow Condensed",Barlow,sans-serif;color:var(--mu)}
+.pv-sub{margin:2px 0 8px;font:500 14px/1.35 Barlow,sans-serif;color:var(--mu)}
+.pv-sub b{color:var(--tx)}
+.pv-sub~.pv-sub{margin-top:14px}
+.pv-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.pv-mc{flex:none;width:72px;position:relative;display:flex;flex-direction:column;gap:3px;padding:0;border:0;background:none;color:inherit;text-align:center;cursor:pointer;font:inherit}
+.pv-mc .art{width:100%;border-radius:6px}
+.pv-mid{font:700 11.5px/1.15 "Barlow Condensed",Barlow,sans-serif;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-mid i{font-style:normal;color:#F5B82E}
+.pv-mc em{position:absolute;top:4px;right:4px;z-index:3;padding:1px 5px;border-radius:6px;background:rgba(0,0,0,.78);color:#fff;font:800 11px/1.3 Barlow,sans-serif;font-style:normal}
+.pv-mc.hit .art{box-shadow:0 0 0 2px #F5B82E,0 8px 18px -10px #F5B82E}
+.pv-mk{font:700 10.5px/1.15 Barlow,sans-serif;color:#F5B82E}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px 8px}
+@media (min-width:900px){.pv-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}}
+.pv-grid .pv-mc{width:auto}
+.pv-tabs{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.pv-tab{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font:700 14px Barlow,sans-serif;cursor:pointer}
+.pv-tab small{font:700 12px Barlow,sans-serif;color:var(--mu)}
+.pv-tab[aria-selected="true"]{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+.pv-tab[aria-selected="true"] small{color:inherit;opacity:.65}
+.pv-srs{display:flex;flex-direction:column}
+.pv-sr{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;padding:11px 2px;border:0;border-bottom:1px solid var(--ln);background:none;color:inherit;text-align:left;font:inherit}
+button.pv-sr{cursor:pointer}
+button.pv-sr:active{background:color-mix(in srgb,var(--sc) 10%,transparent)}
+.pv-code{font:700 14px/1.1 "Barlow Condensed",Barlow,sans-serif;color:var(--sc);overflow-wrap:anywhere}
+.pv-sn{display:flex;flex-direction:column;gap:7px;min-width:0}
+.pv-snm{font:600 14.5px/1.2 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-bar{display:block;height:6px;border-radius:4px;background:var(--ln);overflow:hidden}
+.pv-bar i{display:block;height:100%;border-radius:4px;background:var(--sc)}
+.pv-sv{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.pv-sv b{font:800 16px/1 Barlow,sans-serif}
+.pv-sv small{font:600 12px/1 Barlow,sans-serif;color:var(--mu);white-space:nowrap}
+.pv-sr.full .pv-bar i{background:linear-gradient(90deg,#F5B82E,#FFE29A,#F5B82E)}
+.pv-sr.full .pv-code{color:#F5B82E}
+.pv-ok{color:#F5B82E}
+.pv-rest,.pv-hint,.pv-none{margin:10px 0 0;font:500 13px/1.35 Barlow,sans-serif;color:var(--mu)}
+.pv-an{padding:12px 0;border-bottom:1px solid var(--ln)}
+.pv-anh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.pv-anh b{font:700 15px Barlow,sans-serif}
+.pv-anh small{margin-left:auto;color:var(--mu);font:500 12.5px Barlow,sans-serif}
+.pv-anp{font:800 15px Barlow,sans-serif;color:#2fbf71}
+.pv-an p{margin:8px 0 0;font:500 14px/1.35 Barlow,sans-serif}
+.pv-empty p{margin:0;color:var(--mu);font:500 14px/1.4 Barlow,sans-serif}
+.pv-card h2.pv-name{display:block}
+.pv-card h2.pv-name::before,.pv-card h2.pv-name::after{display:none!important;content:none!important}
+.pv-hero,.pv-facts,.pv-acts,.pv-badges{max-width:620px}
+@media (min-width:900px){.pv-card{aspect-ratio:1.9/1}}
 </style>
 </head>
 <body>
@@ -8422,7 +8515,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='20 nov. 2026 · 134';
+const BUILD='21 nov. 2026 · 135';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10735,13 +10828,13 @@ function anHTML(){const T=(k,t)=>`<button type="button" class="chip" aria-presse
  if(!SBS)body=`<div class="sub">Connecte-toi pour voir et poster des annonces.</div><button class="btn" data-anacc>🔑 Se connecter</button>`;
  else if(AN.err==='nosrv')body='<div class="sub">Les annonces ne sont pas encore activées sur le serveur.</div>';
  else if(AN.form)body=anFormHTML();
- else{const L=(AN.L||[]).filter(a=>AN.f==='me'?a.uid===SBS.uid:AN.f==='for'?!!anFor(a):!AN.f||a.g===AN.f),nf=(AN.L||[]).filter(a=>a.uid!==SBS.uid&&anFor(a)).length;
-  body=`<button type="button" class="btn" data-anform="1">＋ Poster une annonce</button><div class="row an-fl">${T('','Toutes')}${nf?T('for','🎯 Pour toi ('+nf+')'):''}${T('vend','💶 Ventes')}${T('cherche','🎯 Recherches')}${T('echange','🔁 Échanges')}${T('me','Mes annonces')}</div>
+ else{const L=(AN.L||[]).filter(a=>!AN.who||cmLow(a.ps)===cmLow(AN.who)).filter(a=>AN.f==='me'?a.uid===SBS.uid:AN.f==='for'?!!anFor(a):!AN.f||a.g===AN.f),nf=(AN.L||[]).filter(a=>a.uid!==SBS.uid&&anFor(a)).length;
+  body=`<button type="button" class="btn" data-anform="1">＋ Poster une annonce</button>${AN.who?`<div class="row" style="margin-top:12px"><button type="button" class="chip on" data-anwho aria-label="Voir toutes les annonces">Annonces de ${esc(AN.who)} ✕</button></div>`:''}<div class="row an-fl">${T('','Toutes')}${nf?T('for','🎯 Pour toi ('+nf+')'):''}${T('vend','💶 Ventes')}${T('cherche','🎯 Recherches')}${T('echange','🔁 Échanges')}${T('me','Mes annonces')}</div>
   ${AN.err==='net'?'<div class="sub">Connexion impossible. <button class="chip" data-anre>Réessayer</button></div>':''}${AN.L===null?'<div class="sub">Chargement…</div>':L.length?L.map(anItem).join(''):'<div class="sub">Aucune annonce ici pour l’instant. Lance-toi !</div>'}`}
  return `<div class="sheet ann" id="ann"><div role="dialog" aria-label="Annonces"><div class="bkv-hd"><h2>📢 Annonces</h2><button class="ib" data-anx aria-label="Fermer">✕</button></div><div class="sub" style="margin-bottom:10px">Ventes, recherches et échanges entre membres.</div>${body}</div></div>`}
 function anDraw(){if(!AN.open)return;const a=document.activeElement,id=a&&a.id,ss=a&&a.selectionStart;const e=document.getElementById('ann');if(e)e.outerHTML=anHTML();else document.body.insertAdjacentHTML('beforeend',anHTML());
  if(id){const n=document.getElementById(id);if(n){n.focus();try{n.setSelectionRange(ss,ss)}catch(x){}}}}
-function anOpen(){AN.open=true;AN.form=null;anDraw();anLoad()}
+function anOpen(who){AN.who=typeof who==='string'?who:'';AN.open=true;AN.form=null;anDraw();anLoad()}
 function anClose(){AN.open=false;AN.form=null;const e=document.getElementById('ann');if(e)e.remove()}
 function anKeep(){const F=AN.form;if(!F)return;const q=document.getElementById('an-q'),t=document.getElementById('an-tx'),p=document.getElementById('an-px');if(q)F.q=q.value;if(t)F.tx=t.value;if(p)F.px=p.value}
 async function anPost(){anKeep();const F=AN.form;if(!F||F.busy)return;const tx=(F.tx||'').trim().slice(0,300);if(!F.c.length&&!tx){toast('Ajoute au moins une carte ou un message');return}
@@ -10758,6 +10851,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(t===v||q('[data-anx]')){anClose();return}
  if(q('[data-anacc]')){anClose();S.tab='set';S.sacc=true;render();window.scrollTo(0,0);return}
  if(q('[data-anre]')){anLoad(true);return}
+ if(q('[data-anwho]')){AN.who='';anDraw();return}
  if(b=q('[data-anf]')){AN.f=b.dataset.anf;anDraw();return}
  if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false,ph:[],up:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
  if(b=q('[data-ang]')){anKeep();AN.form.g=b.dataset.ang;anDraw();return}
@@ -10781,6 +10875,95 @@ function confirm2(b){if(b.dataset.ok==='1')return true;b.dataset.ok='1';b.textCo
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='an-q'&&AN.form){AN.form.q=e.target.value;clearTimeout(AN.qt);AN.qt=setTimeout(()=>{anKeep();anDraw()},160)}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&AN.open){e.stopPropagation();if(AN.form){AN.form=null;anDraw()}else anClose()}},true);
 /* ===== ANN:END ===== */
+/* ===== PPV2 : profil public refait — une carte de joueur, seulement ce qui existe, tout se touche ===== */
+const ppPx=id=>MKON?((MKT[id]||0)+(MSP[id]||0)):0;
+let PPM={k:'',v:null};
+/* les cartes qu'il possède (Fusion World + Masters) : d'après son profil, sa sauvegarde en ligne, ou ma collection si c'est moi */
+function ppOwned(P,mine){
+ if(mine){const s=new Set(cards.filter(c=>c.own>0).map(c=>c.id));try{msBindInit();MS_ALL.forEach(c=>{if(c.own>0)s.add(c.id)})}catch(e){}return s}
+ try{const h=cmpHis(P);return typeof h==='string'?null:new Set([...h.fw,...h.ms])}catch(e){return null}}
+function ppMeta(name,P,mine){
+ const k=cmLow(name)+'|'+(mine?'me|'+Math.floor(Date.now()/15e3):((PP.row&&PP.row.t)||0))+'|'+(typeof PPC==='object'&&PPC[cmLow(name)]?1:0)+'|'+MKON;
+ if(PPM.k===k&&PPM.v)return PPM.v;
+ const exn=ppExN(),em=new Map(P.ex),G={fw:[],dk:[],ms:[],old:[]};
+ EXTS.forEach(([e,nm])=>G.fw.push({id:e,nm,o:em.get(e)||0,n:exn[e]||0,col:SERCOL[e]||'var(--ac)',go:1}));
+ DECKS.forEach(([e,nm])=>G.dk.push({id:e,nm,o:em.get(e)||0,n:exn[e]||0,col:SERCOL[e]||'var(--ac)'}));
+ if(P.ms){try{msBindInit();const mm=new Map(P.ms.ex);MS_SETS.forEach(t=>G.ms.push({id:t.id,nm:t.n,o:mm.get(t.id)||0,n:t.c.length,col:'rgb('+(MS_COL[t.id]||'229,9,20')+')',go:1}))}catch(e){}}
+ if(P.dz)for(const [id,o] of Object.entries(P.dz)){const s=dzSet(id);if(s&&o>0)G.old.push({id,nm:s.dz.ser||s.n,o,n:s.dz.n,col:'#C9A227'})}
+ const full=[];let started=0;for(const g of Object.values(G))for(const r of g){r.p=r.n?Math.min(100,Math.round(r.o/r.n*100)):0;if(r.o>0)started++;if(r.n&&r.o>=r.n)full.push(r.id)}
+ const own=ppOwned(P,mine);let val=0,top=null,tv=0;if(own)for(const id of own){const v=ppPx(id);val+=v;if(v>tv){tv=v;top=id}}
+ const best=G.fw.filter(r=>r.o>0).sort((a,b)=>b.p-a.p||b.o-a.o)[0]||G.ms.filter(r=>r.o>0).sort((a,b)=>b.p-a.p||b.o-a.o)[0];
+ const v={G,full,started,val:own?val:null,top,col:P.db>=7?'#F5B82E':best?best.col:'var(--ac)',uniq:P.t.u+(P.ms?P.ms.u:0),ex:P.t.n+(P.ms?P.ms.n:0),alt:P.t.a+(P.ms?P.ms.a:0)};
+ PPM={k,v};return v}
+function ppHeroImg(id){if(!id)return '';try{const m=typeof myImg==='function'&&myImg(id);if(m)return m}catch(e){}const fw=CARDIMG[id];if(fw)return bU(id,fw);if(MS_CI[id])return MS_CI[id];try{msHi(id)}catch(e){}return ''}
+function ppBadges(P,M){const b=[];
+ if(P.db>=7)b.push(['🐉','Les 7 Dragon Balls']);
+ M.full.slice(0,3).forEach(id=>b.push(['🏆',id+' complète']));if(M.full.length>3)b.push(['🏆','+'+(M.full.length-3)+' séries complètes']);
+ for(const [n,l] of [[3000,'3 000 cartes'],[2000,'2 000 cartes'],[1000,'1 000 cartes'],[500,'500 cartes'],[100,'100 cartes']])if(M.uniq>=n){b.push(['📚',l]);break}
+ if(M.alt>=50)b.push(['✨','Chasseur d’Alt Art']);
+ if(P.ms&&P.ms.u>=200)b.push(['🃏','Collectionneur Masters']);
+ if(P.sell&&P.sell.length>=10)b.push(['🔁','Ouvert aux échanges']);
+ return b}
+const ppMini=(id,extra,cls)=>{const c=swCard(id);if(!c)return '';return `<button type="button" class="pv-mc${cls?' '+cls:''}" data-n="${esc(id)}" aria-label="${esc((c.name||id)+' · '+id)}">${art({...c,own:1})}<span class="pv-mid">${esc(id.replace(/_ALT\d?/,''))}${c.ver&&c.ver!=='Normal'?' <i>Alt</i>':''}</span>${extra||''}</button>`};
+/* ses annonces en cours */
+const PPAN={};
+function ppAnn(name){if(!SBS)return null;const k=cmLow(name),st=PPAN[k];if(st&&(st.busy||Date.now()-st.t<120000))return st;
+ PPAN[k]={busy:1,t:Date.now(),L:st&&st.L||null};
+ frApi('/rest/v1/annonces?select=id,genre,cartes,texte,prix,cree_le&pseudo=eq.'+encodeURIComponent(name)+'&fin_le=gt.'+encodeURIComponent(new Date().toISOString())+'&order=cree_le.desc&limit=5')
+  .then(r=>{PPAN[k]={t:Date.now(),L:Array.isArray(r)?r:[]};if(S.tab==='prof'&&cmLow(PP.name)===k)render()}).catch(()=>{PPAN[k]={t:Date.now(),L:[]}});
+ return PPAN[k]}
+function ppAnnHTML(name,mine){const st=ppAnn(name);if(!st||!st.L||!st.L.length)return '';const G={vend:['💶','Vend'],cherche:['🎯','Cherche'],echange:['🔁','Échange']};
+ return `<section class="pv-sec"><div class="pv-h"><h3>📢 ${mine?'Tes annonces':'Ses annonces'}</h3><span>${st.L.length}</span></div>${st.L.map(a=>{const g=G[a.genre]||['📢',''],ids=(Array.isArray(a.cartes)?a.cartes:[]).filter(x=>typeof x==='string').slice(0,4);
+  return `<div class="pv-an pv-an-${esc(a.genre)}"><div class="pv-anh"><b>${g[0]} ${g[1]}</b>${a.prix!=null&&a.genre==='vend'?`<span class="pv-anp">${eur(+a.prix)}</span>`:''}<small>${typeof anAgo==='function'?anAgo(a.cree_le):''}</small></div>${ids.length?`<div class="pv-strip">${ids.map(id=>ppMini(id)).join('')}</div>`:''}${a.texte?`<p>${esc(String(a.texte).slice(0,140))}${String(a.texte).length>140?'…':''}</p>`:''}</div>`}).join('')}
+  <button type="button" class="pv-btn alt" data-ppann="${esc(name)}">Voir ${mine?'tes':'ses'} annonces</button></section>`}
+/* la page */
+ppBody=function(name,P,t,mine){
+ const M=ppMeta(name,P,mine),rk=dbRank(P.t.u),hero=(P.vit&&P.vit[0])||M.top,img=ppHeroImg(hero);
+ let h=`<section class="pv-hero" style="--pc:${M.col}"><div class="pv-card${img?'':' noart'}">
+  <div class="pv-art">${img?`<img src="${esc(img)}" alt="" aria-hidden="true" decoding="async">`:''}</div><div class="pv-shade" aria-hidden="true"></div>
+  <span class="pv-cost" title="Dragon Balls" aria-label="${P.db} Dragon Ball${P.db>1?'s':''} sur 7"><b>${P.db}</b></span>
+  <span class="pv-pow" aria-label="${M.uniq} cartes différentes"><b>${cmNum(M.uniq)}</b><small>cartes</small></span>
+  <div class="pv-plate"><span class="pv-av" aria-hidden="true">${cmIni(name)}</span><div class="pv-id"><h2 class="pv-name">${esc(name)}</h2><div class="pv-rank">${esc(rk.name)}${t?' · '+(mine?'publié ':'')+agoFr(t):''}</div></div>
+   <span class="pv-orbs" aria-hidden="true">${[1,2,3,4,5,6,7].map(k=>dbOrb(k,k<=P.db)).join('')}</span></div>
+ </div></section>`;
+ const F=[[cmNum(M.uniq),'cartes'],[cmNum(M.ex),'exemplaires']];if(M.full.length)F.push([M.full.length,'série'+(M.full.length>1?'s':'')+' complète'+(M.full.length>1?'s':'')]);if(M.alt)F.push([cmNum(M.alt),'Alt Art']);
+ if(M.val!=null&&M.val>0)F.push(['≈ '+cmNum(Math.round(M.val))+'\u00a0€','de valeur']);
+ h+=`<div class="pv-facts">${F.map(([a,b])=>`<span><b>${a}</b> ${b}</span>`).join('')}</div>`;
+ if(!mine)h+=`<div class="pv-acts"><div class="ppact" id="pp-act">${ppActHTML()}</div><button type="button" class="pv-btn alt" data-cmpgo>⚖️ Comparer</button></div>`;
+ const bd=ppBadges(P,M);if(bd.length)h+=`<div class="pv-badges" aria-label="Succès">${bd.map(([i,l])=>`<span class="pv-bd"><i aria-hidden="true">${i}</i>${esc(l)}</span>`).join('')}</div>`;
+ /* vitrine */
+ if(P.vit&&P.vit.length)h+=`<section class="pv-sec"><div class="pv-h"><h3>⭐ Vitrine</h3><span>${P.vit.length} carte${P.vit.length>1?'s':''}</span></div><div class="pv-vit">${P.vit.map(id=>{const c=swCard(id);if(!c)return '';const p=ppPx(id);
+  return `<button type="button" class="pv-vc" data-n="${esc(id)}">${art({...c,own:1})}<b>${esc(c.name||c.id)}</b><small>${esc(id.replace(/_ALT\d?/,''))}${c.rar?' · '+esc(c.rar):''}${p?' · '+eur(p):''}</small></button>`}).join('')}</div></section>`;
+ else if(mine)h+=`<section class="pv-sec pv-empty"><div class="pv-h"><h3>⭐ Vitrine</h3></div><p>Mets tes plus belles cartes en favori ⭐ : elles s’afficheront ici, en grand.</p><button type="button" class="pv-btn alt" data-go="coll">Choisir dans ma collection</button></section>`;
+ /* échanges possibles */
+ if(!mine&&(P.sell||P.want)){const mt=ppMatch(P);
+  if(mt.get.length||mt.give.length)h+=`<section class="pv-sec pv-trade"><div class="pv-h"><h3>🤝 Échanges possibles</h3></div>
+   ${mt.get.length?`<div class="pv-sub">Il peut te donner <b>${mt.get.length}</b> carte${mt.get.length>1?'s':''} que tu cherches</div><div class="pv-strip">${mt.get.slice(0,10).map(([id,q])=>ppMini(id,q>1?`<em>×${q}</em>`:'')).join('')}</div>`:''}
+   ${mt.give.length?`<div class="pv-sub">Tu peux lui donner <b>${mt.give.length}</b> carte${mt.give.length>1?'s':''} qu’il cherche</div><div class="pv-strip">${mt.give.slice(0,10).map(([id,q])=>ppMini(id,q>1?`<em>×${q}</em>`:'')).join('')}</div>`:''}
+   <div class="pv-row"><button type="button" class="pv-btn" data-ppsw>⚖️ Préparer l’échange</button></div></section>`}
+ /* collection : seulement les séries commencées */
+ const tabs=[['fw','Fusion World'],['ms','Masters'],['dk','Decks'],['old','Anciennes']].map(([k,l])=>[k,l,M.G[k].filter(r=>r.o>0).length]).filter(x=>x[2]||x[0]==='fw');
+ let sg=PP.sg&&tabs.some(x=>x[0]===PP.sg)?PP.sg:(tabs.find(x=>x[2])||tabs[0])[0];
+ const rows=M.G[sg].filter(r=>r.o>0).sort((a,b)=>b.p-a.p||b.o-a.o),rest=M.G[sg].filter(r=>!r.o).length,canGo=r=>!!r.go;
+ h+=`<section class="pv-sec"><div class="pv-h"><h3>🗂️ Collection</h3><span>${M.started} série${M.started>1?'s':''} commencée${M.started>1?'s':''}</span></div>
+  <div class="pv-tabs" role="tablist">${tabs.map(([k,l,n])=>`<button type="button" role="tab" aria-selected="${k===sg}" class="pv-tab" data-ppsg="${k}">${l}<small>${n}</small></button>`).join('')}</div>
+  ${rows.length?`<div class="pv-srs">${rows.map(r=>{const full=r.n&&r.o>=r.n,tag=canGo(r)?'button':'div';
+   return `<${tag}${tag==='button'?` type="button" data-ppser="${esc(r.id)}" aria-label="Voir les cartes ${esc(r.id)} en photo"`:''} class="pv-sr${full?' full':''}" style="--sc:${r.col}"><span class="pv-code">${esc(r.id)}</span><span class="pv-sn"><span class="pv-snm">${esc(r.nm)}</span><span class="pv-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${r.n}" aria-valuenow="${r.o}" aria-label="${esc(r.id)}"><i style="width:${r.p}%"></i></span></span><span class="pv-sv">${full?'<b class="pv-ok">✓</b>':`<b>${r.p}%</b>`}<small>${cmNum(r.o)} / ${cmNum(r.n)}</small></span></${tag}>`}).join('')}</div>`:`<p class="pv-none">Aucune carte ${sg==='fw'?'Fusion World':''} pour l’instant.</p>`}
+  ${rest?`<p class="pv-rest">+ ${rest} série${rest>1?'s':''} pas encore commencée${rest>1?'s':''}</p>`:''}${rows.some(canGo)?'<p class="pv-hint">📷 Touche une série pour voir les cartes en photo.</p>':''}</section>`;
+ /* listes d'échange */
+ const sellMine=new Set(tradeData().prop.concat(msProp()).map(x=>x.c.id));
+ const grid=(k,title,list,mark)=>{if(!list||!list.length)return '';const open=PP.more[k],cut=open?list:list.slice(0,8);
+  return `<section class="pv-sec"><div class="pv-h"><h3>${title}</h3><span>${list.length}</span></div><div class="pv-grid">${cut.map(([id,q])=>{const c=swCard(id);if(!c)return '';const m=mark(c);return ppMini(id,(q>1?`<em>×${q}</em>`:'')+(m?`<span class="pv-mk">${m}</span>`:''),m?'hit':'')}).join('')}</div>${list.length>8&&!open?`<button type="button" class="pv-btn alt" data-ppmore="${k}">Voir les ${list.length} cartes</button>`:''}</section>`};
+ h+=grid('sell','🔁 À échanger',P.sell,c=>!mine&&c.want>c.own?'Tu la cherches':'');
+ h+=grid('want',mine?'🔎 Tu cherches':'🔎 Il cherche',P.want,c=>!mine&&sellMine.has(c.id)?'Tu peux la donner':'');
+ try{h+=ppAnnHTML(mine&&SBS&&SBS.pseudo?SBS.pseudo:name,mine)}catch(e){}
+ return h};
+/* onglets de séries, annonces du joueur */
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ const g=t.closest('[data-ppsg]');if(g){e.stopPropagation();PP.sg=g.dataset.ppsg;render();return}
+ const a=t.closest('[data-ppann]');if(a){e.stopPropagation();try{AN.f=''}catch(x){}anOpen(a.dataset.ppann);return}},true);
+/* ===== PPV2:END ===== */
+
 
 
 
@@ -11844,6 +12027,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:135,d:'2026-11-21',it:[['n','🪪','Profil public tout neuf','Ton profil devient une carte de joueur : ta plus belle carte en grand, tes Dragon Balls, tes succès, ta vitrine, seulement les séries commencées, et tes annonces.','comm']]},
 {v:134,d:'2026-11-20',it:[['n','📷','Photos dans les annonces','Ajoute jusqu’à 3 photos à ton annonce (tes vraies cartes, un lot…). Touche une photo pour l’agrandir.','home']]},
 {v:133,d:'2026-11-20',it:[['n','📢','Annonces entre membres','Menu > Plus d’actions > Annonces : poste « je vends », « je cherche » ou « j’échange » avec tes cartes. « 🎯 Pour toi » montre celles qui t’intéressent.','home']]},
 {v:132,d:'2026-11-20',it:[['n','📷','Photo de ta vraie carte','Dans la fiche d’une carte (Fusion World aussi), « Photo de ma carte » : ta photo remplace l’image officielle dans ta collection, tes classeurs et ton profil public.','coll']]},

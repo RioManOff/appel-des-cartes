@@ -5,5 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -s "https://web.archive.org/cdx/search/cdx?url=dbs-cardgame.com/europe-fr/cardlist/*&output=txt&fl=original,timestamp&collapse=urlkey&limit=400" | sed 's/^/XX /' | head -300
-          curl -s "https://web.archive.org/cdx/search/cdx?url=dbs-cardgame.com/fr/cardlist/*&output=txt&fl=original,timestamp&collapse=urlkey&limit=100" | sed 's/^/XY /' | head -100
+          for q in "dbs-cardgame.com/europe-fr/*" "dbs-cardgame.com/fr/*"; do
+            curl -s -m 120 -w "\nCODE %{http_code}\n" "https://web.archive.org/cdx/search/cdx?url=$q&fl=original&collapse=urlkey&filter=original:.*card.*&limit=300" > o.txt || true
+            sed 's/^/XX /' o.txt | head -200
+          done

@@ -5,7 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          for u in "https://www.dbs-cardgame.com/europe-fr/cardlist/" "https://www.dbs-cardgame.com/fr/cardlist/" "https://www.coleka.com/fr/carte-dragon-ball-combat_t30411"; do
-            echo "XXURL $u"; curl -sL -A "Mozilla/5.0" "$u" -o p.html -w "XXCODE %{http_code} %{size_download}\n"
-            grep -o '<option[^>]*value="[^"]*"[^<]*' p.html | grep -i "deck\|SD\|XD\|starter" | head -60 | sed 's/^/XX /'
-          done
+          curl -s "https://web.archive.org/cdx/search/cdx?url=dbs-cardgame.com/europe-fr/cardlist/*&output=txt&fl=original,timestamp&collapse=urlkey&limit=400" | sed 's/^/XX /' | head -300
+          curl -s "https://web.archive.org/cdx/search/cdx?url=dbs-cardgame.com/fr/cardlist/*&output=txt&fl=original,timestamp&collapse=urlkey&limit=100" | sed 's/^/XY /' | head -100

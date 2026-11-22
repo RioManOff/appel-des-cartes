@@ -3499,6 +3499,115 @@ button.pv-sr:active{background:color-mix(in srgb,var(--sc) 10%,transparent)}
 .pv-card h2.pv-name::before,.pv-card h2.pv-name::after{display:none!important;content:none!important}
 .pv-hero,.pv-facts,.pv-acts,.pv-badges{max-width:620px}
 @media (min-width:900px){.pv-card{aspect-ratio:1.9/1}}
+/* HM2 : Accueil */
+.hr-bg{fill:none;stroke:var(--ln);stroke-width:8}
+.hr-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}
+.hr-t{fill:var(--tx);font:800 19px Barlow,sans-serif}
+.m2{position:relative;margin:18px 0 4px;padding:16px;border-radius:18px;background:linear-gradient(160deg,color-mix(in srgb,var(--sc) 22%,var(--sf)) 0%,var(--sf) 55%);border:1px solid color-mix(in srgb,var(--sc) 45%,var(--ln));overflow:hidden}
+.m2::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--sc) 35%,transparent),transparent 70%);pointer-events:none}
+.m2-b{position:relative;display:flex;align-items:center;gap:14px}
+.m2 .hr{flex:none}
+.m2 .hr-t{font-size:22px}
+.m2-x{display:flex;flex-direction:column;min-width:0}
+.m2-k{font:700 13px Barlow,sans-serif;color:var(--mu)}
+.m2-t{margin-top:2px;font:900 italic 32px/1 "Big Shoulders Display",Barlow,sans-serif;color:var(--tx)}
+.m2-n{margin-top:2px;font:600 14px Barlow,sans-serif;color:var(--sc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m2-s{margin-top:6px;font:500 14px/1.3 Barlow,sans-serif;color:var(--mu)}
+.m2-s b{color:var(--tx)}
+.m2-st{position:relative;display:flex;gap:8px;overflow-x:auto;margin:14px -4px 0;padding:0 4px 4px;scrollbar-width:none}
+.m2-st::-webkit-scrollbar{display:none}
+.m2-c{flex:none;width:64px;display:flex;flex-direction:column;gap:3px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:center;cursor:pointer}
+.m2-c .art{width:100%;border-radius:6px}
+.m2-c small{font:700 11px/1.15 "Barlow Condensed",Barlow,sans-serif;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m2-c small i{display:block;font-style:normal;color:var(--tx)}
+.m2-more{flex:none;align-self:center;padding:0 8px;font:800 15px Barlow,sans-serif;color:var(--mu)}
+.m2-go{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:14px;border:0;border-radius:12px;background:var(--sc);color:#fff;font:700 15px Barlow,sans-serif;cursor:pointer;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.ft{margin-top:22px}
+.ft-l{display:flex;flex-direction:column;border-radius:16px;background:var(--sf);border:1px solid var(--ln);overflow:hidden}
+.ft-i{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;padding:10px 12px;border:0;border-bottom:1px solid var(--ln);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ft-i:last-child{border-bottom:0}
+.ft-a .art{width:44px;border-radius:5px}
+.ft-e{display:grid;place-items:center;width:44px;height:61px;border-radius:6px;background:var(--bg);font-size:22px}
+.ft-x{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ft-x b{font:700 14.5px/1.25 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ft-x small{font:500 12.5px/1.25 Barlow,sans-serif;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ft-g{font-size:22px;color:var(--mu)}
+.ft-up{font:800 13.5px Barlow,sans-serif;color:var(--ok,#2fbf71);white-space:nowrap}
+.cg2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:22px}
+.cg2-i{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.cg2-i .hr{flex:none}
+.cg2-i .hr-t{font-size:14px}
+.cg2-i span{display:flex;flex-direction:column;min-width:0}
+.cg2-i b{font:900 italic 26px/1 "Big Shoulders Display",Barlow,sans-serif}
+.cg2-i small{font:500 12.5px Barlow,sans-serif;color:var(--mu)}
+.cg2-i em{margin-top:2px;font:700 13px Barlow,sans-serif;font-style:normal}
+@media (prefers-reduced-motion:reduce){.hr-fg{transition:none}}
+/* ST3 : stats */
+.s3 .st-vh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.s3-sub{font:600 13px Barlow,sans-serif;color:var(--mu)}
+.s3-kr{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.s3-k{display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:var(--sf);border:1px solid var(--ln)}
+.s3-k b{font:900 italic 36px/1 "Big Shoulders Display",Barlow,sans-serif;color:var(--tx);font-variant-numeric:tabular-nums}
+.s3-k span{font:700 14px Barlow,sans-serif;color:var(--tx)}
+.s3-k small{margin-top:4px;font:500 12.5px/1.3 Barlow,sans-serif;color:var(--mu)}
+.s3-k.up small{color:var(--ok,#2fbf71)}
+.s3-k.dn small{color:#FF5A6E}
+.s3-bl{display:flex;flex-direction:column;gap:12px}
+.s3-br{display:grid;grid-template-columns:minmax(64px,30%) minmax(0,1fr) auto;align-items:center;gap:12px}
+.s3-bn{display:flex;flex-direction:column;min-width:0}
+.s3-bn b{font:700 14px/1.15 "Barlow Condensed",Barlow,sans-serif;color:var(--tx)}
+.s3-bn small{font:500 12px/1.2 Barlow,sans-serif;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s3-bt{display:block;height:12px}
+.s3-bt i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--gold,#F5B82E)}
+.s3-mt{border-radius:4px;background:color-mix(in srgb,var(--gold,#F5B82E) 16%,transparent)}
+.s3-mt i{border-radius:4px}
+.s3-bv{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.s3-bv b{font:800 14.5px/1.1 Barlow,sans-serif;color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+.s3-bv small{font:500 12px/1.2 Barlow,sans-serif;color:var(--mu);white-space:nowrap}
+.s3-cs{display:block;width:100%;height:auto}
+.s3-ax{stroke:var(--ln);stroke-width:1}
+.s3-col path{fill:color-mix(in srgb,var(--gold,#F5B82E) 55%,transparent)}
+.s3-col.now path{fill:var(--gold,#F5B82E)}
+.s3-cv{fill:var(--tx);font:700 12px Barlow,sans-serif}
+.s3-cl{fill:var(--mu);font:600 11.5px Barlow,sans-serif}
+/* CG2 : chat refait — bulles nettes, photos sans cadre, réactions discrètes, saisie en pilule */
+.cg-ov .cg-list{background:radial-gradient(900px 520px at 105% -5%,rgba(47,127,232,.10),transparent 60%),radial-gradient(800px 480px at -10% 105%,rgba(245,184,46,.07),transparent 60%);padding:12px 12px 10px}
+.cg-ov .cg-m{margin-top:2px}
+.cg-ov .cg-m.first{margin-top:14px}
+.cg-ov .cg-av{width:34px;height:34px;font-size:17px;background:linear-gradient(145deg,hsl(var(--gh,20) 60% 46%),hsl(var(--gh,20) 55% 28%));box-shadow:0 0 0 2px rgba(0,0,0,.35),0 4px 10px -4px rgba(0,0,0,.6)}
+.cg-ov .cg-sp{width:34px}
+.cg-ov .cg-nm{margin:0 0 4px 12px}
+.cg-ov .cg-pn{font:700 13.5px/1.1 Barlow,sans-serif;letter-spacing:0}
+/* bulles des autres : surface neutre, coin d'attache en bas à gauche */
+.cg-ov .cg-m:not(.me) .cg-bb{padding:9px 13px 7px;background:color-mix(in srgb,var(--sf) 92%,#fff 8%);border:1px solid var(--ln);border-left:1px solid var(--ln);border-radius:18px 18px 18px 6px;box-shadow:0 6px 14px -12px rgba(0,0,0,.9)}
+.cg-ov .cg-m:not(.me):not(.first) .cg-bb{border-top-left-radius:6px}
+/* mes bulles : bleu de l'appli, coin d'attache en bas à droite */
+.cg-ov .cg-m.me .cg-bb{padding:9px 13px 7px;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 88%,#fff 12%),color-mix(in srgb,var(--ac) 70%,#000));border:0;border-right:0;border-radius:18px 18px 6px 18px;box-shadow:0 8px 18px -12px color-mix(in srgb,var(--ac) 90%,#000)}
+.cg-ov .cg-m.me:not(.first) .cg-bb{border-top-right-radius:6px}
+.cg-ov .cg-m.hl:not(.me) .cg-bb{border-color:color-mix(in srgb,var(--gold,#F5B82E) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold,#F5B82E) 45%,transparent),0 8px 20px -12px color-mix(in srgb,var(--gold,#F5B82E) 70%,transparent)}
+.cg-ov .cg-m.big .cg-bb,.cg-ov .cg-m.big.me .cg-bb{padding:0 2px;border:0;background:none;box-shadow:none}
+.cg-ov .cg-t{font-size:15.5px;line-height:1.38}
+.cg-ov .cg-mt{font-size:11px;opacity:.6}
+/* photos : sans cadre autour, coins arrondis, légende dessous */
+.cg-ov .cg-bb:has(.cg-ph){padding:4px 4px 6px}
+.cg-ov .cg-bb:has(.cg-ph) .cg-t{padding:0 8px}
+.cg-ov .cg-bb:has(.cg-ph) .cg-mt{padding-right:8px}
+.cg-ov .cg-ph{max-width:min(240px,62vw);margin:0 0 4px;border-radius:14px}
+.cg-ov .cg-ph img{max-height:300px;min-height:60px}
+/* cartes citées */
+.cg-ov .cg-cc{border-radius:14px}
+/* réactions : petites pastilles collées sous la bulle */
+.cg-ov .cg-rx{gap:4px;margin:-6px 0 0 10px;position:relative;z-index:1}
+.cg-ov .cg-m.me .cg-rx{justify-content:flex-end;margin:-6px 10px 0 0}
+.cg-ov .cg-r{padding:1px 8px 1px 6px;border-radius:999px;border:2px solid var(--bg,#0b0b0b);background:color-mix(in srgb,var(--sf) 85%,#fff 15%);font:700 12px/1.5 Barlow,sans-serif}
+.cg-ov .cg-r.on{background:color-mix(in srgb,var(--gold,#F5B82E) 30%,var(--sf));color:var(--tx)}
+/* barre de saisie : icônes rondes, champ en pilule, bouton envoyer rond */
+.cg-ov .cg-cmp{gap:6px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg,#000) 70%,var(--sf));border-top:1px solid color-mix(in srgb,var(--gold,#F5B82E) 55%,transparent)}
+.cg-ov .cg-cmp .cg-ia{width:40px;height:40px;flex:none;border-radius:50%;background:var(--sf);border:1px solid var(--ln);font-size:19px;display:grid;place-items:center;padding:0}
+.cg-ov .cg-cmp textarea{flex:1;min-height:44px;padding:11px 16px!important;border:1px solid var(--ln)!important;border-radius:22px!important;background:var(--bg,#000)!important;box-shadow:none!important;font-size:16px}
+.cg-ov .cg-cmp textarea:focus{border-color:color-mix(in srgb,var(--ac) 70%,var(--ln))!important}
+.cg-ov .cg-send{width:46px;height:46px;border-radius:50%;margin-left:0}
+@media (max-width:380px){.cg-ov .cg-cmp .cg-ia{width:36px;height:36px;font-size:17px}}
 </style>
 </head>
 <body>
@@ -8515,7 +8624,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='21 nov. 2026 · 135';
+const BUILD='22 nov. 2026 · 136';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10963,6 +11072,89 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  const g=t.closest('[data-ppsg]');if(g){e.stopPropagation();PP.sg=g.dataset.ppsg;render();return}
  const a=t.closest('[data-ppann]');if(a){e.stopPropagation();try{AN.f=''}catch(x){}anOpen(a.dataset.ppann);return}},true);
 /* ===== PPV2:END ===== */
+/* ===== HM2 : Accueil refait — un objectif, ce qui est pour toi, ta collection en un coup d'œil ===== */
+const hmRing=(p,sz,col,inner)=>{const r=(sz-10)/2,c=2*Math.PI*r,o=c*(1-Math.min(100,Math.max(0,p))/100);
+ return `<svg class="hr" viewBox="0 0 ${sz} ${sz}" width="${sz}" height="${sz}" aria-hidden="true"><circle cx="${sz/2}" cy="${sz/2}" r="${r}" class="hr-bg"/><circle cx="${sz/2}" cy="${sz/2}" r="${r}" class="hr-fg" style="stroke:${col}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 ${sz/2} ${sz/2})"/>${inner?`<text x="50%" y="50%" class="hr-t" dominant-baseline="central" text-anchor="middle">${inner}</text>`:''}</svg>`};
+/* l'objectif : la série la plus avancée pas encore finie (Fusion World ou Masters) */
+function hm2Target(){const L=[],tot={},own={};cards.forEach(c=>{tot[c.ext]=(tot[c.ext]||0)+1;if(c.own>0)own[c.ext]=(own[c.ext]||0)+1});
+ EXTS.forEach(([e,nm])=>{const n=tot[e]||0,o=own[e]||0;if(n&&o&&o<n)L.push({id:e,nm,o,n,ms:false,col:SERCOL[e]||'var(--ac)'})});
+ try{msBindInit();MS_SETS.forEach(t=>{const n=t.c.length;let o=0;for(const c of t.c)if(msOwn(c[0])>0)o++;if(o&&o<n)L.push({id:t.id,nm:t.n,o,n,ms:true,col:'rgb('+(MS_COL[t.id]||'229,9,20')+')'})})}catch(e){}
+ L.forEach(x=>x.p=x.o/x.n);L.sort((a,b)=>b.p-a.p||(a.n-a.o)-(b.n-b.o));return L[0]||null}
+function hm2Mission(){const T=hm2Target();if(!T)return '';
+ const miss=T.ms?MS_SETS.find(t=>t.id===T.id).c.filter(c=>!(msOwn(c[0])>0)).map(c=>BKC[c[0]]).filter(Boolean):cards.filter(c=>c.ext===T.id&&!(c.own>0));
+ const px=c=>T.ms?(msPx(c.id)||0):(MKON?cmP(c)||0:pxv(c)||0),cost=miss.reduce((a,c)=>a+px(c),0),left=T.n-T.o,p=Math.floor(T.o/T.n*100);
+ const th=miss.slice().sort((a,b)=>px(b)-px(a)).slice(0,10);
+ return `<section class="m2" style="--sc:${T.col}" aria-label="Ton prochain objectif : finir ${esc(T.id)}">
+  <div class="m2-b">${hmRing(p,92,T.col,p+'%')}<div class="m2-x"><span class="m2-k">🎯 Ton prochain objectif</span><b class="m2-t">Finir ${esc(T.id)}</b><span class="m2-n">${esc(T.nm)}</span>
+  <span class="m2-s">Plus que <b>${left}</b> carte${left>1?'s':''}${cost>0?` · ≈ <b>${eur(cost)}</b> pour la finir`:''}</span></div></div>
+  ${th.length?`<div class="m2-st" aria-label="Les cartes qui te manquent">${th.map(c=>{const v=px(c);return `<${T.ms?'span':'button type="button" data-n="'+esc(c.id)+'"'} class="m2-c">${T.ms?msArt([c.id,c.name,c.rar]):art({...c,own:1})}<small>${esc(T.ms?c.id:cid(c.id))}${v?'<i>'+eur(v)+'</i>':''}</small></${T.ms?'span':'button'}>`}).join('')}${left>10?`<span class="m2-more">+${left-10}</span>`:''}</div>`:''}
+  <button type="button" class="m2-go" ${T.ms?`data-hms="${esc(T.id)}"`:`data-hext="${esc(T.id)}"`}>Voir la série ${esc(T.id)} ›</button></section>`}
+/* pour toi : annonces qui t'intéressent + tes cartes qui montent */
+function hm2ForYou(){const it=[];
+ try{if(SBS&&typeof anLoad==='function'){if(!AN.lt||Date.now()-AN.lt>60000){AN.lt=Date.now();anLoad()}(AN.L||[]).filter(a=>a.uid!==SBS.uid&&anFor(a)).slice(0,3).forEach(a=>{const id=a.c.find(x=>{const c=anCard(x);return c&&(a.g==='cherche'?(+c.own||0)>1:(+c.want||0)>0)})||a.c[0],c=id&&anCard(id);
+  it.push(`<button type="button" class="ft-i" data-anforyou><span class="ft-a">${c?art({...c,own:1}):'<span class="ft-e">📢</span>'}</span><span class="ft-x"><b>${esc(a.ps)} ${a.g==='vend'?'vend':a.g==='cherche'?'cherche':'échange'} ${esc(id?id.replace(/_ALT\d?/,''):'des cartes')}</b><small>${a.g==='cherche'?'Tu l’as en double':'Tu la cherches'}${a.px!=null&&a.g==='vend'?' · '+eur(a.px):''} · ${anAgo(a.t)}</small></span><span class="ft-g">›</span></button>`)})}}catch(e){}
+ try{const h=stHist();if(h){const n=h.D.length,L=h.per.map(x=>({c:x.c,a:x.v[h.r],b:x.v[n-1],d:(x.v[n-1]-x.v[h.r])})).filter(x=>x.d>=.05&&x.c.own>0).sort((a,b)=>b.d-a.d).slice(0,3);
+  L.forEach(x=>it.push(`<button type="button" class="ft-i" data-n="${esc(x.c.id)}"><span class="ft-a">${art({...x.c,own:1})}</span><span class="ft-x"><b>${esc(x.c.name)}</b><small>${esc(x.c.id.replace(/_ALT\d?$/,''))} · ${eur(x.a)} → ${eur(x.b)}</small></span><span class="ft-up">▲ +${eur(x.d)}</span></button>`))}}catch(e){}
+ return it.length?`<section class="ft"><h2 class="hmh">✨ Pour toi</h2><div class="ft-l">${it.join('')}</div></section>`:''}
+/* ta collection en deux anneaux */
+function hm2Coll(){let fo=0,fa=cards.length,mo=0,ma=0;cards.forEach(c=>{if(c.own>0)fo++});try{for(const s of MS_SETS)for(const c of s.c){ma++;if(msOwn(c[0])>0)mo++}}catch(e){}
+ const tile=(g,nm,o,n,col)=>{const p=n?o/n*100:0;return `<button type="button" class="cg2-i" data-hgame="${g}" aria-label="${nm} : ${o} cartes sur ${n}. Ouvrir">${hmRing(p,58,col,(p>0&&p<1?'<1':Math.round(p))+'%')}<span><b>${hmNum(o)}</b><small>sur ${hmNum(n)}</small><em>${nm}</em></span></button>`};
+ return `<div class="cg2">${tile('fw','Fusion World',fo,fa,'#F5B82E')}${ma?tile('ms','Masters',mo,ma,'#2F7FE8'):''}</div>`}
+homeV=function(){const H=hmHand(),TL=[['find','🔎','Recherche'],['luck','🎲','Boosters'],['bind','📒','Classeurs'],['#sealed','📦','Scellé'],['@ann','📢','Annonces'],['trade','💶','Ventes'],['budget','💰','Budget'],['print','🖨️','Liste']];
+ return header()+pollBox()+remBanner()+alBanner()+greet()+hmFan(H)
+ +`<div class="row hmchips">${[['best','Plus belles'],['last','Derniers ajouts'],['fav','Favoris']].map(([k,t])=>`<button class="chip" aria-pressed="${H.mode===k}" data-hf="${k}">${t}</button>`).join('')}</div>`
+ +hm2Mission()+hmVal()+hm2ForYou()+hm2Coll()
+ +`<div class="hmcta"><button class="hmscan" data-cam><span>📷</span><b>Scanner une carte</b><small>Place la carte devant l’appareil photo</small></button><button data-hburst><span>⚡</span><b>Rafale</b><small>Saisir plusieurs numéros</small></button></div>`
+ +`<div class="hmgrid">${TL.map(([k,i,t])=>`<button class="hmt" ${k[0]==='#'?'data-hgo="'+k.slice(1)+'"':k[0]==='@'?'data-annopen':'data-go="'+k+'"'}><span>${i}</span>${t}</button>`).join('')}</div>`
+ +`<div class="hmhrow" style="justify-content:flex-end"><button class="chip" data-share>📤 Partager ma collection</button></div>`
+ +hmGift()+dbHomeCard()
+ +(hmMs()?`<h2 class="hmh">💶 Mes ventes</h2>`+hmMoney():(typeof AD!=='undefined'&&AD.d?adCard():''))
+ +hmNews()
+ +`<div class="hmsoc"><h2 class="hmh" style="margin-top:0">Retrouve RioMan0ff</h2><div class="hmlinks"><a class="hml" href="https://www.whatnot.com/user/rioman0ff" target="_blank" rel="noopener noreferrer" aria-label="Profil Whatnot de RioMan0ff (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.wn}</span><span><b>Whatnot</b><small>RioMan0ff</small></span></a><a class="hml" href="https://www.instagram.com/rioman___/" target="_blank" rel="noopener noreferrer" aria-label="Profil Instagram rioman___ (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.ig}</span><span><b>Instagram</b><small>rioman___</small></span></a><a class="hml" href="https://www.tiktok.com/@riomanoff0" target="_blank" rel="noopener noreferrer" aria-label="Profil TikTok de riomanoff0 (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.tt}</span><span><b>TikTok</b><small>riomanoff0</small></span></a><a class="hml" href="${DISC}" target="_blank" rel="noopener noreferrer" aria-label="Discord : une idée ou un bug ? (s’ouvre dans un nouvel onglet)"><span class="hmi" aria-hidden="true">${HMLG.dc}</span><span><b>Discord</b><small>Idée ou bug ?</small></span></a></div></div>`};
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
+ const g=t.closest('[data-hgame]');if(g){e.stopPropagation();X.game=g.dataset.hgame;saveX();S.tab='coll';render();window.scrollTo(0,0);return}
+ if(t.closest('[data-anforyou]')){e.stopPropagation();anOpen();AN.f='for';anDraw()}},true);
+/* quand les annonces arrivent, l'accueil se met à jour (une fois) */
+{const l0=anLoad;anLoad=async function(f){const had=!!AN.L;await l0(f);if(!had&&AN.L&&S.tab==='home'&&!AN.open)render()}}
+/* ===== HM2:END ===== */
+/* ===== ST3 : Stats plus parlantes — ton mois, où est ta valeur, tes ajouts mois par mois, tes raretés ===== */
+const st3M=d=>d.slice(0,7),st3MN=k=>{try{return new Date(+k.slice(0,4),+k.slice(5,7)-1,15).toLocaleDateString('fr-FR',{month:'short'}).replace('.','')}catch(e){return k}};
+function st3Months(n){const out=[],d=new Date();d.setDate(15);for(let i=n-1;i>=0;i--){const x=new Date(d.getFullYear(),d.getMonth()-i,15);out.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0'))}return out}
+function st3Act(){const m={};let days={};for(const [k,v] of Object.entries(X.act||{})){const c=+(v&&v.c)||0;if(c>0){const mk=st3M(k);m[mk]=(m[mk]||0)+c;days[mk]=(days[mk]||0)+1}}return {m,days}}
+let ST3SET=null;const st3Set=id=>{if(!ST3SET){ST3SET=new Map();try{MS_SETS.forEach(t=>t.c.forEach(c=>ST3SET.set(c[0],t.id)))}catch(e){}}return ST3SET.get(id)};
+/* ton mois */
+function st3Month(D){const A=st3Act(),[pm,cm]=st3Months(2),n=A.m[cm]||0,p=A.m[pm]||0,dd=A.days[cm]||0;
+ let v30=null;try{const h=stHist();if(h&&h.D.length>1){const L=h.D.length,i0=Math.max(0,h.D.findIndex(d=>pxDay(d)>=pxDay(h.D[L-1])-30));v30=h.tot[L-1]-h.tot[i0]}}catch(e){}
+ const dl=n-p,mn=new Date().toLocaleDateString('fr-FR',{month:'long'});
+ const tile=(big,lab,sub,cls)=>`<div class="s3-k${cls?' '+cls:''}"><b>${big}</b><span>${lab}</span>${sub?`<small>${sub}</small>`:''}</div>`;
+ return `<section class="st-c st-w2 s3"><div class="st-vh"><h3>Ton mois de ${mn}</h3></div><div class="s3-kr">`
+  +tile(apNf(n),'carte'+apS(n)+' ajoutée'+apS(n),p||n?(dl>0?'▲ '+apNf(dl)+' de plus qu’en '+st3MN(pm):dl<0?'▼ '+apNf(-dl)+' de moins qu’en '+st3MN(pm):'autant qu’en '+st3MN(pm)):'',dl>0?'up':dl<0?'dn':'')
+  +tile(apNf(dd),'jour'+apS(dd)+' actif'+apS(dd),'où tu as ajouté des cartes')
+  +(v30!=null?tile((v30>=0?'+':'−')+eur(Math.abs(v30)).replace(/,\d\d(?=\s?€)/,''),'de valeur en 30 jours','cartes Fusion World',v30>0?'up':v30<0?'dn':''):'')
+  +`</div></section>`}
+/* où est ta valeur : barres classées, une seule couleur */
+function st3Where(){const by=new Map(),add=(k,v)=>{if(v>0)by.set(k,(by.get(k)||0)+v)};
+ cards.forEach(c=>{if(c.own>0)add(c.ext,c.own*pxv(c))});try{msOwnL().forEach(c=>add(st3Set(c.id)||'Masters',c.own*(msPx(c.id)||0)))}catch(e){}
+ const L=[...by.entries()].sort((a,b)=>b[1]-a[1]);if(!L.length)return '';const tot=L.reduce((a,x)=>a+x[1],0),top=L.slice(0,6),rest=L.slice(6).reduce((a,x)=>a+x[1],0);if(rest>0)top.push(['Autres',rest]);
+ const mx=Math.max(...top.map(x=>x[1]));
+ return `<section class="panel st-c s3"><div class="st-vh"><h3>Où est ta valeur</h3><span class="s3-sub">${eur(tot)}</span></div><div class="s3-bl" role="list">${top.map(([k,v])=>{const nm=k==='Autres'?(L.length-6)+' autre'+(L.length-6>1?'s séries':' série'):(serNm(k)||(MS_SETS.find(t=>t.id===k)||{}).n||'');const p=Math.round(v/tot*100);
+  return `<div class="s3-br" role="listitem" aria-label="${esc(k)} : ${eur(v)}, ${p} %"><span class="s3-bn"><b>${esc(k==='Autres'?'Autres':k)}</b><small>${esc(nm)}</small></span><span class="s3-bt"><i style="width:${Math.max(2,v/mx*100).toFixed(1)}%"></i></span><span class="s3-bv"><b>${eur(v).replace(/,\d\d(?=\s?€)/,'')}</b><small>${p} %</small></span></div>`}).join('')}</div></section>`}
+/* ajouts mois par mois : colonnes, une seule couleur, valeur écrite dessus */
+function st3Cols(){const A=st3Act(),M=st3Months(6),v=M.map(k=>A.m[k]||0),mx=Math.max(1,...v);if(!v.some(x=>x>0))return '';
+ const W=320,H=150,T=22,B=22,bw=W/6*0.56,gap=W/6;
+ const bars=v.map((x,i)=>{const h=x?Math.max(4,(H-T-B)*x/mx):0,xx=i*gap+(gap-bw)/2,y=H-B-h;
+  return `<g class="s3-col${i===5?' now':''}"><title>${st3MN(M[i])} : ${x} carte${x>1?'s':''} ajoutée${x>1?'s':''}</title>${h?`<path d="M${xx} ${H-B}V${y+4}a4 4 0 0 1 4-4h${(bw-8).toFixed(1)}a4 4 0 0 1 4 4V${H-B}Z"/>`:''}<text x="${(xx+bw/2).toFixed(1)}" y="${(h?y-6:H-B-6).toFixed(1)}" class="s3-cv" text-anchor="middle">${x?apNf(x):''}</text><text x="${(xx+bw/2).toFixed(1)}" y="${H-5}" class="s3-cl" text-anchor="middle">${st3MN(M[i])}</text></g>`}).join('');
+ return `<section class="panel st-c s3"><div class="st-vh"><h3>Tes ajouts mois par mois</h3></div><svg class="s3-cs" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cartes ajoutées : ${M.map((k,i)=>st3MN(k)+' '+v[i]).join(', ')}"><line x1="0" x2="${W}" y1="${H-B}" y2="${H-B}" class="s3-ax"/>${bars}</svg></section>`}
+/* raretés : une barre par rareté, possédées sur le total */
+function st3Rar(){const R={};cards.forEach(c=>{const r=c.rar||'?';const x=R[r]||(R[r]={o:0,n:0});x.n++;if(c.own>0)x.o++});
+ const ord=['C','UC','R','SR','SCR','SPR','L','PR','?'],L=Object.entries(R).filter(([k,x])=>x.n>=5).sort((a,b)=>(ord.indexOf(a[0])+99*(ord.indexOf(a[0])<0))-(ord.indexOf(b[0])+99*(ord.indexOf(b[0])<0))).slice(0,8);
+ if(!L.some(([k,x])=>x.o))return '';
+ return `<section class="panel st-c s3"><div class="st-vh"><h3>Tes raretés</h3><span class="s3-sub">Fusion World</span></div><div class="s3-bl">${L.map(([k,x])=>{const p=x.n?x.o/x.n*100:0;
+  return `<div class="s3-br s3-rr" aria-label="${esc(k)} : ${x.o} sur ${x.n}"><span class="s3-bn"><b>${esc(k==='?'?'Autres':k)}</b></span><span class="s3-bt s3-mt"><i style="width:${p.toFixed(1)}%"></i></span><span class="s3-bv"><b>${Math.round(p)} %</b><small>${apNf(x.o)} / ${apNf(x.n)}</small></span></div>`}).join('')}</div></section>`}
+{const r0=stResume;stResume=function(D){const h=r0(D),k=h.indexOf('<section class="panel st-c st-act">');const add=st3Month(D)+st3Where()+st3Cols()+st3Rar();return k>0?h.slice(0,k)+add+h.slice(k):h+add}}
+/* ===== ST3:END ===== */
+
+
 
 
 
@@ -12027,6 +12219,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{v:136,d:'2026-11-22',it:[['n','🏠','Accueil refait','Ton prochain objectif (la série la plus proche d’être finie et ce qu’il te manque), « Pour toi » (annonces qui t’intéressent, tes cartes qui montent) et ta collection en deux anneaux.','home'],['n','📊','Stats plus parlantes','Ton mois en chiffres, où est la valeur de ta collection, tes ajouts mois par mois et tes raretés.','stats'],['a','💬','Chat plus beau','Bulles plus nettes, photos sans cadre, réactions discrètes et barre de saisie arrondie.','home']]},
 {v:135,d:'2026-11-21',it:[['n','🪪','Profil public tout neuf','Ton profil devient une carte de joueur : ta plus belle carte en grand, tes Dragon Balls, tes succès, ta vitrine, seulement les séries commencées, et tes annonces.','comm']]},
 {v:134,d:'2026-11-20',it:[['n','📷','Photos dans les annonces','Ajoute jusqu’à 3 photos à ton annonce (tes vraies cartes, un lot…). Touche une photo pour l’agrandir.','home']]},
 {v:133,d:'2026-11-20',it:[['n','📢','Annonces entre membres','Menu > Plus d’actions > Annonces : poste « je vends », « je cherche » ou « j’échange » avec tes cartes. « 🎯 Pour toi » montre celles qui t’intéressent.','home']]},

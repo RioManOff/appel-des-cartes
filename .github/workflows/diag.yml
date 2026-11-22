@@ -6,24 +6,15 @@ jobs:
     steps:
       - run: |
           python3 - <<'PY'
-          import urllib.request,re,json,html,time
-          cats=['4613%02d'%i for i in range(1,24)]+['4615%02d'%i for i in range(1,4)]
-          out={}
-          for c in cats:
-            u='https://web.archive.org/web/2024id_/https://www.dbs-cardgame.com/europe-fr/cartes/?search=true&category='+c
-            for host in ['https://www.','https://','http://www.','http://']:
-              pass
-            b=''
-            for v in ['https://www.dbs-cardgame.com','https://dbs-cardgame.com','http://www.dbs-cardgame.com:80','http://dbs-cardgame.com']:
-              try:
-                b=urllib.request.urlopen(urllib.request.Request('https://web.archive.org/web/2024id_/'+v+'/europe-fr/cartes/?search=true&category='+c,headers={'User-Agent':'Mozilla/5.0'}),timeout=90).read().decode('utf-8','replace')
-                if 'cardNumber' in b or 'card' in b:break
-              except Exception as e:b=''
-            nums=re.findall(r'class="cardNumber"[^>]*>([^<]+)<',b)
-            names=re.findall(r'class="cardName"[^>]*>(.*?)</',b,re.S)
-            print('XXC',c,len(b),len(nums),len(names),re.findall(r'<title>(.*?)</title>',b)[:1])
-            if c=='461302' and not nums:print('XXS',re.sub(r'\s+',' ',b[b.find('SD2'):b.find('SD2')+1500]))
-            out[c]=list(zip(nums,[html.unescape(re.sub('<[^>]+>','',n)).strip() for n in names]))
-            time.sleep(2)
-          print('XXJ',json.dumps(out,ensure_ascii=False))
+          import urllib.request,re,json,html
+          res=[]
+          for y in ['2020','2021','2022','2023','2025']:
+            for v in ['https://www.dbs-cardgame.com','http://www.dbs-cardgame.com:80','http://dbs-cardgame.com','https://dbs-cardgame.com']:
+              try:b=urllib.request.urlopen(urllib.request.Request('https://web.archive.org/web/%sid_/%s/europe-fr/cartes/?search=true&category=461308'%(y,v),headers={'User-Agent':'Mozilla/5.0'}),timeout=90).read().decode('utf-8','replace')
+              except Exception as e:continue
+              nums=re.findall(r'class="cardNumber"[^>]*>([^<]+)<',b);names=re.findall(r'class="cardName"[^>]*>(.*?)</',b,re.S)
+              print('XXT',y,v,len(b),len(nums))
+              if nums:res=list(zip(nums,[html.unescape(re.sub('<[^>]+>','',n)).strip() for n in names]));break
+            if res:break
+          print('XXJ',json.dumps(res,ensure_ascii=False))
           PY

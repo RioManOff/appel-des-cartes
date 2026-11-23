@@ -8624,7 +8624,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='22 nov. 2026 · 137';
+const BUILD='23 nov. 2026 · 138';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10920,10 +10920,10 @@ function anItem(a){const me=SBS&&a.uid===SBS.uid,f=anFor(a),ic=ANG[a.g];const th
  const nm=a.c.slice(0,8).map(id=>{const c=anCard(id);return esc(c?(c.name||id):id)}).join(', ');
  return `<article class="an-i an-${a.g}${f?' an-for':''}"><div class="an-h"><b class="an-g">${ic[0]} ${ic[1]}</b><button type="button" class="an-ps" data-anpp="${esc(a.ps)}">${esc(a.ps)}</button><small>${anAgo(a.t)}</small></div>
  ${f?`<div class="an-f">${f}</div>`:''}${a.c.length?`<div class="an-th">${th}</div><div class="an-nm">${nm}${a.c.length>8?'…':''}</div>`:''}${a.ph&&a.ph.length?`<div class="an-phs">${a.ph.map(x=>`<button type="button" class="an-ph" data-gcph="${esc(x)}" aria-label="Agrandir la photo"><img src="${esc(gphUrl(x))}" alt="Photo de l’annonce" loading="lazy" decoding="async"></button>`).join('')}</div>`:''}${a.tx?`<p class="an-tx">${esc(a.tx)}</p>`:''}${a.px!=null&&a.g==='vend'?`<div class="an-px">${eur(a.px)}</div>`:''}
- <div class="an-a">${me?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Supprimer</button>`:`<button type="button" class="chip" data-anpp="${esc(a.ps)}">👤 Voir son profil</button>${GC.admin?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Retirer (admin)</button>`:''}`}</div></article>`}
+ <div class="an-a">${me?`<button type="button" class="chip" data-anedit="${a.id}">✏️ Modifier</button><button type="button" class="chip" data-andel="${a.id}">🗑️ Supprimer</button>`:`<button type="button" class="chip" data-anpp="${esc(a.ps)}">👤 Voir son profil</button>${GC.admin?`<button type="button" class="chip" data-andel="${a.id}">🗑️ Retirer (admin)</button>`:''}`}</div></article>`}
 function anFormHTML(){const F=AN.form,T=(k)=>`<button type="button" class="chip" aria-pressed="${F.g===k}" data-ang="${k}">${ANG[k][0]} ${ANG[k][1]}</button>`;
  const R=F.q?bkSearch(F.q).L.slice(0,8):[];
- return `<div class="an-form"><h3>Nouvelle annonce</h3><div class="row">${T('vend')}${T('cherche')}${T('echange')}</div>
+ return `<div class="an-form"><h3>${F.id?'Modifier l’annonce':'Nouvelle annonce'}</h3><div class="row">${T('vend')}${T('cherche')}${T('echange')}</div>
  <label class="sub" for="an-q">Cartes (20 max) : nom ou numéro</label><input id="an-q" class="in" placeholder="ex. bt31 45, Gogeta, FB01-001" value="${esc(F.q||'')}" autocomplete="off">
  <div class="an-res">${R.map(e=>{const c=bkSC(e);return c?`<button type="button" class="chip" data-anadd="${esc(c.id)}">＋ ${esc(c.id)} · ${esc((c.name||'').slice(0,26))}</button>`:''}).join('')}</div>
  <div class="row an-qk">${F.g==='cherche'?`<button type="button" class="chip" data-anfill="want">🎯 Mes cartes recherchées</button>`:`<button type="button" class="chip" data-anfill="dup">🔁 Mes doubles</button>`}</div>
@@ -10931,8 +10931,8 @@ function anFormHTML(){const F=AN.form,T=(k)=>`<button type="button" class="chip"
  <div class="an-phs an-fph">${(F.ph||[]).map(x=>`<span class="an-ph"><img src="${esc(gphUrl(x))}" alt="Photo ajoutée"><button type="button" class="an-phx" data-anphrm="${esc(x)}" aria-label="Retirer la photo">✕</button></span>`).join('')}${(F.ph||[]).length<3&&!AN.noph?`<button type="button" class="an-phadd" data-anphadd ${F.up?'disabled':''}>${F.up?'Envoi…':'📷<small>Photo</small>'}</button>`:''}</div>
  <label class="sub" for="an-tx">Message (300 caractères)</label><textarea id="an-tx" class="in" rows="3" maxlength="300" placeholder="${F.g==='vend'?'État, envoi, remise en main propre…':F.g==='cherche'?'Ce que tu cherches exactement, ton budget…':'Ce que tu proposes et ce que tu veux en échange…'}">${esc(F.tx||'')}</textarea>
  ${F.g==='vend'?`<label class="sub" for="an-px">Prix (facultatif, en €)</label><input id="an-px" class="in" inputmode="decimal" value="${esc(F.px||'')}" placeholder="ex. 5">`:''}
- <div class="row" style="margin-top:10px"><button type="button" class="btn" data-anpost ${F.busy?'disabled':''}>${F.busy?'Envoi…':'📢 Publier l’annonce'}</button><button type="button" class="btn alt" data-anform="0">Annuler</button></div>
- <p class="sub">Ton annonce reste 30 jours. Pas de numéro de téléphone ni d’adresse : les membres te contactent par l’appli.</p></div>`}
+ <div class="row" style="margin-top:10px"><button type="button" class="btn" data-anpost ${F.busy?'disabled':''}>${F.busy?'Envoi…':F.id?'💾 Enregistrer':'📢 Publier l’annonce'}</button><button type="button" class="btn alt" data-anform="0">Annuler</button></div>
+ <p class="sub">${F.id?'La date de fin ne change pas.':'Ton annonce reste 30 jours.'} Pas de numéro de téléphone ni d’adresse : les membres te contactent par l’appli.</p></div>`}
 function anHTML(){const T=(k,t)=>`<button type="button" class="chip" aria-pressed="${AN.f===k}" data-anf="${k}">${t}</button>`;let body;
  if(!SBS)body=`<div class="sub">Connecte-toi pour voir et poster des annonces.</div><button class="btn" data-anacc>🔑 Se connecter</button>`;
  else if(AN.err==='nosrv')body='<div class="sub">Les annonces ne sont pas encore activées sur le serveur.</div>';
@@ -10951,8 +10951,8 @@ async function anPost(){anKeep();const F=AN.form;if(!F||F.busy)return;const tx=(
  if(/(\+33|0)[1-9]([\s.-]?\d{2}){4}/.test(tx)){toast('Pas de numéro de téléphone dans les annonces');return}
  let px=null;if(F.g==='vend'&&String(F.px||'').trim()){px=Math.round(parseFloat(String(F.px).replace(',','.'))*100)/100;if(!(px>=0&&px<100000)){toast('Prix invalide');return}}
  F.busy=true;anDraw();
- try{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},F.ph&&F.ph.length?{photos:F.ph}:{}))});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}
- catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/10 annonces/.test(m)?'Tu as déjà 10 annonces en cours':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':'Publication impossible');anDraw()}}
+ try{if(F.id){await frApi('/rest/v1/annonces?id=eq.'+F.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},AN.noph?{}:{photos:F.ph||[]}))});AN.form=null;toast('Annonce modifiée ✓');anLoad(true)}else{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},F.ph&&F.ph.length?{photos:F.ph}:{}))});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}}
+ catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/10 annonces/.test(m)?'Tu as déjà 10 annonces en cours':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':F.id?'Modification impossible':'Publication impossible');anDraw()}}
 document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(t.closest('[data-annopen]')){e.stopPropagation();if(S.menu){S.menu=false;S.mnmore=false;render()}anOpen();return}
  const v=document.getElementById('ann');if(!v||!v.contains(t))return;e.stopPropagation();
@@ -10963,6 +10963,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(q('[data-anwho]')){AN.who='';anDraw();return}
  if(b=q('[data-anf]')){AN.f=b.dataset.anf;anDraw();return}
  if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false,ph:[],up:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
+ if(b=q('[data-anedit]')){const a=(AN.L||[]).find(x=>x.id===+b.dataset.anedit);if(!a||!SBS||a.uid!==SBS.uid)return;AN.form={id:a.id,g:a.g,c:a.c.slice(),q:'',tx:a.tx||'',px:a.px==null?'':String(a.px).replace('.',','),busy:false,ph:(a.ph||[]).slice(),up:false};anDraw();setTimeout(()=>{try{bkIx()}catch(x){}const v=document.getElementById('ann');if(v)v.scrollTop=0},50);return}
  if(b=q('[data-ang]')){anKeep();AN.form.g=b.dataset.ang;anDraw();return}
  if(b=q('[data-anadd]')){anKeep();const F=AN.form,id=b.dataset.anadd;if(!F.c.includes(id)){if(F.c.length>=20){toast('20 cartes maximum');return}F.c.push(id)}F.q='';anDraw();const n=document.getElementById('an-q');if(n)n.focus();return}
  if(b=q('[data-anrm]')){anKeep();AN.form.c=AN.form.c.filter(x=>x!==b.dataset.anrm);anDraw();return}
@@ -12219,6 +12220,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 138, "d": "2026-11-23", "it": [["a", "✏️", "Modifier ses annonces", "Dans Annonces, appuie sur « Modifier » sous une de tes annonces : cartes, message, prix et photos.", ""]]},
 {"v": 137, "d": "2026-11-22", "it": [["n", "🃏", "Starter et Expert Decks", "Les 23 Starter Decks (SD1 à SD23) et les 3 Expert Decks (XD1 à XD3) sont dans la catégorie « Decks », avec les photos et les noms en français.", ""], ["a", "🔎", "Chercher une série", "Dans « Choisir la série », tape EX19, XD3 ou BT10 pour la trouver direct.", ""], ["c", "🏷️", "Coffrets anniversaire", "Ils affichent maintenant leur code : EX06, EX13, EX19 et EX21.", ""]]},
 {v:136,d:'2026-11-22',it:[['n','🏠','Accueil refait','Ton prochain objectif (la série la plus proche d’être finie et ce qu’il te manque), « Pour toi » (annonces qui t’intéressent, tes cartes qui montent) et ta collection en deux anneaux.','home'],['n','📊','Stats plus parlantes','Ton mois en chiffres, où est la valeur de ta collection, tes ajouts mois par mois et tes raretés.','stats'],['a','💬','Chat plus beau','Bulles plus nettes, photos sans cadre, réactions discrètes et barre de saisie arrondie.','home']]},
 {v:135,d:'2026-11-21',it:[['n','🪪','Profil public tout neuf','Ton profil devient une carte de joueur : ta plus belle carte en grand, tes Dragon Balls, tes succès, ta vitrine, seulement les séries commencées, et tes annonces.','comm']]},

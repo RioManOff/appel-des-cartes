@@ -3,18 +3,10 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - run: |
-          python3 - <<'PY'
-          import urllib.request,re,json,html
-          res=[]
-          for y in ['2020','2021','2022','2023','2025']:
-            for v in ['https://www.dbs-cardgame.com','http://www.dbs-cardgame.com:80','http://dbs-cardgame.com','https://dbs-cardgame.com']:
-              try:b=urllib.request.urlopen(urllib.request.Request('https://web.archive.org/web/%sid_/%s/europe-fr/cartes/?search=true&category=461308'%(y,v),headers={'User-Agent':'Mozilla/5.0'}),timeout=90).read().decode('utf-8','replace')
-              except Exception as e:continue
-              nums=re.findall(r'class="cardNumber"[^>]*>([^<]+)<',b);names=re.findall(r'class="cardName"[^>]*>(.*?)</',b,re.S)
-              print('XXT',y,v,len(b),len(nums))
-              if nums:res=list(zip(nums,[html.unescape(re.sub('<[^>]+>','',n)).strip() for n in names]));break
-            if res:break
-          print('XXJ',json.dumps(res,ensure_ascii=False))
-          PY
+          for b in tmp-bt32 tmp-bt32v tmp-cat tmp-cm tmp-decks tmp-dz tmp-em tmp-em2 tmp-img tmp-ns tmp-packs tmp-photos; do
+            curl -s -o /dev/null -w "XX $b %{http_code}\n" -X DELETE -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$b"
+          done

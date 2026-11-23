@@ -3,10 +3,14 @@ on: push
 jobs:
   d:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - run: |
-          for b in tmp-bt32 tmp-bt32v tmp-cat tmp-cm tmp-decks tmp-dz tmp-em tmp-em2 tmp-img tmp-ns tmp-packs tmp-photos; do
-            curl -s -o /dev/null -w "XX $b %{http_code}\n" -X DELETE -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$b"
+          for u in "https://www.dbs-cardgame.com/fw/jp/cardlist/" "https://www.dbs-cardgame.com/fw/en/cardlist/" "https://www.dbs-cardgame.com/fw/fr/cardlist/"; do
+            echo "XXURL $u"; curl -sL -A "Mozilla/5.0" "$u" -o p.html -w "XXCODE %{http_code} %{size_download}\n"
+            python3 -c "
+          import re,html
+          s=open('p.html',encoding='utf-8',errors='replace').read()
+          for v,t in re.findall(r'<option[^>]*value=\"(\d{6})\"[^>]*>(.*?)</option>',s,re.S):print('XX',v,html.unescape(re.sub(r'\s+',' ',re.sub('<[^>]+>','',t))).strip())
+          for v,t in re.findall(r'data-val=\"(\d{6})\"[^>]*>(.*?)<',s,re.S)[:80]:print('XXD',v,html.unescape(t).strip())
+          "
           done

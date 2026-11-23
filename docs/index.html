@@ -8624,7 +8624,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='23 nov. 2026 · 139';
+const BUILD='23 nov. 2026 · 140';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10952,7 +10952,7 @@ async function anPost(){anKeep();const F=AN.form;if(!F||F.busy)return;const tx=(
  let px=null;if(F.g==='vend'&&String(F.px||'').trim()){px=Math.round(parseFloat(String(F.px).replace(',','.'))*100)/100;if(!(px>=0&&px<100000)){toast('Prix invalide');return}}
  F.busy=true;anDraw();
  try{if(F.id){await frApi('/rest/v1/annonces?id=eq.'+F.id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},AN.noph?{}:{photos:F.ph||[]}))});AN.form=null;toast('Annonce modifiée ✓');anLoad(true)}else{await frApi('/rest/v1/annonces',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(Object.assign({genre:F.g,cartes:F.c,texte:tx,prix:px},F.ph&&F.ph.length?{photos:F.ph}:{}))});AN.form=null;AN.f='me';toast('Annonce publiée ✓');anLoad(true)}}
- catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/10 annonces/.test(m)?'Tu as déjà 10 annonces en cours':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':F.id?'Modification impossible':'Publication impossible');anDraw()}}
+ catch(e){F.busy=false;const m=String(e&&(e.message||e.msg)||'');toast(/\d+ annonces en cours/.test(m)?'Tu as déjà '+m.match(/(\d+) annonces/)[1]+' annonces en cours : supprimes-en une':/pseudo/.test(m)?'Choisis d’abord ton pseudo':e&&e.status===404?'Annonces pas encore activées':F.id?'Modification impossible':'Publication impossible');anDraw()}}
 document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(t.closest('[data-annopen]')){e.stopPropagation();if(S.menu){S.menu=false;S.mnmore=false;render()}anOpen();return}
  const v=document.getElementById('ann');if(!v||!v.contains(t))return;e.stopPropagation();
@@ -10965,7 +10965,7 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(b=q('[data-anform]')){AN.form=b.dataset.anform==='1'?{g:'vend',c:[],q:'',tx:'',px:'',busy:false,ph:[],up:false}:null;anDraw();if(AN.form)setTimeout(()=>{try{bkIx()}catch(x){}},50);return}
  if(b=q('[data-anedit]')){const a=(AN.L||[]).find(x=>x.id===+b.dataset.anedit);if(!a||!SBS||a.uid!==SBS.uid)return;AN.form={id:a.id,g:a.g,c:a.c.slice(),q:'',tx:a.tx||'',px:a.px==null?'':String(a.px).replace('.',','),busy:false,ph:(a.ph||[]).slice(),up:false};anDraw();setTimeout(()=>{try{bkIx()}catch(x){}const v=document.getElementById('ann');if(v)v.scrollTop=0},50);return}
  if(b=q('[data-ang]')){anKeep();AN.form.g=b.dataset.ang;anDraw();return}
- if(b=q('[data-anadd]')){anKeep();const F=AN.form,id=b.dataset.anadd;if(!F.c.includes(id)){if(F.c.length>=20){toast('20 cartes maximum');return}F.c.push(id)}F.q='';anDraw();const n=document.getElementById('an-q');if(n)n.focus();return}
+ if(b=q('[data-anadd]')){anKeep();const F=AN.form,id=b.dataset.anadd;if(!F.c.includes(id)){if(F.c.length>=50){toast('50 cartes maximum');return}F.c.push(id)}F.q='';anDraw();const n=document.getElementById('an-q');if(n)n.focus();return}
  if(b=q('[data-anrm]')){anKeep();AN.form.c=AN.form.c.filter(x=>x!==b.dataset.anrm);anDraw();return}
  if(b=q('[data-anfill]')){anKeep();const F=AN.form;let ids=[];if(b.dataset.anfill==='dup'){try{ids=tradeData().prop.map(x=>x.c.id)}catch(x){}}else ids=cards.filter(c=>(+c.want||0)>0).map(c=>c.id);
   if(!ids.length){toast(b.dataset.anfill==='dup'?'Tu n’as pas de doubles':'Tu n’as pas de cartes recherchées');return}ids.forEach(id=>{if(F.c.length<20&&!F.c.includes(id))F.c.push(id)});anDraw();return}
@@ -12220,6 +12220,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 140, "d": "2026-11-23", "it": [["a", "📢", "Plus d’annonces", "Tu peux maintenant avoir 50 annonces en cours (au lieu de 10) et mettre 50 cartes par annonce (au lieu de 20).", ""]]},
 {"v": 139, "d": "2026-11-23", "it": [["n", "⚡", "Marqueurs d’énergie complétés", "Fusion World anglais : les marqueurs E-22 à E-28, E-91, E-92 et E-116 à E-125 qui manquaient sont ajoutés, avec les photos.", ""]]},
 {"v": 138, "d": "2026-11-23", "it": [["a", "✏️", "Modifier ses annonces", "Dans Annonces, appuie sur « Modifier » sous une de tes annonces : cartes, message, prix et photos.", ""]]},
 {"v": 137, "d": "2026-11-22", "it": [["n", "🃏", "Starter et Expert Decks", "Les 23 Starter Decks (SD1 à SD23) et les 3 Expert Decks (XD1 à XD3) sont dans la catégorie « Decks », avec les photos et les noms en français.", ""], ["a", "🔎", "Chercher une série", "Dans « Choisir la série », tape EX19, XD3 ou BT10 pour la trouver direct.", ""], ["c", "🏷️", "Coffrets anniversaire", "Ils affichent maintenant leur code : EX06, EX13, EX19 et EX21.", ""]]},

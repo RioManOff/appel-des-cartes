@@ -3294,6 +3294,12 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .bk-tools2{margin:4px 0 10px}
 .bk-topb{display:contents}
 .bk-slot.bk-tg{outline:3px solid var(--gold);outline-offset:2px;background:color-mix(in srgb,var(--gold) 14%,transparent)}
+.avi{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.stb,.cg-av,.pv-av{overflow:hidden}
+.pv-av .avi{border-radius:15px}
+.pv-avb{border:0;padding:0;cursor:pointer;position:relative;overflow:visible}
+.pv-avb .avi{position:absolute;inset:0}
+.pv-avb i{position:absolute;right:-6px;bottom:-6px;font:normal 13px/1 system-ui;background:#111;border-radius:50%;padding:4px;box-shadow:0 0 0 2px var(--pc,#e8322b)}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -4069,7 +4075,8 @@ try{PPS=JSON.parse(localStorage.getItem('fb_pps')||'null')||{}}catch(e){PPS={}}
 const ppSaveS=()=>{try{localStorage.setItem('fb_pps',JSON.stringify(PPS))}catch(e){}},
   cmLow=s=>String(s||'').toLowerCase(),
   cmMe=n=>!!(SBS&&SBS.pseudo&&cmLow(n)===cmLow(SBS.pseudo)),
-  cmIni=n=>esc((Array.from(String(n||'?').trim())[0]||'?').toUpperCase()),
+  cmIni0=n=>esc((Array.from(String(n||'?').trim())[0]||'?').toUpperCase()),
+  cmIni=n=>{const p=(typeof AVM!=='undefined'&&AVM&&AVM.m||{})[cmLow(String(n||'').trim())];return p?`<img class="avi" src="${esc(gphUrl(p))}" alt="" loading="lazy" decoding="async" data-l="${cmIni0(n)}" onerror="this.replaceWith(this.dataset.l)">`:cmIni0(n)},
   cmAv=n=>`<span class="stb" aria-hidden="true">${cmIni(n)}</span>`,
   cmNum=n=>(+n||0).toLocaleString('fr-FR'),
   ppExN=()=>{if(!PPEXN){PPEXN={};cards.forEach(c=>{PPEXN[c.ext]=(PPEXN[c.ext]||0)+1})}return PPEXN};
@@ -8624,7 +8631,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='23 nov. 2026 · 140';
+const BUILD='24 nov. 2026 · 142';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -8653,7 +8660,7 @@ const late=REM!=='0'&&LASTEXP&&(Date.now()-LASTEXP)>=REM*7*864e5;
 const bkc=lg?'ok':LASTEXP?(late?'warn':'ok'):has?'bad':'off';
 const bkt=lg?'Ta collection est gardée dans ton compte':LASTEXP?'Dernier export '+agoFr(LASTEXP):has?'Jamais exportée : pense à le faire':'Rien à sauvegarder pour l’instant';
 const srow=(lead,t,sub,btn)=>`<div class="stl">${lead}<div class="stx"><b>${t}</b><small>${sub}</small></div>${btn||''}</div>`;
-const status=`<div class="panel stc">${on?srow(`<span class="stb" aria-hidden="true">${lg?esc((SBS.pseudo||SBS.email||'?').slice(0,1).toUpperCase()):'👤'}</span>`,lg?esc(SBS.pseudo||'Compte connecté'):'Mode local',lg?(SBAUTO?'Synchronisation automatique activée':'Synchronisation en pause'):'Ta collection reste sur cet appareil.',lg?'':`<button class="chip" data-sacc>${S.sacc?'Fermer':'Se connecter'}</button>`):''}${srow(`<span class="sdt ${bkc}" aria-hidden="true"></span>`,'Sauvegarde',bkt,`<button class="chip" data-act="export">Exporter</button>`)}</div>`;
+const status=`<div class="panel stc">${on?srow(`<span class="stb" aria-hidden="true">${lg?(SBS.pseudo?cmIni(SBS.pseudo):esc((SBS.email||'?').slice(0,1).toUpperCase())):'👤'}</span>`,lg?esc(SBS.pseudo||'Compte connecté'):'Mode local',lg?(SBAUTO?'Synchronisation automatique activée':'Synchronisation en pause'):'Ta collection reste sur cet appareil.',lg?(SBS.pseudo?`<button class="chip" data-avset>📷 Photo</button>`:''):`<button class="chip" data-sacc>${S.sacc?'Fermer':'Se connecter'}</button>`):''}${srow(`<span class="sdt ${bkc}" aria-hidden="true"></span>`,'Sauvegarde',bkt,`<button class="chip" data-act="export">Exporter</button>`)}</div>`;
 /* compte (formulaire seulement si demandé) */
 let accS='';
 if(on&&(lg||S.sacc||S.setp==='compte')){const h=sbPanel().replace('<div class="panel" style="margin-bottom:10px">👤 Compte','<div class="panel sbp">');accS=sg('👤','Compte',lg?'Pseudo, synchronisation et amis':'Retrouve ta collection sur tous tes appareils',h)}
@@ -8932,7 +8939,7 @@ else if(d.rx!==undefined){SNZ=Date.now();try{localStorage.setItem('fb_snz',Strin
 else if(d.sxf!==undefined){S.sx=d.sxf}
 else if(d.prt){S.pr=d.prt}
 else if(d.pal!==undefined){S.pal=!S.pal}
-else if(d.print!==undefined){try{window.print()}catch(e){toast('Impression indisponible ici : copie la liste')}return}
+else if(d.print!==undefined){const C=window.Capacitor;if(C&&C.isNativePlatform&&C.isNativePlatform()){prPicGo();return}try{window.print()}catch(e){toast('Impression indisponible ici : copie la liste')}return}
 else if(d.pcopy!==undefined){copyText(printText()).then(ok=>toast(ok?'Liste copiée ✓':'Copie impossible ici'));return}
 else if(d.sbuy){const q=Math.max(1,parseInt($('#sb-q').value)||1),pr=$('#sb-p').value.trim(),dd=$('#sb-d').value||today(),sx=sl(S.ext,d.sbuy);sx.own+=q;saveSeal();X.buys.unshift({id:'u'+Date.now().toString(36),ext:S.ext,type:d.sbuy,d:dd,q,p:pr});saveX();toast('Achat enregistré ✓')}
 else if(d.sopen1){const sx=sl(S.ext,d.sopen1);if(sx.own>0){sx.own--;const k=S.ext+'-'+d.sopen1;X.opened[k]=(X.opened[k]||0)+1;saveSeal();saveX();toast('Retiré du stock non ouvert')}else toast('Rien à ouvrir : stock à 0')}
@@ -10720,12 +10727,68 @@ function prPanel(lab,sr,l,ms){const head=`<b>${lab} — ${esc(sr)}</b><div class
  return `<div class="panel pzl" style="margin-top:6px">${head}${l.map(c=>`<div class="tr"><span>${S.pr==='missing'?'☐ ':''}${idt(c)} · ${esc(c.name||'')}${c.rar?' ('+esc(c.rar)+')':''}</span><b>${tail(c)}</b></div>`).join('')}</div>`}
 const prPhBar=()=>`<div class="row"><button class="chip" aria-pressed="${!PRPH}" data-prph="0">📝 Sans photo</button><button class="chip" aria-pressed="${PRPH}" data-prph="1">🖼️ Avec photos</button></div>${PRPH&&S.pal?'<div class="sub" style="margin:-2px 0 8px">Les photos se font série par série : choisis une série.</div>':''}`;
 printVFW=function(){const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-pressed="${S.pr===k}" data-prt="${k}">${t}</button>`,sr=S.pal?'toutes les séries':S.ext+' · '+serNm(S.ext);
- return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,sr,l,false)}`};
+ return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${serBar('margin-bottom:8px;text-align:left',S.ext)}<div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-prpic>📸 En image</button><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,sr,l,false)}`};
 printV=function(){if(!prMs())return printVFW().replace('<h2>🖨️ Liste à imprimer</h2>','<h2>🖨️ Liste à imprimer</h2>'+prGame());
  const {lab,l}=printList(),T=(k,t)=>`<button class="chip" aria-pressed="${S.pr===k}" data-prt="${k}">${t}</button>`,set=msCur(),sr=S.pal?'toutes les séries Masters':set.id+' · '+set.n;
- return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${prGame()}<div style="margin-bottom:8px">${msBar(set)}</div><div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,'Masters · '+sr,l,true)}${msPickSheet()}`};
+ return `<div class="noprint">${header()}<h2>🖨️ Liste à imprimer</h2>${prGame()}<div style="margin-bottom:8px">${msBar(set)}</div><div class="row"><button class="chip" aria-pressed="${S.pal}" data-pal>Toutes les séries</button></div><div class="row">${T('missing','Manquantes')}${T('own','Possédées')}${T('upg','À remplacer')}${T('sell','À échanger')}</div>${prPhBar()}<div class="row"><button class="chip" data-prpic>📸 En image</button><button class="chip" data-print>🖨️ Imprimer</button><button class="chip" data-pcopy>📋 Copier la liste</button></div></div>${prPanel(lab,'Masters · '+sr,l,true)}${msPickSheet()}`};
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-prph]');if(!t)return;e.stopPropagation();PRPH=t.dataset.prph==='1';try{localStorage.setItem('fb_prph',PRPH?'1':'0')}catch(x){}render()},true);
 /* ===== PRPH:END ===== */
+/* ===== PRPIC : liste (manquantes…) en image avec les photos, à partager ou enregistrer (marche aussi dans l'appli Android) ===== */
+function prLd(src){return new Promise(ok=>{if(!src)return ok(null);const im=new Image();let t=setTimeout(()=>ok(null),8000);im.onload=()=>{clearTimeout(t);ok(im)};im.onerror=()=>{clearTimeout(t);ok(null)};if(/^https?:/.test(src))im.crossOrigin='anonymous';im.src=src})}
+async function prPics(){const {lab,l}=printList(),ms=!!prMs(),sr=ms?(S.pal?'Masters · toutes les séries':(msCur().id+' · '+msCur().n)):(S.pal?'toutes les séries':S.ext+' · '+serNm(S.ext));
+ const L=l.slice(0,300),COL=5,W=1080,PAD=30,GAP=14,CW=Math.floor((W-PAD*2-GAP*(COL-1))/COL),CH=Math.round(CW*1.4),LH=CH+58,PER=COL*8,FT='Barlow, system-ui, sans-serif',out=[];
+ if(ms)L.forEach(c=>{if(!MS_CI[c.id]&&typeof msHi==='function')try{msHi(c.id)}catch(e){}});
+ const imgs=await Promise.all(L.map(c=>prLd(ms?MS_CI[c.id]:CARDIMG[c.id])));const pages=Math.max(1,Math.ceil(L.length/PER));
+ for(let pg=0;pg<pages;pg++){const part=L.slice(pg*PER,pg*PER+PER),rows=Math.max(1,Math.ceil(part.length/COL)),H=170+rows*(LH+GAP)+70;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  g.fillStyle='#121014';g.fillRect(0,0,W,H);g.fillStyle='#E8322B';g.fillRect(0,0,W,10);
+  g.fillStyle='#F6F2F2';g.font='700 44px '+FT;g.fillText(lab+(pages>1?'  ('+(pg+1)+'/'+pages+')':''),PAD,72);
+  g.fillStyle='#C9BEBE';g.font='400 28px '+FT;let st=sr+' · '+l.length+' carte'+(l.length>1?'s':'');if(st.length>62)st=st.slice(0,60)+'…';g.fillText(st,PAD,116);
+  if(!part.length){g.fillText('Rien dans cette liste.',PAD,200)}
+  part.forEach((c,i)=>{const x=PAD+(i%COL)*(CW+GAP),y=150+Math.floor(i/COL)*(LH+GAP),im=imgs[pg*PER+i];
+   if(im){try{g.drawImage(im,x,y,CW,CH)}catch(e){}}else{g.fillStyle='#2A2529';g.fillRect(x,y,CW,CH);g.fillStyle='#8E8484';g.font='600 24px '+FT;g.textAlign='center';g.fillText(ms?c.id:cid(c.id),x+CW/2,y+CH/2);g.textAlign='left'}
+   g.fillStyle='#F6F2F2';g.font='700 22px '+FT;let t=(ms?c.id:cid(c.id))+(c.rar?' · '+c.rar:'');while(g.measureText(t).width>CW&&t.length>4)t=t.slice(0,-1);g.fillText(t,x,y+CH+26);
+   g.fillStyle='#A89C9C';g.font='400 19px '+FT;let n=c.name||'';const q=S.pr==='own'?' ×'+c.own:S.pr==='missing'&&c.want?' ×'+c.want:'';n+=q;let cut=0;while(g.measureText(n).width>CW&&n.length>4){n=n.slice(0,-1);cut=1}g.fillText(n+(cut?'…':''),x,y+CH+50)});
+  g.fillStyle='#8E8484';g.font='400 22px '+FT;g.fillText('L’Appel des Cartes · '+new Date().toLocaleDateString('fr-FR'),PAD,H-26);
+  out.push(cv.toDataURL('image/jpeg',.86))}
+ return {urls:out,more:l.length>L.length,lab}}
+async function prPicGo(){if(S.prpic)return;S.prpic=1;toast('Préparation de l’image…');let r;try{r=await prPics()}catch(e){S.prpic=0;toast('Image impossible ici : essaie « Copier la liste »');return}S.prpic=0;
+ if(r.more)toast('Image limitée aux 300 premières cartes');
+ const base=(r.lab||'liste').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'liste',nm=i=>'appel-des-cartes-'+base+(r.urls.length>1?'-'+(i+1):'')+'.jpg';
+ try{const C=window.Capacitor,P=C&&C.Plugins;if(C&&C.isNativePlatform&&C.isNativePlatform()&&P&&P.Filesystem&&P.Share){const files=[];for(let i=0;i<r.urls.length;i++){const w=await P.Filesystem.writeFile({path:nm(i),data:r.urls[i].split(',')[1],directory:'CACHE'});files.push(w.uri)}await P.Share.share({title:r.lab,files,dialogTitle:'Partager la liste'});return}}catch(e){if(e&&/cancel|dismiss/i.test(String(e.message||e)))return}
+ try{const fs=await Promise.all(r.urls.map(async(u,i)=>new File([await (await fetch(u)).blob()],nm(i),{type:'image/jpeg'})));if(navigator.canShare&&navigator.canShare({files:fs})){await navigator.share({files:fs,title:r.lab});return}}catch(e){if(e&&e.name==='AbortError')return}
+ try{r.urls.forEach((u,i)=>{const a=document.createElement('a');a.href=u;a.download=nm(i);document.body.appendChild(a);a.click();a.remove()});toast('Image enregistrée ✓')}catch(e){toast('Enregistrement impossible ici')}}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-prpic]');if(!t)return;e.stopPropagation();prPicGo()},true);
+/* ===== PRPIC:END ===== */
+/* ===== AVT : photo de profil (rond à la place de la lettre, partout) ===== */
+var AVM=(()=>{try{const o=JSON.parse(localStorage.getItem('fb_avm')||'null');if(o&&o.m)return o}catch(e){}return {m:{},t:0}})();
+let AVBUSY=0;
+async function avLoad(force){if(!SBS||AVBUSY)return;if(!force&&Date.now()-AVM.t<6e5)return;AVBUSY=1;
+ try{const L=await frApi('/rest/v1/profiles?select=pseudo,avatar&avatar=not.is.null&limit=5000');const m={};(L||[]).forEach(x=>{if(x&&x.pseudo&&x.avatar)m[cmLow(x.pseudo)]=x.avatar});
+  const ch=JSON.stringify(m)!==JSON.stringify(AVM.m);AVM={m,t:Date.now()};try{localStorage.setItem('fb_avm',JSON.stringify(AVM))}catch(e){}if(ch)try{render()}catch(e){}}
+ catch(e){AVM.t=Date.now()-5e5}AVBUSY=0}
+setTimeout(()=>avLoad(),2500);setInterval(()=>{if(document.visibilityState==='visible')avLoad()},6e5);
+function avBlob(f){return new Promise((ok,ko)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const z=Math.min(im.width,im.height),S2=320,c=document.createElement('canvas');c.width=c.height=S2;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,S2,S2);g.drawImage(im,(im.width-z)/2,(im.height-z)/2,z,z,0,0,S2,S2);URL.revokeObjectURL(u);c.toBlob(b=>b?ok(b):ko(new Error('img')),'image/jpeg',.86)};im.onerror=()=>{URL.revokeObjectURL(u);ko(new Error('img'))};im.src=u})}
+function avMine(){return SBS&&SBS.pseudo?AVM.m[cmLow(SBS.pseudo)]||'':''}
+async function avSet(f){if(!SBS||!SBS.pseudo){toast('Choisis d’abord un pseudo');return}if(!f||!/^image\//.test(f.type||'')){toast('Choisis une photo');return}
+ toast('Envoi de la photo…');const old=avMine();
+ try{const b=await avBlob(f),t=await sbTok(),rnd=Math.random().toString(36).slice(2,8).padEnd(6,'0'),path=SBS.uid.toLowerCase()+'/p-'+Date.now()+'-'+rnd+'.jpg';
+  const r=await fetch(SBC.url+'/storage/v1/object/chat-photos/'+path,{method:'POST',headers:{apikey:SBC.key,Authorization:'Bearer '+t,'Content-Type':'image/jpeg','cache-control':'31536000'},body:b});
+  if(!r.ok)throw new Error('up');
+  await frApi('/rest/v1/profiles?user_id=eq.'+SBS.uid,{method:'PATCH',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({avatar:path})});
+  AVM.m[cmLow(SBS.pseudo)]=path;try{localStorage.setItem('fb_avm',JSON.stringify(AVM))}catch(e){}toast('Photo de profil mise ✓');render();
+  if(old&&old!==path)fetch(SBC.url+'/storage/v1/object/chat-photos/'+old,{method:'DELETE',headers:{apikey:SBC.key,Authorization:'Bearer '+t}}).catch(()=>{})}
+ catch(e){toast(e&&e.status===400?'Photos de profil pas encore activées':'Envoi de la photo impossible')}}
+async function avDel(){const old=avMine();if(!old)return;try{await frApi('/rest/v1/profiles?user_id=eq.'+SBS.uid,{method:'PATCH',headers:{'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({avatar:null})});delete AVM.m[cmLow(SBS.pseudo)];try{localStorage.setItem('fb_avm',JSON.stringify(AVM))}catch(e){}toast('Photo retirée');render();const t=await sbTok();fetch(SBC.url+'/storage/v1/object/chat-photos/'+old,{method:'DELETE',headers:{apikey:SBC.key,Authorization:'Bearer '+t}}).catch(()=>{})}catch(e){toast('Impossible pour le moment')}}
+function avPick(){let i=document.getElementById('av-f');if(!i){i=document.createElement('input');i.type='file';i.accept='image/*';i.id='av-f';i.hidden=true;document.body.appendChild(i);i.addEventListener('change',()=>{const f=i.files&&i.files[0];i.value='';if(f)avSet(f)})}i.click()}
+document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.target.closest('[data-avset],[data-avdel]');if(!t)return;e.stopPropagation();e.preventDefault();
+ if(t.hasAttribute('data-avdel')){avDel();return}
+ if(avMine()){avMenu();return}avPick()},true);
+document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.target.closest('[data-avch]');if(!t)return;e.stopPropagation();document.querySelectorAll('.av-sh').forEach(x=>x.remove());const k=t.dataset.avch;if(k==='new')avPick();else if(k==='del')avDel()},true);
+function avMenu(){document.querySelectorAll('.av-sh').forEach(x=>x.remove());const d=document.createElement('div');d.innerHTML=`<div class="sheet av-sh"><div role="dialog" aria-modal="true" aria-label="Photo de profil" style="text-align:center"><span class="stb ppav" style="margin:4px auto 12px">${cmIni(SBS&&SBS.pseudo)}</span><h3 style="margin:0 0 14px">Photo de profil</h3><button class="btn" data-avch="new">📷 Changer la photo</button><button class="btn alt" data-avch="del" style="margin-top:8px">🗑️ Retirer la photo</button><button class="btn alt" data-avch="x" style="margin-top:8px">Fermer</button></div></div>`;document.body.appendChild(d.firstChild)}
+/* ===== AVT:END ===== */
+
+
 /* ===== PPS2 : profil public, voir les cartes d'une série en photo ===== */
 /* ce que je publie : pour chaque série où j'ai des cartes, [nombre de cartes de la série, cartes possédées en bits] */
 const ppBits=(ids,has)=>{const a=new Uint8Array(Math.ceil(ids.length/8));ids.forEach((id,i)=>{if(has(id))a[i>>3]|=1<<(i&7)});return b64u(a)};
@@ -11033,7 +11096,7 @@ ppBody=function(name,P,t,mine){
   <div class="pv-art">${img?`<img src="${esc(img)}" alt="" aria-hidden="true" decoding="async">`:''}</div><div class="pv-shade" aria-hidden="true"></div>
   <span class="pv-cost" title="Dragon Balls" aria-label="${P.db} Dragon Ball${P.db>1?'s':''} sur 7"><b>${P.db}</b></span>
   <span class="pv-pow" aria-label="${M.uniq} cartes différentes"><b>${cmNum(M.uniq)}</b><small>cartes</small></span>
-  <div class="pv-plate"><span class="pv-av" aria-hidden="true">${cmIni(name)}</span><div class="pv-id"><h2 class="pv-name">${esc(name)}</h2><div class="pv-rank">${esc(rk.name)}${t?' · '+(mine?'publié ':'')+agoFr(t):''}</div></div>
+  <div class="pv-plate">${mine?`<button type="button" class="pv-av pv-avb" data-avset aria-label="Changer ma photo de profil">${cmIni(name)}<i aria-hidden="true">📷</i></button>`:`<span class="pv-av" aria-hidden="true">${cmIni(name)}</span>`}<div class="pv-id"><h2 class="pv-name">${esc(name)}</h2><div class="pv-rank">${esc(rk.name)}${t?' · '+(mine?'publié ':'')+agoFr(t):''}</div></div>
    <span class="pv-orbs" aria-hidden="true">${[1,2,3,4,5,6,7].map(k=>dbOrb(k,k<=P.db)).join('')}</span></div>
  </div></section>`;
  const F=[[cmNum(M.uniq),'cartes'],[cmNum(M.ex),'exemplaires']];if(M.full.length)F.push([M.full.length,'série'+(M.full.length>1?'s':'')+' complète'+(M.full.length>1?'s':'')]);if(M.alt)F.push([cmNum(M.alt),'Alt Art']);
@@ -12220,6 +12283,8 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 142, "d": "2026-11-24", "it": [["n", "🧑", "Photo de profil", "Mets ta photo de profil : appuie sur ton rond dans ton profil public ou sur « 📷 Photo » dans Réglages > Compte. Elle s’affiche dans le chat, les messages, les amis et les classements.", ""]]},
+{"v": 141, "d": "2026-11-23", "it": [["n", "📸", "Liste en image", "Dans « Liste à imprimer », le bouton « En image » crée une image de tes manquantes (ou possédées…) avec les photos des cartes, à partager ou enregistrer. Marche aussi dans l’appli Android.", "print"]]},
 {"v": 140, "d": "2026-11-23", "it": [["a", "📢", "Plus d’annonces", "Tu peux maintenant avoir 50 annonces en cours (au lieu de 10) et mettre 50 cartes par annonce (au lieu de 20).", ""]]},
 {"v": 139, "d": "2026-11-23", "it": [["n", "⚡", "Marqueurs d’énergie complétés", "Fusion World anglais : les marqueurs E-22 à E-28, E-91, E-92 et E-116 à E-125 qui manquaient sont ajoutés, avec les photos.", ""]]},
 {"v": 138, "d": "2026-11-23", "it": [["a", "✏️", "Modifier ses annonces", "Dans Annonces, appuie sur « Modifier » sous une de tes annonces : cartes, message, prix et photos.", ""]]},

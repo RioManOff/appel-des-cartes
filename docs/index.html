@@ -3300,6 +3300,16 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .pv-avb{border:0;padding:0;cursor:pointer;position:relative;overflow:visible}
 .pv-avb .avi{position:absolute;inset:0}
 .pv-avb i{position:absolute;right:-6px;bottom:-6px;font:normal 13px/1 system-ui;background:#111;border-radius:50%;padding:4px;box-shadow:0 0 0 2px var(--pc,#e8322b)}
+.mc-sh{z-index:80}
+.mc-sh>.mc-d{max-height:86vh!important;max-height:86dvh!important;overflow-y:auto!important;margin-bottom:0}
+.mc-d{width:min(640px,100%);max-height:88vh;overflow:auto;box-sizing:border-box}
+.mc-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.mc-hd h2{margin:0}.mc-hd small{color:var(--mut,#aaa)}
+.mc-so{margin:10px 0}.mc-l{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.mc-r{display:grid;grid-template-columns:26px 44px 1fr auto;align-items:center;gap:10px;width:100%;text-align:left;padding:6px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:inherit;font:inherit;cursor:pointer}
+.mc-k{font:600 13px/1 Barlow,sans-serif;color:var(--mut,#999);text-align:right}
+.mc-im{width:44px;height:61px;border-radius:5px;overflow:hidden;background:rgba(255,255,255,.06)}.mc-im img{width:100%;height:100%;object-fit:cover;display:block}
+.mc-t{min-width:0}.mc-t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mc-t small{color:var(--mut,#aaa)}
+.mc-p{text-align:right;white-space:nowrap}.mc-p b{display:block;color:var(--ac,#f5b82e)}.mc-p small{color:var(--mut,#aaa);font-size:12px}
 </style>
 <style id="oled-css">
 :root[data-oled]{--bg:#000!important;--sf:#050505!important;--ln:#262626!important;--mu:#9A9090!important}
@@ -8631,7 +8641,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='24 nov. 2026 · 142';
+const BUILD='24 nov. 2026 · 143';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -8824,7 +8834,7 @@ if(sameS){const nd=document.querySelector('.sheet>div');if(nd&&st)nd.scrollTop=s
 if(sameV&&y)window.scrollTo(0,y);else if(!sameV&&RESTORE&&SCRM[vk])window.scrollTo(0,SCRM[vk]);RESTORE=false;
 const ap=document.getElementById('app');if(!sameV){ap.classList.remove('enter');void ap.offsetWidth;ap.classList.add('enter')}
 if(!sameS)document.querySelectorAll('.sheet').forEach(e=>e.classList.add('in'));initTilt();srAfter();dbWatch();b3Auto();try{tvAfter()}catch(e){}try{cxAfter()}catch(e){}}
-function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]()+(S.tab==='set'?FANNOTE:'');$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet();
+function renderCore(){if(!S.mspick){try{MSK=(k=>k==='old'?'bt':k)(msKd(msCur().id))}catch(e){}}if(isDeck(S.ext)){if(S.tab==='luck'||S.tab==='scan')S.ext=LASTFB}else if(/^FB\d{2}$/.test(S.ext))LASTFB=S.ext;if(!S.pick)SRD=isDeck(S.ext)?'fs':'fb';if(S.op&&S.op.tour&&S.tab!=='tour')S.op=null;serTheme(S.op?S.op.ext:S.ext);const v={coll,scan,want,stats,set,bind:binders,find,dup:dups,trade,swap:swapV,comm:commV,prof:ppView,chat:chatV,tour:tourV,print:printV,budget,trash:trashV,luck,soon:soonV,home:homeV,dball:dballV,mys:mysV,dev:devV}[S.tab]()+(S.tab==='set'?FANNOTE:'');$('#app').innerHTML=v+sheet()+zoomSheet()+tutSheet()+sealSheet()+pickSheet()+cfSheet()+menuSheet()+shareSheet()+sortSheet()+valSheet()+alSheet()+mcSheet();
 $('#nav').innerHTML=tabs.map(t=>t[0]==='mid'?`<button class="mid" data-menu aria-label="${S.menu?'Fermer le menu':'Que veux-tu faire ?'}" aria-expanded="${!!S.menu}"><i>${S.menu?'✕':'＋'}${cmDot()}</i></button>`:`<button ${t[0]==='shop'?'data-affshop':`data-go="${t[0]}"`} ${(t[0]==='comm'?COMMTAB():S.tab===t[0])?'aria-current="page"':''}><span>${t[1]}</span>${t[2]}${t[0]==='comm'?cmBdg():''}</button>`).join('');
 const sc=$('#sc');if(sc){sc.onkeydown=e=>{if(e.key==='Enter'&&S.burst){e.preventDefault();burstAdd()}};sc.oninput=e=>{S.sc=e.target.value;const p=e.target.selectionStart;render();const n=$('#sc');n.focus();n.setSelectionRange(p,p)}}
 const bq=$('#bq');if(bq){bq.oninput=e=>{S.bq=e.target.value;const p=e.target.selectionStart;render();const n=$('#bq');n.focus();n.setSelectionRange(p,p)}}
@@ -10285,7 +10295,7 @@ function stResume(D){const E=D.ed,fl=k=>(typeof FLAG!=='undefined'&&FLAG[k])||''
  return `<section class="panel st-c st-val" id="st-val">${stValIn(D)}</section>`
  +`<section class="panel st-c st-act">${stActIn()}</section>`
  +`<section class="st-c st-w2"><div class="st-vh"><h3>Ma collection en chiffres</h3></div><div class="st-tg">`
- +stTile('data-go="coll"','61,184,255','card','Cartes',apNf(D.copies),apNf(D.uniq)+' différente'+apS(D.uniq)+(D.cardV>0?' · '+apA(D.cardV):''))
+ +stTile('data-mcl','61,184,255','card','Cartes',apNf(D.copies),apNf(D.uniq)+' différente'+apS(D.uniq)+(D.cardV>0?' · '+apA(D.cardV):''))
  +stTile('data-hgo="sealed"','255,138,43','box','Scellés',apNf(D.sealN),D.sealN?apNf(D.sealU)+' produit'+apS(D.sealU)+(D.vSe>0?' · '+apA(D.vSe):''):'Aucun pour l’instant')
  +stTile('data-apa','177,79,224','alt','Alt Art',apNf(D.aOwn),'sur '+apNf(D.AL.length)+(D.aV>0?' · '+apA(D.aV):''))
  +stTile('data-go="want"','255,77,106','heart','Recherchées',apNf(D.wn),D.wn?(D.wc>0?apA(D.wc)+' à acheter':'Ta liste d’envies'):'Rien de suivi')
@@ -10787,6 +10797,25 @@ document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.targ
 document.addEventListener('click',e=>{const t=e.target&&e.target.closest&&e.target.closest('[data-avch]');if(!t)return;e.stopPropagation();document.querySelectorAll('.av-sh').forEach(x=>x.remove());const k=t.dataset.avch;if(k==='new')avPick();else if(k==='del')avDel()},true);
 function avMenu(){document.querySelectorAll('.av-sh').forEach(x=>x.remove());const d=document.createElement('div');d.innerHTML=`<div class="sheet av-sh"><div role="dialog" aria-modal="true" aria-label="Photo de profil" style="text-align:center"><span class="stb ppav" style="margin:4px auto 12px">${cmIni(SBS&&SBS.pseudo)}</span><h3 style="margin:0 0 14px">Photo de profil</h3><button class="btn" data-avch="new">📷 Changer la photo</button><button class="btn alt" data-avch="del" style="margin-top:8px">🗑️ Retirer la photo</button><button class="btn alt" data-avch="x" style="margin-top:8px">Fermer</button></div></div>`;document.body.appendChild(d.firstChild)}
 /* ===== AVT:END ===== */
+/* ===== MCL : Stats > Cartes = la liste de mes cartes triée par prix ===== */
+function mcRows(){const R=[];cards.forEach(c=>{if(c.own>0)R.push({g:'fw',id:c.id,n:c.name||'',r:c.rar||'',q:c.own,p:+pxv(c)||0,im:(typeof PH!=='undefined'&&PH[c.id])||CARDIMG[c.id]||''})});
+ msOwnL().forEach(c=>{R.push({g:'ms',id:c.id,n:c.name||'',r:c.rar||'',q:c.own,p:+msPx(c.id)||0,im:(typeof PH!=='undefined'&&PH[c.id])||MS_CI[c.id]||''})});
+ const k=S.mcs||'u';R.sort((a,b)=>k==='t'?(b.p*b.q-a.p*a.q)||(b.p-a.p):(b.p-a.p)||(b.p*b.q-a.p*a.q)||a.id.localeCompare(b.id));return R}
+function mcSheet(){if(!S.mcl)return '';const R=mcRows(),tot=R.reduce((a,x)=>a+x.p*x.q,0),cp=R.reduce((a,x)=>a+x.q,0),k=S.mcs||'u',L=R.slice(0,S.mcn||150);
+ L.forEach(x=>{if(x.g==='ms'&&!x.im)try{msHi(x.id)}catch(e){}});
+ return `<div class="sheet mc-sh" data-mcx><div role="dialog" aria-modal="true" aria-label="Mes cartes par prix" class="mc-d"><div class="mc-hd"><div><h2>Mes cartes</h2><small>${R.length.toLocaleString('fr-FR')} différentes · ${cp.toLocaleString('fr-FR')} exemplaires${tot>0?' · ≈ '+eur(tot):''}</small></div><button type="button" class="chip" data-mcx aria-label="Fermer">✕</button></div>
+ <div class="row mc-so" role="group" aria-label="Trier"><button type="button" class="chip" data-mcs="u" aria-pressed="${k==='u'}">Prix de la carte</button><button type="button" class="chip" data-mcs="t" aria-pressed="${k==='t'}">Prix × quantité</button></div>
+ <div class="mc-l">${L.map((x,i)=>`<button type="button" class="mc-r" data-mco="${x.g}|${esc(x.id)}"><span class="mc-k">${i+1}</span><span class="mc-im">${x.im?`<img src="${esc(x.im)}" alt="" loading="lazy" decoding="async">`:''}</span><span class="mc-t"><b>${esc(x.n||x.id)}</b><small>${esc(x.g==='fw'?cid(x.id):x.id)}${x.r?' · '+esc(x.r):''}${x.q>1?' · ×'+x.q:''}</small></span><span class="mc-p">${x.p>0?`<b>${eur(k==='t'?x.p*x.q:x.p)}</b>${k==='t'&&x.q>1?`<small>${eur(x.p)} l’une</small>`:k==='u'&&x.q>1?`<small>${eur(x.p*x.q)} en tout</small>`:''}`:'<small>pas de prix</small>'}</span></button>`).join('')||'<p class="sub">Aucune carte pour l’instant.</p>'}</div>
+ ${R.length>L.length?`<button type="button" class="btn alt" data-mcmore>Voir plus (${(R.length-L.length).toLocaleString('fr-FR')} restantes)</button>`:''}</div></div>`}
+document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;let b;
+ if(t.closest('[data-mcl]')){e.stopPropagation();S.mcl=1;S.mcn=150;render();return}
+ if(!S.mcl)return;
+ if(b=t.closest('[data-mcs]')){e.stopPropagation();S.mcs=b.dataset.mcs;S.mcn=150;render();const l=document.querySelector('.mc-d');if(l)l.scrollTop=0;return}
+ if(t.closest('[data-mcmore]')){e.stopPropagation();const l=document.querySelector('.mc-d'),y=l?l.scrollTop:0;S.mcn=(S.mcn||150)+300;render();const l2=document.querySelector('.mc-d');if(l2)l2.scrollTop=y;return}
+ if(b=t.closest('[data-mco]')){e.stopPropagation();const [g,id]=b.dataset.mco.split('|');S.mcl=0;if(g==='ms'){msOpenCard(id)}else{X.game='fw';S.tab='coll';S.sel=id;render()}return}
+ if(t.closest('[data-mcx]')&&(t.closest('button[data-mcx]')||t.classList.contains('mc-sh'))){e.stopPropagation();S.mcl=0;render()}},true);
+/* ===== MCL:END ===== */
+
 
 
 /* ===== PPS2 : profil public, voir les cartes d'une série en photo ===== */
@@ -12283,6 +12312,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 143, "d": "2026-11-24", "it": [["a", "💶", "Mes cartes par prix", "Dans Stats, appuie sur « Cartes » : la liste de toutes tes cartes, de la plus chère à la moins chère. Tu peux aussi trier par prix × quantité.", ""]]},
 {"v": 142, "d": "2026-11-24", "it": [["n", "🧑", "Photo de profil", "Mets ta photo de profil : appuie sur ton rond dans ton profil public ou sur « 📷 Photo » dans Réglages > Compte. Elle s’affiche dans le chat, les messages, les amis et les classements.", ""]]},
 {"v": 141, "d": "2026-11-23", "it": [["n", "📸", "Liste en image", "Dans « Liste à imprimer », le bouton « En image » crée une image de tes manquantes (ou possédées…) avec les photos des cartes, à partager ou enregistrer. Marche aussi dans l’appli Android.", "print"]]},
 {"v": 140, "d": "2026-11-23", "it": [["a", "📢", "Plus d’annonces", "Tu peux maintenant avoir 50 annonces en cours (au lieu de 10) et mettre 50 cartes par annonce (au lieu de 20).", ""]]},

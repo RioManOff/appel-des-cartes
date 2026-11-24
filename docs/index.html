@@ -3300,6 +3300,10 @@ html:is([data-ly=tab],[data-ly=pc]) .v-cart,html:is([data-ly=tab],[data-ly=pc]) 
 .pv-avb{border:0;padding:0;cursor:pointer;position:relative;overflow:visible}
 .pv-avb .avi{position:absolute;inset:0}
 .pv-avb i{position:absolute;right:-6px;bottom:-6px;font:normal 13px/1 system-ui;background:#111;border-radius:50%;padding:4px;box-shadow:0 0 0 2px var(--pc,#e8322b)}
+.mc-g{margin-bottom:12px}.mc-c{display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:center;cursor:pointer;min-width:0}
+.mc-c .art{position:relative}.mc-rk{position:absolute;left:5px;top:5px;min-width:22px;height:22px;padding:0 5px;box-sizing:border-box;border-radius:11px;background:rgba(0,0,0,.72);color:#fff;font:700 12px/22px Barlow,sans-serif}
+.mc-cp{font:700 15px/1.2 Barlow,sans-serif;color:var(--ac,#f5b82e)}.mc-ci{font-size:11.5px;color:var(--mut,#aaa);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-noim{display:grid;place-items:center;aspect-ratio:5/7;font-size:12px;color:var(--mut,#999);background:rgba(255,255,255,.06);border-radius:6px}
 .mc-sh{z-index:80}
 .mc-sh>.mc-d{max-height:86vh!important;max-height:86dvh!important;overflow-y:auto!important;margin-bottom:0}
 .mc-d{width:min(640px,100%);max-height:88vh;overflow:auto;box-sizing:border-box}
@@ -8641,7 +8645,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='24 nov. 2026 · 143';
+const BUILD='24 nov. 2026 · 144';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10805,7 +10809,7 @@ function mcSheet(){if(!S.mcl)return '';const R=mcRows(),tot=R.reduce((a,x)=>a+x.
  L.forEach(x=>{if(x.g==='ms'&&!x.im)try{msHi(x.id)}catch(e){}});
  return `<div class="sheet mc-sh" data-mcx><div role="dialog" aria-modal="true" aria-label="Mes cartes par prix" class="mc-d"><div class="mc-hd"><div><h2>Mes cartes</h2><small>${R.length.toLocaleString('fr-FR')} différentes · ${cp.toLocaleString('fr-FR')} exemplaires${tot>0?' · ≈ '+eur(tot):''}</small></div><button type="button" class="chip" data-mcx aria-label="Fermer">✕</button></div>
  <div class="row mc-so" role="group" aria-label="Trier"><button type="button" class="chip" data-mcs="u" aria-pressed="${k==='u'}">Prix de la carte</button><button type="button" class="chip" data-mcs="t" aria-pressed="${k==='t'}">Prix × quantité</button></div>
- <div class="mc-l">${L.map((x,i)=>`<button type="button" class="mc-r" data-mco="${x.g}|${esc(x.id)}"><span class="mc-k">${i+1}</span><span class="mc-im">${x.im?`<img src="${esc(x.im)}" alt="" loading="lazy" decoding="async">`:''}</span><span class="mc-t"><b>${esc(x.n||x.id)}</b><small>${esc(x.g==='fw'?cid(x.id):x.id)}${x.r?' · '+esc(x.r):''}${x.q>1?' · ×'+x.q:''}</small></span><span class="mc-p">${x.p>0?`<b>${eur(k==='t'?x.p*x.q:x.p)}</b>${k==='t'&&x.q>1?`<small>${eur(x.p)} l’une</small>`:k==='u'&&x.q>1?`<small>${eur(x.p*x.q)} en tout</small>`:''}`:'<small>pas de prix</small>'}</span></button>`).join('')||'<p class="sub">Aucune carte pour l’instant.</p>'}</div>
+ <div class="grid mc-g">${L.map((x,i)=>{const v=k==='t'?x.p*x.q:x.p;return `<button type="button" class="mc-c" data-mco="${x.g}|${esc(x.id)}" aria-label="${esc((x.n||x.id)+', '+(x.p>0?eur(v):'pas de prix'))}"><div class="art r-U">${x.im?`<img class="cimg" src="${esc(x.im)}" alt="" loading="lazy" decoding="async" draggable="false">`:`<span class="mc-noim">${esc(x.g==='fw'?cid(x.id):x.id)}</span>`}<span class="mc-rk">${i+1}</span>${x.q>1?`<span class="qty">×${x.q}</span>`:''}</div><span class="mc-cp">${x.p>0?eur(v):'—'}</span><small class="mc-ci">${esc(x.g==='fw'?cid(x.id):x.id)}${x.r?' · '+esc(x.r):''}</small></button>`}).join('')||'<p class="sub">Aucune carte pour l’instant.</p>'}</div>
  ${R.length>L.length?`<button type="button" class="btn alt" data-mcmore>Voir plus (${(R.length-L.length).toLocaleString('fr-FR')} restantes)</button>`:''}</div></div>`}
 document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;let b;
  if(t.closest('[data-mcl]')){e.stopPropagation();S.mcl=1;S.mcn=150;render();return}
@@ -12312,6 +12316,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 144, "d": "2026-11-24", "it": [["c", "💶", "Mes cartes en grille", "Stats > Cartes : tes cartes s’affichent maintenant en grille comme une série, de la plus chère à la moins chère, avec le prix sous chaque carte.", ""]]},
 {"v": 143, "d": "2026-11-24", "it": [["a", "💶", "Mes cartes par prix", "Dans Stats, appuie sur « Cartes » : la liste de toutes tes cartes, de la plus chère à la moins chère. Tu peux aussi trier par prix × quantité.", ""]]},
 {"v": 142, "d": "2026-11-24", "it": [["n", "🧑", "Photo de profil", "Mets ta photo de profil : appuie sur ton rond dans ton profil public ou sur « 📷 Photo » dans Réglages > Compte. Elle s’affiche dans le chat, les messages, les amis et les classements.", ""]]},
 {"v": 141, "d": "2026-11-23", "it": [["n", "📸", "Liste en image", "Dans « Liste à imprimer », le bouton « En image » crée une image de tes manquantes (ou possédées…) avec les photos des cartes, à partager ou enregistrer. Marche aussi dans l’appli Android.", "print"]]},

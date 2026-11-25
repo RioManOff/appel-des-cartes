@@ -7,4 +7,4 @@ jobs:
       contents: write
     steps:
       - run: |
-          for b in tmp-aab; do curl -s -o /dev/null -w "XX $b %{http_code}\n" -X DELETE -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$b"; done
+          for b in tmp-widget widget; do curl -s -o /dev/null -w "XX $b %{http_code}\n" -X DELETE -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$b"; done

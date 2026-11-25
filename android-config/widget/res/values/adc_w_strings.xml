@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="adc_w_label">Ma collection et boosters</string>
+    <string name="adc_w_desc">Ta valeur, tes cartes et un booster, display ou case à ouvrir en un appui</string>
+</resources>

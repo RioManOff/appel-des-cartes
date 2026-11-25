@@ -34,6 +34,8 @@ jobs:
           if [ -z "$GS" ] && [ -f android-config/google-services.json ]; then GS="$(cat android-config/google-services.json)"; fi
           if [ -n "$GS" ]; then printf '%s' "$GS" > android/app/google-services.json && python3 -c "import json;d=json.load(open('android/app/google-services.json'));print('Firebase :',d['project_info']['project_id'])"; else echo "::warning::secret GOOGLE_SERVICES_JSON absent : pas de notifications quand l'appli est fermée"; npm uninstall --no-save @capacitor/push-notifications; fi
       - run: npx cap sync android
+      - name: "Widget « Ma collection et boosters » (android-config/widget)"
+        run: python3 android-config/widget/install.py
       - name: Mettre le logo de l'appli (icône et écran de lancement)
         continue-on-error: true
         run: |

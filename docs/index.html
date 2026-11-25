@@ -3628,6 +3628,141 @@ button.pv-sr:active{background:color-mix(in srgb,var(--sc) 10%,transparent)}
 .cg-ov .cg-cmp textarea:focus{border-color:color-mix(in srgb,var(--ac) 70%,var(--ln))!important}
 .cg-ov .cg-send{width:46px;height:46px;border-radius:50%;margin-left:0}
 @media (max-width:380px){.cg-ov .cg-cmp .cg-ia{width:36px;height:36px;font-size:17px}}
+/* ===== COLL-V4 : vitrine, bande de séries, cartes premium ===== */
+#app .c4h{display:block;position:relative;isolation:isolate;padding:14px 14px 12px;margin:0 0 12px;border:1px solid rgba(var(--cr),.5);border-radius:22px;background:linear-gradient(160deg,rgba(var(--cr),.28),rgba(var(--cr),.06) 46%,transparent 70%),var(--sf);box-shadow:0 22px 40px -28px #000,inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+#app .c4h.done{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 30px -8px color-mix(in srgb,var(--gold) 70%,transparent),0 22px 40px -28px #000}
+#app .c4-bg{position:absolute;inset:-30% -20% auto auto;z-index:-2;width:70%;opacity:.22;filter:blur(18px) saturate(1.4);pointer-events:none}
+#app .c4-bg .cx-pk{width:100%;transform:rotate(12deg);filter:none}
+#app .c4-aura{position:absolute;z-index:-1;left:-34px;top:-30px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(var(--cr),.55),rgba(var(--cr),.12) 45%,transparent 68%);pointer-events:none}
+#app .c4h.anim .c4-aura{animation:c4aura 1.6s ease-out both}
+@keyframes c4aura{0%{transform:scale(.6);opacity:0}45%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+#app .c4-top{display:grid;grid-template-columns:96px minmax(0,1fr);column-gap:14px;align-items:start}
+#app .c4-pkb{display:block;width:96px;margin:2px 0 0;padding:0;border:0;background:none;cursor:pointer}
+#app .c4-pkb .cx-pk{width:96px;transform:rotate(-7deg) translateY(2px);filter:drop-shadow(0 14px 14px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(var(--cr),.45))}
+#app .c4h.anim .c4-pkb .cx-pk{animation:c4pk .7s cubic-bezier(.2,.9,.25,1.2) both}
+@keyframes c4pk{from{transform:rotate(-16deg) translateY(18px) scale(.86);opacity:0}}
+#app .c4-pkb:active .cx-pk{transform:rotate(-7deg) scale(.95)}
+#app .c4-id{min-width:0}
+#app .c4-r1{display:flex;align-items:flex-start;gap:8px}
+#app .c4-hb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:0;border:0;background:none;color:var(--tx);text-align:left;cursor:pointer}
+#app .c4-code{display:flex;align-items:center;gap:2px;font:900 38px/.9 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em;color:var(--tx);text-shadow:0 2px 0 rgba(0,0,0,.35)}
+#app .c4-code.lg{font-size:26px}
+#app .c4-code svg{width:18px;height:18px;margin-top:4px;color:var(--mu)}
+#app .c4-nm{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font:600 14.5px/1.2 Barlow,sans-serif;color:color-mix(in srgb,var(--tx) 85%,transparent)}
+#app .c4h .cx-arr{width:34px;height:34px;border-radius:50%;border:1px solid rgba(var(--cr),.55);background:rgba(0,0,0,.28);transform:none}
+:root[data-theme="light"] #app .c4h .cx-arr{background:rgba(255,255,255,.75)}
+#app .c4h .cx-arr svg{transform:none}
+#app .c4-r2{display:flex;align-items:center;gap:12px;margin-top:10px}
+#app .c4-ring{position:relative;flex:none;width:74px;height:74px}
+#app .c4-ring svg{display:block;width:100%;height:100%}
+#app .c4-ring b{position:absolute;inset:0;display:grid;place-items:center;font:900 22px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--cxg)}
+#app .c4-ring b small{font-size:.55em}
+#app .c4-ring b{display:flex;align-items:center;justify-content:center;gap:1px}
+.c4-big circle,.c4-gr circle{fill:none}
+.c4-big .bk,.c4-gr .bk{stroke:rgba(255,255,255,.1)}
+:root[data-theme="light"] .c4-big .bk,:root[data-theme="light"] .c4-gr .bk{stroke:rgba(0,0,0,.1)}
+.c4-big .v{stroke:url(#c4g);stroke:var(--gold);stroke-linecap:round;stroke-dasharray:var(--C);stroke-dashoffset:var(--o);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--gold) 70%,transparent));transition:stroke-dashoffset .5s cubic-bezier(.2,.9,.25,1)}
+#app .c4h.anim .c4-big .v{animation:c4ring 1.1s .15s cubic-bezier(.2,.8,.2,1) both}
+@keyframes c4ring{from{stroke-dashoffset:var(--C)}}
+#app .c4-cnt{display:flex;flex-direction:column;min-width:0}
+#app .c4-n{display:flex;align-items:baseline;gap:2px}
+#app .c4-n b{font:900 34px/.95 'Big Shoulders Display',Impact,sans-serif;color:var(--tx)}
+#app .c4-n span{font:800 19px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--mu)}
+#app .c4-cnt small{font:600 12.5px/1.2 Barlow,sans-serif;color:var(--mu)}
+#app .c4-val{margin-top:4px;font:800 19px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.02em;color:var(--cxg)}
+#app .c4-val::before{content:'≈ ';opacity:.7}
+#app .c4-trk{position:relative;height:12px;margin:16px 2px 6px;border-radius:8px;background:rgba(0,0,0,.45);box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
+:root[data-theme="light"] #app .c4-trk{background:rgba(0,0,0,.1)}
+#app .c4-trk>i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,rgb(var(--cr)),color-mix(in srgb,rgb(var(--cr)) 40%,var(--gold)) 70%,var(--gold));box-shadow:0 0 12px rgba(var(--cr),.75);transition:width .5s cubic-bezier(.2,.9,.25,1)}
+#app .c4h.anim .c4-trk>i{animation:c4trk 1.1s .15s cubic-bezier(.2,.8,.2,1) both}
+@keyframes c4trk{from{width:0}}
+#app .c4-tk{position:absolute;top:-3px;width:2px;height:18px;margin-left:-1px;background:rgba(255,255,255,.28);border-radius:1px}
+#app .c4-tk.on{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+#app .c4-tk em{position:absolute;top:20px;left:50%;transform:translateX(-50%);font:700 10px/1 Barlow,sans-serif;font-style:normal;color:var(--mu)}
+#app .c4-tk em::after{content:'%'}
+#app .c4-tk.on em{color:var(--cxg)}
+#app .c4-achs{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+#app .c4-ach{width:auto;flex:none;display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 10px 0 4px;border:1px solid var(--ln);border-radius:16px;background:rgba(0,0,0,.25);color:var(--tx);font:inherit}
+:root[data-theme="light"] #app .c4-ach{background:rgba(255,255,255,.6)}
+#app .c4-ach i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px dashed var(--mu);font:800 11px/1 Barlow,sans-serif;font-style:normal;color:var(--mu)}
+#app .c4-ach b{font:700 13px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em}
+#app .c4-ach small{font:600 12px/1 Barlow,sans-serif;color:var(--mu)}
+#app .c4-ach.ok{border-color:color-mix(in srgb,var(--ok) 70%,transparent)}
+#app .c4-ach.ok i{border:0;background:var(--ok);color:#06140B}
+#app .c4-ach.ok.gold{border-color:var(--gold)}
+#app .c4-ach.ok.gold i{background:var(--gold);color:var(--cxk)}
+#app .c4-ach.btn{cursor:pointer}
+#app .c4-ach.btn i{border:0;background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--cxg);font-size:10px}
+#app .c4-ach.btn[aria-pressed="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 18%,transparent)}
+#app .c4-gems{display:flex;gap:8px;margin:12px -14px 0;padding:2px 14px 4px;overflow-x:auto;scrollbar-width:none}
+#app .c4-gems::-webkit-scrollbar{display:none}
+#app .c4-gem{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;width:56px;padding:0;border:0;background:none;color:var(--tx);cursor:pointer}
+#app .c4-gem svg{width:46px;height:46px;display:block}
+.c4-gr .v{stroke:var(--rc);stroke-linecap:round;stroke-dasharray:var(--C);stroke-dashoffset:var(--o)}
+#app .c4-gem b{position:absolute;top:0;left:50%;width:46px;height:46px;margin-left:-23px;display:grid;place-items:center;font:800 13.5px/1 'Barlow Condensed',Barlow,sans-serif;color:var(--rc)}
+#app .c4-gem span{font:700 11.5px/1 Barlow,sans-serif;color:var(--mu)}
+#app .c4-gem.ok span{color:var(--ok)}
+#app .c4-gem[aria-pressed="true"] svg{border-radius:50%;background:color-mix(in srgb,var(--rc) 22%,transparent);box-shadow:0 0 0 2px var(--rc)}
+#app .c4-gem.ok b{text-shadow:0 0 8px var(--rc)}
+.rc-c{--rc:#B4B8BE}.rc-uc{--rc:#4FD58C}.rc-r{--rc:#4DA3FF}.rc-sr{--rc:#F5B82E}.rc-l{--rc:#FF8A1F}.rc-scr{--rc:#FF4D7A}.rc-cr{--rc:#B47CFF}.rc-h{--rc:#FF7AD9}.rc-x{--rc:#C9BEBE}
+:root[data-theme="light"] .rc-c{--rc:#6B7178}:root[data-theme="light"] .rc-uc{--rc:#178A4C}:root[data-theme="light"] .rc-r{--rc:#1D6FD1}:root[data-theme="light"] .rc-sr{--rc:#B07800}:root[data-theme="light"] .rc-l{--rc:#C85A00}:root[data-theme="light"] .rc-scr{--rc:#D41E4E}:root[data-theme="light"] .rc-h{--rc:#C0359E}
+#app .c4-act{display:flex;gap:8px;margin-top:12px}
+#app .c4-cta{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:0;border-radius:14px;background:linear-gradient(90deg,#FF9F1A,#E8322B);color:#fff;font:600 14.5px/1.1 Barlow,sans-serif;text-align:left;cursor:pointer;box-shadow:0 8px 18px -10px #E8322B}
+#app .c4-cta>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#app .c4-cta b{font:800 15px/1.1 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app .c4-cta small{font:600 12.5px/1.1 Barlow,sans-serif;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app .c4-cta[aria-pressed="true"]{background:var(--sf);color:var(--tx);border:1px solid var(--gold);box-shadow:none}
+#app .c4-cta.done{background:linear-gradient(90deg,var(--gold),#FFE28A);color:var(--cxk);font-weight:800}
+#app .c4-sh{flex:none;display:flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border:1px solid var(--ln);border-radius:14px;background:rgba(0,0,0,.25);color:var(--tx);font:600 14px/1 Barlow,sans-serif;cursor:pointer}
+:root[data-theme="light"] #app .c4-sh{background:rgba(255,255,255,.7)}
+/* bande des séries */
+#app .c4-rh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 2px 6px}
+#app .c4-rh b{font:900 20px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;color:var(--tx)}
+#app .c4-rh span{font:600 12.5px/1 Barlow,sans-serif;color:var(--mu)}
+#app .c4-rail{display:flex;gap:8px;margin:0 -16px 14px;padding:4px 16px 8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none}
+#app .c4-rail::-webkit-scrollbar{display:none}
+#app .c4-ri{flex:none;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;width:66px;padding:6px 4px 7px;border:1px solid var(--ln);border-radius:14px;background:var(--sf);color:var(--tx);cursor:pointer}
+#app .c4-ri.cur{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--sf));box-shadow:0 0 0 1px var(--gold),0 8px 18px -10px color-mix(in srgb,var(--gold) 80%,transparent)}
+#app .c4-rt{position:relative;display:grid;place-items:center;width:40px;height:56px;background-position:center;background-size:contain;background-repeat:no-repeat;filter:drop-shadow(0 4px 5px rgba(0,0,0,.5))}
+#app .c4-ri.z .c4-rt{filter:grayscale(.75) brightness(.8) drop-shadow(0 4px 5px rgba(0,0,0,.5))}
+#app .c4-rt b{display:grid;place-items:center;width:100%;height:100%;border-radius:5px;background:linear-gradient(155deg,#E8322B,#5A0F10);font:800 11px/1 'Barlow Condensed',Barlow,sans-serif;color:#fff;letter-spacing:.02em;text-align:center;word-break:break-all;padding:2px}
+#app .c4-rt i{position:absolute;right:-6px;top:-5px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--cxk);font:900 11px/1 Barlow,sans-serif;font-style:normal;box-shadow:0 0 0 2px var(--sf)}
+#app .c4-rc{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 13px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em}
+#app .c4-rb{display:block;width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+:root[data-theme="light"] #app .c4-rb{background:rgba(0,0,0,.1)}
+#app .c4-rb i{display:block;height:100%;border-radius:2px;background:var(--gold)}
+#app .c4-ri.ok .c4-rb i{background:var(--ok)}
+#app .c4-rp{font:600 11px/1 Barlow,sans-serif;color:var(--mu)}
+/* outils : recherche, compteurs */
+#app .cx-hud{border-radius:0 0 18px 18px}
+#app .cx-s{border-radius:14px;border:1px solid var(--ln);border-bottom:1px solid var(--ln);background:var(--sf);height:46px}
+#app .cx-s:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+#app .cx-ib{border-radius:14px;background:var(--sf)}
+#app .cx-seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:2px 0 12px;padding:4px;border:1px solid var(--ln);border-radius:16px;background:var(--sf)}
+#app .cx-seg button{min-height:48px;border:0;border-radius:12px;background:none;transform:none;transition:background .2s,color .2s}
+#app .cx-seg button>*{transform:none}
+#app .cx-seg button[aria-pressed="true"]{background:linear-gradient(180deg,#FFD25C,var(--gold));color:var(--cxk);box-shadow:0 6px 14px -8px var(--gold)}
+#app .cx-seg b{font:900 20px/1 'Big Shoulders Display',Impact,sans-serif;font-style:normal}
+#app .cx-tabs button{border-radius:14px}
+#app .cx-tabs button[aria-pressed="true"]{background:color-mix(in srgb,var(--gold) 12%,var(--sf));box-shadow:0 0 0 1px var(--gold) inset}
+/* cartes premium : liseré de rareté, reflet holo, numéro et rareté en couleur */
+#app .cx-g:not(.v-list) .cx-t .card .art{border-radius:8px;overflow:hidden;transition:transform .18s ease,box-shadow .2s}
+#app .cx-g:not(.v-list) .cx-t.own .card .art{box-shadow:0 8px 16px -10px #000}
+#app .cx-g:not(.v-list) .cx-t.own.rc-sr .card .art,#app .cx-g:not(.v-list) .cx-t.own.rc-l .card .art{box-shadow:0 0 0 2px var(--rc),0 0 16px -4px var(--rc),0 8px 16px -10px #000}
+#app .cx-g:not(.v-list) .cx-t.own.rc-scr .card .art,#app .cx-g:not(.v-list) .cx-t.own.rc-h .card .art,#app .cx-g:not(.v-list) .cx-t.own.rc-cr .card .art,#app .cx-g:not(.v-list) .cx-t.own.alt .card .art{box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 18px -2px rgba(255,90,200,.75),0 8px 16px -10px #000}
+#app .cx-t.own.rc-scr .card .art::after,#app .cx-t.own.rc-h .card .art::after,#app .cx-t.own.rc-cr .card .art::after,#app .cx-t.own.alt .card .art::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,transparent 28%,rgba(255,255,255,.42) 42%,rgba(255,80,200,.22) 48%,rgba(80,220,255,.24) 54%,rgba(255,240,120,.2) 60%,transparent 74%);background-size:280% 100%;mix-blend-mode:screen;opacity:.75;animation:c4holo 4.2s linear infinite}
+@keyframes c4holo{0%{background-position:120% 0}100%{background-position:-120% 0}}
+#app .cx-g:not(.v-list) .cx-t:not(.own) .card .art{opacity:.62;outline:none}
+#app .cx-g:not(.v-list) .cx-t:not(.own) .card .art img{filter:grayscale(1) contrast(.9)}
+#app .cx-g:not(.v-list) .cx-t .card:active .art{transform:scale(.96)}
+#app .cx-r{display:inline-block;padding:2px 6px 1px;border-radius:6px;background:color-mix(in srgb,var(--rc) 18%,transparent);color:var(--rc);font:800 11px/1.1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.03em;flex-basis:auto!important}
+#app .cx-t.own .cx-no{color:var(--tx)}
+#app .cx-t .cx-st{border-radius:16px;border-color:color-mix(in srgb,var(--gold) 80%,transparent);background:rgba(10,6,6,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#app .cx-t .cx-st.z{border-color:rgba(255,255,255,.45)}
+#app .cx-t.pop .card .art{animation:c4pop .45s cubic-bezier(.2,.9,.25,1.4)}
+@keyframes c4pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){#app .c4h.anim .c4-aura,#app .c4h.anim .c4-pkb .cx-pk,#app .c4h.anim .c4-big .v,#app .c4h.anim .c4-trk>i,#app .cx-t .card .art::after,#app .cx-t.pop .card .art{animation:none!important}}
+@media (min-width:700px){#app .c4-top{grid-template-columns:120px minmax(0,1fr)}#app .c4-pkb,#app .c4-pkb .cx-pk{width:120px}#app .c4-code{font-size:46px}}
 </style>
 </head>
 <body>
@@ -8645,7 +8780,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='25 nov. 2026 · 145';
+const BUILD='25 nov. 2026 · 146';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9220,10 +9355,10 @@ function cxTile(x,c,other){if(x.r1===undefined){const R=new Set();for(const y of
  const open=ms?`data-msopen="${id}"`:en?`data-cxen="${id}"`:`data-n="${id}"`;
  const at=d=>`data-cxd="${d}"`;
  const mk=cxMarks(id,x.want(c)>q),rp=!ms&&RPR[id];
- return `<div class="cx-t${q?' own':''}${CXPOP&&CXPOP.id===id?' pop':''}" data-cxid="${id}">`
+ return `<div class="cx-t rc-${c4Rc(c.rar)}${x.isAlt(c)?' alt':''}${q?' own':''}${CXPOP&&CXPOP.id===id?' pop':''}" data-cxid="${id}">`
   +`<div class="cx-a"><button type="button" class="card" ${open} aria-label="${lab}, ${esc(id)}, ${q?'possédée, '+q+' exemplaire'+cxS(q,''):'manquante'}">${artH}</button>${mk?`<span class="cx-mk" aria-hidden="true">${mk}</span>`:''}`
   +`<span class="cx-st${q?'':' z'}">${q?`<button type="button" class="cx-m" ${at(-1)} aria-label="Retirer un exemplaire de ${lab}">−</button><b>${q}</b>`:''}<button type="button" class="cx-p" ${at(1)} aria-label="Ajouter un exemplaire de ${lab}">+</button></span></div>`
-  +`<div class="cx-i"><b class="cx-no">${other?esc(c.ext)+' ':''}${cxNoF(id,nm)}</b>${c.rar&&(other||!x.r1)?`<span class="cx-r">${esc(c.rar)}</span>`:''}${rp?'<span class="cx-r">Réimp.</span>':''}<span class="cx-px">${p?eur(p):''}</span><span class="cx-nm">${esc(nm)}</span>${mk?`<span class="cx-mk2" aria-hidden="true">${mk}</span>`:''}</div></div>`}
+  +`<div class="cx-i"><b class="cx-no">${other?esc(c.ext)+' ':''}${cxNoF(id,nm)}</b>${c.rar&&(other||!x.r1)?`<span class="cx-r rc-${c4Rc(c.rar)}">${esc(c.rar)}</span>`:''}${rp?'<span class="cx-r">Réimp.</span>':''}<span class="cx-px">${p?eur(p):''}</span><span class="cx-nm">${esc(nm)}</span>${mk?`<span class="cx-mk2" aria-hidden="true">${mk}</span>`:''}</div></div>`}
 function cxBook(x,l){let o='';for(let i=0;i<l.length;i+=9){const pg=l.slice(i,i+9),ok=pg.every(c=>x.own(c)>0);
   o+=`<section class="cx-pg${ok?' ok':''}"><div class="cx-pt"><span>Page ${i/9+1}${ok?' ✓':''}</span></div><div class="cx-g v-book${CXQ?' quick':''}">${pg.map(c=>cxTile(x,c)).join('')}</div></section>`}
  return o}
@@ -9398,6 +9533,60 @@ document.addEventListener('keydown',e=>{if(S.tab!=='coll'||e.altKey||e.ctrlKey||
  document.addEventListener('touchstart',e=>{s0=null;if(S.tab!=='coll'||e.touches.length!==1||!e.target.closest)return;const d=e.target.closest('.sheet>[role=dialog]');if(!d||!d.querySelector('.cx-nav')||e.target.closest('input,select,textarea,a,.cmt,.pxc,.row'))return;const p=e.touches[0];s0={x:p.clientX,y:p.clientY,t:Date.now()}},{passive:true});
  document.addEventListener('touchend',e=>{if(!s0)return;const p=e.changedTouches[0],dx=p.clientX-s0.x,dy=p.clientY-s0.y,dt=Date.now()-s0.t;s0=null;if(Math.abs(dx)<60||Math.abs(dy)>Math.abs(dx)*.7||dt>650)return;cxGo(dx<0?1:-1)},{passive:true})})();
 /* ===== COLL-V3:END ===== */
+/* ===== COLL-V4 : vitrine de la série (anneau, paliers, raretés), bande de séries ===== */
+let CX4K='';
+function c4Rc(r){return ({C:'c',UC:'uc',R:'r',SR:'sr',L:'l',SCR:'scr',CR:'cr',SPR:'h',SLR:'h',GDR:'h',DPR:'h',DAR:'h',GFR:'h',SEC:'h'})[r]||'x'}
+function c4Ring(pc,R,w,cls){const C=+(2*Math.PI*R).toFixed(2),o=+(C*(1-Math.min(100,pc)/100)).toFixed(2),S2=R*2+w*2;
+ return `<svg class="${cls||''}" viewBox="0 0 ${S2} ${S2}" aria-hidden="true" focusable="false" style="--C:${C};--o:${o}"><circle class="bk" cx="${S2/2}" cy="${S2/2}" r="${R}" stroke-width="${w}"/><circle class="v" cx="${S2/2}" cy="${S2/2}" r="${R}" stroke-width="${w}" transform="rotate(-90 ${S2/2} ${S2/2})"/></svg>`}
+cxHero=function(x,s){
+ const pc=cxPc(s.o,s.n),fullN=s.nN>0&&s.oN>=s.nN,fullA=s.n>0&&s.o>=s.n,pick=x.ed==='ms'?'data-mspick':'data-pick',
+  arr=d=>{if(x.ed==='ms'){const L=x.set.dz?DZ_COL[x.set.dz.idc].s:MS_SETS,i=L.indexOf(x.set),n=L.length;return `data-msset="${L[(i+(d>0?1:n-1))%n].id}"`}return `data-sr="${d>0?'next':'prev'}"`},
+  rr=Object.keys(s.R).sort((a,b)=>cxRo(a)-cxRo(b)||a.localeCompare(b)),
+  dz=x.set&&x.set.dz,code=dz?cxDzT(x.set)[0]:x.id,name=dz?cxDzT(x.set)[1]:x.nm,
+  key=x.ed+'|'+x.id,anim=key!==CX4K&&!RM;CX4K=key;
+ const miss=s.n-s.o,cost=MKON&&s.px?s.mn+s.ma:0,val=MKON&&s.px;
+ const gem=(at,lab,o,n,on,aria,rc)=>{const ok=n>0&&o>=n,p=n?o/n*100:0;return `<button type="button" class="c4-gem rc-${rc}${ok?' ok':''}" ${at} aria-pressed="${on}" aria-label="${aria} : ${o} sur ${n}${ok?', complet':''}">${c4Ring(p,17,3.4,'c4-gr')}<b>${esc(lab)}</b><span>${ok?'✓':o+'/'+n}</span></button>`};
+ const gems=(rr.length>1?rr.map(r=>gem(`data-cxr="${r}"`,r,s.R[r].o,s.R[r].n,x.F.rar===r,'Rareté '+r,c4Rc(r))).join(''):'')
+  +(x.ed!=='ms'&&s.nA?gem('data-cxv="alt"','ALT',s.oA,s.nA,x.F.ver==='alt','Alternative Art','h'):'');
+ const ms1=s.nA&&s.nN?`<span class="c4-ach${fullN?' ok':''}"><i>${fullN?'✓':''}</i><b>Full Set</b><small>${fullN?'complet':s.oN+'/'+s.nN}</small></span>`:'';
+ const ms2=`<span class="c4-ach${fullA?' ok gold':''}"><i>${fullA?'★':''}</i><b>${s.nA&&s.nN?'Master Set':'Série complète'}</b><small>${fullA?'complet':s.o+'/'+s.n}</small></span>`;
+ const dup=s.dup?`<button type="button" class="c4-ach btn" data-cxo="d" aria-pressed="${x.F.own==='d'}"><i>×2</i><b>Doubles</b><small>${s.dup} carte${cxS(s.dup,'')}</small></button>`:'';
+ const part=x.ed==='ms'&&x.set.part?`<div class="cx-note">Liste partielle : ${s.n} cartes ajoutées pour l’instant, les autres arriveront.${x.set.lang?' '+esc(x.set.lang):''}</div>`:'';
+ const cta=miss>0?`<button type="button" class="c4-cta" data-cxo="${x.F.own==='n'?'':'n'}" aria-pressed="${x.F.own==='n'}">🎯 <span>${x.F.own==='n'?'<b>Voir toute la série</b>':'<b>Il m’en manque '+miss+'</b>'+(cost>0?`<small>≈ ${eur(cost)} pour finir</small>`:'<small>Voir les cartes manquantes</small>')}</span></button>`:`<span class="c4-cta done">🏆 <span>Série complète !</span></span>`;
+ return `<section class="cx-hero c4h${fullA?' done':''}${anim?' anim':''}" style="--cr:${x.rgb};--pc:${pc}" aria-label="Série ${esc(code)} ${esc(name)}">`
+  +`<div class="c4-bg" aria-hidden="true">${cxPort(x)}</div><i class="c4-aura" aria-hidden="true"></i>`
+  +`<div class="c4-top"><button type="button" class="c4-pkb" ${pick} tabindex="-1" aria-hidden="true">${cxPort(x)}</button>`
+  +`<div class="c4-id"><div class="c4-r1"><button type="button" class="cx-hb c4-hb" ${pick} aria-haspopup="dialog" aria-label="Changer de série. Série actuelle : ${esc(code)} ${esc(name)}"><span class="c4-code${code.length>8?' lg':''}">${esc(code)}${CXIC.chev}</span><span class="c4-nm">${esc(name)}</span></button>`
+  +`<span class="cx-arrs"><button type="button" class="cx-arr" ${arr(-1)} aria-label="Série précédente">${CXIC.left}</button><button type="button" class="cx-arr" ${arr(1)} aria-label="Série suivante">${CXIC.right}</button></span></div>`
+  +`<div class="c4-r2"><span class="c4-ring" role="img" aria-label="${pc} pour cent de la série">${c4Ring(pc,30,7,'c4-big')}<b>${pc}<small>%</small></b></span>`
+  +`<span class="c4-cnt"><span class="c4-n"><b>${s.o}</b><span>/${s.n}</span></span><small>carte${s.n>1?'s':''} possédée${s.o>1?'s':''}</small>${val?`<span class="c4-val">${eur(s.have)}</span>`:''}</span></div></div></div>`
+  +`<div class="c4-trk" role="progressbar" aria-valuemin="0" aria-valuemax="${s.n}" aria-valuenow="${s.o}" aria-label="Cartes possédées dans la série"><i style="width:${s.n?Math.max(s.o?1.5:0,s.o/s.n*100).toFixed(1):0}%"></i>${[25,50,75].map(m=>`<span class="c4-tk${pc>=m?' on':''}" style="left:${m}%"><em>${m}</em></span>`).join('')}</div>`
+  +`<div class="c4-achs">${ms1}${ms2}${dup}</div>`
+  +(gems?`<div class="cx-tags c4-gems" role="group" aria-label="Filtrer par rareté">${gems}</div>`:'')+part
+  +`<div class="c4-act">${cta}<button type="button" class="c4-sh" data-sershare aria-label="Partager cette série">📤<span>Partager</span></button></div></section>`};
+
+/* bande des séries de la même édition / catégorie */
+function c4RailL(x){
+ if(x.ed==='ms'){if(x.set.dz){const C=DZ_COL[x.set.dz.idc];return C&&C.s?C.s.map(t=>{const st=msStat(t),T=cxDzT(t);return{id:t.id,code:T[0],nm:T[1],o:st.o,n:st.n,at:`data-msset="${t.id}"`,img:'',cls:''}}):[]}
+  const k=msKd(x.id);return MS_SETS.filter(t=>msKd(t.id)===k).map(t=>{const st=msStat(t),g=MS_IMG[t.id]||{};return{id:t.id,code:t.id,nm:t.n,o:st.o,n:st.n,at:`data-msset="${t.id}"`,img:g.pk||'',cls:''}})}
+ const LL=isDeck(x.id)?DECKS:EXTS;return LL.map(([e,nm])=>{const N=SRB[e]||[],o=N.filter(c=>(x.ed==='en'?enOwn(c.id):c.own)>0).length;return{id:e,code:e,nm,o,n:N.length,at:`data-ext="${e}"`,img:'',cls:PACKIMG[e]?'srp-'+e:''}})}
+function c4Rail(x){const L=c4RailL(x);if(L.length<2)return '';const done=L.filter(y=>y.n&&y.o>=y.n).length;
+ return `<div class="c4-rh"><b>Mes séries</b><span>${done?done+' complète'+cxS(done,'')+' · ':''}${L.length} série${cxS(L.length,'')}</span></div><div class="c4-rail" role="navigation" aria-label="Changer de série">${L.map(y=>{const p=cxPc(y.o,y.n),cur=y.id===x.id,ok=y.n&&y.o>=y.n;
+  return `<button type="button" class="c4-ri${cur?' cur':''}${ok?' ok':''}${y.o?'':' z'}" ${y.at}${cur?' aria-current="true"':''} aria-label="${esc(y.code)} ${esc(y.nm)}, ${y.o} carte${cxS(y.o,'')} sur ${y.n}">`
+   +`<span class="c4-rt ${y.cls}"${y.img?` style="background-image:url(${y.img})"`:''}>${!y.img&&!y.cls?`<b>${esc(y.code)}</b>`:''}${ok?'<i>✓</i>':''}</span><span class="c4-rc">${esc(y.code)}</span><span class="c4-rb"><i style="width:${p}%"></i></span><span class="c4-rp">${p}%</span></button>`}).join('')}</div>`}
+
+/* l'écran : on glisse la bande de séries au bon endroit */
+cxColl=function(){const x=cxCtx(),s=cxStat(x);
+ let h=cxHead(x)+cxFlags(x)+remBanner()+cxHero(x,s)+c4Rail(x)+cxTabs(x,s)+(x.sealed?cxSealed(x):cxCards(x,s));
+ if(x.ed==='ms')h+=cxNavWrap(cxSheetFix(msSheet()),S.msel)+msPickSheet();
+ else if(x.ed==='en')h+=cxEnSheet();
+ return h+cxFiltSheet(x)};
+coll=cxColl;
+/* après ± : la bande de séries suit aussi */
+{const p0=cxPatch;cxPatch=function(id){const r=p0(id);if(r)try{const x=cxCtx(),s=cxStat(x),b=document.querySelector('.c4-ri.cur');if(b){const p=cxPc(s.o,s.n),ok=s.n&&s.o>=s.n,i=b.querySelector('.c4-rb i'),t=b.querySelector('.c4-rp');if(i)i.style.width=p+'%';if(t)t.textContent=p+'%';b.classList.toggle('ok',!!ok);b.classList.toggle('z',!s.o)}}catch(e){}return r}}
+{const a0=cxAfter;cxAfter=function(){a0();try{const r=document.querySelector('.c4-rail'),c=r&&r.querySelector('.c4-ri.cur');if(r&&c){const a=c.offsetLeft,b=a+c.offsetWidth;if(a<r.scrollLeft||b>r.scrollLeft+r.clientWidth)r.scrollLeft=Math.max(0,a-(r.clientWidth-c.offsetWidth)/2)}}catch(e){}}}
+/* ===== COLL-V4:END ===== */
+
 
 /* titre d'une série Fusion World à part (SB01, ST01…) : le code en grand, le nom dessous */
 function cxDzT(set){const d=set.dz;if(d.idc%9000===330){const m=/^([A-Z]{2,3}\d{2}|PROMO)\s+(.*?)(?:\s*\(anglais\))?$/.exec(d.ser);if(m)return [m[1],m[2]];return [d.ser.replace(/\s*\(anglais\)$/,''),d.col]}return [d.ser,d.col]}
@@ -12341,6 +12530,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 146, "d": "2026-11-25", "it": [["n", "✨", "Nouvelle Collection", "La Collection est refaite : vitrine de la série avec anneau de progression et paliers, raretés en un coup d’œil, bande de toutes tes séries, cartes rares qui brillent.", "coll"]]},
 {"v": 145, "d": "2026-11-25", "it": [["n", "📱", "Widget Android", "Avec la nouvelle version de l’appli Android : un widget pour l’écran d’accueil avec ta valeur et tes cartes. Tu choisis la série et booster, display ou case, et « Ouvrir » lance l’ouverture direct dans l’appli. Ajoute-le par un appui long sur l’écran d’accueil, puis Widgets.", ""]]},
 {"v": 144, "d": "2026-11-24", "it": [["c", "💶", "Mes cartes en grille", "Stats > Cartes : tes cartes s’affichent maintenant en grille comme une série, de la plus chère à la moins chère, avec le prix sous chaque carte.", ""]]},
 {"v": 143, "d": "2026-11-24", "it": [["a", "💶", "Mes cartes par prix", "Dans Stats, appuie sur « Cartes » : la liste de toutes tes cartes, de la plus chère à la moins chère. Tu peux aussi trier par prix × quantité.", ""]]},

@@ -3763,6 +3763,97 @@ button.pv-sr:active{background:color-mix(in srgb,var(--sc) 10%,transparent)}
 @keyframes c4pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){#app .c4h.anim .c4-aura,#app .c4h.anim .c4-pkb .cx-pk,#app .c4h.anim .c4-big .v,#app .c4h.anim .c4-trk>i,#app .cx-t .card .art::after,#app .cx-t.pop .card .art{animation:none!important}}
 @media (min-width:700px){#app .c4-top{grid-template-columns:120px minmax(0,1fr)}#app .c4-pkb,#app .c4-pkb .cx-pk{width:120px}#app .c4-code{font-size:46px}}
+/* ===== LK2 : salle des boosters ===== */
+#app .lk2-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#app .lk2-row{display:flex;align-items:center;gap:8px;margin:8px 0 10px}
+#app .lk2-sw{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;padding:3px;border:1px solid var(--ln);border-radius:15px;background:var(--sf)}
+#app .lk2-sw button{min-width:0;min-height:40px;padding:0 6px;border:0;border-radius:12px;background:none;color:var(--mu);font:700 14.5px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:background .2s,color .2s}
+#app .lk2-sw button[aria-pressed="true"]{background:linear-gradient(180deg,#FFD25C,var(--gold));color:var(--cxk);box-shadow:0 6px 14px -8px var(--gold)}
+#app .lk2-pts{width:auto;flex:none;display:inline-flex;align-items:center;gap:5px;min-height:46px;padding:0 13px;border:1px solid color-mix(in srgb,var(--gold) 65%,transparent);border-radius:15px;background:color-mix(in srgb,var(--gold) 13%,var(--sf));color:var(--tx);font:600 15px/1 Barlow,sans-serif;cursor:pointer}
+#app .lk2-pts b{font:900 19px/1 'Big Shoulders Display',Impact,sans-serif;color:var(--cxg)}
+#app .lk2-st{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:10px 12px 12px;margin:0 0 10px;border:1px solid rgba(var(--cr),.55);border-radius:24px;background:radial-gradient(120% 80% at 50% 42%,rgba(var(--cr),.42),rgba(var(--cr),.1) 48%,transparent 72%),linear-gradient(180deg,#140909,#060404);box-shadow:0 24px 44px -30px #000,inset 0 1px 0 rgba(255,255,255,.07);color:#FFF4E0;touch-action:pan-y}
+:root[data-theme="light"] #app .lk2-st{background:radial-gradient(120% 80% at 50% 42%,rgba(var(--cr),.5),rgba(var(--cr),.14) 48%,transparent 72%),linear-gradient(180deg,#24120f,#0c0707)}
+#app .lk2-rays{position:absolute;z-index:-2;left:50%;top:50%;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(var(--cr),.22) 0 7deg,transparent 7deg 18deg);-webkit-mask:radial-gradient(circle,#000 12%,transparent 58%);mask:radial-gradient(circle,#000 12%,transparent 58%);animation:lk2spin 60s linear infinite;pointer-events:none}
+@keyframes lk2spin{to{transform:rotate(360deg)}}
+#app .lk2-aura{position:absolute;z-index:-1;left:50%;top:50%;width:240px;height:240px;margin:-120px 0 0 -120px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,170,.5),rgba(var(--cr),.45) 38%,transparent 68%);filter:blur(6px);animation:lk2pulse 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes lk2pulse{0%,100%{transform:scale(.94);opacity:.8}50%{transform:scale(1.06);opacity:1}}
+#app .lk2-sp{position:absolute;inset:0;z-index:-1;pointer-events:none}
+#app .lk2-sp i{position:absolute;bottom:24%;width:4px;height:4px;border-radius:50%;background:#FFE7A0;box-shadow:0 0 8px #FFC94D;opacity:0;animation:lk2up 4.2s linear infinite}
+#app .lk2-sp i:nth-child(1){left:18%}#app .lk2-sp i:nth-child(2){left:30%;animation-delay:1.4s}#app .lk2-sp i:nth-child(3){left:42%;animation-delay:2.6s}#app .lk2-sp i:nth-child(4){left:58%;animation-delay:.7s}#app .lk2-sp i:nth-child(5){left:70%;animation-delay:2s}#app .lk2-sp i:nth-child(6){left:82%;animation-delay:3.3s}#app .lk2-sp i:nth-child(7){left:24%;animation-delay:3.8s}#app .lk2-sp i:nth-child(8){left:76%;animation-delay:1s}
+@keyframes lk2up{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.9}100%{transform:translateY(-170px) scale(1.1);opacity:0}}
+#app .lk2-top{width:100%;display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;gap:8px}
+#app .lk2-ar{width:40px;height:40px;display:grid;place-items:center;padding:0;border:1px solid rgba(var(--cr),.6);border-radius:50%;background:rgba(0,0,0,.35);color:#FFF4E0;cursor:pointer}
+#app .lk2-ar svg{width:18px;height:18px}
+#app .lk2-ar:active{transform:scale(.92)}
+#app .lk2-ser{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:2px 4px;border:0;background:none;color:#FFF4E0;cursor:pointer}
+#app .lk2-ser b{display:flex;align-items:center;gap:2px;font:900 31px/.95 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;text-shadow:0 2px 10px rgba(var(--cr),.8)}
+#app .lk2-ser b svg{width:16px;height:16px;opacity:.75}
+#app .lk2-ser span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 14px/1.2 Barlow,sans-serif;color:rgba(255,244,224,.82)}
+#app .lk2-prod{position:relative;display:grid;place-items:center;width:100%;height:198px;height:clamp(130px,calc(100vh - 616px),230px);height:clamp(130px,calc(100svh - 616px),230px);margin:4px 0 0;padding:0;border:0;background:none;cursor:pointer;animation:lk2bob 4.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+#app .lk2-pw{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform}
+#app .lk2-pw.in{animation:lk2in .5s cubic-bezier(.2,.9,.3,1.25) backwards}
+@keyframes lk2in{from{opacity:0;transform:translateX(calc(var(--dir) * 70px)) scale(.82) rotate(calc(var(--dir) * 6deg))}}
+#app .lk2-st img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+#app .lk2-pw img{max-width:66%;max-height:97%;object-fit:contain;filter:drop-shadow(0 16px 16px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(var(--cr),.55));transition:transform .2s}
+#app .lk2-box .lk2-pw img{max-width:80%;max-height:87%}
+#app .lk2-case .lk2-pw img{max-width:88%;max-height:80%}
+#app .lk2-pw>i{font-size:84px;font-style:normal}
+#app .lk2-prod:active img{transform:scale(.95)}
+#app .lk2-st.lock .lk2-pw img{filter:grayscale(.7) brightness(.62) drop-shadow(0 16px 16px rgba(0,0,0,.7))}
+#app .lk2-prod em{position:absolute;right:15%;top:8%;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(10,6,6,.85);border:2px solid rgba(255,255,255,.4);font:normal 21px/1 system-ui;box-shadow:0 8px 16px -6px #000}
+#app .lk2-prod em.pend{border-color:#FF9F1A;color:#FFB54A;font-size:19px}
+@keyframes lk2bob{0%,100%{transform:translateY(0) rotate(-2.5deg)}50%{transform:translateY(-8px) rotate(-.5deg)}}
+#app .lk2-plat{display:block;width:58%;height:16px;margin:-10px 0 8px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.75),transparent);animation:lk2plat 4.5s ease-in-out infinite}
+@keyframes lk2plat{0%,100%{transform:scaleX(1);opacity:.9}50%{transform:scaleX(.86);opacity:.6}}
+#app .lk2-vc{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;background:rgba(0,0,0,.42);font:600 13px/1.1 Barlow,sans-serif;color:rgba(255,244,224,.82)}
+#app .lk2-vc b{font:900 17px/1 'Big Shoulders Display',Impact,sans-serif;color:#FFF4E0}
+#app .lk2-vb{height:8px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+#app .lk2-vb i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,rgb(var(--cr)),#F5B82E);box-shadow:0 0 10px rgba(var(--cr),.8)}
+#app .lk2-ks3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 10px}
+#app .lk2-k{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 9px;border:1.5px solid var(--ln);border-radius:18px;background:var(--sf);color:var(--tx);font:inherit;cursor:pointer;transition:transform .15s,border-color .2s,box-shadow .2s}
+#app .lk2-k[aria-pressed="true"]{border-color:var(--gold);background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 16%,var(--sf)),var(--sf));box-shadow:0 0 0 1px var(--gold),0 12px 22px -14px var(--gold);transform:translateY(-2px)}
+#app .lk2-ki{display:grid;place-items:center;width:100%;height:46px;margin-bottom:2px}
+#app .lk2-ki img{max-width:80%;max-height:46px;object-fit:contain;filter:drop-shadow(0 5px 7px rgba(0,0,0,.5))}
+#app .lk2-k.wait .lk2-ki img{filter:grayscale(.75) brightness(.75) drop-shadow(0 5px 7px rgba(0,0,0,.5))}
+#app .lk2-ki i{font-size:30px;font-style:normal}
+#app .lk2-k b{font:800 16px/1 'Barlow Condensed',Barlow,sans-serif;letter-spacing:.02em}
+#app .lk2-k small{font:600 11.5px/1.1 Barlow,sans-serif;color:var(--mu)}
+#app .lk2-ks{max-width:100%;margin-top:4px;padding:4px 7px;border-radius:10px;font:700 11.5px/1.1 Barlow,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app .lk2-k.ok .lk2-ks{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+#app .lk2-k.ok .lk2-ks::before{content:'✓ '}
+#app .lk2-k.go .lk2-ks{background:rgba(255,159,26,.2);color:#FF9F1A}
+#app .lk2-k.wait .lk2-ks{background:rgba(127,127,127,.16);color:var(--mu)}
+#app .lk2-go{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;min-height:64px;margin:0 0 12px;padding:9px 16px;border:0;border-radius:20px;background:linear-gradient(90deg,#FF9F1A,#FF5A1F 50%,#E8322B);color:#fff;text-align:center;cursor:pointer;box-shadow:0 14px 26px -14px #E8322B,inset 0 1px 0 rgba(255,255,255,.3)}
+#app .lk2-go b{font:900 24px/1 'Big Shoulders Display',Impact,sans-serif;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+#app .lk2-go small{font:600 13px/1.1 Barlow,sans-serif;opacity:.92}
+#app .lk2-go::after{content:'';position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);animation:lk2shine 3.2s ease-in-out infinite}
+@keyframes lk2shine{0%,55%{left:-40%}100%{left:130%}}
+#app .lk2-go.go{background:linear-gradient(90deg,#F5B82E,#FF9F1A)}
+#app .lk2-go.go b{color:#1A0E06;text-shadow:none}#app .lk2-go.go small{color:#2A1606}
+#app .lk2-go.wait{margin-bottom:8px;background:var(--sf);border:1px solid var(--ln);color:var(--tx);box-shadow:none}
+#app .lk2-go.wait b{font-size:20px;text-transform:none;text-shadow:none}
+#app .lk2-go.wait small{color:var(--mu)}
+#app .lk2-go.wait::after{display:none}
+#app .lk2-go:active{transform:scale(.98)}
+#app .lk2-alt{display:block;width:100%;margin:0 0 12px;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--gold) 60%,transparent);border-radius:14px;background:none;color:var(--tx);font:600 13.5px/1.25 Barlow,sans-serif;cursor:pointer}
+#app .lk2-ms{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+#app .lk2-m{position:relative;overflow:hidden;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:100px;padding:12px;border:1px solid var(--ln);border-radius:18px;background:var(--sf);color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+#app .lk2-m i{font-size:27px;font-style:normal;line-height:1;margin-bottom:4px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+#app .lk2-m b{font:800 15.5px/1.1 Barlow,sans-serif}
+#app .lk2-m small{font:600 12px/1.25 Barlow,sans-serif;color:var(--mu)}
+#app .lk2-m.duel{background:linear-gradient(140deg,rgba(232,50,43,.26),transparent 62%),var(--sf)}
+#app .lk2-m.tour{background:linear-gradient(140deg,rgba(150,90,255,.26),transparent 62%),var(--sf)}
+#app .lk2-m.shop{background:linear-gradient(140deg,color-mix(in srgb,var(--gold) 28%,transparent),transparent 62%),var(--sf)}
+#app .lk2-m.virt{background:linear-gradient(140deg,rgba(60,160,255,.26),transparent 62%),var(--sf)}
+#app .lk2-ms .lk2-m:last-child:nth-child(odd){grid-column:1/-1;min-height:0}
+#app .lk2-m:active,#app .lk2-k:active{transform:scale(.97)}
+#app .lk2-ru{margin:0 0 14px;padding:12px 14px;border:1px solid var(--ln);border-radius:16px;background:var(--sf)}
+#app .lk2-ru summary{cursor:pointer;font:700 14px/1.2 Barlow,sans-serif;color:var(--mu)}
+#app .lk2-ru p{margin:8px 0 0;font:500 13.5px/1.45 Barlow,sans-serif;color:var(--mu)}
+#app .lk2-ar:focus-visible,#app .lk2-ser:focus-visible,#app .lk2-k:focus-visible,#app .lk2-go:focus-visible,#app .lk2-m:focus-visible,#app .lk2-pts:focus-visible,#app .lk2-sw button:focus-visible,#app .lk2-alt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#app .lk2-rays,#app .lk2-aura,#app .lk2-sp i,#app .lk2-prod,#app .lk2-plat,#app .lk2-go::after,#app .lk2-pw.in{animation:none!important}#app .lk2-sp{display:none}}
+@media (min-width:700px){#app .lk2-prod{height:clamp(200px,calc(100vh - 560px),300px)}}
+@media (max-height:760px){#app .lk2-ki{height:38px}#app .lk2-ki img{max-height:38px}#app .lk2-st{padding-top:8px}}
 </style>
 </head>
 <body>
@@ -8780,7 +8871,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='25 nov. 2026 · 146';
+const BUILD='25 nov. 2026 · 147';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9586,6 +9677,58 @@ coll=cxColl;
 {const p0=cxPatch;cxPatch=function(id){const r=p0(id);if(r)try{const x=cxCtx(),s=cxStat(x),b=document.querySelector('.c4-ri.cur');if(b){const p=cxPc(s.o,s.n),ok=s.n&&s.o>=s.n,i=b.querySelector('.c4-rb i'),t=b.querySelector('.c4-rp');if(i)i.style.width=p+'%';if(t)t.textContent=p+'%';b.classList.toggle('ok',!!ok);b.classList.toggle('z',!s.o)}}catch(e){}return r}}
 {const a0=cxAfter;cxAfter=function(){a0();try{const r=document.querySelector('.c4-rail'),c=r&&r.querySelector('.c4-ri.cur');if(r&&c){const a=c.offsetLeft,b=a+c.offsetWidth;if(a<r.scrollLeft||b>r.scrollLeft+r.clientWidth)r.scrollLeft=Math.max(0,a-(r.clientWidth-c.offsetWidth)/2)}}catch(e){}}}
 /* ===== COLL-V4:END ===== */
+/* ===== LK2 : salle des boosters (scène, booster / display / case, gros bouton, modes) ===== */
+const LK2K=[['pack','Booster','🎴'],['box','Display','📦'],['case','Case','🗃️']],LK2={last:'',dir:0,sw:0,t:null};
+function lk2Kind(){const ok=k=>LK2K.some(x=>x[0]===k);if(ok(S.lkk))return S.lkk;const p=LK2K.find(x=>cdPend(x[0]));if(p)return p[0];const a=LK2K.find(x=>cdOk(x[0]));return a?a[0]:'pack'}
+function lk2Img(k,e){return k==='pack'?PACKIMG[e]:k==='box'?DISPIMG[e]:CASEIMG}
+function lk2St(k){const p=cdPend(k);if(p)return{c:'go',t:'▶ À reprendre'};if(cdOk(k))return{c:'ok',t:'Dispo'};return{c:'wait',t:'⏳ <span data-cdt="'+k+'">'+cdFmt(cdLeft(k))+'</span>'}}
+function lk2(){const ms=HZM(),e=HX(),k=lk2Kind(),I=CDI[k],p=cdPend(k),ok=cdOk(k),
+  nm=ms?esc(msSetName(e)||srxName(e)||e):esc(serNm(e)),rgb=ms?(MS_COL[e]||'229,9,20'):srRGB(e),
+  vs=ms?mhVs(e):srStat(e,'luck'),vp=vs.n?Math.round(100*vs.o/vs.n):0,opened=ms?((VIRT.bs||{})[e]||0):(VIRT.b||0),
+  pts=VIRT.pts||0,dist=Object.keys(VIRT.q).filter(id=>ms?/^BT/.test(id):!/^BT/.test(id)).length,D=X.duel||{w:0,l:0,d:0},
+  here=!p||p.ext===e,img=lk2Img(k,e),key=(ms?'m':'f')+e+k,anim=!!LK2.last&&LK2.last!==key,dir=LK2.dir;
+ LK2.last=key;LK2.dir=0;
+ const fr=n=>Number(n).toLocaleString('fr-FR');
+ const arr=d=>{if(ms){const L=srxMhList(),i=Math.max(0,L.findIndex(s=>s.id===e)),n=L.length;return `data-hzx="${L[(i+(d>0?1:n-1))%n].id}"`}return `data-sr="${d>0?'next':'prev'}"`};
+ const tiles=LK2K.map(([kk,lab,ic])=>{const st=lk2St(kk),im=lk2Img(kk,e),sub=kk==='pack'?(ms?MH_N:6)+' cartes':kk==='box'?'24 boosters':'12 displays';
+  return `<button type="button" class="lk2-k ${st.c}" data-lkk="${kk}" aria-pressed="${kk===k}" aria-label="${lab}, ${sub}, ${st.c==='ok'?'disponible':st.c==='go'?'à reprendre':'en attente'}"><span class="lk2-ki" aria-hidden="true">${im?`<img src="${im}" alt="" decoding="async" draggable="false">`:`<i>${ic}</i>`}</span><b>${lab}</b><small>${sub}</small><span class="lk2-ks">${st.t}</span></button>`}).join('');
+ let cta;
+ if(p){const n=p.packs.filter(x=>x.st).length,t=p.packs.length;cta=`<button type="button" class="lk2-go go" data-oresume="${k}"><b>▶ Reprendre ${p.duel?'ton duel':I.art} ${esc(p.ext)}</b><small>${t>1?n+' / '+t+' boosters ouverts':'Pas encore ouvert'}</small></button>`}
+ else if(ok)cta=`<button type="button" class="lk2-go" data-oi="${k}"><b>Ouvrir ${k==='case'?'une case':k==='box'?'un display':'un booster'} ${esc(e)}</b><small>Disponible · 1 par ${I.sh}</small></button>`;
+ else cta=`<button type="button" class="lk2-go wait" data-cdlock="${k}" aria-disabled="true"><b>⏳ ${I.nx} dans <span data-cdt="${k}">${cdFmt(cdLeft(k))}</span></b><small>${I.lim} · ${I.back}</small></button><button type="button" class="lk2-alt" data-shop>🛒 En attendant, la boutique n’a pas d’attente · 🪙 ${fr(pts)}</button>`;
+ const badge=p?(here?'<em class="pend" aria-hidden="true">▶</em>':''):ok?'':'<em aria-hidden="true">⏳</em>',act=p?(here?`data-oresume="${k}"`:''):ok?`data-oi="${k}"`:`data-cdlock="${k}"`;
+ const stage=`<section class="lk2-st lk2-${k}${p?(here?' pend':''):ok?'':' lock'}" style="--cr:${rgb}" aria-label="Série ${esc(e)}, ${nm}">`
+  +`<i class="lk2-rays" aria-hidden="true"></i><i class="lk2-aura" aria-hidden="true"></i><span class="lk2-sp" aria-hidden="true">${'<i></i>'.repeat(8)}</span>`
+  +`<div class="lk2-top"><button type="button" class="lk2-ar" ${arr(-1)} aria-label="Série précédente">${CXIC.left}</button><button type="button" class="lk2-ser" ${ms?'data-mspick':'data-pick'} aria-haspopup="dialog" aria-label="Changer de série. Actuellement ${esc(e)}, ${nm}"><b>${esc(e)}${CXIC.chev}</b><span>${nm}</span></button><button type="button" class="lk2-ar" ${arr(1)} aria-label="Série suivante">${CXIC.right}</button></div>`
+  +`<button type="button" class="lk2-prod" ${act} tabindex="-1" aria-hidden="true"><span class="lk2-pw${anim?' in':''}" style="--dir:${dir}">${img?`<img src="${img}" alt="" decoding="async" draggable="false">`:`<i>${LK2K.find(x=>x[0]===k)[2]}</i>`}</span>${badge}</button><i class="lk2-plat" aria-hidden="true"></i>`
+  +`<div class="lk2-vc"><span>Collection virtuelle <b>${vs.o}</b> / ${vs.n}</span><span class="lk2-vb" role="progressbar" aria-label="Collection virtuelle ${esc(e)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${vp}"><i style="width:${vp}%"></i></span><span><b>${vp}</b> %</span></div></section>`;
+ const modes=[`<button type="button" class="lk2-m duel" data-dl><i aria-hidden="true">⚔️</i><b>Duel de boosters</b><small>${D.w} V · ${D.l} D · ${D.d} É</small></button>`,
+  !ms?`<button type="button" class="lk2-m tour" data-go="tour"><i aria-hidden="true">🏟️</i><b>Tournoi de la semaine</b><small>Même display pour tous</small></button>`:'',
+  `<button type="button" class="lk2-m shop" data-shop><i aria-hidden="true">🛒</i><b>Boutique virtuelle</b><small>🪙 ${fr(pts)} pts · sans attente</small></button>`,
+  `<button type="button" class="lk2-m virt" data-vopen><i aria-hidden="true">📚</i><b>Collection virtuelle</b><small>${fr(dist)} carte${dist>1?'s':''} · ${fr(opened)} booster${opened>1?'s':''} ouvert${opened>1?'s':''}</small></button>`].join('');
+ const rules=ms?`Ouvre des boosters Masters virtuels de ${MH_N} cartes (édition française). Taux estimés d’après les observations de la communauté (Bandai ne les publie pas) : 7 communes, 3 peu communes, 1 carte foil, 1 emplacement rare qui peut devenir SR, SPR, SCR… Un display = 24 boosters (au moins une SR ou mieux), une case = 12 displays.`
+  :`Boosters de 6 cartes, comme un paquet japonais. Taux estimés d’après des observations de la communauté (Bandai ne les publie pas). Un display = 24 boosters, une case = 12 displays.`;
+ return header()+`<h2 class="lk2-sr">Boosters</h2><div class="lk2-row"><div class="lk2-sw" role="group" aria-label="Jeu"><button type="button" data-hzg="fw" aria-pressed="${!ms}">Fusion World</button><button type="button" data-hzg="ms" aria-pressed="${ms}">Masters et autres</button></div><button type="button" class="lk2-pts" data-shop aria-label="Boutique virtuelle, ${pts} points">🪙 <b>${fr(pts)}</b></button></div>`
+  +stage+`<div class="lk2-ks3" role="group" aria-label="Que veux-tu ouvrir ?">${tiles}</div>`+cta+(S.celeb===e?celeb(e):'')+stockPanel()
+  +`<div class="lk2-ms">${modes}</div>`
+  +`<details class="lk2-ru"><summary>ⓘ Règles et taux</summary><p>Des boosters pour de faux : les cartes vont dans ta collection virtuelle, jamais dans la vraie.</p><p>${rules}</p><p>⏳ 1 booster par jour (00h) · 1 display par semaine (lundi 00h) · 1 case par mois (le 1er, 00h), partagés entre Fusion World et Masters. Un duel compte comme une ouverture ; la boutique 🛒 n’a pas d’attente.</p></details>`
+  +(ms?mhPickSheet():'')}
+{const L0=luck;luck=function(){mhImgs();if(S.op&&mhIs(S.op.ext)&&S.tab==='luck')S.hzm=true;if(S.hzv||S.op||S.dl||S.shop)return L0();return lk2()}}
+/* choix booster / display / case ; flèches : sens de l'arrivée ; pas d'ouverture juste après un glissé */
+window.addEventListener('click',ev=>{if(S.tab!=='luck'||!ev.target.closest)return;
+ if(Date.now()-LK2.sw<450&&ev.target.closest('.lk2-st')){ev.stopPropagation();ev.preventDefault();return}
+ const a=ev.target.closest('.lk2-ar');if(a){LK2.dir=a===a.parentNode.lastElementChild?1:-1;return}
+ const b=ev.target.closest('[data-lkk]');if(!b)return;ev.stopPropagation();S.lkk=b.dataset.lkk;try{VIB&&navigator.vibrate&&navigator.vibrate(8)}catch(e){}render()},true);
+/* glisser le paquet à gauche / à droite pour changer de série */
+document.addEventListener('pointerdown',e=>{if(S.tab!=='luck'||!e.target.closest)return;const st=e.target.closest('.lk2-st');if(!st||e.target.closest('.lk2-top'))return;LK2.t={x:e.clientX,y:e.clientY,id:e.pointerId,w:st.querySelector('.lk2-pw'),h:false}},{passive:true});
+document.addEventListener('pointermove',e=>{const t=LK2.t;if(!t||e.pointerId!==t.id||!t.w)return;const dx=e.clientX-t.x,dy=e.clientY-t.y;if(!t.h&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.3)t.h=true;if(t.h){const v=Math.max(-90,Math.min(90,dx));t.w.style.transition='none';t.w.style.transform=`translateX(${v}px) rotate(${v/14}deg)`}},{passive:true});
+const lk2Up=e=>{const t=LK2.t;if(!t||e.pointerId!==t.id)return;LK2.t=null;const dx=e.clientX-t.x,dy=e.clientY-t.y;
+ if(e.type==='pointerup'&&t.h&&Math.abs(dx)>56&&Math.abs(dx)>Math.abs(dy)*1.3){LK2.sw=Date.now();const ar=document.querySelectorAll('.lk2-top .lk2-ar'),b=ar[dx<0?1:0];if(b){LK2.dir=dx<0?1:-1;const ev=new MouseEvent('click',{bubbles:true,cancelable:true});LK2.sw=0;b.dispatchEvent(ev);LK2.sw=Date.now()}return}
+ if(t.w){t.w.style.transition='transform .35s cubic-bezier(.2,.9,.3,1.3)';t.w.style.transform=''}
+ if(t.h)LK2.sw=Date.now()};
+document.addEventListener('pointerup',lk2Up,{passive:true});document.addEventListener('pointercancel',lk2Up,{passive:true});
+/* ===== LK2:END ===== */
+
 
 
 /* titre d'une série Fusion World à part (SB01, ST01…) : le code en grand, le nom dessous */
@@ -12530,6 +12673,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 147, "d": "2026-11-25", "it": [["n", "🎲", "Nouveaux Boosters", "L’onglet Boosters est refait : le paquet flotte sur scène aux couleurs de la série, tu choisis Booster, Display ou Case avec le temps d’attente en direct, et un gros bouton pour ouvrir. Duel, tournoi, boutique et collection virtuelle en un appui.", "luck"]]},
 {"v": 146, "d": "2026-11-25", "it": [["n", "✨", "Nouvelle Collection", "La Collection est refaite : vitrine de la série avec anneau de progression et paliers, raretés en un coup d’œil, bande de toutes tes séries, cartes rares qui brillent.", "coll"]]},
 {"v": 145, "d": "2026-11-25", "it": [["n", "📱", "Widget Android", "Avec la nouvelle version de l’appli Android : un widget pour l’écran d’accueil avec ta valeur et tes cartes. Tu choisis la série et booster, display ou case, et « Ouvrir » lance l’ouverture direct dans l’appli. Ajoute-le par un appui long sur l’écran d’accueil, puis Widgets.", ""]]},
 {"v": 144, "d": "2026-11-24", "it": [["c", "💶", "Mes cartes en grille", "Stats > Cartes : tes cartes s’affichent maintenant en grille comme une série, de la plus chère à la moins chère, avec le prix sous chaque carte.", ""]]},

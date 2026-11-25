@@ -8645,7 +8645,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='24 nov. 2026 · 144';
+const BUILD='25 nov. 2026 · 145';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -10819,6 +10819,31 @@ document.addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;
  if(b=t.closest('[data-mco]')){e.stopPropagation();const [g,id]=b.dataset.mco.split('|');S.mcl=0;if(g==='ms'){msOpenCard(id)}else{X.game='fw';S.tab='coll';S.sel=id;render()}return}
  if(t.closest('[data-mcx]')&&(t.closest('button[data-mcx]')||t.classList.contains('mc-sh'))){e.stopPropagation();S.mcl=0;render()}},true);
 /* ===== MCL:END ===== */
+/* ===== WGT : widget Android « Ma collection et boosters » (valeur, cartes, booster / display / case à ouvrir) ===== */
+const WG={last:'',done:{}};
+function wgP(){try{const C=window.Capacitor;if(!C||!(C.isNativePlatform&&C.isNativePlatform()))return null;return (C.Plugins&&C.Plugins.AdcWidget)||(C.registerPlugin?C.registerPlugin('AdcWidget'):null)}catch(e){return null}}
+function wgData(){const D=stData(),cd={},pend={};['pack','box','case'].forEach(k=>{cd[k]=cdOk(k)?0:cdNext(k).getTime();const p=cdPend(k);pend[k]=p?p.ext:''});
+ const v=Math.round(D.val||0),u=D.uniq||0,sn=D.sealN||0;
+ return {v:'≈ '+v.toLocaleString('fr-FR')+' €',n:u.toLocaleString('fr-FR')+' carte'+(u>1?'s':'')+(sn?' · '+sn+' scellé'+(sn>1?'s':''):''),
+  cur:(S.hzm&&S.hxm)||S.ext||'FB01',series:EXTS.map(x=>[x[0],x[1],'fw']).concat(mhB().map(t=>[t.id,t.n,'ms'])),cd,pend}}
+async function wgPush(){const P=wgP();if(!P)return;let j;try{j=JSON.stringify(wgData())}catch(e){return}if(j===WG.last)return;WG.last=j;try{await P.update({data:j})}catch(e){WG.last=''}}
+function wgGo(se,k){k=CDI[k]?k:'pack';const fw=EXTS.some(x=>x[0]===se),ok=fw||mhIs(se);
+ try{if(S.op)opLeave()}catch(e){}
+ Object.assign(S,{tut:null,menu:false,mcl:0,sel:null,pick:false,mspick:false,zoom:false,dl:false,shop:false,hzv:false,celeb:null,tab:'luck'});
+ if(ok){if(fw){S.hzm=false;S.ext=se;try{serTheme(se)}catch(e){}}else{S.hzm=true;S.hxm=se}}
+ const p=cdPend(k);
+ if(p){S.op=p;if(p.ext!==se)toast('▶ On reprend '+CDI[k].art+' '+p.ext+' déjà commencé')}
+ else if(cdOk(k)){if(cdTake(k)){try{play('open')}catch(e){}S.op=newOp(k);opKeep(S.op)}}
+ else toast('⏳ '+CDI[k].nx+' dans '+cdFmt(cdLeft(k)));
+ window.scrollTo(0,0);render();setTimeout(wgPush,900)}
+function wgHit(r){if(!r||!r.serie||WG.done[r.t])return;WG.done[r.t]=1;wgGo(r.serie,r.type)}
+async function wgCheck(){const P=wgP();if(!P)return;try{wgHit(await P.getPending())}catch(e){}}
+(function(){const P=wgP();if(!P)return;try{P.addListener&&P.addListener('open',r=>{wgHit(r);P.getPending().catch(()=>{})})}catch(e){}
+ setTimeout(()=>{wgCheck();wgPush()},1500);setInterval(()=>{if(!document.hidden)wgPush()},60000);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)wgPush();else wgCheck()});
+ document.addEventListener('pause',()=>wgPush());document.addEventListener('resume',()=>{wgCheck();setTimeout(wgPush,1500)})})();
+/* ===== WGT:END ===== */
+
 
 
 
@@ -12316,6 +12341,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 145, "d": "2026-11-25", "it": [["n", "📱", "Widget Android", "Avec la nouvelle version de l’appli Android : un widget pour l’écran d’accueil avec ta valeur et tes cartes. Tu choisis la série et booster, display ou case, et « Ouvrir » lance l’ouverture direct dans l’appli. Ajoute-le par un appui long sur l’écran d’accueil, puis Widgets.", ""]]},
 {"v": 144, "d": "2026-11-24", "it": [["c", "💶", "Mes cartes en grille", "Stats > Cartes : tes cartes s’affichent maintenant en grille comme une série, de la plus chère à la moins chère, avec le prix sous chaque carte.", ""]]},
 {"v": 143, "d": "2026-11-24", "it": [["a", "💶", "Mes cartes par prix", "Dans Stats, appuie sur « Cartes » : la liste de toutes tes cartes, de la plus chère à la moins chère. Tu peux aussi trier par prix × quantité.", ""]]},
 {"v": 142, "d": "2026-11-24", "it": [["n", "🧑", "Photo de profil", "Mets ta photo de profil : appuie sur ton rond dans ton profil public ou sur « 📷 Photo » dans Réglages > Compte. Elle s’affiche dans le chat, les messages, les amis et les classements.", ""]]},

@@ -91,10 +91,10 @@ public class AdcWidgetTest {
     public void a_dessin_et_boutons() throws Exception {
         Context c = ctx();
         AdcWidget.prefs(c).edit().clear().commit();
-        shot("w0_sans_donnees", 7, 320, 196);
+        shot("w0_sans_donnees", 7, 320, 180);
 
         AdcWidget.prefs(c).edit().putString("data", data("")).commit();
-        shot("w1_booster_dispo", 7, 320, 196);
+        shot("w1_booster_dispo", 7, 320, 180);
         assertEquals("FB05", AdcWidget.curSerie(c, 7, AdcWidget.data(c), AdcWidget.series(AdcWidget.data(c))));
 
         // flèche ›  : FB05 -> FB11
@@ -111,15 +111,15 @@ public class AdcWidgetTest {
         // bouton Display
         new AdcWidget().onReceive(c, new Intent(c, AdcWidget.class).setAction(AdcWidget.A_TYPE).putExtra(AdcWidget.X_WID, 7).putExtra(AdcWidget.X_KIND, "box"));
         assertEquals("box", AdcWidget.prefs(c).getString("t_7", ""));
-        shot("w2_display_attente_masters", 7, 320, 196);
+        shot("w2_display_attente_masters", 7, 320, 180);
 
         // case commencée à reprendre
         AdcWidget.prefs(c).edit().putString("data", data("FB05")).putString("t_7", "case").putString("s_7", "FB05").commit();
-        shot("w3_case_a_reprendre", 7, 320, 196);
+        shot("w3_case_a_reprendre", 7, 320, 180);
 
         // tailles : petit et grand
         AdcWidget.prefs(c).edit().putString("t_7", "pack").commit();
-        shot("w4_petit", 7, 262, 180);
+        shot("w4_petit", 7, 262, 170);
         shot("w5_grand", 7, 400, 240);
         AdcWidget.updateAll(c);
     }
@@ -189,6 +189,6 @@ public class AdcWidgetTest {
         } finally {
             note("rapport_js", rep.toString());
         }
-        shot("w6_donnees_de_l_appli", 9, 320, 196);
+        shot("w6_donnees_de_l_appli", 9, 320, 180);
     }
 }

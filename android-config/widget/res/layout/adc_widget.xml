@@ -5,69 +5,64 @@
     android:layout_height="match_parent"
     android:background="@drawable/adc_w_bg"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:id="@+id/w_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="28dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:contentDescription="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/adc_w_logo" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/w_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:text="L’Appel des Cartes"
+            android:textColor="#FFF5B82E"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/w_sub"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/w_val"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="L’Appel des Cartes"
-                android:textColor="#FFF5B82E"
-                android:textSize="21sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/w_sub"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Ouvre l’appli une fois pour voir ta collection ici"
-                android:textColor="#FFC9BEBE"
-                android:textSize="12sp" />
-        </LinearLayout>
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:text="Ouvre l’appli une fois"
+            android:textColor="#FFC9BEBE"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="7dp"
         android:background="@drawable/adc_w_row"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/w_prev"
-            android:layout_width="40dp"
+            android:layout_width="34dp"
             android:layout_height="match_parent"
             android:contentDescription="Série précédente"
             android:gravity="center"
             android:text="‹"
             android:textColor="#FFFFFFFF"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -111,20 +106,20 @@
 
         <TextView
             android:id="@+id/w_next"
-            android:layout_width="40dp"
+            android:layout_width="34dp"
             android:layout_height="match_parent"
             android:contentDescription="Série suivante"
             android:gravity="center"
             android:text="›"
             android:textColor="#FFFFFFFF"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -135,8 +130,8 @@
             android:background="@drawable/adc_w_chip_on"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp">
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/w_k0a"
@@ -166,8 +161,8 @@
             android:background="@drawable/adc_w_chip"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp">
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/w_k1a"
@@ -197,8 +192,8 @@
             android:background="@drawable/adc_w_chip"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp">
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/w_k2a"
@@ -223,8 +218,10 @@
     <TextView
         android:id="@+id/w_open"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:minHeight="32dp"
         android:background="@drawable/adc_w_btn"
         android:ellipsize="end"
         android:gravity="center"

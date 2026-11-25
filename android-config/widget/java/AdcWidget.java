@@ -166,7 +166,7 @@ public class AdcWidget extends AppWidgetProvider {
 
         if (d == null) {
             v.setTextViewText(R.id.w_val, "L’Appel des Cartes");
-            v.setTextViewText(R.id.w_sub, "Ouvre l’appli une fois pour voir ta collection ici");
+            v.setTextViewText(R.id.w_sub, "Ouvre l\u2019appli une fois");
         } else {
             v.setTextViewText(R.id.w_val, d.optString("v", "—"));
             v.setTextViewText(R.id.w_sub, d.optString("n", ""));

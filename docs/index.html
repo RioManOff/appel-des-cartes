@@ -8871,7 +8871,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 nov. 2026 · 148';
+const BUILD='27 nov. 2026 · 149';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9728,9 +9728,24 @@ const lk2Up=e=>{const t=LK2.t;if(!t||e.pointerId!==t.id)return;LK2.t=null;const 
  if(t.h)LK2.sw=Date.now()};
 document.addEventListener('pointerup',lk2Up,{passive:true});document.addEventListener('pointercancel',lk2Up,{passive:true});
 /* ===== LK2:END ===== */
+/* ===== FIND2 : « Rechercher une carte » cherche aussi dans Masters et les anciennes séries ===== */
+let FDRAW=null;const fdRaw=id=>{if(!FDRAW){FDRAW={};MS_SETS.forEach(t=>t.c.forEach(c=>{FDRAW[c[0]]=[c,t]}))}return FDRAW[id]};
+find=function(){const W=cxWords(S.fq||''),q=W.length;let fw=[],ms=[];
+ if(q){fw=cards.filter(c=>{const h=cxN([c.name,c.id,c.n,c.rar,c.ver,c.ext,serNm(c.ext)].join(' '));return W.every(t=>h.includes(t))});
+  try{msBindInit()}catch(e){}
+  ms=MS_ALL.filter(c=>{const r=fdRaw(c.id),h=cxN([c.id,r?r[0][1]:c.name,c.rar,c.ext,r?r[1].n:'','promo'.repeat(c.ext==='PROMO'?1:0)].join(' '));return W.every(t=>h.includes(t))})}
+ const n=fw.length+ms.length,msT=c=>{const r=fdRaw(c.id);if(!r)return '';return csCell(c.id,c.name,msPx(c.id),msOwn(c.id),`<button class="card" data-fdms="${esc(c.id)}" aria-label="${esc(c.id)} · ${esc(r[1].n)}" style="width:100%">${msArt(r[0])}</button>`,'data-ms="dec" data-id="'+esc(c.id)+'"','data-ms="inc" data-id="'+esc(c.id)+'"')};
+ const sec=(t,l)=>l.length?`<h3 style="margin:16px 2px 6px">${t} <small class="sub">${l.length>120?'120 premières sur '+l.length:l.length}</small></h3>`:'';
+ return header()+`<h2>Rechercher une carte</h2><input type="search" id="fq" placeholder="🔎 Nom ou numéro dans toutes les séries" value="${esc(S.fq)}" aria-label="Rechercher">`
+  +(q?`<div class="sub" style="margin-top:8px">${n} carte${n>1?'s':''}${n?'':' · essaie le numéro seul (187) ou un mot du nom'}</div>`
+   +sec('Fusion World',fw)+(fw.length?`<div class="grid gc">${fw.slice(0,120).map(cardBtn).join('')}</div>`:'')
+   +sec('Masters et anciennes séries',ms)+(ms.length?`<div class="grid gc">${ms.slice(0,120).map(msT).join('')}</div>`:'')
+  :'<p class="sub">Tape un nom (Vegeta), un numéro (P-187, BT1-001, FB01-035), une série (promo 187) ou une rareté (SR).</p>')};
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fdms]');if(!b)return;e.stopPropagation();e.preventDefault();const r=fdRaw(b.dataset.fdms);if(!r)return;
+ X.game='ms';try{saveX()}catch(_){}S.tab='coll';S.mode='cards';S.ext=r[1].id;S.msel=b.dataset.fdms;render();scrollTo(0,0)},true);
 /* ===== CXQKEEP : la case de recherche n'est jamais recréée pendant la frappe (clavier qui se ferme, lettres perdues) ===== */
-{const R0=render;render=function(){const a=document.activeElement,keep=a&&a.id==='cxq'?a:null,ss=keep?keep.selectionStart:0,se=keep?keep.selectionEnd:0;const r=R0.apply(this,arguments);
- if(keep){const n=document.getElementById('cxq');if(n&&n!==keep&&n.isConnected){n.replaceWith(keep);try{if(document.activeElement!==keep)keep.focus({preventScroll:true});keep.setSelectionRange(ss,se)}catch(e){}}}return r}}
+{const R0=render;render=function(){const a=document.activeElement,keep=a&&(a.id==='cxq'||a.id==='fq')?a:null,ss=keep?keep.selectionStart:0,se=keep?keep.selectionEnd:0;const r=R0.apply(this,arguments);
+ if(keep){const n=document.getElementById(keep.id);if(n&&n!==keep&&n.isConnected){n.replaceWith(keep);try{if(document.activeElement!==keep)keep.focus({preventScroll:true});keep.setSelectionRange(ss,se)}catch(e){}}}return r}}
 
 
 

@@ -8871,7 +8871,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='25 nov. 2026 · 147';
+const BUILD='27 nov. 2026 · 148';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9357,7 +9357,7 @@ const CXIC={
 const cxN=s=>String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 const CXH=new Map();
 const cxHay=c=>{const k=c.id+'|'+(c.name||'');let h=CXH.get(k);if(h===undefined){h=cxN([c.name,c.full||'',c.id,c.id.replace(/[-_]/g,' '),String(c.n||'').padStart(3,'0'),c.rar||''].join(' '));CXH.set(k,h)}return h};
-const cxWords=q=>cxN(q).trim().split(/\s+/).filter(Boolean);
+const cxWords=q=>cxN(q).trim().replace(/(\d)[-_]([a-z]{1,4})(?![a-z0-9])/g,'$1 $2').replace(/(^|\s)p\s*(\d{1,3})(?=\s|$)/g,'$1p-$2').split(/\s+/).filter(Boolean);
 const cxMatch=(c,w)=>{if(!w.length)return true;const h=cxHay(c);return w.every(t=>h.includes(t))};
 const CXRO=['L','C','UC','R','SR','SCR','CR','SPR','SLR','GDR','DPR','DAR','GFR'];
 const cxRo=r=>{const i=CXRO.indexOf(r);return i<0?99:i};
@@ -9728,6 +9728,10 @@ const lk2Up=e=>{const t=LK2.t;if(!t||e.pointerId!==t.id)return;LK2.t=null;const 
  if(t.h)LK2.sw=Date.now()};
 document.addEventListener('pointerup',lk2Up,{passive:true});document.addEventListener('pointercancel',lk2Up,{passive:true});
 /* ===== LK2:END ===== */
+/* ===== CXQKEEP : la case de recherche n'est jamais recréée pendant la frappe (clavier qui se ferme, lettres perdues) ===== */
+{const R0=render;render=function(){const a=document.activeElement,keep=a&&a.id==='cxq'?a:null,ss=keep?keep.selectionStart:0,se=keep?keep.selectionEnd:0;const r=R0.apply(this,arguments);
+ if(keep){const n=document.getElementById('cxq');if(n&&n!==keep&&n.isConnected){n.replaceWith(keep);try{if(document.activeElement!==keep)keep.focus({preventScroll:true});keep.setSelectionRange(ss,se)}catch(e){}}}return r}}
+
 
 
 

@@ -4007,7 +4007,7 @@ function mkLine(N){if(!MKON)return '';
 
 /* tableau des 4 prix Cardmarket (fiche d'une carte) : tendance, moyenne 30 j / 7 j / 1 j */
 function mkTab(c){if(!MKON)return '';const p=MKT[c.id];if(!p)return '';const a=MKA[c.id],v=x=>x?eur(x):'—';
- return `<div class="cmt" role="group" aria-label="Prix Cardmarket"><div class="cmh"><span>💶 Prix Cardmarket</span><span>au ${MKDF}</span></div><dl><dt>Premier prix</dt><dd>${a?eur(p):'—'}</dd><dt>Prix moyen 30 jours</dt><dd>${v(a&&a[0])}</dd><dt>Prix moyen 7 jours</dt><dd>${v(a&&a[1])}</dd><dt>Prix moyen 1 jour</dt><dd>${v(a&&a[2])}</dd></dl>${a?'':`<div class="sub">Pas de vente récente sur Cardmarket : ${eur(p)} est une estimation moins fiable.</div>`}</div>`}
+ return `<div class="cmt" role="group" aria-label="Prix Cardmarket"><div class="cmh"><span>💶 Prix Cardmarket</span><span>au ${MKDF}</span></div><dl>${MKL[c.id]?`<dt>À partir de</dt><dd>${eur(MKL[c.id])}</dd>`:''}<dt>Tendance des prix</dt><dd>${MKTR[c.id]!=null?eur(MKTR[c.id]):a?eur(p):'—'}</dd><dt>Prix moyen 30 jours</dt><dd>${v(a&&a[0])}</dd><dt>Prix moyen 7 jours</dt><dd>${v(a&&a[1])}</dd><dt>Prix moyen 1 jour</dt><dd>${v(a&&a[2])}</dd></dl>${MKTR[c.id]!=null?`<div class="sub">Tendance faussée sur Cardmarket : l’appli compte cette carte à <b>${eur(p)}</b> (entre « À partir de » et les moyennes).</div>`:''}${a?'':`<div class="sub">Pas de vente récente sur Cardmarket : ${eur(p)} est une estimation moins fiable.</div>`}</div>`}
 
 /* ----- mise à jour automatique : docs/prix.json ----- */
 let PXTXT='';   /* texte du fichier prix.json actuellement appliqué ('' = prix intégrés) */
@@ -5402,7 +5402,7 @@ const MSA={"BT5-037":[0.03,0.02,0.02],"BT5-055":[0.44,0.43,0.39],"BT5-055-SPR":[
 const TRD=(p,a)=>a&&a[0]>=.1&&p>=.1?p/a[0]-1:null,TRT=t=>t==null?'—':(t>0?'+':'')+Math.round(t*100)+' %';const msdG=id=>(X.msd&&X.msd[id])||{};
 const msPx=id=>nb(msdG(id).price)||msCm(id);
 function msTab(id){const p=msCm(id);if(!p)return '';const a=MSA[id],v=x=>x?eur(x):'—';
- return `<div class="cmt" role="group" aria-label="Prix Cardmarket"><div class="cmh"><span>💶 Prix Cardmarket</span><span>au ${MKDF}</span></div><dl><dt>Premier prix</dt><dd>${a?eur(p):'—'}</dd><dt>Prix moyen 30 jours</dt><dd>${v(a&&a[0])}</dd><dt>Prix moyen 7 jours</dt><dd>${v(a&&a[1])}</dd><dt>Prix moyen 1 jour</dt><dd>${v(a&&a[2])}</dd></dl>${a?'':`<div class="sub">Pas de vente récente sur Cardmarket : ${eur(p)} est une estimation moins fiable.</div>`}</div>`}
+ return `<div class="cmt" role="group" aria-label="Prix Cardmarket"><div class="cmh"><span>💶 Prix Cardmarket</span><span>au ${MKDF}</span></div><dl>${MSL[id]?`<dt>À partir de</dt><dd>${eur(MSL[id])}</dd>`:''}<dt>Tendance des prix</dt><dd>${MSTR[id]!=null?eur(MSTR[id]):a?eur(p):'—'}</dd><dt>Prix moyen 30 jours</dt><dd>${v(a&&a[0])}</dd><dt>Prix moyen 7 jours</dt><dd>${v(a&&a[1])}</dd><dt>Prix moyen 1 jour</dt><dd>${v(a&&a[2])}</dd></dl>${MSTR[id]!=null?`<div class="sub">Tendance faussée sur Cardmarket : l’appli compte cette carte à <b>${eur(p)}</b> (entre « À partir de » et les moyennes).</div>`:''}${a?'':`<div class="sub">Pas de vente récente sur Cardmarket : ${eur(p)} est une estimation moins fiable.</div>`}</div>`}
 function msdS(id,k,v){if(!X.msd)X.msd={};const o=X.msd[id]||(X.msd[id]={});if(v===''||v==null||v===0)delete o[k];else o[k]=v;if(!Object.keys(o).length)delete X.msd[id];saveX()}
 function msdNorm(v){const o={};if(v&&typeof v==='object')for(const k in v){if(!/^[A-Z][A-Z0-9]{0,6}-\d{3,4}(-SPR|-SLR|-GDR)?$/.test(k))continue;const r=v[k];if(!r||typeof r!=='object')continue;const e={},w=Math.floor(+r.want);if(w>=1)e.want=Math.min(99,w);const p=String(r.price==null?'':r.price).replace(',','.').slice(0,10);if(/^\d+(\.\d{1,2})?$/.test(p)&&+p>0)e.price=p;if(['Mint','Near Mint','Excellent','Bon','Joué','Abîmé'].includes(r.cond))e.cond=r.cond;if(typeof r.note==='string'&&r.note.trim())e.note=r.note.slice(0,200);if(Object.keys(e).length)o[k]=e}return o}
 function msChart(id){const a=MSA[id],t=msCm(id);if(!a||!t||!a[0]||!a[1]||!a[2])return '';
@@ -8871,7 +8871,7 @@ function valSheet(){if(!S.vsh)return '';
 ${top.length?`<h2>Ce qui pèse le plus</h2><div class="panel">${top.map(c=>`<div class="ap-tr"><span class="vnth sm">${art({...c,own:1,ver:'Normal'})}</span><span class="ap-tn"><b>${esc(c.name||c.id)}</b><small>${c.id.replace(/_ALT\d?$/,'')}${c.ver!=='Normal'?' · Alt Art':''}${c.own>1?' · ×'+c.own:''}</small></span><span class="ap-tv"><b>${eur(pxv(c)*c.own)}</b>${c.own>1?`<small>${c.own} × ${eur(pxv(c))}</small>`:''}</span></div>`).join('')}</div>`:''}
 <button class="btn" data-close style="margin-top:12px">Fermer</button></div></div>`}
 /* ===== Réglages v2 ===== */
-const BUILD='27 nov. 2026 · 149';
+const BUILD='28 nov. 2026 · 150';
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('#mj li[data-mjgo]')){e.preventDefault();e.target.click()}});
 const agoFr=t=>{const m=Math.floor((Date.now()-t)/6e4);if(m<1)return 'à l’instant';if(m<60)return 'il y a '+m+' min';const h=Math.floor(m/60);if(h<24)return 'il y a '+h+' h';const d=Math.floor(h/24);return 'il y a '+d+' jour'+(d>1?'s':'')};
 
@@ -9728,6 +9728,12 @@ const lk2Up=e=>{const t=LK2.t;if(!t||e.pointerId!==t.id)return;LK2.t=null;const 
  if(t.h)LK2.sw=Date.now()};
 document.addEventListener('pointerup',lk2Up,{passive:true});document.addEventListener('pointercancel',lk2Up,{passive:true});
 /* ===== LK2:END ===== */
+/* ===== PXLOW : « À partir de » (le moins cher en vente sur Cardmarket), lu dans prix.json et prix_ms.json (clé l) ===== */
+let MKL={},MSL={},MKTR={},MSTR={};
+const pxLowRd=o=>{const m={};if(o&&typeof o==='object')for(const k in o){const v=o[k];if(typeof v==='number'&&v>0&&v<1e6)m[k]=v}return m};
+{const p0=pxApply;pxApply=function(j,t){const r=p0(j,t);if(r){MKL=pxLowRd(j&&j.l);MKTR=pxLowRd(j&&j.tr)}return r}}
+{const m0=msPxApply;msPxApply=function(j){const r=m0(j);if(r){MSL=pxLowRd(j&&j.l);MSTR=pxLowRd(j&&j.tr)}return r}}
+
 /* ===== FIND2 : « Rechercher une carte » cherche aussi dans Masters et les anciennes séries ===== */
 let FDRAW=null;const fdRaw=id=>{if(!FDRAW){FDRAW={};MS_SETS.forEach(t=>t.c.forEach(c=>{FDRAW[c[0]]=[c,t]}))}return FDRAW[id]};
 find=function(){const W=cxWords(S.fq||''),q=W.length;let fw=[],ms=[];
@@ -12692,6 +12698,7 @@ const TG={n:'Nouveau',a:'Amélioré',c:'Corrigé'};
 
 /* ---------- le journal : une entrée par version (la plus récente en haut) ---------- */
 const MJV=[
+{"v": 150, "d": "2026-11-28", "it": [["n", "💶", "Prix plus justes", "Fini les prix gonflés par une vente bizarre sur Cardmarket. Dans la fiche d’une carte, tu vois maintenant « À partir de » (le moins cher en vente) et la « Tendance des prix », comme sur Cardmarket. La BT32 et des promos Masters ont maintenant un prix.", "coll"]]},
 {"v": 147, "d": "2026-11-25", "it": [["n", "🎲", "Nouveaux Boosters", "L’onglet Boosters est refait : le paquet flotte sur scène aux couleurs de la série, tu choisis Booster, Display ou Case avec le temps d’attente en direct, et un gros bouton pour ouvrir. Duel, tournoi, boutique et collection virtuelle en un appui.", "luck"]]},
 {"v": 146, "d": "2026-11-25", "it": [["n", "✨", "Nouvelle Collection", "La Collection est refaite : vitrine de la série avec anneau de progression et paliers, raretés en un coup d’œil, bande de toutes tes séries, cartes rares qui brillent.", "coll"]]},
 {"v": 145, "d": "2026-11-25", "it": [["n", "📱", "Widget Android", "Avec la nouvelle version de l’appli Android : un widget pour l’écran d’accueil avec ta valeur et tes cartes. Tu choisis la série et booster, display ou case, et « Ouvrir » lance l’ouverture direct dans l’appli. Ajoute-le par un appui long sur l’écran d’accueil, puis Widgets.", ""]]},

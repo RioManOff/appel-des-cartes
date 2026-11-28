@@ -105,17 +105,27 @@ jobs:
 
 
           def meilleur(g):
-              """Premier prix > 0 dans l'ordre de confiance : tendance, moyennes, puis prix le plus bas."""
+              """Prix affiché : la « Tendance des prix » de Cardmarket.
+              Tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €, ou bien plus basse que le moins cher en vente) :
+              on prend la valeur du milieu entre « À partir de », la moyenne 7 jours et la moyenne 30 jours,
+              pour qu'une seule vente aberrante ne fausse pas le prix (avant : la moyenne 30 jours seule, souvent beaucoup trop haute)."""
               if g:
-                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
-                  t0, a30 = g.get('trend'), g.get('avg30')
-                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
-                      return a30, 'avg30'
+                  num = lambda k: g.get(k) if isinstance(g.get(k), (int, float)) and not isinstance(g.get(k), bool) and g.get(k) > 0 else None
+                  t0, a30, bas = num('trend'), num('avg30'), num('low')
+                  if t0 and ((a30 and a30 >= 1 and a30 >= 10 * t0) or (bas and bas >= 1 and bas >= 5 * t0)):
+                      vals = sorted(v for v in (bas, num('avg7'), a30) if v)
+                      return vals[(len(vals) - 1) // 2], 'milieu'
                   for k in ORDRE:
-                      v = g.get(k)
-                      if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
+                      v = num(k)
+                      if v:
                           return v, k
               return None, None
+
+
+          def plus_bas(g):
+              """« À partir de » sur Cardmarket : le prix le moins cher en vente."""
+              v = (g or {}).get('low')
+              return round(v, 2) if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0 else None
 
 
           def lire_hist(chemin, serie):
@@ -214,7 +224,7 @@ jobs:
                   if mm and 'idProduct' in p and 'idExpansion' in p:
                       par[mm.group(1)][p['idExpansion']][mm.group(2)].append(p['idProduct'])
 
-              t, a = {}, {}
+              t, a, l, tr, vrai = {}, {}, {}, {}, set()
               for serie, exts in par.items():
                   if serie in EXTENSIONS:
                       ordre = [e for e in EXTENSIONS[serie] if e in exts]
@@ -233,9 +243,16 @@ jobs:
                                   continue
                               cid = '%s-%s%s' % (serie, num, suf)
                               t[cid] = round(v, 2)
-                              if src in ('trend', 'trend-foil'):
+                              pb = plus_bas(g)
+                              if pb:
+                                  l[cid] = pb
+                              if src in ('trend', 'trend-foil', 'milieu'):
                                   f = '-foil' if src.endswith('-foil') else ''
                                   a[cid] = [round(g.get(k + f) or 0, 2) for k in ('avg30', 'avg7', 'avg1')]
+                                  if src == 'milieu':
+                                      tr[cid] = round(g.get('trend') or 0, 2)   # vraie « Tendance des prix », faussée
+                                  else:
+                                      vrai.add(cid)
                               break
 
               # édition anglaise : FB01 à FB05 ont une extension anglaise à part sur Cardmarket (la 2e de EXTENSIONS)
@@ -265,7 +282,7 @@ jobs:
               if avant and len(t) < 0.9 * avant:
                   echec('seulement %d prix reconnus contre %d dans le fichier actuel : je n’écrase rien' % (len(t), avant))
 
-              sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}, 'en': {k: en[k] for k in sorted(en)}}
+              sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}, 'l': {k: l[k] for k in sorted(l)}, 'tr': {k: tr[k] for k in sorted(tr)}, 'en': {k: en[k] for k in sorted(en)}}
               texte = json.dumps(sortie, ensure_ascii=False, separators=(',', ':')) + '\n'
               dossier = os.path.dirname(SORTIE)
               if dossier:
@@ -275,7 +292,7 @@ jobs:
                   f.write(texte)
               os.replace(tmp, SORTIE)
               print('OK : %d prix (dont %d avec moyennes), prix du %s -> %s' % (len(t), len(a), date, SORTIE))
-              maj_historique(dossier, date, {cid: t[cid] for cid in a}, prec if isinstance(prec, dict) else None)
+              maj_historique(dossier, date, {cid: t[cid] for cid in vrai}, prec if isinstance(prec, dict) else None)
 
 
           if __name__ == '__main__':
@@ -305,14 +322,17 @@ jobs:
                       print('Essai %d/4 : %s -> %s' % (essai, url, e)); time.sleep(5 * essai)
               print('Prix Masters : téléchargement impossible, je ne change rien.'); sys.exit(0)
           def meilleur(g):
+              # même règle que pour Fusion World : tendance, sauf si elle est cassée (valeur du milieu entre
+              # « À partir de », moyenne 7 jours et moyenne 30 jours)
               if g:
-                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
-                  t0, a30 = g.get('trend'), g.get('avg30')
-                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
-                      return a30, 'avg30'
+                  num = lambda k: g.get(k) if isinstance(g.get(k), (int, float)) and not isinstance(g.get(k), bool) and g.get(k) > 0 else None
+                  t0, a30, bas = num('trend'), num('avg30'), num('low')
+                  if t0 and ((a30 and a30 >= 1 and a30 >= 10 * t0) or (bas and bas >= 1 and bas >= 5 * t0)):
+                      vals = sorted(v for v in (bas, num('avg7'), a30) if v)
+                      return vals[(len(vals) - 1) // 2], 'milieu'
                   for k in ORDRE:
-                      v = g.get(k)
-                      if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0:
+                      v = num(k)
+                      if v:
                           return v, k
               return None, None
           try:
@@ -344,58 +364,95 @@ jobs:
               if cid not in lien and cid not in vus:
                   vus[cid] = p['idProduct']
           lien.update(vus)
-          # séries Masters toutes neuves (ex. BT32 à sa sortie) : Cardmarket ne met pas le code dans le nom.
-          # On relie les cartes par leur nom anglais, dans une extension Cardmarket dont aucun produit n'est encore relié.
+          # cartes encore sans prix : on les relie par leur nom anglais, en restant dans la bonne extension Cardmarket.
+          #  - série déjà en partie reliée : on cherche dans l'extension où sont ses autres cartes, seulement quand le nom
+          #    n'y désigne qu'un seul produit libre (pas de risque de confondre deux versions) ;
+          #  - série encore jamais reliée (ex. BT32 à sa sortie) : l'extension qui contient au moins 60 % de ses noms,
+          #    la carte normale passant avant sa version spéciale (idProduct croissant, comme la liste de l'appli).
           try:
               import collections
               src = open('docs/index.html', encoding='utf-8').read()
               dec = json.JSONDecoder()
-              connus = set(lien.values())
+              pexp = {p['idProduct']: p['idExpansion'] for p in produits if 'idProduct' in p and 'idExpansion' in p}
               parexp = collections.defaultdict(list)
               for p in produits:
                   if 'idProduct' in p and 'idExpansion' in p:
                       parexp[p['idExpansion']].append(p)
-              libres = {e: L for e, L in parexp.items() if not any(p['idProduct'] in connus for p in L)}
               nz = lambda s: re.sub(r'[^a-z0-9]', '', html.unescape(s).lower().replace('&', 'and'))
-              base = lambda nom: nz(re.sub(r'\s*\((SLR|SPR|SCR|GDR|SR|CR)\)\s*$', '', nom))
-              index = {}
-              for e, L in libres.items():
+              base = lambda nom: nz(re.sub(r'\s*\((SLR|SPR|SCR|GDR|SR|CR|Foil|Non-Foil)\)\s*$', '', nom))
+              pris_tous = set(lien.values())
+              def libres_de(e):
                   noms = collections.defaultdict(list)
-                  for p in sorted(L, key=lambda p: p['idProduct']):
-                      noms[nz(p.get('name', ''))].append(p['idProduct'])
-                  index[e] = noms
-              for mset in re.finditer(r'\{"id":"(BT\d+)","n":', src):
+                  for p in sorted(parexp[e], key=lambda p: p['idProduct']):
+                      if p['idProduct'] not in pris_tous:
+                          noms[nz(p.get('name', ''))].append(p['idProduct'])
+                  return noms
+              total = 0
+              for mset in re.finditer(r'\{"id":"([A-Z][A-Z0-9-]*)","n":', src):
                   sid = mset.group(1)
-                  cs, _ = dec.raw_decode(src, mset.start())
-                  cl = cs.get('c', [])
-                  if not cl or any(c[0] in lien for c in cl):
+                  try:
+                      cs, _ = dec.raw_decode(src, mset.start())
+                  except Exception:
                       continue
-                  best = None
-                  for e, noms in index.items():
-                      ok = sum(1 for c in cl if base(c[1]) in noms)
-                      if ok >= 0.6 * len(cl) and (not best or ok > best[0]):
-                          best = (ok, e)
-                  if not best:
-                      print(sid, ': pas encore sur Cardmarket')
+                  cl = cs.get('c') if isinstance(cs, dict) else None
+                  if not isinstance(cl, list) or not cl or not all(isinstance(c, list) and len(c) >= 2 and isinstance(c[0], str) for c in cl):
                       continue
-                  noms = index[best[1]]; pris = collections.defaultdict(int); n = 0
-                  for c in cl:  # la liste met la carte normale avant sa version spéciale, comme Cardmarket (idProduct croissant)
-                      k = base(c[1]); L = noms.get(k, [])
-                      if pris[k] < len(L):
-                          lien[c[0]] = L[pris[k]]; pris[k] += 1; n += 1
-                  print(sid, ': %d cartes reliées par leur nom (extension Cardmarket %s)' % (n, best[1]))
+                  reste = [c for c in cl if c[0] not in lien]
+                  if not reste:
+                      continue
+                  deja = [c for c in cl if c[0] in lien]
+                  n = 0
+                  if len(deja) >= max(3, 0.2 * len(cl)):
+                      maison = collections.Counter(pexp.get(lien[c[0]]) for c in deja)
+                      for e, k in maison.most_common(2):
+                          if e is None or k < max(3, 0.25 * len(deja)):
+                              continue
+                          noms = libres_de(e)
+                          besoin = collections.Counter(base(c[1]) for c in reste)
+                          for c in reste:
+                              if c[0] in lien:
+                                  continue
+                              k2 = base(c[1]); L = noms.get(k2, [])
+                              if len(L) == 1 and besoin[k2] == 1:
+                                  lien[c[0]] = L[0]; pris_tous.add(L[0]); n += 1
+                  else:
+                      best = None
+                      for e, L in parexp.items():
+                          if sum(1 for p in L if p['idProduct'] in pris_tous) > 0.5 * len(L):
+                              continue
+                          noms = {nz(p.get('name', '')) for p in L}
+                          ok = sum(1 for c in reste if base(c[1]) in noms)
+                          if ok >= max(5, 0.6 * len(reste)) and (not best or ok > best[0]):
+                              best = (ok, e)
+                      if best:
+                          noms = libres_de(best[1]); pris = collections.defaultdict(int)
+                          for c in reste:
+                              k2 = base(c[1]); L = noms.get(k2, [])
+                              if pris[k2] < len(L):
+                                  lien[c[0]] = L[pris[k2]]; pris_tous.add(L[pris[k2]]); pris[k2] += 1; n += 1
+                      elif re.fullmatch(r'BT\d+', sid):
+                          print(sid, ': pas encore sur Cardmarket')
+                  if n:
+                      total += n
+                      print(sid, ': %d carte(s) reliée(s) par leur nom' % n)
+              print('Association par le nom : %d carte(s) en plus' % total)
           except Exception as ex:
               print('association par le nom impossible :', ex)
-          t, a = {}, {}
+          t, a, l, tr = {}, {}, {}, {}
           for cid, ip in lien.items():
               g = G.get(ip)
               v, src = meilleur(g)
               if v is None:
                   continue
               t[cid] = round(v, 2)
-              if src in ('trend', 'trend-foil'):
+              lo = (g or {}).get('low')
+              if isinstance(lo, (int, float)) and not isinstance(lo, bool) and lo > 0:
+                  l[cid] = round(lo, 2)
+              if src in ('trend', 'trend-foil', 'milieu'):
                   f = '-foil' if src.endswith('-foil') else ''
                   a[cid] = [round(g.get(k + f) or 0, 2) for k in ('avg30', 'avg7', 'avg1')]
+                  if src == 'milieu':
+                      tr[cid] = round(g.get('trend') or 0, 2)
           if len(t) < 1000:
               print('trop peu de prix Masters reconnus (%d) : je ne change rien.' % len(t)); sys.exit(0)
           try:
@@ -405,7 +462,7 @@ jobs:
               avant = 0
           if avant and len(t) < 0.9 * avant:
               print('seulement %d prix Masters contre %d : je ne change rien.' % (len(t), avant)); sys.exit(0)
-          sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}}
+          sortie = {'v': 1, 'date': date, 'n': len(t), 't': {k: t[k] for k in sorted(t)}, 'a': {k: a[k] for k in sorted(a)}, 'l': {k: l[k] for k in sorted(l)}, 'tr': {k: tr[k] for k in sorted(tr)}}
           with open('docs/prix_ms.json', 'w', encoding='utf-8') as f:
               f.write(json.dumps(sortie, ensure_ascii=False, separators=(',', ':')) + '\n')
           print('OK Masters : %d prix (%d trouvés par le nom), prix du %s' % (len(t), len(vus), date))
@@ -436,10 +493,13 @@ jobs:
               print('Autres séries : téléchargement impossible, je ne change rien.'); sys.exit(0)
           def meilleur(g, bas):
               if g:
-                  # tendance cassée (ex. 0,02 € pour une Secret Rare qui se vend 60 €) : on prend la moyenne sur 30 jours
-                  t0, a30 = g.get('trend'), g.get('avg30')
-                  if isinstance(t0, (int, float)) and isinstance(a30, (int, float)) and t0 > 0 and a30 >= 1 and a30 >= 10 * t0:
-                      return a30, 'avg30'
+                  # tendance cassée : valeur du milieu entre « À partir de », moyenne 7 jours et moyenne 30 jours
+                  num = lambda k: g.get(k) if isinstance(g.get(k), (int, float)) and not isinstance(g.get(k), bool) and 0 < g.get(k) < 1e5 else None
+                  t0, a30, lo = num('trend'), num('avg30'), num('low')
+                  if t0 and ((a30 and a30 >= 1 and a30 >= 10 * t0) or (lo and lo >= 1 and lo >= 5 * t0)):
+                      vals = sorted(v for v in ((lo if bas else None), num('avg7'), a30) if v)
+                      if vals:
+                          return vals[(len(vals) - 1) // 2], 'milieu'
                   for k in ORDRE:
                       if not bas and k.startswith('low'):
                           continue
@@ -463,7 +523,7 @@ jobs:
               if mm and 'idProduct' in p and p.get('idExpansion') not in BOOSTERS:
                   par[p['idExpansion']][mm.group(1)].append(p['idProduct'])
           rxn = re.compile(r'^((?:FB|FS|SB|ST)\d\d-\d{2,3}|FP-\d{3}|E-\d{2,3})( ★)?(?: \((\d+)\))?$')
-          t, a, nb = {}, {}, 0
+          t, a, nb, l2, tr2 = {}, {}, 0, {}, {}
           for sid, info in noms.items():
               cartes = []
               for i, nm in enumerate(info.get('n', [])):
@@ -483,9 +543,14 @@ jobs:
                           v, src = meilleur(g, k == 0)
                           if v is not None:
                               t[cid] = round(v, 2)
-                              if src in ('trend', 'trend-foil'):
+                              lo = (g or {}).get('low')
+                              if k == 0 and isinstance(lo, (int, float)) and not isinstance(lo, bool) and lo > 0:
+                                  l2[cid] = round(lo, 2)
+                              if src in ('trend', 'trend-foil', 'milieu'):
                                   f = '-foil' if src.endswith('-foil') else ''
                                   a[cid] = [round(g.get(x + f) or 0, 2) for x in ('avg30', 'avg7', 'avg1')]
+                                  if src == 'milieu':
+                                      tr2[cid] = round(g.get('trend') or 0, 2)
                           break
               print('%s : %d cartes avec un prix sur %d (extensions %s)' % (sid, sum(1 for c in t if c.startswith(sid + '-')), len(cartes), exts[:3]))
           if not t:
@@ -493,6 +558,11 @@ jobs:
           sortie['t'].update(t)
           if isinstance(sortie.get('a'), dict):
               sortie['a'].update(a)
+          for cle, val in (('l', l2), ('tr', tr2)):
+              if val:
+                  if not isinstance(sortie.get(cle), dict):
+                      sortie[cle] = {}
+                  sortie[cle].update(val)
           sortie['n'] = len(sortie['t'])
           sortie['t'] = {k: sortie['t'][k] for k in sorted(sortie['t'])}
           with open('docs/prix_ms.json', 'w', encoding='utf-8') as f:
